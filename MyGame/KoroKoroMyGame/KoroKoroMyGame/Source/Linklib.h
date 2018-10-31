@@ -7,4 +7,3 @@
 	#pragma comment (lib, "xinput.lib")
 	#pragma comment (lib, "audiere.lib")
 #endif
-

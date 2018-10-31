@@ -8,19 +8,18 @@
 #include <Windows.h>
 #include "Application.h"
 
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+int APIENTRY WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdLine, int cmdShow)
 {
-	UNREFERENCED_PARAMETER(hPrevInstance);	
-	UNREFERENCED_PARAMETER(lpCmdLine);	
+	UNREFERENCED_PARAMETER(prevInstance);
+	UNREFERENCED_PARAMETER(cmdLine);
 
 	Application applivationObj;
 
-	applivationObj.initialize();
+	applivationObj.initialize(instance,cmdShow);
 
 	while (applivationObj.isAppContinuation())
 	{
-		applivationObj.update();
-		applivationObj.draw();
+		applivationObj.mainLoop();
 	}
 
 	applivationObj.finalize();

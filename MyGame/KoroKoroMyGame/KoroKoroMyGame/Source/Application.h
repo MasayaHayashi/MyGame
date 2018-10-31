@@ -10,9 +10,10 @@
 
 // ===== インクルード部 =====
 #include <string>
+#include <memory>
 #include "Linklib.h"
 #include "d3dx9.h"
-// メモリリーク検出用
+
 #ifdef _DEBUG
 	#define _CRTDBG_MAP_ALLOC
 	#include <crtdbg.h>
@@ -20,17 +21,20 @@
 
 // ===== 定数・マクロ定義 =====
 #if defined(DEBUG) || defined(_DEBUG)
-	#define NEW  new(_NORMAL_BLOCK, __FILE__, __LINE__)  // new によるメモリリーク検出でCPPファイル名と行数出力指定
+	#define NEW  new(_NORMAL_BLOCK, __FILE__, __LINE__)  // new によるメモリリーク検出
 #else
-	#define NEW  new									 // リリースの場合通常のメモリ確保へ
+	#define NEW  new									 // リリースの場合通常のメモリ確保
 #endif
+
+// ===== クラスの前方宣言 =====
+class DirectX3D;
 
 // ===== クラス定義 =====
 class Application
 {
 public :
-	static constexpr FLOAT ScreenWidth		= 1280;
-	static constexpr FLOAT ScreenHeight		= 720;
+	static constexpr UINT ScreenWidth		= 1280;
+	static constexpr UINT ScreenHeight		= 720;
 	static constexpr FLOAT ScreenCenterX	= ScreenWidth  * 0.5f;
 	static constexpr FLOAT ScreenCenterY	= ScreenHeight * 0.5f;
 	static constexpr INT   Vertex			= 4;
@@ -39,10 +43,12 @@ public :
 	Application();
 	~Application();
 
-	void initialize(HINSTANCE instance);
+	void initialize(HINSTANCE& instance, INT& cmdShow);
 	void update();
 	const void draw();
 	void finalize();
+
+	const void mainLoop();
 
 	HWND createWindow(HINSTANCE instance);
 
@@ -54,12 +60,18 @@ private :
 	static constexpr INT   FvfVertex2d = D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1;
 	static constexpr INT   FvfVertex3d = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1;
 
+	std::unique_ptr <DirectX3D> directX3dObj;
+
 	DWORD execLastTime;
 	DWORD fpsLastTime;
 	DWORD currentTime;
 	DWORD frameCount;
 
-	bool appContinuation;
+	MSG msg;
+
+	INT fpsCnt;
+
+	bool appContinuation = true;
 };
 
 #endif

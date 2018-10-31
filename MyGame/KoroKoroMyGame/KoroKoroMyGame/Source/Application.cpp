@@ -5,15 +5,17 @@
 
 // ===== インクルード部 =====
 #include "Application.h"
+#include "DirectX3D.h"
 #include <Windows.h>
 #include <time.h>
+#include <memory>
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 Application::Application()
 {
-
+	directX3dObj.reset(NEW DirectX3D());
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -27,31 +29,74 @@ Application::~Application()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Application::initialize(HINSTANCE instance, int nCmdShow)
+void Application::initialize(HINSTANCE& instance, INT& cmdShow)
 {
-
+	
 #if _DEBUG
 	_CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
 	HWND windowHandle = createWindow(instance);
 
-	if (windowHandle < 0)
-	{
-		return;
-	}
-
 	// フレームカウント初期化
-	timeBeginPeriod(1);				// 分解能を設定
+	timeBeginPeriod(1);
 	execLastTime = fpsLastTime = timeGetTime();
-	currentTime = frameCount = 0;
+	currentTime  = frameCount = 0;
 
-	//ランダムの初期化
-	srand((unsigned)time(NULL));
-
-	// ウインドウの表示(初期化処理の後に呼ばないと駄目)
-	ShowWindow(windowHandle, nCmdShow);
+	ShowWindow(windowHandle, cmdShow);
 	UpdateWindow(windowHandle);
+
+	directX3dObj->init(windowHandle);
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// メインループ
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+const void Application::mainLoop()
+{
+	// メッセージループ
+	while (1)
+	{
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+		{
+			if (msg.message == WM_QUIT)
+			{// PostQuitMessage()が呼ばれたらループ終了
+				break;
+			}
+			else
+			{
+				// メッセージの翻訳とディスパッチ
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+		}
+		else
+		{
+			currentTime = timeGetTime();
+			if ((currentTime - fpsLastTime) >= 500)	// 0.5秒ごとに実行
+			{
+#ifdef _DEBUG
+				fpsCnt = frameCount * 1000 / (currentTime - fpsLastTime);
+#endif
+				fpsLastTime = currentTime;
+				frameCount = 0;
+			}
+
+			if ((currentTime - execLastTime) >= (1000 / 60))
+			{
+#ifdef _DEBUG
+				//PrintDebugProc("FPS:%d\n", fpsCnt);
+#endif
+				execLastTime = currentTime;
+
+				update();
+
+				draw();
+
+				frameCount++;
+			}
+		}
+	}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -67,7 +112,7 @@ void Application::update()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 const void Application::draw()
 {
-
+	directX3dObj->draw();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -75,7 +120,7 @@ const void Application::draw()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Application::finalize()
 {
-
+	
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -127,15 +172,14 @@ HWND Application::createWindow(HINSTANCE instance)
 		0,
 		0,
 		instance,
-		NULL,
-		LoadCursor(NULL, IDC_ARROW),
+		nullptr,
+		LoadCursor(nullptr, IDC_ARROW),
 		(HBRUSH)(COLOR_WINDOW + 1),
-		NULL,
+		nullptr,
 		ClassName,
-		NULL
+		nullptr
 	};
 	HWND wndHandle;
-	MSG msg;
 
 	// ウィンドウクラスの登録
 	RegisterClassEx(&wcex);
@@ -149,10 +193,10 @@ HWND Application::createWindow(HINSTANCE instance)
 		CW_USEDEFAULT,
 		ScreenWidth + GetSystemMetrics(SM_CXDLGFRAME)  * 2,
 		ScreenHeight + GetSystemMetrics(SM_CXDLGFRAME) * 2 + GetSystemMetrics(SM_CYCAPTION),
-		NULL,
-		NULL,
+		nullptr,
+		nullptr,
 		instance,
-		NULL);
+		nullptr);
 
 	return wndHandle;
 }
