@@ -6,6 +6,7 @@
 // ===== インクルード部 =====
 #include "Application.h"
 #include "DirectX3D.h"
+#include "MyAudiere.h"
 #include <Windows.h>
 #include <time.h>
 #include <memory>
@@ -16,6 +17,7 @@
 Application::Application()
 {
 	directX3dObj.reset(NEW DirectX3D());
+	myAudiereObj.reset(NEW MyAudiere());
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -31,7 +33,6 @@ Application::~Application()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Application::initialize(HINSTANCE& instance, INT& cmdShow)
 {
-	
 #if _DEBUG
 	_CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
@@ -46,7 +47,7 @@ void Application::initialize(HINSTANCE& instance, INT& cmdShow)
 	ShowWindow(windowHandle, cmdShow);
 	UpdateWindow(windowHandle);
 
-	directX3dObj->init(windowHandle);
+	directX3dObj->initialize(windowHandle);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -85,7 +86,7 @@ const void Application::mainLoop()
 			if ((currentTime - execLastTime) >= (1000 / 60))
 			{
 #ifdef _DEBUG
-				//PrintDebugProc("FPS:%d\n", fpsCnt);
+				DirectX3D::printDebug("FPS:%d\n", fpsCnt);
 #endif
 				execLastTime = currentTime;
 
@@ -104,6 +105,7 @@ const void Application::mainLoop()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Application::update()
 {
+	DirectX3D::printDebug("ああああああああああ");
 
 }
 

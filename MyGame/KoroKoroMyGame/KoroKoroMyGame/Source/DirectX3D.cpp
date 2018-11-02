@@ -9,8 +9,8 @@
 #include "Application.h"
 
 // ===== 静的メンバ変数 =====
-//std::unique_ptr<LPDIRECT3DDEVICE9> DirectX3D::pDirectXDevice(new LPDIRECT3DDEVICE9);
-
+CComPtr<IDirect3DDevice9> DirectX3D::directXDevice;
+CHAR DirectX3D::debug[1024] = {" \0 "};
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -30,7 +30,7 @@ DirectX3D::~DirectX3D()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-HRESULT DirectX3D::init(HWND& wnd)
+HRESULT DirectX3D::initialize(HWND& wnd)
 {
 	D3DPRESENT_PARAMETERS d3dpp;
 	D3DDISPLAYMODE d3ddm;
@@ -43,7 +43,6 @@ HRESULT DirectX3D::init(HWND& wnd)
 
 	// 現在のディスプレイモードを取得
 	directXObj->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm);
-
 
 	// デバイスのプレゼンテーションパラメータの設定
 	ZeroMemory(&d3dpp, sizeof(d3dpp));
@@ -94,9 +93,8 @@ HRESULT DirectX3D::init(HWND& wnd)
 		}
 	}
 
-
 	//シェーダーを読み込み
-	if (FAILED(D3DXCreateEffectFromFile( directXDevice, "Data/FX/Min.fx", nullptr, nullptr, 0, nullptr, &effectObj, nullptr)))
+	if (FAILED(D3DXCreateEffectFromFile( directXDevice, "Data/FX/Min.fx", nullptr, nullptr, 0, nullptr, &directXEffect, nullptr)))
 	{
 		MessageBox(nullptr, "シェーダーファイル読み込み失敗", "", MB_OK);
 		return E_FAIL;
@@ -119,7 +117,7 @@ HRESULT DirectX3D::init(HWND& wnd)
 	directXDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);	// 最初のアルファ引数
 	directXDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);	// ２番目のアルファ引数
 
-	
+	initializeDebugProc();
 	/*
 	// ステージ番号初期化
 	g_StageNum = 0;	// チュートリアルステージ
@@ -128,10 +126,10 @@ HRESULT DirectX3D::init(HWND& wnd)
 	InitInput(hInstance, hWnd);
 
 	// Xinput生成
-	C_XINPUT::Create();
+	Xinput::Create();
 
 	// Xinput初期化
-	g_pXinput = C_XINPUT::GetInstance();
+	g_pXinput = Xinput::GetInstance();
 	g_pXinput->InitXinput();
 
 #if _DEBUG
@@ -177,9 +175,8 @@ const void DirectX3D::draw()
 		// デバッグ表示の描画処理
 #if _DEBUG
 		//if (g_bDispDebug)
-		//	DrawDebugProc();
+		drawDebugProc();
 #endif
-
 
 		// Direct3Dによる描画の終了
 		directXDevice->EndScene();
@@ -193,13 +190,13 @@ const void DirectX3D::draw()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // デバッグ初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-HRESULT DirectX3D::initDebugProc()
+HRESULT DirectX3D::initializeDebugProc()
 {
 	HRESULT hr;
 
 	// 情報表示用フォントを設定
 	hr = D3DXCreateFont(directXDevice, 18, 0, 0, 0, FALSE, SHIFTJIS_CHARSET,
-		 OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, "Terminal", &pD3DXFont);
+						OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, "Terminal", &directXFont);
 
 	// 情報クリア
 	memset(debug, 0, sizeof debug);
@@ -221,7 +218,13 @@ void DirectX3D::updateDebugProc()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 const void DirectX3D::drawDebugProc()
 {
+	RECT rect = { 0, 0, Application::ScreenWidth, Application::ScreenHeight };
 
+	// 情報表示
+	directXFont->DrawText(NULL, debug, -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xFF, 0xFF, 0xFF, 0x00));
+
+	// 情報クリア
+	memset(debug, 0, sizeof debug);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -233,11 +236,73 @@ void DirectX3D::finalizeDebugProc()
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// デバッグ描画
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+const void DirectX3D::printDebug(CHAR *fmt,...)
+{
+	va_list list;			// 可変引数を処理する為に使用する変数
+	char *pCur;
+	char aBuf[256] = { "\0" };
+	char aWk[32];
+
+	// 可変引数にアクセスする前の初期処理
+	va_start(list, fmt);
+
+	pCur = fmt;
+	for (; *pCur; ++pCur)
+	{
+		if (*pCur != '%')
+		{
+			sprintf_s(aWk, "%c", *pCur);
+		}
+		else
+		{
+			pCur++;
+
+			switch (*pCur)
+			{
+			case 'd':
+				// 可変引数にアクセスしてその変数を取り出す処理
+				sprintf_s(aWk, "%d", va_arg(list, int));
+				break;
+
+			case 'f':
+				// 可変引数にアクセスしてその変数を取り出す処理
+				sprintf_s(aWk, "%.2f", va_arg(list, double));		// double型で指定
+				break;
+
+			case 's':
+				// 可変引数にアクセスしてその変数を取り出す処理
+				sprintf_s(aWk, "%s", va_arg(list, char*));
+				break;
+
+			case 'c':
+				// 可変引数にアクセスしてその変数を取り出す処理
+				sprintf_s(aWk, "%c", va_arg(list, char));
+				break;
+
+			default:
+				sprintf_s(aWk, "%c", *pCur);
+				break;
+			}
+		}
+		strcat_s(aBuf, aWk);
+	}
+
+	// 可変引数にアクセスした後の終了処理
+	va_end(list);
+
+	// 連結
+	if ((strlen(debug) + strlen(aBuf)) < ((sizeof debug) - 1))
+	{
+		strcat_s(debug, aBuf);
+	}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // デバイス取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-LPDIRECT3DDEVICE9 DirectX3D::getDevice()
+const LPDIRECT3DDEVICE9 DirectX3D::getDevice()
 {
-	//return pDirectXDevice;
-
-	return nullptr;
+	return directXDevice;
 }

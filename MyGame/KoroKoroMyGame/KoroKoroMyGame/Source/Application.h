@@ -13,7 +13,6 @@
 #include <memory>
 #include "Linklib.h"
 #include "d3dx9.h"
-#include <memory>
 
 #ifdef _DEBUG
 	#define _CRTDBG_MAP_ALLOC
@@ -29,14 +28,12 @@
 
 // ===== クラスの前方宣言 =====
 class DirectX3D;
+class MyAudiere;
 
 // ===== クラス定義 =====
 class Application
 {
 public :
-
-	std::unique_ptr<INT> test;
-
 	static constexpr UINT ScreenWidth		= 1280;
 	static constexpr UINT ScreenHeight		= 720;
 	static constexpr FLOAT ScreenCenterX	= ScreenWidth  * 0.5f;
@@ -65,6 +62,7 @@ private :
 	static constexpr INT   FvfVertex3d = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1;
 
 	std::unique_ptr <DirectX3D> directX3dObj;
+	std::unique_ptr <MyAudiere> myAudiereObj;
 
 	DWORD execLastTime;
 	DWORD fpsLastTime;

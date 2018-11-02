@@ -7,6 +7,7 @@
 // ===== インクルード部 =====
 #include <Windows.h>
 #include "Application.h"
+#include "DirectX3D.h"
 
 int APIENTRY WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdLine, int cmdShow)
 {
@@ -20,6 +21,7 @@ int APIENTRY WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdLine, 
 	while (applivationObj.isAppContinuation())
 	{
 		applivationObj.mainLoop();
+		
 	}
 
 	applivationObj.finalize();

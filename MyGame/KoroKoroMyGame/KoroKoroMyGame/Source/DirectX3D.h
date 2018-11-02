@@ -11,6 +11,7 @@
 // ===== インクルード部 =====
 #include "d3dx9.h"
 #include <atlbase.h>
+#include <string>
 
 // ===== クラス定義 =====
 class DirectX3D
@@ -19,25 +20,27 @@ public :
 	DirectX3D();
 	~DirectX3D();
 
-	HRESULT init(HWND& wnd);
-	const void draw();
+	HRESULT initialize(HWND& wnd);
 
-	static LPDIRECT3DDEVICE9 getDevice();
+	const void draw();
+	static const void printDebug(CHAR *fmt,...);
+
+	static const LPDIRECT3DDEVICE9 getDevice();
 
 private :
-	CComPtr<IDirect3DDevice9> directXDevice = nullptr;
-	CComPtr<IDirect3D9>		  directXObj	= nullptr;
-	CComPtr<ID3DXEffect>	  effectObj		= nullptr;
+	static CComPtr<IDirect3DDevice9> directXDevice;
+	CComPtr<IDirect3D9>				 directXObj		= nullptr;
+	CComPtr<ID3DXEffect>			 directXEffect	= nullptr;
+	CComPtr<ID3DXFont>				 directXFont	= nullptr;
 
-	BOOL				isWindowMode	= true;
+	BOOL		 isWindowMode	= true;
 
-	LPD3DXFONT			pD3DXFont	 = nullptr;
-	CHAR				debug[1024]  = { "\0" };
+	static CHAR  debug[1024];	// TODO : string型に変更
 
-	HRESULT initDebugProc();
-	void	updateDebugProc();
+	HRESULT		initializeDebugProc();
+	void		updateDebugProc();
 	const void	drawDebugProc();
-	void	finalizeDebugProc();
+	void		finalizeDebugProc();
 
 };
 
