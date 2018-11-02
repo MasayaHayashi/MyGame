@@ -10,6 +10,7 @@
 
 // ===== インクルード部 =====
 #include "d3dx9.h"
+#include <memory>
 
 // ===== クラス定義 =====
 class DirectX3D
@@ -19,25 +20,31 @@ public :
 	~DirectX3D();
 
 	HRESULT init(HWND& wnd);
-
-	HRESULT initDebugProc();
-
 	const void draw();
 
-//	static void printDebugProc(CHAR *pFmt);
+	static LPDIRECT3DDEVICE9 getDevice();
 
 private :
-	LPDIRECT3D9			pD3D		 = nullptr;
-	LPDIRECT3DDEVICE9	pD3DDevice	 = nullptr;
-	BOOL				isWindowMode = true;
 
-	LPD3DXEFFECT		pEffect		 = nullptr;
+	std::unique_ptr<LPDIRECT3DDEVICE9> pDirectXDevice;
+	std::unique_ptr<LPDIRECT3D9>  pDirectXObj;
+	std::unique_ptr<LPD3DXEFFECT> pEffectObj;
+
+	/*
+	LPDIRECT3DDEVICE9	pDirectXDevice  = nullptr;
+	LPDIRECT3D9			pDirectXObj		= nullptr;
+	LPD3DXEFFECT		pEffectObj		= nullptr;
+	*/
+
+	BOOL				isWindowMode	= true;
 
 	LPD3DXFONT			pD3DXFont	 = nullptr;
 	CHAR				debug[1024]  = { "\0" };
 
+	HRESULT initDebugProc();
+	void	updateDebugProc();
 	const void	drawDebugProc();
-
+	void	finalizeDebugProc();
 
 };
 
