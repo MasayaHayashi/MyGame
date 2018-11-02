@@ -17,9 +17,6 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 DirectX3D::DirectX3D()
 {
-	pDirectXDevice.reset(new LPDIRECT3DDEVICE9);
-	pDirectXObj.reset(new LPDIRECT3D9);
-	pEffectObj.reset(new LPD3DXEFFECT);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -39,14 +36,13 @@ HRESULT DirectX3D::init(HWND& wnd)
 	D3DDISPLAYMODE d3ddm;
 
 	// Direct3Dオブジェクトの作成
-	*pDirectXObj.get() = Direct3DCreate9(D3D_SDK_VERSION);
+	directXObj = Direct3DCreate9(D3D_SDK_VERSION);
 
-
-	if (*pDirectXObj == nullptr)
+	if (directXObj == nullptr)
 		return E_FAIL;
 
 	// 現在のディスプレイモードを取得
-	(*pDirectXObj)->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm);
+	directXObj->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm);
 
 
 	// デバイスのプレゼンテーションパラメータの設定
@@ -72,25 +68,25 @@ HRESULT DirectX3D::init(HWND& wnd)
 	}
 
 	// 描画と頂点処理をハードウェアで行なう
-	if (FAILED( (*pDirectXObj)->CreateDevice(D3DADAPTER_DEFAULT,
+	if (FAILED( (directXObj)->CreateDevice(D3DADAPTER_DEFAULT,
 		D3DDEVTYPE_HAL,
 		wnd,
 		D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_MULTITHREADED,
-		&d3dpp, pDirectXDevice.get())))
+		&d3dpp, &directXDevice)))
 	{
 		// 上記の設定が失敗したら描画をハードウェアで行い、頂点処理はCPUで行なう
-		if (FAILED( (*pDirectXObj)->CreateDevice(D3DADAPTER_DEFAULT,
+		if (FAILED( directXObj->CreateDevice(D3DADAPTER_DEFAULT,
 			D3DDEVTYPE_HAL,
 			wnd,
 			D3DCREATE_SOFTWARE_VERTEXPROCESSING,
-			&d3dpp, pDirectXDevice.get() )))
+			&d3dpp, &directXDevice )))
 		{
 			// 上記の設定が失敗したら描画と頂点処理をCPUで行なう
-			if (FAILED( (*pDirectXObj)->CreateDevice(D3DADAPTER_DEFAULT,
+			if (FAILED( directXObj->CreateDevice(D3DADAPTER_DEFAULT,
 				D3DDEVTYPE_REF,
 				wnd,
 				D3DCREATE_SOFTWARE_VERTEXPROCESSING,
-				&d3dpp, pDirectXDevice.get() )))
+				&d3dpp, &directXDevice )))
 			{
 				// 初期化失敗
 				return E_FAIL;
@@ -100,29 +96,28 @@ HRESULT DirectX3D::init(HWND& wnd)
 
 
 	//シェーダーを読み込み
-	if (FAILED(D3DXCreateEffectFromFile( *pDirectXDevice.get(), "Data/FX/Min.fx", nullptr, nullptr, 0, nullptr, pEffectObj.get(), nullptr)))
+	if (FAILED(D3DXCreateEffectFromFile( directXDevice, "Data/FX/Min.fx", nullptr, nullptr, 0, nullptr, &effectObj, nullptr)))
 	{
 		MessageBox(nullptr, "シェーダーファイル読み込み失敗", "", MB_OK);
 		return E_FAIL;
 	}
 
 	// レンダーステートパラメータの設定	
-	(*pDirectXDevice.get())->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);			// 裏面をカリング
-	(*pDirectXDevice.get())->SetRenderState(D3DRS_ZENABLE, TRUE);					// Zバッファを使用
-	(*pDirectXDevice.get())->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);			// αブレンドを行う
-	(*pDirectXDevice.get())->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		// αソースカラーの指定
-	(*pDirectXDevice.get())->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);	// αデスティネーションカラーの指定
-	(*pDirectXDevice.get())->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);			// 法線を常に正規化する設定
-
-	(*pDirectXDevice.get())->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);	// テクスチャアドレッシング方法(U値)を設定
-	(*pDirectXDevice.get())->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);	// テクスチャアドレッシング方法(V値)を設定
-	(*pDirectXDevice.get())->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);	// テクスチャ縮小フィルタモードを設定
-	(*pDirectXDevice.get())->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);	// テクスチャ拡大フィルタモードを設定
+	directXDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);			// 裏面をカリング
+	directXDevice->SetRenderState(D3DRS_ZENABLE, TRUE);					// Zバッファを使用
+	directXDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);			// αブレンドを行う
+	directXDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		// αソースカラーの指定
+	directXDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);	// αデスティネーションカラーの指定
+	directXDevice->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);			// 法線を常に正規化する設定
 	
+	directXDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);	// テクスチャアドレッシング方法(U値)を設定
+	directXDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);	// テクスチャアドレッシング方法(V値)を設定
+	directXDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);	// テクスチャ縮小フィルタモードを設定
+	directXDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);	// テクスチャ拡大フィルタモードを設定
 	
-	(*pDirectXDevice.get())->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);	// アルファブレンディング処理
-	(*pDirectXDevice.get())->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);	// 最初のアルファ引数
-	(*pDirectXDevice.get())->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);	// ２番目のアルファ引数
+	directXDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);	// アルファブレンディング処理
+	directXDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);	// 最初のアルファ引数
+	directXDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);	// ２番目のアルファ引数
 
 	
 	/*
@@ -168,10 +163,10 @@ const void DirectX3D::draw()
 {
 	
 	// バックバッファ＆Ｚバッファのクリア
-	(*pDirectXDevice.get())->Clear(0, nullptr, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 0), 1.0f, 0);
+	directXDevice->Clear(0, nullptr, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 0), 1.0f, 0);
 
 	// Direct3Dによる描画の開始
-	if (SUCCEEDED((*pDirectXDevice.get())->BeginScene()))
+	if (SUCCEEDED(directXDevice->BeginScene()))
 	{
 		// シーン描画
 	//	pSceneManager->DrawScene();
@@ -187,11 +182,11 @@ const void DirectX3D::draw()
 
 
 		// Direct3Dによる描画の終了
-		(*pDirectXDevice.get())->EndScene();
+		directXDevice->EndScene();
 	}
 
 	// バックバッファとフロントバッファの入れ替え
-	(*pDirectXDevice.get())->Present(nullptr, nullptr, nullptr, nullptr);
+	directXDevice->Present(nullptr, nullptr, nullptr, nullptr);
 	
 }
 
@@ -202,17 +197,13 @@ HRESULT DirectX3D::initDebugProc()
 {
 	HRESULT hr;
 
-	/*
-
 	// 情報表示用フォントを設定
-	hr = D3DXCreateFont(pDirectXDevice, 18, 0, 0, 0, FALSE, SHIFTJIS_CHARSET,
+	hr = D3DXCreateFont(directXDevice, 18, 0, 0, 0, FALSE, SHIFTJIS_CHARSET,
 		 OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, "Terminal", &pD3DXFont);
 
 	// 情報クリア
 	memset(debug, 0, sizeof debug);
-
-	return E_FAIL;
-	*/
+	
 
 	return E_FAIL;
 }

@@ -10,7 +10,7 @@
 
 // ===== インクルード部 =====
 #include "d3dx9.h"
-#include <memory>
+#include <atlbase.h>
 
 // ===== クラス定義 =====
 class DirectX3D
@@ -25,16 +25,9 @@ public :
 	static LPDIRECT3DDEVICE9 getDevice();
 
 private :
-
-	std::unique_ptr<LPDIRECT3DDEVICE9> pDirectXDevice;
-	std::unique_ptr<LPDIRECT3D9>  pDirectXObj;
-	std::unique_ptr<LPD3DXEFFECT> pEffectObj;
-
-	/*
-	LPDIRECT3DDEVICE9	pDirectXDevice  = nullptr;
-	LPDIRECT3D9			pDirectXObj		= nullptr;
-	LPD3DXEFFECT		pEffectObj		= nullptr;
-	*/
+	CComPtr<IDirect3DDevice9> directXDevice = nullptr;
+	CComPtr<IDirect3D9>		  directXObj	= nullptr;
+	CComPtr<ID3DXEffect>	  effectObj		= nullptr;
 
 	BOOL				isWindowMode	= true;
 

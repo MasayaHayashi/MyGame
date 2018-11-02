@@ -13,6 +13,7 @@
 #include <memory>
 #include "Linklib.h"
 #include "d3dx9.h"
+#include <memory>
 
 #ifdef _DEBUG
 	#define _CRTDBG_MAP_ALLOC
@@ -33,6 +34,9 @@ class DirectX3D;
 class Application
 {
 public :
+
+	std::unique_ptr<INT> test;
+
 	static constexpr UINT ScreenWidth		= 1280;
 	static constexpr UINT ScreenHeight		= 720;
 	static constexpr FLOAT ScreenCenterX	= ScreenWidth  * 0.5f;
