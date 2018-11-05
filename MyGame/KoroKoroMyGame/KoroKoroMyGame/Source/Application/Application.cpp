@@ -6,7 +6,7 @@
 // ===== インクルード部 =====
 #include "Application.h"
 #include "DirectX3D.h"
-#include "MyAudiere.h"
+#include "Audio\MyAudiere.h"
 #include <Windows.h>
 #include <time.h>
 #include <memory>
@@ -106,7 +106,6 @@ const void Application::mainLoop()
 void Application::update()
 {
 	DirectX3D::printDebug("ああああああああああ");
-
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

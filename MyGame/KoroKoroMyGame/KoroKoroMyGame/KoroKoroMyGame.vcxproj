@@ -113,14 +113,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DirectX3D.cpp" />
     <ClCompile Include="Source\Application.cpp" />
+    <ClCompile Include="Source\Audio\MyAudiere.cpp" />
+    <ClCompile Include="Source\Board\Board.cpp" />
+    <ClCompile Include="Source\DirectX3D.cpp" />
+    <ClCompile Include="Source\Fade\FadeUI.cpp" />
+    <ClCompile Include="Source\GameObjectBase\GameObjectBase.cpp" />
+    <ClCompile Include="Source\KeyBoard\Keyboard.cpp" />
     <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\MyHierarchy\MyHierarchy.cpp" />
+    <ClCompile Include="Source\ResoueceManager\ResourceManager.cpp" />
+    <ClCompile Include="Source\SceneInterface\sceneBase.cpp" />
+    <ClCompile Include="Source\SceneManager\SceneManager.cpp" />
+    <ClCompile Include="Source\Scene\SceneLoad.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DirectX3D.h" />
     <ClInclude Include="Source\Application.h" />
+    <ClInclude Include="Source\Audio\audiere.h" />
+    <ClInclude Include="Source\Audio\MyAudiere.h" />
+    <ClInclude Include="Source\Board\Board.h" />
+    <ClInclude Include="Source\DirectX3D.h" />
+    <ClInclude Include="Source\Fade\FadeUI.h" />
+    <ClInclude Include="Source\GameObjectBase\GameObjectBase.h" />
+    <ClInclude Include="Source\KeyBoard\Keyboard.h" />
     <ClInclude Include="Source\Linklib.h" />
+    <ClInclude Include="Source\MyHierarchy\MyHierarchy.h" />
+    <ClInclude Include="Source\ResoueceManager\ResourceManager.h" />
+    <ClInclude Include="Source\SceneInterface\sceneBase.h" />
+    <ClInclude Include="Source\SceneManager\SceneManager.h" />
+    <ClInclude Include="Source\Scene\SceneLoad.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

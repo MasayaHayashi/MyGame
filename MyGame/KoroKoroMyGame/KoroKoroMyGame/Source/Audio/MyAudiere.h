@@ -9,8 +9,8 @@
 
 // ===== インクルード部 =====
 #include "audiere.h"
-#include "Linklib.h"
-#include "DirectX3D.h"
+#include "../DirectX3D.h"
+#include "../Linklib.h"
 #include <unordered_map>
 
 // ===== 構造体定義 =====
