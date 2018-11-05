@@ -61,6 +61,18 @@
     <Filter Include="ソース ファイル\KeyBoard">
       <UniqueIdentifier>{55769192-4e2f-4795-8b87-c4f5e98681dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Scene\Main">
+      <UniqueIdentifier>{f1437d95-95a5-4da9-a94e-06e50cd008dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene\Title">
+      <UniqueIdentifier>{2113b544-b467-4013-953c-ffab0d725f1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Camera">
+      <UniqueIdentifier>{1303f139-1e34-4efd-82c3-94cf0a4a6277}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Mesh">
+      <UniqueIdentifier>{c29bd3c3-3771-40b8-804d-c1578706d92f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\DirectX3D.cpp">
@@ -101,6 +113,15 @@
     </ClCompile>
     <ClCompile Include="Source\KeyBoard\Keyboard.cpp">
       <Filter>ソース ファイル\KeyBoard</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\Main\C_SceneMain.cpp">
+      <Filter>ソース ファイル\Scene\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\Title\SceneTitle.cpp">
+      <Filter>ソース ファイル\Scene\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera\camera.cpp">
+      <Filter>ソース ファイル\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +166,18 @@
     </ClInclude>
     <ClInclude Include="Source\KeyBoard\Keyboard.h">
       <Filter>ソース ファイル\KeyBoard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\Main\C_SceneMain.h">
+      <Filter>ソース ファイル\Scene\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\Title\SceneTitle.h">
+      <Filter>ソース ファイル\Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera\camera.h">
+      <Filter>ソース ファイル\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>ソース ファイル\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
