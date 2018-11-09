@@ -6,10 +6,11 @@
 
 // ===== インクルード部 =====
 #include "DirectX3D.h"
-#include "Application.h"
+#include "../Application/Application.h"
 
 // ===== 静的メンバ変数 =====
-CComPtr<IDirect3DDevice9> DirectX3D::directXDevice;
+CComPtr<IDirect3DDevice9>  DirectX3D::directXDevice = nullptr;
+CComPtr<ID3DXEffect>	   DirectX3D::directXEffect = nullptr;
 CHAR DirectX3D::debug[1024] = {" \0 "};
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -67,7 +68,7 @@ HRESULT DirectX3D::initialize(HWND& wnd)
 	}
 
 	// 描画と頂点処理をハードウェアで行なう
-	if (FAILED( (directXObj)->CreateDevice(D3DADAPTER_DEFAULT,
+	if (FAILED( directXObj->CreateDevice(D3DADAPTER_DEFAULT,
 		D3DDEVTYPE_HAL,
 		wnd,
 		D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_MULTITHREADED,
@@ -221,7 +222,7 @@ const void DirectX3D::drawDebugProc()
 	RECT rect = { 0, 0, Application::ScreenWidth, Application::ScreenHeight };
 
 	// 情報表示
-	directXFont->DrawText(NULL, debug, -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xFF, 0xFF, 0xFF, 0x00));
+	directXFont->DrawText(nullptr, debug, -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xFF, 0xFF, 0xFF, 0x00));
 
 	// 情報クリア
 	memset(debug, 0, sizeof debug);
@@ -305,4 +306,12 @@ const void DirectX3D::printDebug(CHAR *fmt,...)
 const LPDIRECT3DDEVICE9 DirectX3D::getDevice()
 {
 	return directXDevice;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// シェーダー用effect取得
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+const LPD3DXEFFECT DirectX3D::getEffect()
+{
+	return directXEffect;
 }

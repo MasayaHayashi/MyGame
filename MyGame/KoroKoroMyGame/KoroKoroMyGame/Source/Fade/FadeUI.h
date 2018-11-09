@@ -11,12 +11,15 @@
 #include "../Board/Board.h"
 #include "../SceneManager/SceneManager.h"
 
-// ===== 定数・マクロ定義 =====
+// ===== 前方宣言 =====
+class SceneManager;
+enum class SceneState;
 
 // ===== クラス定義 =====
 class FadeUI final : public Board
 {
 public:
+
 	enum class FadeType
 	{
 		FadeNone = 0,		// 何もない状態
@@ -25,28 +28,30 @@ public:
 		FadeComp,			// フェード完了
 	};
 
-	FadeUI();			// コンストラクタ
-	~FadeUI();			// デストラクタ
+	FadeUI();
+	~FadeUI();
 
 	void initialize();
-	void Update();
-	void Draw();
-	void Uninit();
+	void update();
+	const void draw();
+	void finalize();
 
-	void SetColor(D3DCOLOR col);
-	void SetFade(FadeType Fade);
-	void SetWorkScene(C_SCENE_MANAGER::SCENE_STATE);
+	void setColor(D3DCOLOR col);
+	void setFade(FadeType Fade);
+	void setWorkScene(SceneManager::SceneState);
 	
-	FadeType GetFadeState();
+	FadeType getFadeState();
 
 
 protected:
 private:
+	std::string TextureName = "data/TEXTURE/test.png";
 
-	SceneManager::SCENE_STATE CurrentScene;
+
+	SceneManager::SceneState CurrentScene;
 	FadeType  CurentFadeType;		// 現在のフェード状態
 	D3DXCOLOR CurrentColor;			// 現在色状態
-	SceneManager::SCENE_STATE WorkScene;
+	SceneManager::SceneState WorkScene;
 };
 
 #endif

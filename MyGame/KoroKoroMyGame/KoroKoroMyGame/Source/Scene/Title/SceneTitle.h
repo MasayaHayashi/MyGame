@@ -9,9 +9,7 @@
 
 // ===== インクルード部 =====
 #include "../../SceneInterface/sceneBase.h"
-
-#include "C_Skydome.h"
-#include "C_ParticleBase.h"
+#include "../../Skydome/Skydome.h"
 
 // ===== 列挙体定義 =====
 enum class UIType
@@ -28,8 +26,9 @@ class C_TITLE_UI;
 class C_PARTICLE_BASE;
 class C_TITLE_OBJ;
 class C_CAMERA;
-class C_LIGHT;
+class Light;
 class C_FADE;
+class Board;
 
 // ===== クラス定義 =====
 class SceneTitle final : public C_SCENE_BASE
@@ -49,17 +48,19 @@ public:
 
 
 private:
+	static constexpr UINT MaxUIType = static_cast<UINT>(UIType::DescUI) + 1;
+
 	C_CAMERA				*pCamera;							// カメラ
-	C_LIGHT					*pLight;							// ライト
-	C_SKYDOME				*pSkydome;							// スカイドーム
+	Light					*pLight;							// ライト
+
+	Skydome					*pSkydome;							// スカイドーム
 
 
-
-	C_PLAYER				*pPlayer;							// プレイヤー
-	C_MAIN_FIELD			*pField;							// フィールド
+	C_PLAYER				*pPlayer;
+	C_MAIN_FIELD			*pField;
 	C_TITLE_UI				*pTitleUI;							// タイトルUI
 	C_TITLE_OBJ				*pTitleObj;							// タイトルオブジェクト
-	C_BOARD					*pBoard[MAX_UI_TYPE];				// UI関連
+	Board					*pBoard[MaxUIType];					// UI関連
 	C_PARTICLE_BASE			*pParticle[MAX_PARTICLE];			// パーティクル
 
 	bool					bChangeScene;						// シーン切り替え

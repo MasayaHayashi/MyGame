@@ -47,7 +47,7 @@ SceneManager::SceneManager()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 SceneManager::~SceneManager()
 {
-	fadePtr->UninitObject();
+	fadePtr->finalizeObject();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -65,7 +65,7 @@ void SceneManager::initialize()
 void SceneManager::finalize()
 {
 	// シーン後処理
-	currentScenePtr->UninitScene();
+	currentScenePtr->finalizeScene();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -86,12 +86,12 @@ void SceneManager::update()
 		if (frameAdvanceCnt <= 0)
 		{
 			frameAdvanceCnt = DebugMoveOnFream;
-			currentScenePtr->UpdateScene();
+			currentScenePtr->updateScene();
 		}
 	}
 	else
 		// シーン更新
-		currentScenePtr->UpdateScene();
+		currentScenePtr->updateScene();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -99,7 +99,7 @@ void SceneManager::update()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneManager::updateFade()
 {
-	fadePtr->UpdateObject();
+	fadePtr->updateObject();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -108,7 +108,7 @@ void SceneManager::updateFade()
 void SceneManager::draw()
 {
 	// シーン描画
-	currentScenePtr->DrawScene();
+	currentScenePtr->drawScene();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -116,10 +116,10 @@ void SceneManager::draw()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void  SceneManager::drawFade()
 {
-	if (fadePtr->GetFadeState() != FadeUI::FadeType::FadeNone)
+	if (fadePtr->getFadeState() != FadeUI::FadeType::FadeNone)
 	{
 		// フェード描画
-		fadePtr->DrawObject();
+		fadePtr->drawObject();
 	}
 }
 
@@ -182,7 +182,7 @@ void SceneManager::setCurrentScene(SceneState setStateType)
 void SceneManager::setNextScene(SceneState setNextSceneType)
 {
 	nextSceneType = setNextSceneType;
-	fadePtr->SetFade(FadeUI::FadeType::FadeOut);
+	fadePtr->setFade(FadeUI::FadeType::FadeOut);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

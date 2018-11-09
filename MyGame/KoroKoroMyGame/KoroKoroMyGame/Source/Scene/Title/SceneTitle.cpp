@@ -44,7 +44,7 @@ SceneTitle::~SceneTitle()
 void SceneTitle::initialize()
 {
 	// ライト初期化
-	pLight = new C_LIGHT;
+	pLight = new Light;
 	pLight->InitLight();
 
 	// プレイヤー初期化
@@ -98,59 +98,55 @@ void SceneTitle::initialize()
 		pBoard[BoardCnt]->InitObject();
 	}
 
-	pBoard[UI_MAIN]->SetUsedFlg(false);
+	pBoard[UI_MAIN]->setUsedFlg(false);
 
-	// BGM再生
-//	PlaySound(SOUND_BGM_TITLE);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // タイトル終了処理
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void SceneTitle::UninitScene()
+void SceneTitle::finalizeScene()
 {
-	// BGM停止
-
 
 	// カメラ後処理
-	pCamera->UninitCamera();
+	pCamera->finalizeCamera();
 	SAFE_DELETE(pCamera);
 
 	// ライト後処理
-	pLight->UninitLight();
+	pLight->finalizeLight();
 	SAFE_DELETE(pLight);
 
 	// プレイヤー後処理
-	pPlayer->UninitObject();
+	pPlayer->finalizeObject();
 	SAFE_DELETE(pPlayer);
 
 	// スカイドーム後処理
-	pSkydome->UninitObject();
+	pSkydome->finalizeObject();
 	SAFE_DELETE(pSkydome);
 
 	// フィールド後処理
-	pField->UninitMeshField();
+	pField->finalizeMeshField();
 	SAFE_DELETE(pField);
 
 	// タイトルUI後処理
-	pTitleUI->UninitObject();
+	pTitleUI->finalizeObject();
 	SAFE_DELETE(pTitleUI);
 
 	// タイトルオブジェクト後処理
-	pTitleObj->UninitObject();
+	pTitleObj->finalizeObject();
 	SAFE_DELETE(pTitleObj);
 
 	// パーティクル後処理
 	for (int i = 0; i < MAX_PARTICLE; i++)
 	{
-		pParticle[i]->UninitObject();
+		pParticle[i]->finalizeObject();
 		SAFE_DELETE(pParticle[i]);
 	}
 
 	// UI後処理
 	for (INT BoardCnt = 0; BoardCnt < MAX_UI_TYPE; BoardCnt++)
 	{
-		pBoard[BoardCnt]->UninitObject();
+		pBoard[BoardCnt]->finalizeObject();
 		SAFE_DELETE(pBoard[BoardCnt]);
 	}
 
@@ -160,77 +156,77 @@ void SceneTitle::UninitScene()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void SceneTitle::UpdateScene()
+void SceneTitle::updateScene()
 {
-	D3DXVECTOR3 CameraFowerd = pCamera->GetCameraFowerd();
+	D3DXVECTOR3 CameraFowerd = pCamera->getCameraFowerd();
 
 	// タイトルUI更新
-	pTitleUI->UpdateObject();
+	pTitleUI->updateObject();
 
 	// パーティクル更新
 	for (INT i = 0; i < MAX_PARTICLE; i++)
-		pParticle[i]->UpdateObject();
+		pParticle[i]->updateObject();
 
 	// プレイヤー更新
-	pPlayer->UpdateObject(CameraFowerd);
+	pPlayer->updateObject(CameraFowerd);
 
 	// タイトルオブジェクト更新
-	pTitleObj->UpdateObject();
+	pTitleObj->updateObject();
 
 	// カメラ更新
-	pCamera->UpdateCamera_Title(pPlayer);
+	pCamera->updateCamera_Title(pPlayer);
 
 	// シーン遷移
-	if (GetKeyboardTrigger(DIK_F1))
+	if (getKeyboardTrigger(DIK_F1))
 	{
 //		PlaySound(SOUND_SE_CHANGE_SCENE);
-		GetSceneManager()->SetSceneChange(C_SCENE_MANAGER::SCENE_STAGE_EDIT);
+		getSceneManager()->setSceneChange(C_SCENE_MANAGER::SCENE_STAGE_EDIT);
 
 		bChangeScene = true;
 	}
-	if (GetKeyboardTrigger(DIK_F2))
+	if (getKeyboardTrigger(DIK_F2))
 	{
 //		PlaySound(SOUND_SE_CHANGE_SCENE);
-		GetSceneManager()->SetSceneChange(C_SCENE_MANAGER::SCENE_MAIN);
+		getSceneManager()->setSceneChange(C_SCENE_MANAGER::SCENE_MAIN);
 
 		bChangeScene = true;
 	}
 
-	if (GetKeyboardTrigger(DIK_SPACE))
+	if (getKeyboardTrigger(DIK_SPACE))
 	{
 		if (uSelectScene == 0)
 		{
 //			PlaySound(SOUND_SE_CHANGE_SCENE);
-			GetSceneManager()->SetSceneChange(C_SCENE_MANAGER::SCENE_STAGE_EDIT);
+			getSceneManager()->setSceneChange(C_SCENE_MANAGER::SCENE_STAGE_EDIT);
 
 			bChangeScene = true;
 		}
 		else if (uSelectScene == 1)
 		{
 //			PlaySound(SOUND_SE_CHANGE_SCENE);
-			GetSceneManager()->SetSceneChange(C_SCENE_MANAGER::SCENE_MAIN);
+			getSceneManager()->setSceneChange(C_SCENE_MANAGER::SCENE_MAIN);
 
 			bChangeScene = true;
 		}
 	}
 
-	if (GetKeyboardPress(DIK_A))
+	if (getKeyboardPress(DIK_A))
 	{
-		pBoard[UI_MAIN]->SetUsedFlg(false);
-		pBoard[UI_EDIT]->SetUsedFlg(true);
+		pBoard[UI_MAIN]->setUsedFlg(false);
+		pBoard[UI_EDIT]->setUsedFlg(true);
 		uSelectScene = 0;
 	}
-	if (GetKeyboardPress(DIK_D))
+	if (getKeyboardPress(DIK_D))
 	{
-		pBoard[UI_MAIN]->SetUsedFlg(true);
-		pBoard[UI_EDIT]->SetUsedFlg(false);
+		pBoard[UI_MAIN]->setUsedFlg(true);
+		pBoard[UI_EDIT]->setUsedFlg(false);
 		uSelectScene = 1;
 	}
 
 	// UI更新
 	for (INT BoardCnt = 0; BoardCnt < MAX_UI_TYPE; BoardCnt++)
 	{
-		pBoard[BoardCnt]->UpdateObject();
+		pBoard[BoardCnt]->updateObject();
 	}
 
 
@@ -246,34 +242,34 @@ void SceneTitle::UpdateScene()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 描画
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void SceneTitle::DrawScene()
+void SceneTitle::drawScene()
 {
 	// プレイヤー描画
-	pPlayer->DrawObject();
+	pPlayer->drawObject();
 
 	// スカイドーム描画
-	pSkydome->DrawObject();
+	pSkydome->drawObject();
 
 	// フィールド描画
-	pField->DrawMeshField();
+	pField->drawMeshField();
 
 	// タイトルロゴ描画
-	pTitleUI->DrawObject();
+	pTitleUI->drawObject();
 
 	// タイトルオブジェクト描画
-	pTitleObj->DrawObject();
+	pTitleObj->drawObject();
 
 	// カメラセット
-	pCamera->SetCamera();
+	pCamera->setCamera();
 
 		
 	// パーティクル描画
 	for (int i = 0; i < MAX_PARTICLE; i++)
-		pParticle[i]->DrawObject();
+		pParticle[i]->drawObject();
 
 	// UI描画
 	for (INT BoardCnt = 0; BoardCnt < MAX_UI_TYPE; BoardCnt++)
-		pBoard[BoardCnt]->DrawObject();
+		pBoard[BoardCnt]->drawObject();
 	
 }
 
@@ -289,7 +285,7 @@ void SceneTitle::InitStatus()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-C_CAMERA* SceneTitle::GetCamera()
+C_CAMERA* SceneTitle::getCamera()
 {
 	return pCamera;
 }

@@ -1,6 +1,5 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// C_3DActor.cpp
-// アクタークラス
+// GameObjectBase.cpp
 // Author : Masaya Hayashi
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
@@ -24,33 +23,33 @@ GameObjectBase::~GameObjectBase()
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// アクター初期化
+// 初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void GameObjectBase::InitObject()
+void GameObjectBase::initialize()
 {
 
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// アクター後処理
+// 後処理
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void GameObjectBase::UninitObject()
+void GameObjectBase::finalize()
 {
 
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// アクター更新
+// 更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void GameObjectBase::UpdateObject()
+void GameObjectBase::updateObject()
 {
 
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// アクター描画
+// 描画
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void GameObjectBase::DrawObject()
+void GameObjectBase::drawObject()
 {
 
 }

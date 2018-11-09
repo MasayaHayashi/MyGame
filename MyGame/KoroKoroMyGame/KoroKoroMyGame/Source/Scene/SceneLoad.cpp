@@ -46,13 +46,13 @@ void InitNextResorce()
 	std::mutex mutexObj;
 	mutexObj.lock();
 
-	SceneManager *pSceneManager = GetSceneManager();
+	SceneManager *pSceneManager = getSceneManager();
 
 	SceneManager::SceneState nextScene = SceneManager::getNextScene();
 
-	SceneManager::SceneState NextScene = pSceneManager->GetNextScene();
-	pSceneManager->SetCurrentScene(NextScene);	// 現在のシーンを次のシーンに上書き
-	pSceneManager->SetScene(NextScene);
+	SceneManager::SceneState NextScene = pSceneManager->getNextScene();
+	pSceneManager->setCurrentScene(NextScene);	// 現在のシーンを次のシーンに上書き
+	pSceneManager->setScene(NextScene);
 
 	// 次のシーンの初期化
 	pSceneManager->InitScene();
@@ -60,7 +60,7 @@ void InitNextResorce()
 
 	mutexObj.unlock();
 
-	C_SCENE_LOAD::SetLoadFlg(true);
+	C_SCENE_LOAD::setLoadFlg(true);
 
 }
 
@@ -78,7 +78,7 @@ void C_SCENE_LOAD::InitScene()
 	pCamera->InitCamera();
 
 	// ライト初期化
-	pLight = NEW C_LIGHT;
+	pLight = NEW Light;
 	pLight->InitLight();
 
 	
@@ -89,29 +89,29 @@ void C_SCENE_LOAD::InitScene()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // タイトル終了処理
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_SCENE_LOAD::UninitScene()
+void C_SCENE_LOAD::finalizeScene()
 {
 	// タイトルロゴ後処理
-	pLoadIcon->UninitObject();
+	pLoadIcon->finalizeObject();
 	SAFE_DELETE(pLoadIcon);
 
-	pCamera->UninitCamera();
+	pCamera->finalizeCamera();
 	SAFE_DELETE(pCamera);
 
-	pLight->UninitLight();
+	pLight->finalizeLight();
 	SAFE_DELETE(pLight);
 
-	pTitleObj->UninitObject();
+	pTitleObj->finalizeObject();
 	SAFE_DELETE(pTitleObj);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_SCENE_LOAD::UpdateLoad()
+void C_SCENE_LOAD::updateLoad()
 {
 	// ロードオブジェクト更新
-	pLoadIcon->UpdateObject();
+	pLoadIcon->updateObject();
 }
 
 
@@ -125,7 +125,7 @@ void C_SCENE_LOAD::EnableLoad()
 	DWORD dwCurrentTime;
 	DWORD dwFrameCount;
 
-	dwExecLastTime = dwFPSLastTime = timeGetTime();
+	dwExecLastTime = dwFPSLastTime = timegetTime();
 	dwCurrentTime = dwFrameCount = 0;
 
 #if 1
@@ -136,14 +136,14 @@ void C_SCENE_LOAD::EnableLoad()
 	// ロード画面描画
 	while (1)
 	{
-		dwCurrentTime = timeGetTime();
+		dwCurrentTime = timegetTime();
 
 		if ((dwCurrentTime - dwExecLastTime) >= (1000 / 60))
 		{
 			dwExecLastTime = dwCurrentTime;
 
-			UpdateLoad();
-			DrawScene();
+			updateLoad();
+			drawScene();
 
 			// ロード完了
 			if (finishedLoad)
@@ -159,32 +159,32 @@ void C_SCENE_LOAD::EnableLoad()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 描画
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_SCENE_LOAD::DrawScene()
+void C_SCENE_LOAD::drawScene()
 {
 	// オブジェクト取得
 	LPDIRECT3DDEVICE9 devicePtr = ();
 
 	// バックバッファ＆Ｚバッファのクリア
-	devicePtr->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 0), 1.0f, 0);
+	devicePtr->Clear(0, nullptr, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 0), 1.0f, 0);
 
 	// Direct3Dによる描画の開始
 	if (SUCCEEDED(devicePtr->BeginScene()))
 	{
-		pLoadIcon->DrawObject();	// ロード
+		pLoadIcon->drawObject();	// ロード
 
-		pCamera->SetCamera();		// カメラセット
+		pCamera->setCamera();		// カメラセット
 
 		// Direct3Dによる描画の終了
 		devicePtr->EndScene();
 	}
 	// バックバッファとフロントバッファの入れ替え
-	devicePtr->Present(NULL, NULL, NULL, NULL);
+	devicePtr->Present(nullptr, nullptr, nullptr, nullptr);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ロードフラグセット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_SCENE_LOAD::SetLoadFlg(bool bSet)
+void C_SCENE_LOAD::setLoadFlg(bool bset)
 {
-	finishedLoad = bSet;
+	finishedLoad = bset;
 }

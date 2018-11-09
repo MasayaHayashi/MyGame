@@ -11,7 +11,7 @@
 #include "../Scene/Load/SceneLoad.h"
 
 // ===== 定数・マクロ定義 =====
-#define TEXTURE_NAME		"data/TEXTURE/test.png"
+//#define TEXTURE_NAME		"data/TEXTURE/test.png"
 #define TEXTURE_NAME_STAR	"data/TEXTURE/Background.png"
 #define FADE_RATE (0.02f)
 
@@ -20,27 +20,27 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 FadeUI::FadeUI()
 {
-	VertexBoard.bFade = true;
+	vertexBoard.fade = true;
 	CurentFadeType	= FadeType::FadeNone;
 	CurrentColor	= D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f);
 	//CurrentColor	= D3DXCOLOR(0.0f, 0.635f, 0.91f, 0.0f);
 	//Color = D3DXCOLOR(0.0f, 0.0f, 0.8f, 0.0f);
-	strcpy_s(szFileName, TEXTURE_NAME);
-	VertexBoard.SizeBoard		 = D3DXVECTOR3(Application::ScreenWidth, Application::ScreenHeight, 0.0f);
-	VertexBoard.PosBoard		 = D3DXVECTOR3(Application::ScreenWidth * 0.5f, Application::ScreenHeight * 0.5f, 0.0f);
-	VertexBoard.ScaleBoard		 = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-	VertexBoard.fRadAngleBoard	 = D3DXToRadian(0);
-	VertexBoard.BoardType		= POLYGON_2D;
-	bAlphaBlendBoard = false;
-	uNumber			 = 0;
+	strcpy_s(fileName, &TextureName.front());
+	vertexBoard.size		 = D3DXVECTOR3(Application::ScreenWidth, Application::ScreenHeight, 0.0f);
+	vertexBoard.pos		 = D3DXVECTOR3(Application::ScreenWidth * 0.5f, Application::ScreenHeight * 0.5f, 0.0f);
+	vertexBoard.scaleBoard		 = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	vertexBoard.radAngleBoard	 = D3DXToRadian(0);
+	vertexBoard.boardType		= POLYGON_2D;
+	alphaBlendBoard = false;
+	number			 = 0;
 
-	TexPatternDivideX		= 1;
-	TexPatternDivideY		= 1;
-	TexUV_SizeX				= 1.0f / TexPatternDivideX;
-	TexUV_SizeY				= 1.0f / TexPatternDivideY;
-	NumAnimPattern			= TexPatternDivideX * TexPatternDivideY;
-	CurrentAnimPattern		= 1;
-	nIntervalChangePattern	= 7;
+	texPatternDivideX		= 1;
+	texPatternDivideY		= 1;
+	texUV_SizeX				= 1.0f / texPatternDivideX;
+	texUV_SizeY				= 1.0f / texPatternDivideY;
+	animPattern				= texPatternDivideX * texPatternDivideY;
+	currentAnimPattern		= 1;
+	intervalChangePattern	= 7;
 
 	bUsed = true;
 }
@@ -56,34 +56,34 @@ FadeUI::~FadeUI()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 番号初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_FADE::InitObject()
+void C_FADE::initialize()
 {
 	strcpy_s(szFileName, TEXTURE_NAME);
-//	Texture.pD3DTexture = NULL;
+//	Texture.pD3DTexture = nullptr;
 	//	CurentFadeType = FADE_IN;
 	CurrentColor = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.2f);
 
-	C_RESOURCE_MANAGER::MakeVertexBoard(VertexBoard,szFileName);	// 頂点情報生成
-	C_RESOURCE_MANAGER::CreateTexture(Texture,szFileName);		// テクスチャ生成
+	ResourceManager::makevertexBoard(vertexBoard,szFileName);	// 頂点情報生成
+	ResourceManager::CreateTexture(Texture,szFileName);		// テクスチャ生成
 
-	Texture.pD3DTexture = NULL;
+	Texture.pD3DTexture = nullptr;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 番号後処理
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_FADE::UninitObject()
+void C_FADE::finalizeObject()
 {
-//	C_BOARD::UninitObject();
+//	C_BOARD::finalizeObject();
 	
 	// 頂点情報解放
-	C_RESOURCE_MANAGER::DestroyFadeVtx();
+	ResourceManager::destroyFadeVtx();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // フェード更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_FADE::UpdateObject()
+void C_FADE::updateObject()
 {
 	if (CurentFadeType != FADE_NONE)
 	{// フェード処理中
@@ -97,21 +97,21 @@ void C_FADE::UpdateObject()
 				// フェードイン処理に切り替え
 				CurrentColor.a = 1.0f;
 
-				C_SCENE_MANAGER *pSceneManager = GetSceneManager();
+				C_SCENE_MANAGER *pSceneManager = getSceneManager();
 
 				// シーン後処理
-				pSceneManager->UninitScene();
+				pSceneManager->finalizeScene();
 			//	SAFE_DELETE(pCurrentScene);
 
 
 				// ロード開始
-				C_SCENE_LOAD *pSceneLoad = GetSceneLoad();
+				C_SCENE_LOAD *pSceneLoad = getSceneLoad();
 				pSceneLoad->EnableLoad();
-				SetFade(FADE_IN);
+				setFade(FADE_IN);
 			}
 
 			// 色を設定
-			SetColor(CurrentColor);
+			setColor(CurrentColor);
 		}
 		else if (FADE_IN == CurentFadeType)
 		{
@@ -122,36 +122,36 @@ void C_FADE::UpdateObject()
 			{
 				// フェード処理終了
 				CurrentColor.a = 0.0f;
-				SetFade(FADE_NONE);
+				setFade(FADE_NONE);
 			}
 
 			// 色を設定
-			SetColor(CurrentColor);
+			setColor(CurrentColor);
 		}
 	}
-	//SetTexture();
-	SetVtxBoard();
-	SetColor(CurrentColor);
+	//setTexture();
+	setvtxBoard();
+	setColor(CurrentColor);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 番号描画
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_FADE::DrawObject()
+void C_FADE::drawObject()
 {
-	C_BOARD::DrawObject();
+	C_BOARD::drawObject();
 }
 
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 色を設定
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_FADE::SetColor(D3DCOLOR col)
+void C_FADE::setColor(D3DCOLOR col)
 {
 	VERTEX_2D *pVtx;
 
 	// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
-	VertexBoard.pD3DVtxBuffBoard->Lock(0, 0, (void**)&pVtx, 0);
+	vertexBoard.pD3DVtxBuffBoard->Lock(0, 0, (void**)&pVtx, 0);
 
 	// 反射光の設定
 	pVtx[0].diffuse = col;
@@ -160,13 +160,13 @@ void C_FADE::SetColor(D3DCOLOR col)
 	pVtx[3].diffuse = col;
 
 	// 頂点データをアンロックする
-	VertexBoard.pD3DVtxBuffBoard->Unlock();
+	vertexBoard.pD3DVtxBuffBoard->Unlock();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // フェードの状態設定
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_FADE::SetFade(FADE_TYPE fade)
+void C_FADE::setFade(FADE_TYPE fade)
 {
 	CurentFadeType = fade;
 }
@@ -174,7 +174,7 @@ void C_FADE::SetFade(FADE_TYPE fade)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // フェードの状態取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-C_FADE::FADE_TYPE C_FADE::GetFadeState()
+C_FADE::FADE_TYPE C_FADE::getFadeState()
 {
 	return CurentFadeType;
 }
@@ -182,7 +182,7 @@ C_FADE::FADE_TYPE C_FADE::GetFadeState()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ワーク用シーンセット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_FADE::SetWorkScene(C_SCENE_MANAGER::SCENE_STATE SetScene)
+void C_FADE::setWorkScene(C_SCENE_MANAGER::SCENE_STATE setScene)
 {
-	WorkScene = SetScene;
+	WorkScene = setScene;
 }

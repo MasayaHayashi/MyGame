@@ -34,9 +34,9 @@ public:
 	virtual ~C_SCENE_BASE();
 
 	virtual void InitScene()   = 0;
-	virtual void UninitScene() = 0;
-	virtual void UpdateScene() = 0;
-	virtual void DrawScene()   = 0;
+	virtual void finalizeScene() = 0;
+	virtual void updateScene() = 0;
+	virtual void drawScene()   = 0;
 
 	virtual void InitStatus()  = 0;		// 各種ステータスリセット
 

@@ -11,7 +11,7 @@
 // ===== インクルード部 ====
 #include "d3dx9.h"
 #include "../SceneManager/SceneManager.h"
-#include "C_Player.h"
+#include "../Camera/camera.h"
 #include <vector>
 
 // ===== 定数・マクロ定義 =====
@@ -58,14 +58,14 @@ public:
 	Camera();
 	~Camera();
 
-	void Init();
-	void init(C_PLAYER* pPlayer);
-	void uninit();
+	void initialize();
+	void finalize(C_PLAYER* pPlayer);
+	void finalize();
 	void update(C_PLAYER *,C_BOARD *);
-	void updateTitle(C_3DPAWN*);
+	void updateTitle(Pawn*);
 	void updateStageEdit(const D3DXVECTOR3&);
 	void updateGameMain(C_PLAYER*,C_BOARD*);
-	void setState(CAMERA_MOVE_TYPE SetState);
+	void setState(CAMERA_MOVE_TYPE setState);
 
 
 	void setCamera();

@@ -8,15 +8,15 @@
 #include "MyHierarchy.h"
 
 #ifndef SAFE_DELETE
-#define SAFE_DELETE(p)       { if(p!=NULL) { delete (p);     (p) = NULL; } }
+#define SAFE_DELETE(p)       { if(p!=nullptr) { delete (p);     (p) = nullptr; } }
 #endif
 
 #ifndef SAFE_RELEASE
-#define SAFE_RELEASE(p)      { if(p!=NULL) { (p)->Release(); (p) = NULL; } }
+#define SAFE_RELEASE(p)      { if(p!=nullptr) { (p)->Release(); (p) = nullptr; } }
 #endif
 
 #ifndef SAFE_DELETE_ARRAY
-#define SAFE_DELETE_ARRAY(p) { if(p!=NULL) { delete[] (p);   (p) = NULL; } }
+#define SAFE_DELETE_ARRAY(p) { if(p!=nullptr) { delete[] (p);   (p) = nullptr; } }
 #endif
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // フレーム生成
@@ -37,7 +37,7 @@ HRESULT MyHierarchy::CreateFrame(LPCSTR pMesh, LPD3DXFRAME* ppNewFrame)
 	{
 		// フレーム名あり
 		pFrame->Name = new char[lstrlenA(pMesh) + 1];
-		if (pFrame->Name == NULL)
+		if (pFrame->Name == nullptr)
 		{
 			delete pFrame;
 			return E_OUTOFMEMORY;
@@ -47,7 +47,7 @@ HRESULT MyHierarchy::CreateFrame(LPCSTR pMesh, LPD3DXFRAME* ppNewFrame)
 	else
 	{
 		// フレーム名なし
-		pFrame->Name = NULL;
+		pFrame->Name = nullptr;
 	}
 
 	// マトリックス初期化
@@ -71,7 +71,7 @@ HRESULT MyHierarchy::CreateMeshContainer(LPCSTR					name,
 	LPD3DXSKININFO				skinInfoPtr,
 	LPD3DXMESHCONTAINER*		ppNewMeshContainer)
 {
-	// 取りあえずNULLをセットしておく
+	// 取りあえずnullptrをセットしておく
 	*ppNewMeshContainer = nullptr;
 
 	// 正常なメッシュ以外はエラーで戻す
@@ -86,7 +86,7 @@ HRESULT MyHierarchy::CreateMeshContainer(LPCSTR					name,
 	// メッシュコンテナ用メモリの確保
 	MYMESHCONTAINER* meshContainerPtr = new MYMESHCONTAINER();
 
-	if (meshContainerPtr == NULL)
+	if (meshContainerPtr == nullptr)
 		return E_OUTOFMEMORY;
 
 	ZeroMemory(meshContainerPtr, sizeof(MYMESHCONTAINER));
@@ -95,7 +95,7 @@ HRESULT MyHierarchy::CreateMeshContainer(LPCSTR					name,
 	if (name)
 	{
 		meshContainerPtr->Name = new CHAR[lstrlenA(name) + 1];
-		if (meshContainerPtr->Name == NULL)
+		if (meshContainerPtr->Name == nullptr)
 		{
 			delete meshContainerPtr;
 			return E_OUTOFMEMORY;
@@ -103,10 +103,10 @@ HRESULT MyHierarchy::CreateMeshContainer(LPCSTR					name,
 		lstrcpyA(meshContainerPtr->Name, name);
 	}
 	else
-		meshContainerPtr->Name = NULL;
+		meshContainerPtr->Name = nullptr;
 
 	// D3Dデバイス取得
-	LPDIRECT3DDEVICE9 devicePtr = NULL;
+	LPDIRECT3DDEVICE9 devicePtr = nullptr;
 	meshPtr->GetDevice(&devicePtr);
 
 	// ポリゴン(三角形)数取得
@@ -128,7 +128,7 @@ HRESULT MyHierarchy::CreateMeshContainer(LPCSTR					name,
 			return E_FAIL;
 		}
 		meshPtr = meshContainerPtr->MeshData.pMesh;
-		D3DXComputeNormals(meshPtr, NULL);
+		D3DXComputeNormals(meshPtr, nullptr);
 	}
 
 	// マテリアル用メモリ確保
@@ -136,7 +136,7 @@ HRESULT MyHierarchy::CreateMeshContainer(LPCSTR					name,
 	meshContainerPtr->pMaterials = new D3DXMATERIAL[meshContainerPtr->NumMaterials];
 	meshContainerPtr->ppTextures = new LPDIRECT3DTEXTURE9[meshContainerPtr->NumMaterials];
 	meshContainerPtr->pAdjacency = new DWORD[facesAmount * 3];
-	if (meshContainerPtr->pAdjacency == NULL || meshContainerPtr->ppTextures == NULL || meshContainerPtr->pMaterials == NULL)
+	if (meshContainerPtr->pAdjacency == nullptr || meshContainerPtr->ppTextures == nullptr || meshContainerPtr->pMaterials == nullptr)
 	{
 		DestroyMeshContainer(meshContainerPtr);
 		devicePtr->Release();
@@ -162,7 +162,7 @@ HRESULT MyHierarchy::CreateMeshContainer(LPCSTR					name,
 		{
 			meshContainerPtr->pMaterials[i].MatD3D.Ambient = meshContainerPtr->pMaterials[i].MatD3D.Diffuse;
 			if (FAILED(D3DXCreateTextureFromFileA(devicePtr, meshContainerPtr->pMaterials[i].pTextureFilename, &meshContainerPtr->ppTextures[i])))
-				meshContainerPtr->ppTextures[i] = NULL;
+				meshContainerPtr->ppTextures[i] = nullptr;
 		}
 
 		// カレントディレクトリを元に戻す
@@ -187,20 +187,20 @@ HRESULT MyHierarchy::CreateMeshContainer(LPCSTR					name,
 	}
 	SAFE_RELEASE(meshContainerPtr->MeshData.pMesh);
 	meshContainerPtr->MeshData.pMesh = meshPtr;
-	hr = meshPtr->GetAttributeTable(NULL, &meshContainerPtr->NumAttributeGroups);
+	hr = meshPtr->GetAttributeTable(nullptr, &meshContainerPtr->NumAttributeGroups);
 	if (FAILED(hr)) 
 	{
 		devicePtr->Release();
 		return hr;
 	}
 	meshContainerPtr->pAttributeTable = new D3DXATTRIBUTERANGE[meshContainerPtr->NumAttributeGroups];
-	if (meshContainerPtr->pAttributeTable == NULL)
+	if (meshContainerPtr->pAttributeTable == nullptr)
 	{
 		meshContainerPtr->NumAttributeGroups = 0;
 		devicePtr->Release();
 		return E_OUTOFMEMORY;
 	}
-	hr = meshPtr->GetAttributeTable(meshContainerPtr->pAttributeTable, NULL);
+	hr = meshPtr->GetAttributeTable(meshContainerPtr->pAttributeTable, nullptr);
 	if (FAILED(hr))
 	{
 		devicePtr->Release();
@@ -220,7 +220,7 @@ HRESULT MyHierarchy::CreateMeshContainer(LPCSTR					name,
 		// ワールド・マトリックスの場所を確保
 		DWORD dwBoneNum = skinInfoPtr->GetNumBones();
 		meshContainerPtr->pBoneOffsetMatrix = new D3DXMATRIX[dwBoneNum];
-		if (meshContainerPtr->pBoneOffsetMatrix == NULL)
+		if (meshContainerPtr->pBoneOffsetMatrix == nullptr)
 			return E_OUTOFMEMORY;
 
 		// ワールド・マトリックスを初期化
@@ -229,8 +229,8 @@ HRESULT MyHierarchy::CreateMeshContainer(LPCSTR					name,
 
 		// スキン用に変換
 		hr = skinInfoPtr->ConvertToBlendedMesh(
-			meshPtr, NULL, meshContainerPtr->pAdjacency,
-			NULL, NULL, NULL,
+			meshPtr, nullptr, meshContainerPtr->pAdjacency,
+			nullptr, nullptr, nullptr,
 			&meshContainerPtr->dwWeight,
 			&meshContainerPtr->dwBone,
 			&meshContainerPtr->pBoneBuffer,

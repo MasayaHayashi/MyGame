@@ -9,13 +9,13 @@
 
 // ===== インクルード部 =====
 #include "../SceneInterface/sceneBase.h"
-#include "../Fade/FadeUI.h"
 #include "d3dx9.h"
 #include <memory>
 
 // ===== クラスの前方宣言 =====
 class SceneTitle;
 class SceneMain;
+class FadeUI;
 
 // ===== クラス定義 =====
 class SceneManager

@@ -12,7 +12,7 @@
 #include "../ResoueceManager/ResourceManager.h"
 
 // ===== 列挙体定義 =====
-enum class  BoardType
+enum class  boardType
 {
 	Polygon2d = 0,
 	Billboard,
@@ -20,7 +20,7 @@ enum class  BoardType
 };
 
 // ===== クラス定義 =====
-class Board final : public GameObjectBase
+class Board : public GameObjectBase
 {
 public:
 	Board();
@@ -31,23 +31,23 @@ public:
 	virtual void initializeStatus();
 	virtual void finalize();
 
-	bool makeVertexBoard();	
-	bool makeVertexBoard(D3DXVECTOR3);		// 頂点情報生成
+	bool makevertexBoard();	
+	bool makevertexBoard(D3DXVECTOR3);		// 頂点情報生成
 	void setTexture();						// UV座標セット
-	void setVtxBoard();						// 頂点情報セット
+	void setvtxBoard();						// 頂点情報セット
 	void setColor();						// 頂点カラーセット
 	bool createTexture(TEXTURE_DATA &Texture);
 
 	void setNumber(BYTE);					// 使用番号セット
 	void setAnimation();					// アニメーションセット
 	void setPosition(D3DXVECTOR3);			// 位置セット
-	void setUsedFlg(bool Setflg);			// 使用フラグセット
+	void setUsedFlg(bool setflg);			// 使用フラグセット
 	void setMoveNum(D3DXVECTOR3 MoveNum);	// 移動量セット
-	void setCnt(FLOAT fSet);				// カウンタセット
-	void setCnt(INT nSet);					// カウンタセット
+	void setCnt(FLOAT fset);				// カウンタセット
+	void setCnt(INT nset);					// カウンタセット
 	void setCurrentAnimPattern(INT nAnim);	// アニメーションセット
 	void setStartCurvePos(D3DXVECTOR3 );	// ベジェ曲線、エルミート曲線用スタート位置セット
-	void setNarrowFlg(bool bSet);
+	void setNarrowFlg(bool bset);
 	void destroyBoard();					// 板ポリゴン解放
 
 
@@ -72,8 +72,8 @@ protected:
 	LPDIRECT3DTEXTURE9		pD3DTextureBoard;	// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 pD3DVtxBuffBoard;	// 頂点バッファインターフェースへのポインタ
 	LPDIRECT3DINDEXBUFFER9	pD3DIdxBuffBoard;	// インデックスバッファへのポインタ
-	D3DXVECTOR3				posBoard;			// 位置
-	D3DXVECTOR3				sizeBoard;			// 大きさ
+	D3DXVECTOR3				pos;			// 位置
+	D3DXVECTOR3				size;			// 大きさ
 	D3DXVECTOR3				rotBoard;			// 回転
 	D3DXVECTOR3				scaleBoard;			// 拡大率
 	D3DXVECTOR3				posDestBoard;		// 目的位置
@@ -85,7 +85,7 @@ protected:
 	FLOAT					radAngleBoard;		// ポリゴンの回転角度(ラジアン値)
 	FLOAT					rotSpeedBoard;		// ポリゴンの回転速度
 	bool					alphaBlendBoard;	// テクスチャの加算合成設定
-	BoardType				boardType;			// 2Dポリゴンか、ビルボードかの識別
+	boardType				boardType;			// 2Dポリゴンか、ビルボードかの識別
 
 	// テクスチャ関連
 	INT						texPatternDivideX;		// テクスチャ内分割数X
@@ -103,7 +103,7 @@ protected:
 
 	BYTE					number;				// 識別番号
 	bool					narrow;				// 縮小処理
-	bool					used;				// 使用フラグ
+	bool					isUsed;
 private:
 
 	D3DXMATRIX				mtxTempView;			// 逆行列を求めるためのビュー行列

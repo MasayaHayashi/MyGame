@@ -14,12 +14,13 @@
 #include "../MyHierarchy/MyHierarchy.h"
 #include <vector>
 
-// ===== クラスの前方宣言 =====
+// ===== 前方宣言 =====
+enum class boardType;
 
 // ===== 構造体定義 =====
 typedef struct
 {
-	CHAR				szMeshFileName[256];	// ファイル名
+	CHAR				meshFileName[256];	// ファイル名
 	LPD3DXMESH			pD3DXMesh;				// メッシュ情報
 	LPD3DXBUFFER		pD3DXBuffMat;			// マテリアル情報へのポインタ
 	DWORD				numMat;					// マテリアル情報の数
@@ -54,8 +55,8 @@ typedef struct
 
 	LPD3DXFRAME					frameRoot;				// ルート フレーム オブジェクト
 	LPD3DXANIMATIONCONTROLLER	animCtrl;				// アニメーション コントローラ オブジェクト
-	UINT						numAnimSet;				// アニメーション セット数
-	LPD3DXANIMATIONSET*			ppAnimSet;				// アニメーション セット
+	UINT						numAnimset;				// アニメーション セット数
+	LPD3DXANIMATIONSET*			ppAnimset;				// アニメーション セット
 	MyHierarchy					hierarchy;				// 階層メモリ確保/解放クラス
 	DWORD						dwPrev;					// 直前の時刻
 } HIERARCHY_MESH_DATA;	// 階層構造用メッシュ情報
@@ -70,9 +71,9 @@ typedef struct
 {
 	CHAR					name[256];				// 識別名
 	LPDIRECT3DVERTEXBUFFER9 pD3DVtxBuffBoard;		// 頂点バッファインターフェースへのポインタ
-	UINT					boardType;				// ボードの種類
-	D3DXVECTOR3				posBoard;				// 位置
-	D3DXVECTOR3				sizeBoard;				// 大きさ
+	boardType				boardType;				// ボードの種類
+	D3DXVECTOR3				pos;					// 位置
+	D3DXVECTOR3				size;					// 大きさ
 	D3DXVECTOR3				scaleBoard;				// 拡大率
 	D3DXVECTOR3				rotBoard;				// 回転角度
 	FLOAT					radAngleBoard;			// 2D用回転角度
@@ -83,36 +84,36 @@ typedef struct
 class ResourceManager
 {
 public:
-	ResourceManager();
-	~ResourceManager();
-
 	// 生成
-	static HRESULT MakeModel(MESH_DATA &MeshData, CHAR *pszFilename,UINT &uMeshType);
+	static HRESULT makeModel(MESH_DATA &MeshData, CHAR *pszFilename,UINT &uMeshType);
 	static HRESULT CreateTexture(TEXTURE_DATA &TextureData,CHAR *pszFilename);
-	static HRESULT MakeModelHierarchy(HIERARCHY_MESH_DATA &HierarchyMedhData, CHAR *pszFilename, UINT &MeshType);
-	static HRESULT MakeVertexBoard(VERTEX_BOARD_DATA &VtxBordData, CHAR *pszFilename);
+	static HRESULT makeModelHierarchy(HIERARCHY_MESH_DATA &HierarchyMedhData, CHAR *pszFilename, UINT &MeshType);
+	static HRESULT makevertexBoard(VERTEX_BOARD_DATA &VtxBordData, CHAR *pszFilename);
 
 	// 解放
-	static bool DestroyMesh(CHAR *pszChakNeme);
-	static bool DestroyAllMesh();	// 全メッシュを削除
-	static bool DestroyHierarchyMesh(CHAR *pszChakNeme);
-	static bool DestroyAllHierarchyMesh();
-	static bool DestroyAllTexture();
-	static bool DestroyVtx();
-	static bool DestroyFadeVtx();
+	static bool destroyMesh(CHAR *pszChakNeme);
+	static bool destroyAllMesh();	// 全メッシュを削除
+	static bool destroyHierarchymesh(CHAR *pszChakNeme);
+	static bool destroyAllHierarchymesh();
+	static bool destroyAllTexture();
+	static bool destroyVtx();
+	static bool destroyFadeVtx();
 	
 	static void CreateFadeTexture(TEXTURE_DATA& TextureData, CHAR *pszFilename);
 
 	// インスタンス
-	static C_RESOURCE_MANAGER *pInstance;
+	static ResourceManager *pInstance;
 
 private:
-#define FVF_TVERTEX	(D3DFVF_XYZ|D3DFVF_NORMAL|D3DFVF_TEX1)
+#define FVF_TVERTEX	    (D3DFVF_XYZ|D3DFVF_NORMAL|D3DFVF_TEX1)
+#define	FVF_VERTEX_2D	(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1)
+#define	FVF_VERTEX_3D	(D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1)
 
-	C_RESOURCE_MANAGER();
+	ResourceManager();
+	~ResourceManager();
 
 	static std::vector<MESH_DATA*>				mesh;			
-	static std::vector<HIERARCHY_MESH_DATA*>	hierarchyMesh;
+	static std::vector<HIERARCHY_MESH_DATA*>	hierarchymesh;
 	static std::vector<TEXTURE_DATA*>			texture;		
 	static std::vector<TEXTURE_DATA*>			fadeTexture;	
 	static std::vector<VERTEX_BOARD_DATA*>		vtxBoard;		
@@ -122,19 +123,19 @@ private:
 	static bool CheckExisting(CHAR *pszChakNeme, TEXTURE_DATA &textureData);
 	static bool CheckExisting(CHAR *pszChakNeme, VERTEX_BOARD_DATA &textureData);
 
-static void SetTime(DOUBLE dTime, CHAR *pszFilename);
-
-static 	HRESULT AllocBoneMatrix(LPD3DXMESHCONTAINER meshContainerPtrBase, CHAR *pszFilename);
-static 	HRESULT AllocAllBoneMatrix(LPD3DXFRAME pFrameBase, CHAR *pszFilename);
-static	void CalcCollision(LPD3DXFRAME pFrame, CHAR *pszFilename);
-static	void CalcCollisionFrame(LPD3DXFRAME pFrame, CHAR *pszFilename);
-static	void CalcCollisionMeshContainer(LPD3DXMESHCONTAINER meshContainerPtr, LPD3DXFRAME pFrame, CHAR *pszFilename);
-static	void UpdateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX pParentMatrix);
-
-static 	bool makeVtx(VERTEX_BOARD_DATA&);		// 通常
-static 	bool makeVtxFade(VERTEX_BOARD_DATA&);	// フェード用
-
-static	void createNormalTexture(TEXTURE_DATA&,CHAR*);
+	static void setTime(DOUBLE dTime, CHAR *pszFilename);
+	
+	static 	HRESULT AllocBoneMatrix(LPD3DXMESHCONTAINER meshContainerPtrBase, CHAR *pszFilename);
+	static 	HRESULT AllocAllBoneMatrix(LPD3DXFRAME pFrameBase, CHAR *pszFilename);
+	static	void calcCollision(LPD3DXFRAME pFrame, CHAR *pszFilename);
+	static	void calcCollisionFrame(LPD3DXFRAME pFrame, CHAR *pszFilename);
+	static	void calcCollisionMeshContainer(LPD3DXMESHCONTAINER meshContainerPtr, LPD3DXFRAME pFrame, CHAR *pszFilename);
+	static	void updateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX pParentMatrix);
+	
+	static 	bool makeVtx(VERTEX_BOARD_DATA&);		// 通常
+	static 	bool makeVtxFade(VERTEX_BOARD_DATA&);	// フェード用
+	
+	static	void createNormalTexture(TEXTURE_DATA&,CHAR*);
 
 };
 

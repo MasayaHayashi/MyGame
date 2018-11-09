@@ -17,22 +17,13 @@ class GameObjectBase
 		GameObjectBase();
 		virtual ~GameObjectBase();
 
-		virtual void InitObject();
-		virtual void UninitObject();
-		virtual void UpdateObject();
-		virtual void DrawObject();
+		virtual void initialize();
+		virtual void finalize();
+		virtual void updateObject();
+		virtual void drawObject();
 
 	protected:
-		enum class TAG_TYPE
-		{
-			TAG_BASEOBJ = 0,
-			TAG_PLAYER,		// 自機
-			TAG_ENEMY,		// 敵機
-			TAG_LAND,		// 地面
-			MAX_TAG_TYPE,
-		};
 
-		TAG_TYPE	Tag;				// 識別用タグ
 	private:
 
 };

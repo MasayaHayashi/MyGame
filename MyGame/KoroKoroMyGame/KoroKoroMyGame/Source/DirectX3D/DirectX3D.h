@@ -17,6 +17,9 @@
 class DirectX3D
 {
 public :
+	static const constexpr INT VertexSize  = 4;
+	static const constexpr INT PolygonSize = 2;
+
 	DirectX3D();
 	~DirectX3D();
 
@@ -25,15 +28,16 @@ public :
 	const void draw();
 	static const void printDebug(CHAR *fmt,...);
 
-	static const LPDIRECT3DDEVICE9 getDevice();
+	static const LPDIRECT3DDEVICE9	getDevice();
+	static const LPD3DXEFFECT 		getEffect();
 
 private :
-	static CComPtr<IDirect3DDevice9> directXDevice;
-	CComPtr<IDirect3D9>				 directXObj		= nullptr;
-	CComPtr<ID3DXEffect>			 directXEffect	= nullptr;
-	CComPtr<ID3DXFont>				 directXFont	= nullptr;
+	static CComPtr<IDirect3DDevice9>  directXDevice;
+	static CComPtr<ID3DXEffect>		  directXEffect;
+	CComPtr<IDirect3D9>				  directXObj		= nullptr;
+	CComPtr<ID3DXFont>				  directXFont		= nullptr;
 
-	BOOL		 isWindowMode	= true;
+	bool		 isWindowMode	= true;
 
 	static CHAR  debug[1024];	// TODO : stringå^Ç…ïœçX
 

@@ -73,14 +73,29 @@
     <Filter Include="ソース ファイル\Mesh">
       <UniqueIdentifier>{c29bd3c3-3771-40b8-804d-c1578706d92f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Skydome">
+      <UniqueIdentifier>{16017cc1-2607-4478-ad7c-8519a52e2547}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Pawn">
+      <UniqueIdentifier>{dcbe32eb-ddc9-4e73-a4a9-2a0896d92ec6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Collision">
+      <UniqueIdentifier>{3b7ffa1c-1456-4538-8cce-6975496e057b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Player">
+      <UniqueIdentifier>{ab84e46d-a145-4b67-8c97-8ca946abc283}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Collider">
+      <UniqueIdentifier>{3231a8a8-79fe-456b-ba95-691052666bfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Figure">
+      <UniqueIdentifier>{c24ab079-075f-46e1-8619-8fd848798e5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Light">
+      <UniqueIdentifier>{24193427-61ec-4433-9fcd-2754479e6a9f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\DirectX3D.cpp">
-      <Filter>ソース ファイル\DirectX</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Application.cpp">
-      <Filter>ソース ファイル\Application</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Main.cpp">
       <Filter>ソース ファイル\EntryPoint</Filter>
     </ClCompile>
@@ -123,17 +138,35 @@
     <ClCompile Include="Source\Camera\camera.cpp">
       <Filter>ソース ファイル\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Keyboard.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Source\Skydome\Skydome.cpp">
+      <Filter>ソース ファイル\Skydome</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Pawn\Pawn.cpp">
+      <Filter>ソース ファイル\Pawn</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DirectX3D\DirectX3D.cpp">
+      <Filter>ソース ファイル\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision\Collision.cpp">
+      <Filter>ソース ファイル\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player\Player.cpp">
+      <Filter>ソース ファイル\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collider\Collider.cpp">
+      <Filter>ソース ファイル\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Figure\Figure.cpp">
+      <Filter>ソース ファイル\Figure</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\Application.cpp">
+      <Filter>ソース ファイル\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Light\Light.cpp">
+      <Filter>ソース ファイル\Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\DirectX3D.h">
-      <Filter>ソース ファイル\DirectX</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application.h">
-      <Filter>ソース ファイル\Application</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Linklib.h">
       <Filter>ソース ファイル\Link</Filter>
     </ClInclude>
@@ -182,8 +215,32 @@
     <ClInclude Include="Mesh.h">
       <Filter>ソース ファイル\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="Keyboard.h">
-      <Filter>ソース ファイル</Filter>
+    <ClInclude Include="Source\Skydome\Skydome.h">
+      <Filter>ソース ファイル\Skydome</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Pawn\Pawn.h">
+      <Filter>ソース ファイル\Pawn</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DirectX3D\DirectX3D.h">
+      <Filter>ソース ファイル\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision\Collision.h">
+      <Filter>ソース ファイル\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Player\Player.h">
+      <Filter>ソース ファイル\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collider\Collider.h">
+      <Filter>ソース ファイル\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Figure\Figure.h">
+      <Filter>ソース ファイル\Figure</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Application.h">
+      <Filter>ソース ファイル\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Light\Light.h">
+      <Filter>ソース ファイル\Light</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -18,7 +18,7 @@
 
 // ===== クラスの前方定義 =====
 class C_LOAD_UI_ICON;
-class C_LIGHT;
+class Light;
 class C_CAMERA;
 class C_TITLE_OBJ;
 class C_FADE;
@@ -39,21 +39,21 @@ public:
 	~C_SCENE_LOAD();
 
 	void InitScene();
-	void UninitScene();
+	void finalizeScene();
 	void EnableLoad();
-	void UpdateLoad();
-	void DrawScene();
+	void updateLoad();
+	void drawScene();
 
 	// セッター関連
 
 	// 静的メンバ関数
-	static void SetLoadFlg(bool);
+	static void setLoadFlg(bool);
 
 private:
 	std::mutex mutex;
 
 	C_CAMERA		*pCamera;
-	C_LIGHT			*pLight;
+	Light			*pLight;
 	C_TITLE_OBJ		*pTitleObj;
 	C_FADE			*pFade;
 	C_LOAD_UI_ICON	*pLoadIcon;

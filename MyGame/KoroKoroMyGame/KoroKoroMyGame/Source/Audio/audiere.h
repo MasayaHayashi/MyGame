@@ -264,7 +264,7 @@ namespace audiere {
     ADR_METHOD(bool) seek(int position, SeekMode mode) = 0;
 
     /**
-     * Get current position within the file.
+     * get current position within the file.
      *
      * @return  current position
      */
@@ -319,7 +319,7 @@ namespace audiere {
 
     /**
      * Read frame_count samples into buffer.  buffer must be at least
-     * |frame_count * GetSampleSize(format) * channel_count| bytes long.
+     * |frame_count * getSampleSize(format) * channel_count| bytes long.
      *
      * @param frame_count  number of frames to read
      * @param buffer       buffer to store samples in
@@ -347,7 +347,7 @@ namespace audiere {
     ADR_METHOD(int) getLength() = 0;
     
     /**
-     * Sets the current position within the sample source.  If the stream
+     * sets the current position within the sample source.  If the stream
      * is not seekable, this method does nothing.
      *
      * @param position  current position in frames
@@ -367,7 +367,7 @@ namespace audiere {
     ADR_METHOD(bool) getRepeat() = 0;
 
     /**
-     * Sets whether the sample source should repeat or not.  Note that not
+     * sets whether the sample source should repeat or not.  Note that not
      * all sample sources repeat by starting again at the beginning of the
      * sound.  For example MOD files can contain embedded loop points.
      *
@@ -507,7 +507,7 @@ namespace audiere {
     ADR_METHOD(void) reset() = 0;
 
     /**
-     * Set whether the output stream should repeat.
+     * set whether the output stream should repeat.
      *
      * @param repeat  true if the stream should repeat, false otherwise
      */
@@ -519,40 +519,40 @@ namespace audiere {
     ADR_METHOD(bool) getRepeat() = 0;
 
     /**
-     * Sets the stream's volume.
+     * sets the stream's volume.
      *
      * @param  volume  0.0 = silence, 1.0 = maximum volume (default)
      */
     ADR_METHOD(void) setVolume(float volume) = 0;
 
     /**
-     * Gets the current volume.
+     * gets the current volume.
      *
      * @return  current volume of the output stream
      */
     ADR_METHOD(float) getVolume() = 0;
 
     /**
-     * Set current pan.
+     * set current pan.
      *
      * @param pan  -1.0 = left, 0.0 = center (default), 1.0 = right
      */
     ADR_METHOD(void) setPan(float pan) = 0;
 
     /**
-     * Get current pan.
+     * get current pan.
      */
     ADR_METHOD(float) getPan() = 0;
 
     /**
-     * Set current pitch shift.
+     * set current pitch shift.
      *
      * @param shift  can range from 0.5 to 2.0.  default is 1.0.
      */
     ADR_METHOD(void) setPitchShift(float shift) = 0;
 
     /**
-     * Get current pitch shift.  Defaults to 1.0.
+     * get current pitch shift.  Defaults to 1.0.
      */
     ADR_METHOD(float) getPitchShift() = 0;
 
@@ -568,7 +568,7 @@ namespace audiere {
     ADR_METHOD(int) getLength() = 0;
     
     /**
-     * Sets the current position within the sample source.  If the stream
+     * sets the current position within the sample source.  If the stream
      * is not seekable, this method does nothing.
      *
      * @param position  current position in frames
@@ -662,7 +662,7 @@ namespace audiere {
    * implementation.  streamStopped() will be called whenever a stream on that
    * device stops playback.
    *
-   * WARNING: StopCallback is called from another thread.  Make sure your
+   * WARNING: StopCallback is called from another thread.  make sure your
    * callback is thread-safe.
    */
   class StopCallback : public Callback {
@@ -730,7 +730,7 @@ namespace audiere {
      *                 not take ownership of the memory.  The application
      *                 is responsible for freeing it.  There must be at
      *                 least |frame_count * channel_count *
-     *                 GetSampleSize(sample_format)| bytes in the buffer.
+     *                 getSampleSize(sample_format)| bytes in the buffer.
      *
      * @param frame_count  Number of frames in the buffer.
      *
@@ -750,7 +750,7 @@ namespace audiere {
       SampleFormat sample_format) = 0;
 
     /**
-     * Gets the name of the audio device.  For example "directsound" or "oss".
+     * gets the name of the audio device.  For example "directsound" or "oss".
      *
      * @return name of audio device
      */
@@ -799,13 +799,13 @@ namespace audiere {
       SampleFormat& sample_format) = 0;
 
     /**
-     * Get the length of the sample buffer in frames.
+     * get the length of the sample buffer in frames.
      */
     ADR_METHOD(int) getLength() = 0;
 
     /**
-     * Get a readonly pointer to the samples contained within the buffer.  The
-     * buffer is |channel_count * frame_count * GetSampleSize(sample_format)|
+     * get a readonly pointer to the samples contained within the buffer.  The
+     * buffer is |channel_count * frame_count * getSampleSize(sample_format)|
      * bytes long.
      */
     virtual const void* ADR_CALL getSamples() = 0;
@@ -856,40 +856,40 @@ namespace audiere {
     ADR_METHOD(void) stop() = 0;
 
     /**
-     * Sets the sound's volume.
+     * sets the sound's volume.
      *
      * @param  volume  0.0 = silence, 1.0 = maximum volume (default)
      */
     ADR_METHOD(void) setVolume(float volume) = 0;
 
     /**
-     * Gets the current volume.
+     * gets the current volume.
      *
      * @return  current volume of the output stream
      */
     ADR_METHOD(float) getVolume() = 0;
 
     /**
-     * Set current pan.
+     * set current pan.
      *
      * @param pan  -1.0 = left, 0.0 = center (default), 1.0 = right
      */
     ADR_METHOD(void) setPan(float pan) = 0;
 
     /**
-     * Get current pan.
+     * get current pan.
      */
     ADR_METHOD(float) getPan() = 0;
 
     /**
-     * Set current pitch shift.
+     * set current pitch shift.
      *
      * @param shift  can range from 0.5 to 2.0.  default is 1.0.
      */
     ADR_METHOD(void) setPitchShift(float shift) = 0;
 
     /**
-     * Get current pitch shift.  Defaults to 1.0.
+     * get current pitch shift.  Defaults to 1.0.
      */
     ADR_METHOD(float) getPitchShift() = 0;
   };
@@ -1000,13 +1000,13 @@ namespace audiere {
     /// Returns the current position of the song in milliseconds.
     ADR_METHOD(int) getPosition() = 0;
 
-    /// Sets the current position of the song.
+    /// sets the current position of the song.
     ADR_METHOD(void) setPosition(int position) = 0;
 
     /// Returns true if this song is set to repeat.
     ADR_METHOD(bool) getRepeat() = 0;
 
-    /// Sets whether the song should repeat on completion.  Defaults to false.
+    /// sets whether the song should repeat on completion.  Defaults to false.
     ADR_METHOD(void) setRepeat(bool repeat) = 0;
   };
   typedef RefPtr<MIDIStream> MIDIStreamPtr;
@@ -1028,7 +1028,7 @@ namespace audiere {
     /**
      * openStream() creates and returns a new MIDIStream object from the
      * file with the specified name, which then can be queried and played.
-     * This method returns NULL if the stream cannot be opened.
+     * This method returns nullptr if the stream cannot be opened.
      *
      * Note: MCI subsystem limitations do not allow loading MIDIStream
      * objects from an audiere File implementation.  This may be addressed
@@ -1044,7 +1044,7 @@ namespace audiere {
 
     // these are extern "C" so we don't mangle the names
 
-    ADR_FUNCTION(const char*) AdrGetVersion();
+    ADR_FUNCTION(const char*) AdrgetVersion();
 
     /**
      * Returns a formatted string that lists the file formats that Audiere
@@ -1054,7 +1054,7 @@ namespace audiere {
      *
      * description1:ext1,ext2,ext3;description2:ext1,ext2,ext3
      */
-    ADR_FUNCTION(const char*) AdrGetSupportedFileFormats();
+    ADR_FUNCTION(const char*) AdrgetSupportedFileFormats();
 
     /**
      * Returns a formatted string that lists the audio devices Audiere
@@ -1064,9 +1064,9 @@ namespace audiere {
      *
      * name1:description1;name2:description2;...
      */
-    ADR_FUNCTION(const char*) AdrGetSupportedAudioDevices();
+    ADR_FUNCTION(const char*) AdrgetSupportedAudioDevices();
 
-    ADR_FUNCTION(int) AdrGetSampleSize(SampleFormat format);
+    ADR_FUNCTION(int) AdrgetSampleSize(SampleFormat format);
 
     ADR_FUNCTION(AudioDevice*) AdrOpenDevice(
       const char* name,
@@ -1133,8 +1133,8 @@ namespace audiere {
    *
    * @return  Audiere version information
    */
-  inline const char* GetVersion() {
-    return hidden::AdrGetVersion();
+  inline const char* getVersion() {
+    return hidden::AdrgetVersion();
   }
 
 
@@ -1167,9 +1167,9 @@ namespace audiere {
   };
 
   /// Populates a vector of FileFormatDesc structs.
-  inline void GetSupportedFileFormats(std::vector<FileFormatDesc>& formats) {
+  inline void getSupportedFileFormats(std::vector<FileFormatDesc>& formats) {
     std::vector<std::string> descriptions;
-    SplitString(descriptions, hidden::AdrGetSupportedFileFormats(), ';');
+    SplitString(descriptions, hidden::AdrgetSupportedFileFormats(), ';');
 
     formats.resize(descriptions.size());
     for (unsigned i = 0; i < descriptions.size(); ++i) {
@@ -1192,9 +1192,9 @@ namespace audiere {
   };
 
   /// Populates a vector of AudioDeviceDesc structs.
-  inline void GetSupportedAudioDevices(std::vector<AudioDeviceDesc>& devices) {
+  inline void getSupportedAudioDevices(std::vector<AudioDeviceDesc>& devices) {
     std::vector<std::string> descriptions;
-    SplitString(descriptions, hidden::AdrGetSupportedAudioDevices(), ';');
+    SplitString(descriptions, hidden::AdrgetSupportedAudioDevices(), ';');
 
     devices.resize(descriptions.size());
     for (unsigned i = 0; i < descriptions.size(); ++i) {
@@ -1207,21 +1207,21 @@ namespace audiere {
 
 
   /**
-   * Get the size of a sample in a specific sample format.
+   * get the size of a sample in a specific sample format.
    * This is commonly used to determine how many bytes a chunk of
    * PCM data will take.
    *
    * @return  Number of bytes a single sample in the specified format
    *          takes.
    */
-  inline int GetSampleSize(SampleFormat format) {
-    return hidden::AdrGetSampleSize(format);
+  inline int getSampleSize(SampleFormat format) {
+    return hidden::AdrgetSampleSize(format);
   }
 
   /**
    * Open a new audio device. If name or parameters are not specified,
    * defaults are used. Each platform has its own set of audio devices.
-   * Every platform supports the "null" audio device.
+   * Every platform supports the "nullptr" audio device.
    *
    * @param  name  name of audio device that should be used
    * @param  parameters  comma delimited list of audio-device parameters;
@@ -1516,7 +1516,7 @@ namespace audiere {
    * @param buffer  Pointer to the beginning of the data.
    * @param size    Size of the buffer in bytes.
    *
-   * @return  0 if size is non-zero and buffer is null. Otherwise,
+   * @return  0 if size is non-zero and buffer is nullptr. Otherwise,
    *          returns a valid File object.
    */
   inline File* CreateMemoryFile(const void* buffer, int size) {
