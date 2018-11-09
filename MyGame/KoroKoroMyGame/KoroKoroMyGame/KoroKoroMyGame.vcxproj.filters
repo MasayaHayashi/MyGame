@@ -13,30 +13,174 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="ソース ファイル\DirectX">
+      <UniqueIdentifier>{247aa3ac-8c0d-4dc2-bfd3-5f5d3c672e65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Application">
+      <UniqueIdentifier>{f734c863-0559-489d-946d-aaa65847fe8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Link">
+      <UniqueIdentifier>{3b2748a0-7800-42ba-b8b5-833f079f4938}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\EntryPoint">
+      <UniqueIdentifier>{e2319ec7-3446-40a0-9a98-da4035201a1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Xinput">
+      <UniqueIdentifier>{eae1e5c1-08a1-435a-9d59-7264bbfbf9a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Audio">
+      <UniqueIdentifier>{2efdb7eb-cd7a-4be8-b431-938ee920b9d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\SceneInterface">
+      <UniqueIdentifier>{c452406a-a577-42c4-9180-89bf161b8754}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene">
+      <UniqueIdentifier>{4e050983-3ea3-47b2-a5e2-28ced001ab5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\SceneManager">
+      <UniqueIdentifier>{3db57d59-f2f3-47ce-a69a-5625c6bda439}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene\Load">
+      <UniqueIdentifier>{e7062d5a-fca1-4466-b35e-7b14e3f6a606}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Fade">
+      <UniqueIdentifier>{3467c0b9-addd-47d0-af9a-342e73ebaf1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Board">
+      <UniqueIdentifier>{025c88cc-b3b2-4452-8e89-137dac92b3ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameObjectBase">
+      <UniqueIdentifier>{bd137a9c-6310-4b88-aa30-9c757d135dfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ResourceManager">
+      <UniqueIdentifier>{c12d60f8-38cc-4523-839e-d862b562895f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\MyHierarchy">
+      <UniqueIdentifier>{ece24c4b-15ad-413e-9568-bc0bcf40bf5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\KeyBoard">
+      <UniqueIdentifier>{55769192-4e2f-4795-8b87-c4f5e98681dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene\Main">
+      <UniqueIdentifier>{f1437d95-95a5-4da9-a94e-06e50cd008dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene\Title">
+      <UniqueIdentifier>{2113b544-b467-4013-953c-ffab0d725f1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Camera">
+      <UniqueIdentifier>{1303f139-1e34-4efd-82c3-94cf0a4a6277}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Mesh">
+      <UniqueIdentifier>{c29bd3c3-3771-40b8-804d-c1578706d92f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\DirectX3D.cpp">
+      <Filter>ソース ファイル\DirectX</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Application.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Application</Filter>
     </ClCompile>
     <ClCompile Include="Source\Main.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\EntryPoint</Filter>
     </ClCompile>
-    <ClCompile Include="DirectX3D.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Source\Audio\MyAudiere.cpp">
+      <Filter>ソース ファイル\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneInterface\sceneBase.cpp">
+      <Filter>ソース ファイル\SceneInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneManager\SceneManager.cpp">
+      <Filter>ソース ファイル\SceneManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\SceneLoad.cpp">
+      <Filter>ソース ファイル\Scene\Load</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Fade\FadeUI.cpp">
+      <Filter>ソース ファイル\Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Board\Board.cpp">
+      <Filter>ソース ファイル\Board</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameObjectBase\GameObjectBase.cpp">
+      <Filter>ソース ファイル\GameObjectBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ResoueceManager\ResourceManager.cpp">
+      <Filter>ソース ファイル\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MyHierarchy\MyHierarchy.cpp">
+      <Filter>ソース ファイル\MyHierarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KeyBoard\Keyboard.cpp">
+      <Filter>ソース ファイル\KeyBoard</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\Main\C_SceneMain.cpp">
+      <Filter>ソース ファイル\Scene\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\Title\SceneTitle.cpp">
+      <Filter>ソース ファイル\Scene\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera\camera.cpp">
+      <Filter>ソース ファイル\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Keyboard.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\DirectX3D.h">
+      <Filter>ソース ファイル\DirectX</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Application.h">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Application</Filter>
     </ClInclude>
     <ClInclude Include="Source\Linklib.h">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Link</Filter>
     </ClInclude>
-    <ClInclude Include="DirectX3D.h">
-      <Filter>ソース ファイル</Filter>
+    <ClInclude Include="Source\Audio\audiere.h">
+      <Filter>ソース ファイル\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Audio\MyAudiere.h">
+      <Filter>ソース ファイル\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneInterface\sceneBase.h">
+      <Filter>ソース ファイル\SceneInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneManager\SceneManager.h">
+      <Filter>ソース ファイル\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\SceneLoad.h">
+      <Filter>ソース ファイル\Scene\Load</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Fade\FadeUI.h">
+      <Filter>ソース ファイル\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Board\Board.h">
+      <Filter>ソース ファイル\Board</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameObjectBase\GameObjectBase.h">
+      <Filter>ソース ファイル\GameObjectBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ResoueceManager\ResourceManager.h">
+      <Filter>ソース ファイル\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MyHierarchy\MyHierarchy.h">
+      <Filter>ソース ファイル\MyHierarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\KeyBoard\Keyboard.h">
+      <Filter>ソース ファイル\KeyBoard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\Main\C_SceneMain.h">
+      <Filter>ソース ファイル\Scene\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\Title\SceneTitle.h">
+      <Filter>ソース ファイル\Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera\camera.h">
+      <Filter>ソース ファイル\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>ソース ファイル\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="Keyboard.h">
       <Filter>ソース ファイル</Filter>
