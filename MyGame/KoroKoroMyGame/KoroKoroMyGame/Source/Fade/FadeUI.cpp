@@ -101,7 +101,7 @@ void C_FADE::updateObject()
 
 				// シーン後処理
 				pSceneManager->finalizeScene();
-			//	SAFE_DELETE(pCurrentScene);
+			//	SAFE_DELETE(pcurrentScene);
 
 
 				// ロード開始

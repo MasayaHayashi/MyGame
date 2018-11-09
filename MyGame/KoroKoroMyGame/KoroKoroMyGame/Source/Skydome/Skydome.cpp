@@ -5,7 +5,7 @@
 
 // ===== インクルード部 =====
 #include "Skydome.h"
-#include "../Camera/camera.h"
+#include "../camera/camera.h"
 #include "../DirectX3D/DirectX3D.h"
 #include <string>
 
@@ -60,9 +60,9 @@ void Skydome::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Skydome::updateObject()
 {
-	//C_CAMERA *pCamera = C_CAMERA_MANAGER::getUsedCamera(0);
+	//C_camera *pcamera = C_camera_MANAGER::getUsedcamera(0);
 
-	//pos = pCamera->getPosCameraP();
+	//pos = pcamera->getPoscameraP();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

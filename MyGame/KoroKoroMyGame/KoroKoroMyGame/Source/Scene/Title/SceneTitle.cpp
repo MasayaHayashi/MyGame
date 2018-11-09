@@ -5,9 +5,13 @@
 
 // ===== インクルード部 =====
 #include "SceneTitle.h"
+#include "../../Light/Light.h"
+#include "../../Player/Player.h"
+#include "../../camera/camera.h"
+/*
 #include ""
 #include "C_MainField.h"
-#include "C_Camera.h"
+#include "C_camera.h"
 #include "C_Light.h"
 #include "input.h"
 #include "C_ParticleBase.h"
@@ -19,6 +23,7 @@
 #include "debugproc.h"
 #include "C_TitleDesc.h"
 #include <stdio.h>	// ファイル入出力用
+*/
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -52,8 +57,8 @@ void SceneTitle::initialize()
 	pPlayer->InitObject();
 
 	// カメラ初期化
-	pCamera = new C_CAMERA;
-	pCamera->InitCamera(pPlayer);
+	pcamera = new camera;
+	pcamera->initialize(pPlayer);
 
 	// スカイドーム初期化
 	pSkydome = NEW C_SKYDOME;
@@ -109,8 +114,8 @@ void SceneTitle::finalizeScene()
 {
 
 	// カメラ後処理
-	pCamera->finalizeCamera();
-	SAFE_DELETE(pCamera);
+	pcamera->finalizecamera();
+	SAFE_DELETE(pcamera);
 
 	// ライト後処理
 	pLight->finalizeLight();
@@ -158,7 +163,7 @@ void SceneTitle::finalizeScene()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneTitle::updateScene()
 {
-	D3DXVECTOR3 CameraFowerd = pCamera->getCameraFowerd();
+	D3DXVECTOR3 cameraFowerd = pcamera->getcameraFowerd();
 
 	// タイトルUI更新
 	pTitleUI->updateObject();
@@ -168,13 +173,13 @@ void SceneTitle::updateScene()
 		pParticle[i]->updateObject();
 
 	// プレイヤー更新
-	pPlayer->updateObject(CameraFowerd);
+	pPlayer->updateObject(cameraFowerd);
 
 	// タイトルオブジェクト更新
 	pTitleObj->updateObject();
 
 	// カメラ更新
-	pCamera->updateCamera_Title(pPlayer);
+	pcamera->updatecamera_Title(pPlayer);
 
 	// シーン遷移
 	if (getKeyboardTrigger(DIK_F1))
@@ -260,7 +265,7 @@ void SceneTitle::drawScene()
 	pTitleObj->drawObject();
 
 	// カメラセット
-	pCamera->setCamera();
+	pcamera->setcamera();
 
 		
 	// パーティクル描画
@@ -285,7 +290,7 @@ void SceneTitle::InitStatus()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-C_CAMERA* SceneTitle::getCamera()
+const camera* SceneTitle::getcamera()
 {
-	return pCamera;
+	return pcamera;
 }

@@ -48,7 +48,7 @@ private:
 	std::string TextureName = "data/TEXTURE/test.png";
 
 
-	SceneManager::SceneState CurrentScene;
+	SceneManager::SceneState currentScene;
 	FadeType  CurentFadeType;		// 現在のフェード状態
 	D3DXCOLOR CurrentColor;			// 現在色状態
 	SceneManager::SceneState WorkScene;

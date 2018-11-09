@@ -19,7 +19,7 @@
 // ===== クラスの前方定義 =====
 class C_LOAD_UI_ICON;
 class Light;
-class C_CAMERA;
+class C_camera;
 class C_TITLE_OBJ;
 class C_FADE;
 
@@ -52,7 +52,7 @@ public:
 private:
 	std::mutex mutex;
 
-	C_CAMERA		*pCamera;
+	C_camera		*pcamera;
 	Light			*pLight;
 	C_TITLE_OBJ		*pTitleObj;
 	C_FADE			*pFade;

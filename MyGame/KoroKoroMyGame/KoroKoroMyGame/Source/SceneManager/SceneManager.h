@@ -48,10 +48,10 @@ public:
 
 	void changeScene(SceneState setScene);
 	void setNextScene(SceneState setNextScene);
-	void setCurrentScene(SceneState setSceneType);
+	void setcurrentScene(SceneState setSceneType);
 
 	C_SCENE_BASE*	   getInstanse();
-	static SceneState  getCurrentSceneType();
+	static SceneState  getcurrentSceneType();
 	SceneState		   getNextScene();
 	FadeUI*			   getFade();
 

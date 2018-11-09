@@ -69,7 +69,7 @@ C_PLAYER::~C_PLAYER()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void C_PLAYER::InitObject()
 {
-	SceneManager::SceneState currentScene = SceneManager::getCurrentSceneType();
+	SceneManager::SceneState currentScene = SceneManager::getcurrentSceneType();
 
 	switch (currentScene)
 	{
@@ -109,23 +109,23 @@ void C_PLAYER::UninitObject()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // プレイヤー更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_PLAYER::UpdateObject(D3DXVECTOR3 CameraForward)
+void C_PLAYER::UpdateObject(D3DXVECTOR3 cameraForward)
 {
-	SceneManager::SceneState currentScene = SceneManager::getCurrentSceneType();
+	SceneManager::SceneState currentScene = SceneManager::getcurrentSceneType();
 
 	switch (currentScene)
 	{
 	case SceneManager::SceneState::SceneTitle:
-		UpdatePlayer_Title(CameraForward);
+		UpdatePlayer_Title(cameraForward);
 		break;
 	case  SceneManager::SceneState::SceneMain:
-		UpdatePlayer_GameMain(CameraForward);
+		UpdatePlayer_GameMain(cameraForward);
 		break;
 	case  SceneManager::SceneState::SceneResult:
 		UpdatePlayer_Result();
 		break;
 	case  SceneManager::SceneState::SceneStageEdit:
-		UpdatePlayer_Title(CameraForward);
+		UpdatePlayer_Title(cameraForward);
 		break;
 	default:
 		break;
@@ -438,24 +438,24 @@ void C_PLAYER::InitStatus()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // シーンタイトル用プレイヤー更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_PLAYER::UpdatePlayer_Title(D3DXVECTOR3 CameraForward)
+void C_PLAYER::UpdatePlayer_Title(D3DXVECTOR3 cameraForward)
 {
 	C_XINPUT *pXinput = C_XINPUT::GetInstance();
 
 	short Xnum = pXinput->GetThumbLX();
 	short Ynum = pXinput->GetThumbLY();
 
-	D3DXVECTOR3 CameraRight = D3DXVECTOR3(CameraForward.z,0.0f,-CameraForward.x);
+	D3DXVECTOR3 cameraRight = D3DXVECTOR3(cameraForward.z,0.0f,-cameraForward.x);
 
 	PrintDebugProc("xxxxxxxxxxxxxxxxxxxxx:%d\n", Xnum);
 	PrintDebugProc("YYYYYYYYYYYYYYYYYYYYY:%d\n", Ynum);
 
 	D3DXVec3Normalize(&TestVec, &TestVec);
 
-//	TestVec.x = CameraRight.x * CameraForward.x +Xnum;
-//	TestVec.z = CameraForward.z * CameraRight.z + Ynum;
+//	TestVec.x = cameraRight.x * cameraForward.x +Xnum;
+//	TestVec.z = cameraForward.z * cameraRight.z + Ynum;
 
-	TestVec = CameraRight * Xnum + CameraForward * Ynum;
+	TestVec = cameraRight * Xnum + cameraForward * Ynum;
 	
 	D3DXVECTOR3 UpVec = GetUpVec();
 	D3DXVec3Normalize(&UpVec,&UpVec);
@@ -605,7 +605,7 @@ void C_PLAYER::UpdatePlayer_Title(D3DXVECTOR3 CameraForward)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // シーンメイン用プレイヤー更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_PLAYER::UpdatePlayer_GameMain(D3DXVECTOR3 CameraForward)
+void C_PLAYER::UpdatePlayer_GameMain(D3DXVECTOR3 cameraForward)
 {
 	PrintDebugProc("LangingXXX::::%f\n", DestLanding.x);
 	PrintDebugProc("LangingYYY::::%f\n", DestLanding.y);
@@ -647,11 +647,11 @@ void C_PLAYER::UpdatePlayer_GameMain(D3DXVECTOR3 CameraForward)
 
 
 
-	D3DXVECTOR3 CameraRight = D3DXVECTOR3(CameraForward.z, 0.0f, -CameraForward.x);
+	D3DXVECTOR3 cameraRight = D3DXVECTOR3(cameraForward.z, 0.0f, -cameraForward.x);
 
 	D3DXVec3Normalize(&TestVec, &TestVec);
 
-	TestVec = CameraRight * Xnum + CameraForward * Ynum;
+	TestVec = cameraRight * Xnum + cameraForward * Ynum;
 
 	D3DXVECTOR3 UpVec = GetUpVec();
 	D3DXVec3Normalize(&UpVec, &UpVec);

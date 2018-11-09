@@ -15,7 +15,7 @@
 #include "C_Player.h"
 #include "C_Enemy.h"
 #include "C_Light.h"
-#include "C_Camera.h"
+#include "C_camera.h"
 #include "C_Skydome.h"
 #include "C_MoveBlock.h"
 #include "C_GoalObj.h"
@@ -80,8 +80,8 @@ void C_SCENE_MAIN::InitScene()
 	pLight->InitLight();
 
 	// カメラ初期化
-	pCamera = NEW C_CAMERA;
-	pCamera->InitCamera(pPlayer);
+	pcamera = NEW C_camera;
+	pcamera->initialize(pPlayer);
 
 	// スカイドーム初期化
 	pSkydome = NEW C_SKYDOME;
@@ -209,8 +209,8 @@ void C_SCENE_MAIN::finalizeScene()
 	// BGM停止
 
 	// カメラ後処理
-	pCamera->finalizeCamera();
-	SAFE_DELETE(pCamera);
+	pcamera->finalizecamera();
+	SAFE_DELETE(pcamera);
 
 	// ライト後処理
 	pLight->finalizeLight();
@@ -283,7 +283,7 @@ void C_SCENE_MAIN::updateScene()
 	// チュートリアルステージ用処理
 	if (uGameState == GAME_TUTORIAL)
 	{
-		pCamera->setCameraState(MAIN_TUTORIAL);
+		pcamera->setcameraState(MAIN_TUTORIAL);
 		if (getKeyboardPress(DIK_SPACE))
 		{
 			pUIObj[OBJ_NEXT]->setUsedFlg(false);
@@ -293,7 +293,7 @@ void C_SCENE_MAIN::updateScene()
 		if (!pUIObj[OBJ_TUTORIAL]->getUsedFlg())
 		{
 			pUIObj[OBJ_READY]->setUsedFlg(true);
-				pCamera->setCameraState(MAIN_START_FADE);
+				pcamera->setcameraState(MAIN_START_FADE);
 				uGameState = GAME_READY;
 		}
 	}
@@ -350,7 +350,7 @@ void C_SCENE_MAIN::updateScene()
 	}
 
 	// プレイヤー更新
-	pPlayer->updatePlayer_GameMain(pCamera->getCameraFowerd());
+	pPlayer->updatePlayer_GameMain(pcamera->getcameraFowerd());
 
 	// ゲーム状態更新
 	if (!pUIObj[OBJ_READY]->getUsedFlg() && uGameState != GAME_MISS && uGameState != GAME_GOAL && uGameState != GAME_TUTORIAL)
@@ -421,7 +421,7 @@ void C_SCENE_MAIN::updateScene()
 	pGoal->updateObject();
 
 	// カメラ更新
-	pCamera->updateCamera_GameMain(pPlayer,pUIObj[OBJ_READY]);
+	pcamera->updatecamera_GameMain(pPlayer,pUIObj[OBJ_READY]);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -442,7 +442,7 @@ void C_SCENE_MAIN::drawScene()
 	// ゲームオブジェクト描画
 	for (INT i = 0; i < MAX_GAME_OBJ_TYPE; i++)
 		for (INT j = 0; j < MAX_GAME_OBJ; j++)
-			pGameObj[i][j]->drawObject(pCamera->getMtxView(),pCamera->getProjectionMtx());
+			pGameObj[i][j]->drawObject(pcamera->getMtxView(),pcamera->getProjectionMtx());
 
 	// スカイドーム描画
 	pSkydome->drawObject();
@@ -453,7 +453,7 @@ void C_SCENE_MAIN::drawScene()
 			pParticleObj[TypeCnt][ObjCnt]->drawObject();
 
 	// カメラセット
-	pCamera->setCamera();
+	pcamera->setcamera();
 
 	// スコア描画
 	for (INT i = 0; i < MAX_SCORE_DIGIT; i++)
@@ -516,9 +516,9 @@ void C_SCENE_MAIN::InitStatus()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-C_CAMERA* C_SCENE_MAIN::getCamera()
+C_camera* C_SCENE_MAIN::getcamera()
 {
-	return pCamera;
+	return pcamera;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -710,7 +710,7 @@ void C_SCENE_MAIN::CheckCollision()
 			if (uGameState != GAME_GOAL)
 			{
 //				PlaySound(SOUND_SE_STAGE_CLEAR);
-				pCamera->setCameraState(MAIN_GOAL_FADE);
+				pcamera->setcameraState(MAIN_GOAL_FADE);
 				uGameState = GAME_GOAL;
 				AddStage();		// ステージ情報加算
 		//		getSceneManager()->setSceneChange(C_SCENE_MANAGER::SCENE_MAIN);
@@ -725,8 +725,8 @@ void C_SCENE_MAIN::CheckCollision()
 void C_SCENE_MAIN::CheckUnProject(INT Indx)
 {
 	D3DXVECTOR3 StarObj = pGameObj[STAR_OBJ][Indx]->getPosition();
-	D3DXMATRIX  ViewMtx = pCamera->getMtxView();
-	D3DXMATRIX  ProjectionMtx = pCamera->getProjectionMtx();
+	D3DXMATRIX  ViewMtx = pcamera->getMtxView();
+	D3DXMATRIX  ProjectionMtx = pcamera->getProjectionMtx();
 
 	D3DXVECTOR3 OutVec;
 	D3DXVECTOR3 OutVec2;

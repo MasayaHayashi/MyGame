@@ -7,7 +7,7 @@
 // ===== インクルード部 =====
 #include "Board.h"
 #include "../SceneManager/SceneManager.h"
-#include "C_Camera.h"
+#include "C_camera.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -96,7 +96,7 @@ const void Board::draw()
 
 	D3DXMATRIX mtxScale, mtxTranslate, mtxRoll,mtxRot;
 
-	C_CAMERA *pCamera = nullptr;
+	C_camera *pcamera = nullptr;
 
 	// 描画
 	switch (vertexBoard.boardType)
@@ -136,7 +136,7 @@ const void Board::draw()
 		break;
 	case BILLBOARD:
 
-			pCamera = getSceneManager()->getInstanse()->getCamera();
+			pcamera = getSceneManager()->getInstanse()->getcamera();
 
 			// αテストを有効に
 			devicePtr->setRenderState(D3DRS_ALPHATESTENABLE, TRUE);
@@ -148,7 +148,7 @@ const void Board::draw()
 
 
 			// ビューマトリックスを取得
-			mtxTempView = pCamera->getMtxView();
+			mtxTempView = pcamera->getMtxView();
 
 			// ワールドマトリックスの初期化
 			D3DXMatrixIdentity(&WorldMtxBoard);

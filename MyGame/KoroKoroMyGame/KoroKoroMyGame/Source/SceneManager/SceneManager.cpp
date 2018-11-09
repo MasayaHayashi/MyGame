@@ -163,7 +163,7 @@ C_SCENE_BASE* SceneManager::getInstanse()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 現在のシーンenum取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-SceneManager::SceneState SceneManager::getCurrentSceneType()
+SceneManager::SceneState SceneManager::getcurrentSceneType()
 {
 	return currentSceneType;
 }
@@ -171,7 +171,7 @@ SceneManager::SceneState SceneManager::getCurrentSceneType()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 外部から次のシーンをセット(ロードシーン用)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void SceneManager::setCurrentScene(SceneState setStateType)
+void SceneManager::setcurrentScene(SceneState setStateType)
 {
 	currentSceneType = setStateType;
 }

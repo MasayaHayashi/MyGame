@@ -35,7 +35,7 @@ enum UI_OBJ_TYPE
 
 // ===== クラスの前方参照 =====
 class Light;
-class C_CAMERA;
+class C_camera;
 class C_PLAYER;
 class C_SKYDOME;
 class C_ENEMY;
@@ -62,7 +62,7 @@ public:
 	void InitStatus();
 
 	// ゲッター関連
-	C_CAMERA* getCamera();
+	C_camera* getcamera();
 
 private:
 
@@ -71,7 +71,7 @@ private:
 	void setScore();
 
 	Light					*pLight;											  // ライト
-	C_CAMERA				*pCamera;											  // カメラ
+	C_camera				*pcamera;											  // カメラ
 	C_SKYDOME				*pSkydome;											  // スカイドーム
 	C_PLAYER				*pPlayer;											  // プレイヤー
 	C_COLLISION				*pCollision;										  // 衝突用

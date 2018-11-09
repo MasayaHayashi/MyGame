@@ -25,7 +25,6 @@ class C_PLAYER;
 class C_TITLE_UI;
 class C_PARTICLE_BASE;
 class C_TITLE_OBJ;
-class C_CAMERA;
 class Light;
 class C_FADE;
 class Board;
@@ -44,13 +43,13 @@ public:
 
 	void initStatus();
 
-	C_CAMERA* getCamera();
+	const camera* getcamera();
 
 
 private:
 	static constexpr UINT MaxUIType = static_cast<UINT>(UIType::DescUI) + 1;
 
-	C_CAMERA				*pCamera;							// カメラ
+	camera					*pcamera;							// カメラ
 	Light					*pLight;							// ライト
 
 	Skydome					*pSkydome;							// スカイドーム
@@ -61,7 +60,7 @@ private:
 	C_TITLE_UI				*pTitleUI;							// タイトルUI
 	C_TITLE_OBJ				*pTitleObj;							// タイトルオブジェクト
 	Board					*pBoard[MaxUIType];					// UI関連
-	C_PARTICLE_BASE			*pParticle[MAX_PARTICLE];			// パーティクル
+//	C_PARTICLE_BASE			*pParticle[MAX_PARTICLE];			// パーティクル
 
 	bool					bChangeScene;						// シーン切り替え
 	INT						nChangeSceneWaitCnt;				// 待機用カウンタ

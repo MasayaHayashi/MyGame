@@ -5,9 +5,9 @@
 
 // ===== インクルード部 =====
 #include "Light.h"
-#include "../Camera/camera.h"
+#include "../camera/camera.h"
 #include "../DirectX3D/DirectX3D.h"
-#include "../Camera/camera.h"
+#include "../camera/camera.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ライト初期化
@@ -143,14 +143,14 @@ void Light::UninitLight()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ライト更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Light::UpdateLight(Camera *pCamera)
+void Light::UpdateLight(camera *pcamera)
 {
 	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
 
-	D3DXVECTOR3 PosCamera = pCamera->getPos();
-	D3DXVECTOR3 LotCamera = pCamera->getLook();
-	D3DXVECTOR3 Vec		  = LotCamera - PosCamera;
-	D3DXVec3Normalize(&PosCamera, &PosCamera);
+	D3DXVECTOR3 Poscamera = pcamera->getPos();
+	D3DXVECTOR3 Lotcamera = pcamera->getLook();
+	D3DXVECTOR3 Vec		  = Lotcamera - Poscamera;
+	D3DXVec3Normalize(&Poscamera, &Poscamera);
 
 	vecDir = Vec;
 	// ライトの方向の設定

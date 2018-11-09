@@ -13,7 +13,7 @@
 #include "C_LoadUiIcon.h"
 #include "main.h"
 #include "debugproc.h"
-#include "C_Camera.h"
+#include "C_camera.h"
 #include "C_Light.h"
 #include "C_TitleObj.h"
 #include "C_FADE.h"
@@ -51,7 +51,7 @@ void InitNextResorce()
 	SceneManager::SceneState nextScene = SceneManager::getNextScene();
 
 	SceneManager::SceneState NextScene = pSceneManager->getNextScene();
-	pSceneManager->setCurrentScene(NextScene);	// 現在のシーンを次のシーンに上書き
+	pSceneManager->setcurrentScene(NextScene);	// 現在のシーンを次のシーンに上書き
 	pSceneManager->setScene(NextScene);
 
 	// 次のシーンの初期化
@@ -74,8 +74,8 @@ void C_SCENE_LOAD::InitScene()
 	pLoadIcon->InitObject();
 
 	// カメラ初期化
-	pCamera = NEW C_CAMERA;
-	pCamera->InitCamera();
+	pcamera = NEW C_camera;
+	pcamera->initialize();
 
 	// ライト初期化
 	pLight = NEW Light;
@@ -95,8 +95,8 @@ void C_SCENE_LOAD::finalizeScene()
 	pLoadIcon->finalizeObject();
 	SAFE_DELETE(pLoadIcon);
 
-	pCamera->finalizeCamera();
-	SAFE_DELETE(pCamera);
+	pcamera->finalizecamera();
+	SAFE_DELETE(pcamera);
 
 	pLight->finalizeLight();
 	SAFE_DELETE(pLight);
@@ -172,7 +172,7 @@ void C_SCENE_LOAD::drawScene()
 	{
 		pLoadIcon->drawObject();	// ロード
 
-		pCamera->setCamera();		// カメラセット
+		pcamera->setcamera();		// カメラセット
 
 		// Direct3Dによる描画の終了
 		devicePtr->EndScene();

@@ -1,98 +1,166 @@
-﻿  SceneTitle.cpp
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.h(52): error C2370: 'SceneTitle::MaxUIType': 再定義 ; 異なるストレージ クラスです。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.h(51): note: 'SceneTitle::MaxUIType' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.h(65): error C2065: 'MAX_PARTICLE': 定義されていない識別子です。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(8): fatal error C1083: include ファイルを開けません。'':No such file or directory
+﻿  Skydome.cpp
+  SceneTitle.cpp
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.h(46): error C2555: 'SceneTitle::getCamera': オーバーライドする仮想関数の戻り値の型が異なり、'C_SCENE_BASE::getCamera' の covariant ではありません。
+  d:\git\mygame\korokoromygame\korokoromygame\source\sceneinterface\scenebase.h(44): note: 'C_SCENE_BASE::getCamera' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(60): error C2061: 構文エラー: 識別子 'C_CAMERA'
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(61): error C2039: 'InitCamera': 'Camera' のメンバーではありません。
+  d:\git\mygame\korokoromygame\korokoromygame\source\camera\camera.h(56): note: 'Camera' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(64): error C2065: 'NEW': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(64): error C2146: 構文エラー: ';' が、識別子 'C_SKYDOME' の前に必要です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(64): error C2065: 'C_SKYDOME': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(65): error C2039: 'InitObject': 'Skydome' のメンバーではありません。
+  d:\git\mygame\korokoromygame\korokoromygame\source\skydome\skydome.h(14): note: 'Skydome' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(68): error C2065: 'NEW': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(68): error C2146: 構文エラー: ';' が、識別子 'C_MAIN_FIELD' の前に必要です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(69): error C2027: 認識できない型 'C_MAIN_FIELD' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.h(23): note: 'C_MAIN_FIELD' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(69): error C2227: '->InitMeshField' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(72): error C2065: 'NEW': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(72): error C2146: 構文エラー: ';' が、識別子 'C_TITLE_UI' の前に必要です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(73): error C2027: 認識できない型 'C_TITLE_UI' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.h(25): note: 'C_TITLE_UI' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(73): error C2227: '->InitObject' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(76): error C2065: 'NEW': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(76): error C2146: 構文エラー: ';' が、識別子 'C_TITLE_OBJ' の前に必要です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(77): error C2027: 認識できない型 'C_TITLE_OBJ' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.h(27): note: 'C_TITLE_OBJ' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(77): error C2227: '->InitObject' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(80): error C2065: 'MAX_PARTICLE': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(82): error C2065: 'pParticle': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(82): error C2065: 'NEW': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(82): error C2146: 構文エラー: ';' が、識別子 'C_PARTICLE_BASE' の前に必要です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(82): error C2079: 'i' が 未定義の class 'C_PARTICLE_BASE' で使用しています。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(82): error C2086: 'INT i': 再定義されました。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(80): note: 'i' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(83): error C2065: 'pParticle': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(83): error C2227: '->InitObject' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(87): error C2065: 'MAX_UI_TYPE': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(91): error C2065: 'UI_MAIN': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(91): error C2131: 式は定数に評価されませんでした
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(91): note: エラーの原因は非定数引数または非定数シンボルへの参照です
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(91): note: 'UI_MAIN' の使用量を参照してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(92): error C2065: 'NEW': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(92): error C2146: 構文エラー: ';' が、識別子 'C_SCENE_MAIN_UI' の前に必要です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(92): error C2065: 'C_SCENE_MAIN_UI': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(94): error C2065: 'UI_EDIT': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(94): error C2131: 式は定数に評価されませんでした
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(94): note: エラーの原因は非定数引数または非定数シンボルへの参照です
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(94): note: 'UI_EDIT' の使用量を参照してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(95): error C2065: 'NEW': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(95): error C2146: 構文エラー: ';' が、識別子 'C_STAGE_EDIT_UI' の前に必要です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(95): error C2065: 'C_STAGE_EDIT_UI': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(97): error C2065: 'UI_DESC': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(97): error C2131: 式は定数に評価されませんでした
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(97): note: エラーの原因は非定数引数または非定数シンボルへの参照です
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(97): note: 'UI_DESC' の使用量を参照してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(98): error C2065: 'NEW': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(98): error C2146: 構文エラー: ';' が、識別子 'C_TITLE_DESCR_UI' の前に必要です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(98): error C2065: 'C_TITLE_DESCR_UI': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(103): error C2027: 認識できない型 'Board' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.h(30): note: 'Board' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(103): error C2227: '->InitObject' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(106): error C2065: 'UI_MAIN': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(106): error C2227: '->setUsedFlg' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(91): error C2051: case 式は、整数型定数でなければなりません。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(94): error C2051: case 式は、整数型定数でなければなりません。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(97): error C2051: case 式は、整数型定数でなければなりません。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(102): warning C4065: switch 文に 'default' はありますが 'case' ラベルがありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(114): error C2509: 'finalizeScene': メンバー関数が 'SceneTitle' で宣言されていません。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scenemanager\scenemanager.h(16): note: 'SceneTitle' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(165): error C2509: 'updateScene': メンバー関数が 'SceneTitle' で宣言されていません。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scenemanager\scenemanager.h(16): note: 'SceneTitle' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(251): error C2509: 'drawScene': メンバー関数が 'SceneTitle' で宣言されていません。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scenemanager\scenemanager.h(16): note: 'SceneTitle' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\scenetitle.cpp(285): error C2509: 'InitStatus': メンバー関数が 'SceneTitle' で宣言されていません。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scenemanager\scenemanager.h(16): note: 'SceneTitle' の宣言を確認してください
   SceneLoad.cpp
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(49): error C3861: 'getSceneManager': 識別子が見つかりませんでした
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(51): error C2352: 'SceneManager::getNextScene': 静的でないメンバー関数の呼び出しが正しくありません
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scenemanager\scenemanager.h(55): note: 'SceneManager::getNextScene' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(55): error C2039: 'setScene': 'SceneManager' のメンバーではありません。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scenemanager\scenemanager.h(22): note: 'SceneManager' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(58): error C2039: 'InitScene': 'SceneManager' のメンバーではありません。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scenemanager\scenemanager.h(22): note: 'SceneManager' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(73): error C2065: 'NEW': 定義されていない識別子です。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(73): error C2146: 構文エラー: ';' が、識別子 'C_LOAD_UI_ICON' の前に必要です。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(74): error C2027: 認識できない型 'C_LOAD_UI_ICON' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(20): note: 'C_LOAD_UI_ICON' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(74): error C2227: '->InitObject' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(77): error C2065: 'NEW': 定義されていない識別子です。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(77): error C2146: 構文エラー: ';' が、識別子 'C_CAMERA' の前に必要です。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(78): error C2027: 認識できない型 'C_CAMERA' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(22): note: 'C_CAMERA' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(78): error C2227: '->InitCamera' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(81): error C2065: 'NEW': 定義されていない識別子です。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(81): error C2146: 構文エラー: ';' が、識別子 'Light' の前に必要です。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(82): error C2027: 認識できない型 'Light' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(21): note: 'Light' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(82): error C2227: '->InitLight' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(85): error C2065: 'NEW': 定義されていない識別子です。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(85): error C2146: 構文エラー: ';' が、識別子 'C_TITLE_OBJ' の前に必要です。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(86): error C2027: 認識できない型 'C_TITLE_OBJ' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(23): note: 'C_TITLE_OBJ' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(86): error C2227: '->InitObject' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(95): error C2027: 認識できない型 'C_LOAD_UI_ICON' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(20): note: 'C_LOAD_UI_ICON' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(95): error C2227: '->finalizeObject' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(96): error C3861: 'SAFE_DELETE': 識別子が見つかりませんでした
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(98): error C2027: 認識できない型 'C_CAMERA' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(22): note: 'C_CAMERA' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(98): error C2227: '->finalizeCamera' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(99): error C3861: 'SAFE_DELETE': 識別子が見つかりませんでした
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(101): error C2027: 認識できない型 'Light' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(21): note: 'Light' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(101): error C2227: '->finalizeLight' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(102): error C3861: 'SAFE_DELETE': 識別子が見つかりませんでした
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(104): error C2027: 認識できない型 'C_TITLE_OBJ' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(23): note: 'C_TITLE_OBJ' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(104): error C2227: '->finalizeObject' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(105): error C3861: 'SAFE_DELETE': 識別子が見つかりませんでした
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(114): error C2027: 認識できない型 'C_LOAD_UI_ICON' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(20): note: 'C_LOAD_UI_ICON' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(114): error C2227: '->updateObject' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(128): error C3861: 'timegetTime': 識別子が見つかりませんでした
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(139): error C3861: 'timegetTime': 識別子が見つかりませんでした
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(165): error C2059: 構文エラー: ')'
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(173): error C2027: 認識できない型 'C_LOAD_UI_ICON' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(20): note: 'C_LOAD_UI_ICON' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(173): error C2227: '->drawObject' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(175): error C2027: 認識できない型 'C_CAMERA' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(22): note: 'C_CAMERA' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(175): error C2227: '->setCamera' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(49): error C3861: 'getSceneManager': 識別子が見つかりませんでした
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(51): error C2352: 'SceneManager::getNextScene': 静的でないメンバー関数の呼び出しが正しくありません
+  d:\git\mygame\korokoromygame\korokoromygame\source\scenemanager\scenemanager.h(55): note: 'SceneManager::getNextScene' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(55): error C2039: 'setScene': 'SceneManager' のメンバーではありません。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scenemanager\scenemanager.h(22): note: 'SceneManager' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(58): error C2039: 'InitScene': 'SceneManager' のメンバーではありません。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scenemanager\scenemanager.h(22): note: 'SceneManager' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(73): error C2065: 'NEW': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(73): error C2146: 構文エラー: ';' が、識別子 'C_LOAD_UI_ICON' の前に必要です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(74): error C2027: 認識できない型 'C_LOAD_UI_ICON' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(20): note: 'C_LOAD_UI_ICON' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(74): error C2227: '->InitObject' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(77): error C2065: 'NEW': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(77): error C2146: 構文エラー: ';' が、識別子 'C_CAMERA' の前に必要です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(78): error C2027: 認識できない型 'C_CAMERA' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(22): note: 'C_CAMERA' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(78): error C2227: '->InitCamera' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(81): error C2065: 'NEW': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(81): error C2146: 構文エラー: ';' が、識別子 'Light' の前に必要です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(82): error C2027: 認識できない型 'Light' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(21): note: 'Light' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(82): error C2227: '->InitLight' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(85): error C2065: 'NEW': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(85): error C2146: 構文エラー: ';' が、識別子 'C_TITLE_OBJ' の前に必要です。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(86): error C2027: 認識できない型 'C_TITLE_OBJ' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(23): note: 'C_TITLE_OBJ' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(86): error C2227: '->InitObject' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(95): error C2027: 認識できない型 'C_LOAD_UI_ICON' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(20): note: 'C_LOAD_UI_ICON' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(95): error C2227: '->finalizeObject' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(96): error C3861: 'SAFE_DELETE': 識別子が見つかりませんでした
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(98): error C2027: 認識できない型 'C_CAMERA' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(22): note: 'C_CAMERA' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(98): error C2227: '->finalizeCamera' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(99): error C3861: 'SAFE_DELETE': 識別子が見つかりませんでした
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(101): error C2027: 認識できない型 'Light' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(21): note: 'Light' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(101): error C2227: '->finalizeLight' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(102): error C3861: 'SAFE_DELETE': 識別子が見つかりませんでした
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(104): error C2027: 認識できない型 'C_TITLE_OBJ' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(23): note: 'C_TITLE_OBJ' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(104): error C2227: '->finalizeObject' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(105): error C3861: 'SAFE_DELETE': 識別子が見つかりませんでした
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(114): error C2027: 認識できない型 'C_LOAD_UI_ICON' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(20): note: 'C_LOAD_UI_ICON' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(114): error C2227: '->updateObject' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(128): error C3861: 'timegetTime': 識別子が見つかりませんでした
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(139): error C3861: 'timegetTime': 識別子が見つかりませんでした
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(165): error C2059: 構文エラー: ')'
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(173): error C2027: 認識できない型 'C_LOAD_UI_ICON' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(20): note: 'C_LOAD_UI_ICON' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(173): error C2227: '->drawObject' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(175): error C2027: 認識できない型 'C_CAMERA' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.h(22): note: 'C_CAMERA' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\sceneload.cpp(175): error C2227: '->setCamera' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
   C_SceneMain.cpp
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\main\c_scenemain.h(8): fatal error C1083: include ファイルを開けません。'C_SceneBase.h':No such file or directory
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\main\c_scenemain.h(8): fatal error C1083: include ファイルを開けません。'C_SceneBase.h':No such file or directory
   SceneManager.cpp
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\main\c_scenemain.h(8): fatal error C1083: include ファイルを開けません。'C_SceneBase.h':No such file or directory
+d:\git\mygame\korokoromygame\korokoromygame\source\scene\main\c_scenemain.h(8): fatal error C1083: include ファイルを開けません。'C_SceneBase.h':No such file or directory
   ResourceManager.cpp
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\resourcemanager.cpp(56): error C2065: 'NORMAL_MODEL': 定義されていない識別子です。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\resourcemanager.cpp(66): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\resourcemanager.cpp(56): error C2065: 'NORMAL_MODEL': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\resourcemanager.cpp(66): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(119): note: 'strcpy' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\resourcemanager.cpp(193): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\resourcemanager.cpp(193): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(119): note: 'strcpy' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\resourcemanager.cpp(653): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\resourcemanager.cpp(653): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(119): note: 'strcpy' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\resourcemanager.cpp(675): error C2065: 'HIERARCHY_MODEL': 定義されていない識別子です。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\resourcemanager.cpp(678): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\resourcemanager.cpp(675): error C2065: 'HIERARCHY_MODEL': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\resourcemanager.cpp(678): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(119): note: 'strcpy' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\resourcemanager.cpp(686): error C4996: '_splitpath': This function or variable may be unsafe. Consider using _splitpath_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\resourcemanager.cpp(686): error C4996: '_splitpath': This function or variable may be unsafe. Consider using _splitpath_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdlib.h(1096): note: '_splitpath' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\resourcemanager.cpp(1115): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\resourcemanager.cpp(1115): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(119): note: 'strcpy' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\resourcemanager.cpp(1135): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\resourcemanager.cpp(1135): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(119): note: 'strcpy' の宣言を確認してください
   Player.cpp
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\player\player.cpp(12): fatal error C1083: include ファイルを開けません。'C_Collider.h':No such file or directory
+d:\git\mygame\korokoromygame\korokoromygame\source\player\player.cpp(12): fatal error C1083: include ファイルを開けません。'C_Collider.h':No such file or directory
   Pawn.cpp
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\pawn\pawn.cpp(599): error C4996: '_splitpath': This function or variable may be unsafe. Consider using _splitpath_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\git\mygame\korokoromygame\korokoromygame\source\pawn\pawn.cpp(599): error C4996: '_splitpath': This function or variable may be unsafe. Consider using _splitpath_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdlib.h(1096): note: '_splitpath' の宣言を確認してください
   MyHierarchy.cpp
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\myhierarchy\myhierarchy.cpp(237): error C2664: 'HRESULT ID3DXSkinInfo::ConvertToBlendedMesh(LPD3DXMESH,DWORD,const DWORD *,LPDWORD,DWORD *,LPD3DXBUFFER *,DWORD *,DWORD *,LPD3DXBUFFER *,LPD3DXMESH *)': 引数 2 を 'nullptr' から 'DWORD' へ変換できません。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\myhierarchy\myhierarchy.cpp(237): note: ネイティブの nullptr はブールに変換するか、または reinterpret_cast を使用して整数型に変換することのみが可能です
-  Main.cpp
-c1xx : fatal error C1083: ソース ファイルを開けません。'Source\Main.cpp':No such file or directory
+d:\git\mygame\korokoromygame\korokoromygame\source\myhierarchy\myhierarchy.cpp(237): error C2664: 'HRESULT ID3DXSkinInfo::ConvertToBlendedMesh(LPD3DXMESH,DWORD,const DWORD *,LPDWORD,DWORD *,LPD3DXBUFFER *,DWORD *,DWORD *,LPD3DXBUFFER *,LPD3DXMESH *)': 引数 2 を 'nullptr' から 'DWORD' へ変換できません。
+  d:\git\mygame\korokoromygame\korokoromygame\source\myhierarchy\myhierarchy.cpp(237): note: ネイティブの nullptr はブールに変換するか、または reinterpret_cast を使用して整数型に変換することのみが可能です
   Light.cpp
   Keyboard.cpp
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\keyboard\keyboard.cpp(68): error C2039: 'setDataFormat': 'ATL::_NoAddRefReleaseOnCComPtr<T>' のメンバーではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\keyboard\keyboard.cpp(68): error C2039: 'setDataFormat': 'ATL::_NoAddRefReleaseOnCComPtr<T>' のメンバーではありません。
           with
           [
               T=IDirectInputDevice8A
@@ -102,7 +170,7 @@ d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\sourc
           [
               T=IDirectInputDevice8A
           ]
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\keyboard\keyboard.cpp(76): error C2039: 'setCooperativeLevel': 'ATL::_NoAddRefReleaseOnCComPtr<T>' のメンバーではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\keyboard\keyboard.cpp(76): error C2039: 'setCooperativeLevel': 'ATL::_NoAddRefReleaseOnCComPtr<T>' のメンバーではありません。
           with
           [
               T=IDirectInputDevice8A
@@ -112,7 +180,7 @@ d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\sourc
           [
               T=IDirectInputDevice8A
           ]
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\keyboard\keyboard.cpp(107): error C2039: 'getDeviceState': 'ATL::_NoAddRefReleaseOnCComPtr<T>' のメンバーではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\keyboard\keyboard.cpp(107): error C2039: 'getDeviceState': 'ATL::_NoAddRefReleaseOnCComPtr<T>' のメンバーではありません。
           with
           [
               T=IDirectInputDevice8A
@@ -122,116 +190,116 @@ d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\sourc
           [
               T=IDirectInputDevice8A
           ]
-  FadeUI.cpp
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\application\application.h(14): fatal error C1083: include ファイルを開けません。'Linklib.h':No such file or directory
-  DirectX3D.cpp
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\application\application.h(14): fatal error C1083: include ファイルを開けません。'Linklib.h':No such file or directory
-  Collision.cpp
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(38): error C2039: 'GetPosition': 'C_PLAYER' のメンバーではありません。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\player\player.h(45): note: 'C_PLAYER' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(38): error C2660: 'C_COLLISION::IsHitRayToMesh': 関数に 6 個の引数を指定できません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(54): error C2039: 'GetPosition': 'C_PLAYER' のメンバーではありません。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\player\player.h(45): note: 'C_PLAYER' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(54): error C2660: 'C_COLLISION::IsHitRayToMesh': 関数に 6 個の引数を指定できません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(71): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(71): error C2227: '->SetPosition' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(72): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(72): error C2227: '->SetUsedFlg' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(81): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(81): error C2227: '->GetOffset' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(82): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(82): error C2227: '->GetPosition' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(83): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(83): error C2227: '->GetCollisionRadius' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(84): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(84): error C2227: '->GetCollisionRadius' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(213): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(213): error C2227: '->GetWorldMtx' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(215): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(215): error C2227: '->GetWorldMtx' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(215): error C2660: 'D3DXMatrixInverse': 関数に 2 個の引数を指定できません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(232): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(232): error C2227: '->GetWorldMtx' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(232): error C2660: 'D3DXVec3TransformCoord': 関数に 2 個の引数を指定できません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(234): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(234): error C2227: '->GetWorldMtx' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(234): error C2660: 'D3DXVec3TransformNormal': 関数に 2 個の引数を指定できません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(257): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(257): error C2227: '->GetIndxNum' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(258): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(258): error C2227: '->GetVtxAcess' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(259): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(259): error C2227: '->GetIndxAcess' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(345): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(345): error C2227: '->GetMesh' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(345): error C2227: '->GetVertexBuffer' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(347): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(347): error C2227: '->GetMesh' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(347): error C2227: '->GetIndexBuffer' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(348): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(348): error C2227: '->GetMesh' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(348): error C2227: '->GetNumFaces' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(393): error C3861: 'PrintDebugProc': 識別子が見つかりませんでした
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(426): error C3861: 'SAFE_RELEASE': 識別子が見つかりませんでした
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(427): error C3861: 'SAFE_RELEASE': 識別子が見つかりませんでした
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(437): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(437): error C2227: '->GetPosition' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(438): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(438): error C2227: '->GetPosition' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(440): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(440): error C2227: '->GetCollisionBox' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(441): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(441): error C2227: '->GetCollisionBox' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(462): error C2039: 'GetCollisionBox': 'C_PLAYER' のメンバーではありません。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\player\player.h(45): note: 'C_PLAYER' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(463): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(463): error C2227: '->GetCollisionBox' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(465): error C2039: 'GetOffset': 'C_PLAYER' のメンバーではありません。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\player\player.h(45): note: 'C_PLAYER' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(466): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(466): error C2227: '->GetColliderPos' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(487): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(487): error C2227: '->GetTag' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(487): error C2065: 'TAG_PLAYER': 定義されていない識別子です。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(489): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(489): error C2227: '->GetTag' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(489): error C2065: 'TAG_ENEMY': 定義されていない識別子です。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(490): error C2027: 認識できない型 'C_3DPAWN' が使われています。
-  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(490): error C2227: '->SetHitFlg' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
-  camera.cpp
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\camera\camera.cpp(10): fatal error C1083: include ファイルを開けません。'input.h':No such file or directory
-  Board.cpp
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\board\board.cpp(10): fatal error C1083: include ファイルを開けません。'C_Camera.h':No such file or directory
-  MyAudiere.cpp
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\audio\myaudiere.h(12): fatal error C1083: include ファイルを開けません。'../DirectX3D.h':No such file or directory
-  Application.cpp
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\application\application.h(14): fatal error C1083: include ファイルを開けません。'Linklib.h':No such file or directory
-  コードを生成中...
-  スキップ中... (関連する変更は検出されませんでした)
-  Skydome.cpp
   Figure.cpp
+  FadeUI.cpp
+d:\git\mygame\korokoromygame\korokoromygame\source\application\application.h(14): fatal error C1083: include ファイルを開けません。'Linklib.h':No such file or directory
+  DirectX3D.cpp
+d:\git\mygame\korokoromygame\korokoromygame\source\application\application.h(14): fatal error C1083: include ファイルを開けません。'Linklib.h':No such file or directory
+  Collision.cpp
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(38): error C2039: 'GetPosition': 'C_PLAYER' のメンバーではありません。
+  d:\git\mygame\korokoromygame\korokoromygame\source\player\player.h(45): note: 'C_PLAYER' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(38): error C2660: 'C_COLLISION::IsHitRayToMesh': 関数に 6 個の引数を指定できません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(54): error C2039: 'GetPosition': 'C_PLAYER' のメンバーではありません。
+  d:\git\mygame\korokoromygame\korokoromygame\source\player\player.h(45): note: 'C_PLAYER' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(54): error C2660: 'C_COLLISION::IsHitRayToMesh': 関数に 6 個の引数を指定できません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(71): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(71): error C2227: '->SetPosition' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(72): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(72): error C2227: '->SetUsedFlg' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(81): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(81): error C2227: '->GetOffset' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(82): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(82): error C2227: '->GetPosition' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(83): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(83): error C2227: '->GetCollisionRadius' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(84): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(84): error C2227: '->GetCollisionRadius' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(213): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(213): error C2227: '->GetWorldMtx' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(215): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(215): error C2227: '->GetWorldMtx' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(215): error C2660: 'D3DXMatrixInverse': 関数に 2 個の引数を指定できません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(232): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(232): error C2227: '->GetWorldMtx' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(232): error C2660: 'D3DXVec3TransformCoord': 関数に 2 個の引数を指定できません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(234): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(234): error C2227: '->GetWorldMtx' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(234): error C2660: 'D3DXVec3TransformNormal': 関数に 2 個の引数を指定できません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(257): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(257): error C2227: '->GetIndxNum' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(258): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(258): error C2227: '->GetVtxAcess' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(259): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(259): error C2227: '->GetIndxAcess' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(345): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(345): error C2227: '->GetMesh' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(345): error C2227: '->GetVertexBuffer' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(347): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(347): error C2227: '->GetMesh' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(347): error C2227: '->GetIndexBuffer' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(348): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(348): error C2227: '->GetMesh' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(348): error C2227: '->GetNumFaces' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(393): error C3861: 'PrintDebugProc': 識別子が見つかりませんでした
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(426): error C3861: 'SAFE_RELEASE': 識別子が見つかりませんでした
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(427): error C3861: 'SAFE_RELEASE': 識別子が見つかりませんでした
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(437): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(437): error C2227: '->GetPosition' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(438): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(438): error C2227: '->GetPosition' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(440): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(440): error C2227: '->GetCollisionBox' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(441): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(441): error C2227: '->GetCollisionBox' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(462): error C2039: 'GetCollisionBox': 'C_PLAYER' のメンバーではありません。
+  d:\git\mygame\korokoromygame\korokoromygame\source\player\player.h(45): note: 'C_PLAYER' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(463): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(463): error C2227: '->GetCollisionBox' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(465): error C2039: 'GetOffset': 'C_PLAYER' のメンバーではありません。
+  d:\git\mygame\korokoromygame\korokoromygame\source\player\player.h(45): note: 'C_PLAYER' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(466): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(466): error C2227: '->GetColliderPos' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(487): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(487): error C2227: '->GetTag' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(487): error C2065: 'TAG_PLAYER': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(489): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(489): error C2227: '->GetTag' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(489): error C2065: 'TAG_ENEMY': 定義されていない識別子です。
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(490): error C2027: 認識できない型 'C_3DPAWN' が使われています。
+  d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(36): note: 'C_3DPAWN' の宣言を確認してください
+d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(490): error C2227: '->SetHitFlg' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+  camera.cpp
+d:\git\mygame\korokoromygame\korokoromygame\source\camera\camera.cpp(10): fatal error C1083: include ファイルを開けません。'input.h':No such file or directory
+  Board.cpp
+d:\git\mygame\korokoromygame\korokoromygame\source\board\board.cpp(10): fatal error C1083: include ファイルを開けません。'C_Camera.h':No such file or directory
+  Application.cpp
+d:\git\mygame\korokoromygame\korokoromygame\source\application\application.h(14): fatal error C1083: include ファイルを開けません。'Linklib.h':No such file or directory
+  コードを生成中...
+d:\git\mygame\korokoromygame\korokoromygame\source\figure\figure.cpp(375): warning C4715: 'Figure::MakeVtxCube': 値を返さないコントロール パスがあります。
+  コンパイル中...
+  sceneBase.cpp
+  コードを生成中...
