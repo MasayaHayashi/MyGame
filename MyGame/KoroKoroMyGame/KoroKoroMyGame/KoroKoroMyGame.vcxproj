@@ -114,11 +114,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DirectX3D.cpp" />
+    <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectX3D.h" />
+    <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Linklib.h" />
   </ItemGroup>
