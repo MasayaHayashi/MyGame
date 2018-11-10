@@ -1,3 +1,7 @@
-﻿  SceneTitle.cpp
-  KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.exe
-  KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.pdb (Partial PDB)
+﻿  Main.cpp
+  Application.cpp
+  DirectX3D.cpp
+  コードを生成中...
+d:\git\mygame\korokoromygame\korokoromygame\directx3d.cpp(155): warning C4715: 'DirectX3D::init': 値を返さないコントロール パスがあります。
+  KoroKoroMyGame.vcxproj -> D:\git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.exe
+  KoroKoroMyGame.vcxproj -> D:\git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.pdb (Partial PDB)
