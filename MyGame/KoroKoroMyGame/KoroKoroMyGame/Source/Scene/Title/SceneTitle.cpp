@@ -7,17 +7,22 @@
 #include "SceneTitle.h"
 #include "../../Light/Light.h"
 #include "../../Player/Player.h"
-#include "../../camera/camera.h"
+#include "../../Camera/camera.h"
+#include "../../Skydome/Skydome.h"
+#include "../../MainField/MainField.h"
+#include "../../TitleUI/TitleUI.h"
+#include "../../HeartObj/HeartObj.h"
+
 /*
 #include ""
 #include "C_MainField.h"
-#include "C_camera.h"
+#include "C_Camera.h"
 #include "C_Light.h"
 #include "input.h"
 #include "C_ParticleBase.h"
 #include "C_Player.h"
 #include "C_TitleObj.h"
-#include "C_FADE.h"
+#include "FadeUI.h"
 #include "C_SceneMainUI.h"
 #include "C_StageEditUI.h"
 #include "debugproc.h"
@@ -50,38 +55,41 @@ void SceneTitle::initialize()
 {
 	// ライト初期化
 	pLight = new Light;
-	pLight->InitLight();
+	pLight->initialize();
 
 	// プレイヤー初期化
-	pPlayer = new C_PLAYER;
-	pPlayer->InitObject();
+	pPlayer = new Player;
+	pPlayer->initialize();
 
 	// カメラ初期化
-	pcamera = new camera;
-	pcamera->initialize(pPlayer);
+	pCamera = new Camera;
+	pCamera->initializeTitle(pPlayer);
 
 	// スカイドーム初期化
-	pSkydome = NEW C_SKYDOME;
-	pSkydome->InitObject();
+	pSkydome = new Skydome;
+	pSkydome->initialize();
 
 	// フィールド初期化
-	pField = NEW C_MAIN_FIELD;
-	pField->InitMeshField();
+	pField = new C_MAIN_FIELD;
+	pField->initializeMeshField();
 
 	// タイトルUI初期化
-	pTitleUI = NEW C_TITLE_UI;
-	pTitleUI->InitObject();
+	pTitleUI = new TitleUI;
+	pTitleUI->initialize();
 
 	// タイトルオブジェクト初期化
-	pTitleObj = NEW C_TITLE_OBJ;
-	pTitleObj->InitObject();
+	pTitleObj = new HeartObj;
+	pTitleObj->initialize();
 
+	/*
 	// パーティクル初期化
 	for (INT i = 0; i < MAX_PARTICLE; i++)
 	{
 		pParticle[i] = NEW C_PARTICLE_BASE(i);
-		pParticle[i]->InitObject();
+		pParticle[i]->initialize();
 	}
+	*/
+	/*
 
 	// 
 	for (INT BoardCnt = 0; BoardCnt < MAX_UI_TYPE; BoardCnt++)
@@ -100,22 +108,23 @@ void SceneTitle::initialize()
 		default:
 			break;
 		}
-		pBoard[BoardCnt]->InitObject();
+		pBoard[BoardCnt]->initialize();
 	}
 
 	pBoard[UI_MAIN]->setUsedFlg(false);
+	*/
 
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // タイトル終了処理
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void SceneTitle::finalizeScene()
+void SceneTitle::finalize()
 {
-
+	/*
 	// カメラ後処理
-	pcamera->finalizecamera();
-	SAFE_DELETE(pcamera);
+	pCamera->finalizeCamera();
+	SAFE_DELETE(pCamera);
 
 	// ライト後処理
 	pLight->finalizeLight();
@@ -155,15 +164,16 @@ void SceneTitle::finalizeScene()
 		SAFE_DELETE(pBoard[BoardCnt]);
 	}
 
-
+	*/
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void SceneTitle::updateScene()
+void SceneTitle::update()
 {
-	D3DXVECTOR3 cameraFowerd = pcamera->getcameraFowerd();
+	/*
+	D3DXVECTOR3 CameraFowerd = pCamera->getCameraFowerd();
 
 	// タイトルUI更新
 	pTitleUI->updateObject();
@@ -173,13 +183,13 @@ void SceneTitle::updateScene()
 		pParticle[i]->updateObject();
 
 	// プレイヤー更新
-	pPlayer->updateObject(cameraFowerd);
+	pPlayer->updateObject(CameraFowerd);
 
 	// タイトルオブジェクト更新
 	pTitleObj->updateObject();
 
 	// カメラ更新
-	pcamera->updatecamera_Title(pPlayer);
+	pCamera->updateCamera_Title(pPlayer);
 
 	// シーン遷移
 	if (getKeyboardTrigger(DIK_F1))
@@ -233,13 +243,6 @@ void SceneTitle::updateScene()
 	{
 		pBoard[BoardCnt]->updateObject();
 	}
-
-
-	/*
-	// シーン遷移
-	if (bChangeScene)
-		nChangeSceneWaitCnt++;
-	if(nChangeSceneWaitCnt > 120)
 	*/
 
 }
@@ -247,14 +250,15 @@ void SceneTitle::updateScene()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 描画
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void SceneTitle::drawScene()
+void SceneTitle::draw()
 {
 	// プレイヤー描画
-	pPlayer->drawObject();
+	pPlayer->draw();
 
 	// スカイドーム描画
-	pSkydome->drawObject();
+//	pSkydome->draw();
 
+	/*
 	// フィールド描画
 	pField->drawMeshField();
 
@@ -264,10 +268,12 @@ void SceneTitle::drawScene()
 	// タイトルオブジェクト描画
 	pTitleObj->drawObject();
 
-	// カメラセット
-	pcamera->setcamera();
+	*/
 
-		
+	// カメラセット
+	pCamera->setCamera();
+
+	/*
 	// パーティクル描画
 	for (int i = 0; i < MAX_PARTICLE; i++)
 		pParticle[i]->drawObject();
@@ -275,13 +281,13 @@ void SceneTitle::drawScene()
 	// UI描画
 	for (INT BoardCnt = 0; BoardCnt < MAX_UI_TYPE; BoardCnt++)
 		pBoard[BoardCnt]->drawObject();
-	
+	*/
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ステータス初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void SceneTitle::InitStatus()
+void SceneTitle::initializeStatus()
 {
 
 }
@@ -290,7 +296,7 @@ void SceneTitle::InitStatus()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-const camera* SceneTitle::getcamera()
+Camera* SceneTitle::getCamera()
 {
-	return pcamera;
+	return pCamera;
 }

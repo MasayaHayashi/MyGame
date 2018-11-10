@@ -6,43 +6,43 @@
 
 // ===== インクルード部 =====
 #include "Board.h"
+#include "../Application/Application.h"
 #include "../SceneManager/SceneManager.h"
-#include "C_camera.h"
+#include "../DirectX3D/DirectX3D.h"
+#include "../Camera/camera.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 Board::Board()
 {
-	pD3DVtxBuffBoard	= nullptr;
-	pD3DTextureBoard	= nullptr;
-	vertexBoard.bFade   = false;
-	pos			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	scaleBoard			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	size			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	RotBoard			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	MoveBoard			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	PosDestBoard		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	TempQuaternion		= D3DXQUATERNION(0, 0, 0, 1);
-	fradAngleBoard		= 0.0f;
-	fRotSpeedBoard		= 0.0f;
-	bAlphaBlendBoard	= false;
-	bUVMove				= false;
-	narrow				= false;
+	pD3DVtxBuff	= nullptr;
+	pD3DTexture	= nullptr;
+	vertexBoard.fade	= false;
+	pos					= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	scale				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	size				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	rot					= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	moveBoard			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	posDestBoard		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	tempQuaternion		= D3DXQUATERNION(0, 0, 0, 1);
+	radAngle		= 0.0f;
+	rotSpeed		= 0.0f;
+	alphaBlend		= false;
+	isMoveUV			= false;
+	isNarrow				= false;
 	boardType			= boardType::Polygon2d;
 
-	fCnt = 0.0f;
-
 	// テクスチャ関連
-	TexUV_SizeX			   = 0.0f;
-	TexUV_SizeY			   = 0.0f;
-	MoveUV				   = D3DXVECTOR3 (0.0f,0.0f,0.0f);
+	texUV_SizeX			   = 0.0f;
+	texUV_SizeY			   = 0.0f;
+	moveUV				   = D3DXVECTOR3 (0.0f,0.0f,0.0f);
 	texPatternDivideX, texPatternDivideY = 0;
-	NumAnimPattern		   = 0;
-	nIntervalChangePattern = 0;
-	nAnimCnt			   = 0;
-	CurrentAnimPattern	   = 1;
-	Color				   = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	animPattern		   = 0;
+	intervalChangePattern = 0;
+	animCnt			   = 0;
+	currentAnimPattern	   = 1;
+	color				   = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -59,7 +59,7 @@ Board::~Board()
 void Board::initialize()
 {
 //	CreateTexture();	// テクスチャ生成
-	bUsed = false;
+	isUsed = false;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -83,139 +83,138 @@ void Board::update()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ボード描画
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-const void Board::draw()
+void Board::draw()
 {
-	// 例外処理
-	if (!used)
+	if (!isUsed)
 		return;
-	if (!vertexBoard.pD3DVtxBuffBoard)
+	if (!vertexBoard.pD3DVtxBuff)
 		return;
 
 	// オブジェクト取得
-	LPDIRECT3DDEVICE9 devicePtr = getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	D3DXMATRIX mtxScale, mtxTranslate, mtxRoll,mtxRot;
 
-	C_camera *pcamera = nullptr;
+	Camera *pCamera = nullptr;
 
 	// 描画
 	switch (vertexBoard.boardType)
 	{
-	case POLYGON_2D:
+	case  boardType::Polygon2d:
 
 			// αテストを有効に
-			devicePtr->setRenderState(D3DRS_ALPHATESTENABLE, true);	// アルファテストオン
-			devicePtr->setRenderState(D3DRS_ALPHAREF, 5);				// 5以下は描画しない
-			devicePtr->setRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+			devicePtr->SetRenderState(D3DRS_ALPHATESTENABLE, true);	// アルファテストオン
+			devicePtr->SetRenderState(D3DRS_ALPHAREF, 5);				// 5以下は描画しない
+			devicePtr->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
 			// 頂点バッファをデバイスのデータストリームにバインド
-			devicePtr->setStreamSource(0, vertexBoard.pD3DVtxBuffBoard, 0, sizeof(VERTEX_2D));
+			devicePtr->SetStreamSource(0, vertexBoard.pD3DVtxBuff, 0, sizeof(VERTEX_2D));
 
 			// 頂点フォーマットの設定
-			devicePtr->setFVF(FVF_VERTEX_2D);
+			devicePtr->SetFVF(FVF_VERTEX_2D);
 
 			// テクスチャの設定
 			//if(Texture.pD3DTexture)
-			devicePtr->setTexture(0, Texture.pD3DTexture);
+			devicePtr->SetTexture(0, texture.pD3DTexture);
 
 			// アルファブレンド設定
-			if (bAlphaBlendBoard)
-				devicePtr->setRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+			if (alphaBlend)
+				devicePtr->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 
 			// テクスチャの設定（フレーム部分）
-			//	devicePtr->setTexture(0,pD3DTexture);
+			//	devicePtr->SetTexture(0,pD3DTexture);
 
 			// ポリゴンの描画（フレーム部分）
-			devicePtr->drawPrimitive(D3DPT_TRIANGLESTRIP, 0, NUM_POLYGON);
+			devicePtr->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, Polygon);
 
 			// アルファブレンド設定を戻す
-			devicePtr->setRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+			devicePtr->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
 			// αテストを無効に
-			devicePtr->setRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+			devicePtr->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 		break;
-	case BILLBOARD:
+	case boardType::Billboard:
 
-			pcamera = getSceneManager()->getInstanse()->getcamera();
-
+			pCamera = SceneManager::getInstanse()->getCamera();
+			
 			// αテストを有効に
-			devicePtr->setRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-			devicePtr->setRenderState(D3DRS_ALPHAREF, 5);
-			devicePtr->setRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+			devicePtr->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+			devicePtr->SetRenderState(D3DRS_ALPHAREF, 5);
+			devicePtr->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
 			// ラインティングを無効にする
-			devicePtr->setRenderState(D3DRS_LIGHTING, FALSE);
+			devicePtr->SetRenderState(D3DRS_LIGHTING, FALSE);
 
 
 			// ビューマトリックスを取得
-			mtxTempView = pcamera->getMtxView();
+			mtxTempView = pCamera->getMtxView();
 
 			// ワールドマトリックスの初期化
-			D3DXMatrixIdentity(&WorldMtxBoard);
+			D3DXMatrixIdentity(&worldMtx);
 
 			// ポリゴンを正面に向ける
 
 			// 逆行列をもとめる
-			D3DXMatrixInverse(&WorldMtxBoard, nullptr, &mtxTempView);
-			WorldMtxBoard._41 = 0.0f;
-			WorldMtxBoard._42 = 0.0f;
-			WorldMtxBoard._43 = 0.0f;
+			D3DXMatrixInverse(&worldMtx, nullptr, &mtxTempView);
+			worldMtx._41 = 0.0f;
+			worldMtx._42 = 0.0f;
+			worldMtx._43 = 0.0f;
 
 			// スケールを反映
-			D3DXMatrixScaling(&mtxScale, vertexBoard.scaleBoard.x, vertexBoard.scaleBoard.y, vertexBoard.scaleBoard.z);
-			D3DXMatrixMultiply(&WorldMtxBoard, &WorldMtxBoard, &mtxScale);
+			D3DXMatrixScaling(&mtxScale, vertexBoard.scale.x, vertexBoard.scale.y, vertexBoard.scale.z);
+			D3DXMatrixMultiply(&worldMtx, &worldMtx, &mtxScale);
 
 			// 移動を反映
 			D3DXMatrixTranslation(&mtxTranslate, vertexBoard.pos.x, vertexBoard.pos.y, vertexBoard.pos.z);
-			D3DXMatrixMultiply(&WorldMtxBoard, &WorldMtxBoard, &mtxTranslate);
+			D3DXMatrixMultiply(&worldMtx, &worldMtx, &mtxTranslate);
 
 			// ワールドマトリックスの設定
-			devicePtr->setTransform(D3DTS_WORLD, &WorldMtxBoard);
+			devicePtr->SetTransform(D3DTS_WORLD, &worldMtx);
 
 			// 頂点バッファをデバイスのデータストリームにバインド
-			devicePtr->setStreamSource(0, vertexBoard.pD3DVtxBuffBoard, 0, sizeof(VERTEX_3D));
+			devicePtr->SetStreamSource(0, vertexBoard.pD3DVtxBuff, 0, sizeof(VERTEX_3D));
 
 			// 頂点フォーマットの設定
-			devicePtr->setFVF(FVF_VERTEX_3D);
+			devicePtr->SetFVF(FVF_VERTEX_3D);
 
 			// テクスチャの設定
-			devicePtr->setTexture(0, Texture.pD3DTexture);
+			devicePtr->SetTexture(0, texture.pD3DTexture);
 	
 			// アルファブレンド
-			if (bAlphaBlendBoard)
-				devicePtr->setRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+			if (alphaBlend)
+				devicePtr->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 
 			// 半透明処理を行う
-			devicePtr->setRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+			devicePtr->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 
 			// ポリゴンの描画
-			devicePtr->drawPrimitive(D3DPT_TRIANGLESTRIP, 0, NUM_POLYGON);
+			devicePtr->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, Polygon);
 
 			// ラインティングを有効にする
-			devicePtr->setRenderState(D3DRS_LIGHTING, TRUE);
+			devicePtr->SetRenderState(D3DRS_LIGHTING, TRUE);
 
 			// αテストを無効に
-			devicePtr->setRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+			devicePtr->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 
 			// アルファブレンド設定を戻す
-	//		devicePtr->setRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	//		devicePtr->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
 		break;
-	case POLYGON_3D:
+	case boardType::Polygon3d:
 
 	//	D3DXMATRIX mtxRot, mtxTranslate;
 		/*
 		// 減算合成
-		devicePtr->setRenderState(D3DRS_BLENDOP, D3DBLENDOP_REVSUBTRACT);	// 結果 = 転送先(DEST) - 転送元(SRC)
-		devicePtr->setRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-		devicePtr->setRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+		devicePtr->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_REVSUBTRACT);	// 結果 = 転送先(DEST) - 転送元(SRC)
+		devicePtr->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		devicePtr->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 
 		// Z比較なし
-		//	devicePtr->setRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);
+		//	devicePtr->SetRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);
 		*/
 
 		// ワールドマトリックスの初期化
-		D3DXMatrixIdentity(&WorldMtxBoard);
+		D3DXMatrixIdentity(&worldMtx);
 
 #if 0
 		// 回転を反映
@@ -238,39 +237,40 @@ const void Board::draw()
 		D3DXMatrixMultiply(&g_mtxWorldShadow, &g_mtxWorldShadow, &mtxRot);
 #endif
 		// 回転を反映
-		D3DXMatrixRotationYawPitchRoll(&mtxRot, RotBoard.y, RotBoard.x, RotBoard.z);
-		D3DXMatrixMultiply(&WorldMtxBoard, &WorldMtxBoard, &mtxRot);
+		D3DXMatrixRotationYawPitchRoll(&mtxRot, rot.y, rot.x, rot.z);
+		D3DXMatrixMultiply(&worldMtx, &worldMtx, &mtxRot);
 
 		// 移動を反映
 		D3DXMatrixTranslation(&mtxTranslate, pos.x,
 			pos.y,
 			pos.z);
-		D3DXMatrixMultiply(&WorldMtxBoard,
-			&WorldMtxBoard, &mtxTranslate);
+		D3DXMatrixMultiply(&worldMtx,
+			&worldMtx, &mtxTranslate);
 
 		// ワールドマトリックスの設定
-		devicePtr->setTransform(D3DTS_WORLD, &WorldMtxBoard);
+		devicePtr->SetTransform(D3DTS_WORLD, &worldMtx);
 
 		// 頂点バッファをレンダリングパイプラインに設定
-		devicePtr->setStreamSource(0, vertexBoard.pD3DVtxBuffBoard, 0, sizeof(VERTEX_3D));
+		devicePtr->SetStreamSource(0, vertexBoard.pD3DVtxBuff, 0, sizeof(VERTEX_3D));
 
 		// 頂点フォーマットの設定
-		devicePtr->setFVF(FVF_VERTEX_3D);
+		devicePtr->SetFVF(FVF_VERTEX_3D);
 
 		// テクスチャの設定
-		devicePtr->setTexture(0, Texture.pD3DTexture);
+		devicePtr->SetTexture(0, texture.pD3DTexture);
+
 
 		// ポリゴンの描画
-		devicePtr->drawPrimitive(D3DPT_TRIANGLESTRIP, nullptr, NUM_POLYGON);
+		devicePtr->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, Polygon);
 
 		/*
 		// 通常ブレンド
-		devicePtr->setRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);			// 結果 = 転送元(SRC) + 転送先(DEST)
-		devicePtr->setRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-		devicePtr->setRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+		devicePtr->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);			// 結果 = 転送元(SRC) + 転送先(DEST)
+		devicePtr->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		devicePtr->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
 		// Z比較あり
-		devicePtr->setRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
+		devicePtr->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
 		*/
 		break;
 	default:
@@ -281,17 +281,17 @@ const void Board::draw()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 生成した頂点情報のセット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Board::setvtxBoard()
+void Board::setVtx()
 {
 	switch (boardType)
 	{
-	case POLYGON_2D:
+	case boardType::Polygon2d:
 		{
 			// 頂点バッファの中身を埋める
 			VERTEX_2D  *pVtx;
 
 			// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
-			vertexBoard.pD3DVtxBuffBoard->Lock(0, 0, (void**)&pVtx, 0);
+			vertexBoard.pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 			// 頂点座標の設定
 
@@ -300,36 +300,36 @@ void Board::setvtxBoard()
 
 			// 左上
 			pVtx[0].vtx = center;
-			pVtx[0].vtx.x += (-vertexBoard.size.x / 2.0f) * vertexBoard.scaleBoard.x * cos(vertexBoard.fradAngleBoard) - (-vertexBoard.size.y / 2.0f) * vertexBoard.scaleBoard.y * sin(vertexBoard.fradAngleBoard);
-			pVtx[0].vtx.y += (-vertexBoard.size.x / 2.0f) * vertexBoard.scaleBoard.x * sin(vertexBoard.fradAngleBoard) + (-vertexBoard.size.y / 2.0f) * vertexBoard.scaleBoard.y * cos(vertexBoard.fradAngleBoard);
+			pVtx[0].vtx.x += (-vertexBoard.size.x / 2.0f) * vertexBoard.scale.x * cos(vertexBoard.radAngle) - (-vertexBoard.size.y / 2.0f) * vertexBoard.scale.y * sin(vertexBoard.radAngle);
+			pVtx[0].vtx.y += (-vertexBoard.size.x / 2.0f) * vertexBoard.scale.x * sin(vertexBoard.radAngle) + (-vertexBoard.size.y / 2.0f) * vertexBoard.scale.y * cos(vertexBoard.radAngle);
 
 			// 右上
 			pVtx[1].vtx = center;
-			pVtx[1].vtx.x += (vertexBoard.size.x / 2.0f) * vertexBoard.scaleBoard.x * cos(vertexBoard.fradAngleBoard) - (-vertexBoard.size.y / 2.0f) * vertexBoard.scaleBoard.y * sin(vertexBoard.fradAngleBoard);
-			pVtx[1].vtx.y += (vertexBoard.size.x / 2.0f) * vertexBoard.scaleBoard.x * sin(vertexBoard.fradAngleBoard) + (-vertexBoard.size.y / 2.0f) * vertexBoard.scaleBoard.y * cos(vertexBoard.fradAngleBoard);
+			pVtx[1].vtx.x += (vertexBoard.size.x / 2.0f) * vertexBoard.scale.x * cos(vertexBoard.radAngle) - (-vertexBoard.size.y / 2.0f) * vertexBoard.scale.y * sin(vertexBoard.radAngle);
+			pVtx[1].vtx.y += (vertexBoard.size.x / 2.0f) * vertexBoard.scale.x * sin(vertexBoard.radAngle) + (-vertexBoard.size.y / 2.0f) * vertexBoard.scale.y * cos(vertexBoard.radAngle);
 
 			// 左下
 			pVtx[2].vtx = center;
-			pVtx[2].vtx.x += (-vertexBoard.size.x / 2.0f) * vertexBoard.scaleBoard.x * cos(vertexBoard.fradAngleBoard) - (vertexBoard.size.y / 2.0f) * vertexBoard.scaleBoard.y * sin(vertexBoard.fradAngleBoard);
-			pVtx[2].vtx.y += (-vertexBoard.size.x / 2.0f) * vertexBoard.scaleBoard.x * sin(vertexBoard.fradAngleBoard) + (vertexBoard.size.y / 2.0f) * vertexBoard.scaleBoard.y * cos(vertexBoard.fradAngleBoard);
+			pVtx[2].vtx.x += (-vertexBoard.size.x / 2.0f) * vertexBoard.scale.x * cos(vertexBoard.radAngle) - (vertexBoard.size.y / 2.0f) * vertexBoard.scale.y * sin(vertexBoard.radAngle);
+			pVtx[2].vtx.y += (-vertexBoard.size.x / 2.0f) * vertexBoard.scale.x * sin(vertexBoard.radAngle) + (vertexBoard.size.y / 2.0f) * vertexBoard.scale.y * cos(vertexBoard.radAngle);
 
 			// 右下
 			pVtx[3].vtx = center;
-			pVtx[3].vtx.x += (vertexBoard.size.x / 2.0f) * vertexBoard.scaleBoard.x * cos(vertexBoard.fradAngleBoard) - (vertexBoard.size.y / 2.0f) * vertexBoard.scaleBoard.y * sin(vertexBoard.fradAngleBoard);
-			pVtx[3].vtx.y += (vertexBoard.size.x / 2.0f) * vertexBoard.scaleBoard.x * sin(vertexBoard.fradAngleBoard) + (vertexBoard.size.y / 2.0f) * vertexBoard.scaleBoard.y * cos(vertexBoard.fradAngleBoard);
+			pVtx[3].vtx.x += (vertexBoard.size.x / 2.0f) * vertexBoard.scale.x * cos(vertexBoard.radAngle) - (vertexBoard.size.y / 2.0f) * vertexBoard.scale.y * sin(vertexBoard.radAngle);
+			pVtx[3].vtx.y += (vertexBoard.size.x / 2.0f) * vertexBoard.scale.x * sin(vertexBoard.radAngle) + (vertexBoard.size.y / 2.0f) * vertexBoard.scale.y * cos(vertexBoard.radAngle);
 
 			// 頂点データをアンロックする
-			vertexBoard.pD3DVtxBuffBoard->Unlock();
+			vertexBoard.pD3DVtxBuff->Unlock();
 			break;
 
 		}
-	case BILLBOARD:
+	case boardType::Billboard:
 		{
 			//頂点バッファの中身を埋める
 			VERTEX_3D * pVtx;
 
 			// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
-			vertexBoard.pD3DVtxBuffBoard->Lock(0, 0, (void**)&pVtx, 0);
+			vertexBoard.pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 			pVtx[0].vtx = D3DXVECTOR3(-vertexBoard.size.x, vertexBoard.size.y, 0.0f);
 			pVtx[1].vtx = D3DXVECTOR3(vertexBoard.size.x, vertexBoard.size.y, 0.0f);
@@ -337,16 +337,16 @@ void Board::setvtxBoard()
 			pVtx[3].vtx = D3DXVECTOR3(vertexBoard.size.x, -vertexBoard.size.y, 0.0f);
 
 			// 頂点データをアンロックする
-			vertexBoard.pD3DVtxBuffBoard->Unlock();
+			vertexBoard.pD3DVtxBuff->Unlock();
 			break;
 		}
-	case POLYGON_3D:
+	case boardType::Polygon3d:
 		{
 			//頂点バッファの中身を埋める
 			VERTEX_3D *pVtx;
 
 			// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
-			vertexBoard.pD3DVtxBuffBoard->Lock(0, 0, (void**)&pVtx, 0);
+			vertexBoard.pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 			pVtx[0].vtx = D3DXVECTOR3(-vertexBoard.size.x, vertexBoard.size.y, 0.0f);
 			pVtx[1].vtx = D3DXVECTOR3(vertexBoard.size.x, size.y, 0.0f);
@@ -354,11 +354,9 @@ void Board::setvtxBoard()
 			pVtx[3].vtx = D3DXVECTOR3(vertexBoard.size.x, -vertexBoard.size.y, 0.0f);
 
 			// 頂点データをアンロックする
-			vertexBoard.pD3DVtxBuffBoard->Unlock();
+			vertexBoard.pD3DVtxBuff->Unlock();
 			break;
 		}
-	case MAX_BOARD_TYPE:
-		break;
 	default:
 		break;
 	}
@@ -367,18 +365,18 @@ void Board::setvtxBoard()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // テクスチャ生成
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-bool Board::CreateTexture(TEXTURE_DATA &Texture)
+bool Board::createTexture(TEXTURE_DATA &Texture)
 {
 	// 例外処理
-	if (!szFileName)
+	if (!fileName)
 		return false;
 	if (size <= 0)
 		return false;
 
-	LPDIRECT3DDEVICE9 devicePtr = getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	// テクスチャの読み込み
-	if (D3DXCreateTextureFromFile(devicePtr, szFileName, &Texture.pD3DTexture))
+	if (D3DXCreateTextureFromFile(devicePtr, fileName, &Texture.pD3DTexture))
 		return true;
 
 	return false;
@@ -390,19 +388,19 @@ bool Board::CreateTexture(TEXTURE_DATA &Texture)
 bool Board::makevertexBoard()
 {
 	// デバイス取得
-	LPDIRECT3DDEVICE9 devicePtr = getDevice();
+	LPDIRECT3DDEVICE9 devicePtr =  DirectX3D::getDevice();
 	
 	// 頂点情報生成
 	switch (boardType)
 	{
-	case POLYGON_2D:
+	case boardType::Polygon2d:
 
 		// オブジェクトの頂点バッファを生成
-		if (FAILED(devicePtr->CreateVertexBuffer(sizeof(VERTEX_2D) * (NUM_VERTEX),	// 頂点データ用に確保するバッファサイズ(バイト単位)
+		if (FAILED(devicePtr->CreateVertexBuffer(sizeof(VERTEX_2D) * (Vertex),	// 頂点データ用に確保するバッファサイズ(バイト単位)
 			D3DUSAGE_WRITEONLY,							// 頂点バッファの使用法　
 			FVF_VERTEX_2D,								// 使用する頂点フォーマット
 			D3DPOOL_MANAGED,							// リソースのバッファを保持するメモリクラスを指定
-			&pD3DVtxBuffBoard,							// 頂点バッファインターフェースへのポインタ
+			&pD3DVtxBuff,							// 頂点バッファインターフェースへのポインタ
 			nullptr)))										// nullptrに設定
 		{
 			return false;
@@ -412,7 +410,7 @@ bool Board::makevertexBoard()
 			VERTEX_2D *pVtx;
 
 			// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
-			pD3DVtxBuffBoard->Lock(0, 0, (void**)&pVtx, 0);
+			pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 			{
 				// 頂点座標の設定
@@ -441,17 +439,17 @@ bool Board::makevertexBoard()
 			}
 
 			// 頂点データをアンロックする
-			pD3DVtxBuffBoard->Unlock();
+			pD3DVtxBuff->Unlock();
 		}
 		break;
-	case BILLBOARD:
+	case boardType::Billboard:
 	{
 		// オブジェクトの頂点バッファを生成
-		if (FAILED(devicePtr->CreateVertexBuffer(sizeof(VERTEX_3D) * NUM_VERTEX,	// 頂点データ用に確保するバッファサイズ(バイト単位)
+		if (FAILED(devicePtr->CreateVertexBuffer(sizeof(VERTEX_3D) * Vertex,	// 頂点データ用に確保するバッファサイズ(バイト単位)
 			D3DUSAGE_WRITEONLY,			// 頂点バッファの使用法　
 			FVF_VERTEX_3D,				// 使用する頂点フォーマット
 			D3DPOOL_MANAGED,			// リソースのバッファを保持するメモリクラスを指定
-			&pD3DVtxBuffBoard,			// 頂点バッファインターフェースへのポインタ
+			&pD3DVtxBuff,			// 頂点バッファインターフェースへのポインタ
 			nullptr)))						// nullptrに設定
 		{
 			return false;
@@ -461,7 +459,7 @@ bool Board::makevertexBoard()
 		VERTEX_3D *pVtx;
 
 		// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
-		pD3DVtxBuffBoard->Lock(0, 0, (void**)&pVtx, 0);
+		pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 		pVtx[0].vtx = D3DXVECTOR3(-vertexBoard.size.x, vertexBoard.size.y, 0.0f);
 		pVtx[1].vtx = D3DXVECTOR3(vertexBoard.size.x, vertexBoard.size.y, 0.0f);
@@ -499,16 +497,16 @@ bool Board::makevertexBoard()
 		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 
 		// 頂点データをアンロックする
-		vertexBoard.pD3DVtxBuffBoard->Unlock();
+		vertexBoard.pD3DVtxBuff->Unlock();
 	}
 		break;
-	case POLYGON_3D:
+	case boardType::Polygon3d:
 		// オブジェクトの頂点バッファを生成
-		if (FAILED(devicePtr->CreateVertexBuffer(sizeof(VERTEX_3D) * NUM_VERTEX,	// 頂点データ用に確保するバッファサイズ(バイト単位)
+		if (FAILED(devicePtr->CreateVertexBuffer(sizeof(VERTEX_3D) * Vertex,	// 頂点データ用に確保するバッファサイズ(バイト単位)
 			D3DUSAGE_WRITEONLY,			// 頂点バッファの使用法　
 			FVF_VERTEX_3D,				// 使用する頂点フォーマット
 			D3DPOOL_MANAGED,			// リソースのバッファを保持するメモリクラスを指定
-			&vertexBoard.pD3DVtxBuffBoard,			// 頂点バッファインターフェースへのポインタ
+			&vertexBoard.pD3DVtxBuff,			// 頂点バッファインターフェースへのポインタ
 			nullptr)))						// nullptrに設定
 		{
 			return false;
@@ -518,7 +516,7 @@ bool Board::makevertexBoard()
 		VERTEX_3D *pVtx;
 
 		// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
-		pD3DVtxBuffBoard->Lock(0, 0, (void**)&pVtx, 0);
+		pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 		pVtx[0].vtx = D3DXVECTOR3(-vertexBoard.size.x, vertexBoard.size.y, 0.0f);
 		pVtx[1].vtx = D3DXVECTOR3(vertexBoard.size.x, vertexBoard.size.y, 0.0f);
@@ -556,7 +554,7 @@ bool Board::makevertexBoard()
 		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 
 		// 頂点データをアンロックする
-		pD3DVtxBuffBoard->Unlock();
+		pD3DVtxBuff->Unlock();
 
 		break;
 	default:
@@ -571,14 +569,16 @@ bool Board::makevertexBoard()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 bool Board::makevertexBoard(D3DXVECTOR3 nor)
 {
-	LPDIRECT3DDEVICE9 devicePtr = getDevice();
+	static constexpr INT Vertex = 4;
+
+	LPDIRECT3DDEVICE9 devicePtr =  DirectX3D::getDevice();
 
 	// オブジェクトの頂点バッファを生成
-	if (FAILED(devicePtr->CreateVertexBuffer(sizeof(VERTEX_3D) * NUM_VERTEX,	// 頂点データ用に確保するバッファサイズ(バイト単位)
+	if (FAILED(devicePtr->CreateVertexBuffer(sizeof(VERTEX_3D) * Vertex,	// 頂点データ用に確保するバッファサイズ(バイト単位)
 		D3DUSAGE_WRITEONLY,			// 頂点バッファの使用法　
 		FVF_VERTEX_3D,				// 使用する頂点フォーマット
 		D3DPOOL_MANAGED,			// リソースのバッファを保持するメモリクラスを指定
-		&pD3DVtxBuffBoard,	// 頂点バッファインターフェースへのポインタ
+		&pD3DVtxBuff,	// 頂点バッファインターフェースへのポインタ
 		nullptr)))						// nullptrに設定
 	{
 		return false;
@@ -588,7 +588,7 @@ bool Board::makevertexBoard(D3DXVECTOR3 nor)
 	VERTEX_3D *pVtx;
 
 	// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
-	pD3DVtxBuffBoard->Lock(0, 0, (void**)&pVtx, 0);
+	pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 	
 	// 頂点座標の設定
 	pVtx[0].vtx = D3DXVECTOR3(-size.x / 2.0f, 0.0f, -size.z);
@@ -625,7 +625,7 @@ bool Board::makevertexBoard(D3DXVECTOR3 nor)
 	pVtx[3].tex = D3DXVECTOR2(1.0f, 0.0f);
 
 	// 頂点データをアンロックする
-	pD3DVtxBuffBoard->Unlock();
+	pD3DVtxBuff->Unlock();
 
 
 	return true;
@@ -638,7 +638,7 @@ void Board::setTexture()
 {
 	switch (boardType)
 	{
-	case POLYGON_2D:
+	case boardType::Polygon2d:
 			// 頂点バッファの中身を埋める
 			VERTEX_2D  *pVtx;
 
@@ -646,15 +646,15 @@ void Board::setTexture()
 			FLOAT fPosYUp, fPosYDown;
 
 			// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
-			vertexBoard.pD3DVtxBuffBoard->Lock(0, 0, (void**)&pVtx, 0);
+			vertexBoard.pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 			// UV座標の設定
 
 			// 各座標の計算
-			fPosXLeft = (FLOAT)(CurrentAnimPattern % texPatternDivideX) * TexUV_SizeX;
-			fPosXRight = fPosXLeft + TexUV_SizeX;
-			fPosYUp = (FLOAT)(CurrentAnimPattern / (NumAnimPattern / texPatternDivideY)) * TexUV_SizeY;
-			fPosYDown = fPosYUp + TexUV_SizeY;
+			fPosXLeft = (FLOAT)(currentAnimPattern % texPatternDivideX) * texUV_SizeX;
+			fPosXRight = fPosXLeft + texUV_SizeX;
+			fPosYUp = (FLOAT)(currentAnimPattern / (animPattern / texPatternDivideY)) * texUV_SizeY;
+			fPosYDown = fPosYUp + texUV_SizeY;
 
 			pVtx[0].tex = D3DXVECTOR2(fPosXLeft, fPosYUp);
 			pVtx[1].tex = D3DXVECTOR2(fPosXRight, fPosYUp);
@@ -662,9 +662,9 @@ void Board::setTexture()
 			pVtx[3].tex = D3DXVECTOR2(fPosXRight, fPosYDown);
 
 			// 頂点データをアンロックする
-			vertexBoard.pD3DVtxBuffBoard->Unlock();
+			vertexBoard.pD3DVtxBuff->Unlock();
 		break;
-	case BILLBOARD:
+	case boardType::Billboard:
 	{
 		// 頂点バッファの中身を埋める
 		VERTEX_3D  *pVtx;
@@ -673,13 +673,13 @@ void Board::setTexture()
 		FLOAT fPosYUp, fPosYDown;
 
 		// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
-		vertexBoard.pD3DVtxBuffBoard->Lock(0, 0, (void**)&pVtx, 0);
+		vertexBoard.pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 		// 各座標の計算
-		fPosXLeft = (FLOAT)(CurrentAnimPattern % texPatternDivideX) * TexUV_SizeX;
-		fPosXRight = fPosXLeft + TexUV_SizeX;
-		fPosYUp = (FLOAT)(CurrentAnimPattern / (NumAnimPattern / texPatternDivideY)) * TexUV_SizeY;
-		fPosYDown = fPosYUp + TexUV_SizeY;
+		fPosXLeft = (FLOAT)(currentAnimPattern % texPatternDivideX) * texUV_SizeX;
+		fPosXRight = fPosXLeft + texUV_SizeX;
+		fPosYUp = (FLOAT)(currentAnimPattern / (animPattern / texPatternDivideY)) * texUV_SizeY;
+		fPosYDown = fPosYUp + texUV_SizeY;
 
 		pVtx[0].tex = D3DXVECTOR2(fPosXLeft, fPosYUp);
 		pVtx[1].tex = D3DXVECTOR2(fPosXRight, fPosYUp);
@@ -687,10 +687,10 @@ void Board::setTexture()
 		pVtx[3].tex = D3DXVECTOR2(fPosXRight, fPosYDown);
 
 		// 頂点データをアンロックする
-		vertexBoard.pD3DVtxBuffBoard->Unlock();
+		vertexBoard.pD3DVtxBuff->Unlock();
 	}
 		break;
-	case POLYGON_3D:
+	case boardType::Polygon3d:
 		break;
 	default:
 		break;
@@ -701,66 +701,64 @@ void Board::setTexture()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 頂点カラーの変更
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Board::setColor()
+void Board::setcolor()
 {
 	switch (boardType)
 	{
-	case POLYGON_2D:
+	case boardType::Polygon2d:
 			// 2Dポリゴンのとき
 			//頂点バッファの中身を埋める
 			VERTEX_2D *pVtx;
 
 			// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
-			vertexBoard.pD3DVtxBuffBoard->Lock(0, 0, (void**)&pVtx, 0);
+			vertexBoard.pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 			// 頂点座標の設定
-			pVtx[0].diffuse = Color;
-			pVtx[1].diffuse = Color;
-			pVtx[2].diffuse = Color;
-			pVtx[3].diffuse = Color;
+			pVtx[0].diffuse = color;
+			pVtx[1].diffuse = color;
+			pVtx[2].diffuse = color;
+			pVtx[3].diffuse = color;
 
 			// 頂点データをアンロックする
-			vertexBoard.pD3DVtxBuffBoard->Unlock();
+			vertexBoard.pD3DVtxBuff->Unlock();
 		break;
-	case BILLBOARD:
+	case boardType::Billboard:
 	{
 		// 3Dポリゴンのとき
 		//頂点バッファの中身を埋める
 		VERTEX_3D *pVtx;
 
 		// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
-		vertexBoard.pD3DVtxBuffBoard->Lock(0, 0, (void**)&pVtx, 0);
+		vertexBoard.pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 		// 頂点座標の設定
-		pVtx[0].diffuse = Color;
-		pVtx[1].diffuse = Color;
-		pVtx[2].diffuse = Color;
-		pVtx[3].diffuse = Color;
+		pVtx[0].diffuse = color;
+		pVtx[1].diffuse = color;
+		pVtx[2].diffuse = color;
+		pVtx[3].diffuse = color;
 
 		// 頂点データをアンロックする
-		vertexBoard.pD3DVtxBuffBoard->Unlock();
+		vertexBoard.pD3DVtxBuff->Unlock();
 	}
 		break;
-	case POLYGON_3D:
+	case boardType::Polygon3d:
 	{
 		// 3Dポリゴンのとき
 		//頂点バッファの中身を埋める
 		VERTEX_3D *pVtx;
 
 		// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
-		vertexBoard.pD3DVtxBuffBoard->Lock(0, 0, (void**)&pVtx, 0);
+		vertexBoard.pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 		// 頂点座標の設定
-		pVtx[0].diffuse = Color;
-		pVtx[1].diffuse = Color;
-		pVtx[2].diffuse = Color;
-		pVtx[3].diffuse = Color;
+		pVtx[0].diffuse = color;
+		pVtx[1].diffuse = color;
+		pVtx[2].diffuse = color;
+		pVtx[3].diffuse = color;
 
 		// 頂点データをアンロックする
-		vertexBoard.pD3DVtxBuffBoard->Unlock();
+		vertexBoard.pD3DVtxBuff->Unlock();
 	}
-		break;
-	case MAX_BOARD_TYPE:
 		break;
 	default:
 		break;
@@ -770,13 +768,13 @@ void Board::setColor()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ステータス初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Board::InitStatus()
+void Board::initializeStatus()
 {
-	vertexBoard.pos = D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f);
-	vertexBoard.RotBoard = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	vertexBoard.scaleBoard = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	vertexBoard.pos = D3DXVECTOR3(Application::ScreenCenterX, Application::ScreenCenterY, 0.0f);
+	vertexBoard.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	vertexBoard.scale = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
-	setvtxBoard();
+	setVtx();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -798,9 +796,9 @@ D3DXVECTOR3 Board::getSize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 番号セット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Board::setNumber(BYTE nsetNumber)
+void Board::setNumber(BYTE nSetNumber)
 {
-	uNumber = nsetNumber;
+	idNumber = nSetNumber;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -808,37 +806,37 @@ void Board::setNumber(BYTE nsetNumber)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Board::setAnimation()
 {
-	nAnimCnt ++;
+	animCnt ++;
 
-	if ((nAnimCnt % nIntervalChangePattern) == 0)
+	if ((animCnt % intervalChangePattern) == 0)
 	{
 		// パターンの切り替え
-		CurrentAnimPattern = (CurrentAnimPattern + 1) % NumAnimPattern;
+		currentAnimPattern = (currentAnimPattern + 1) % animPattern;
 
 		//param->currentAnimPattern = nAnim;
 
 		// テクスチャ座標を切り替え
-		//setTextureExplosion(0, CurrentAnimPattern);
+		//SetTextureExplosion(0, currentAnimPattern);
 		setTexture();
-		//setColor(D3DXCOLOR(1.0f, 1.0, 1.0f, 1.0f));
-		//setvtxBoard();
+		//Setcolor(D3DXCOLOR(1.0f, 1.0, 1.0f, 1.0f));
+		//SetvtxBoard();
 	}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// 縮小してから使用フラグをfalseへ
+// 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Board::setNarrowFlg(bool bset)
+void Board::setNarrowFlg(bool bSet)
 {
-	bNarrow = bset;
+	isNarrow = bSet;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 使用フラグセット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Board::setUsedFlg(bool setFlg)
+void Board::setUsedFlg(bool SetFlg)
 {
-	bUsed = setFlg;
+	isUsed = SetFlg;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -846,7 +844,7 @@ void Board::setUsedFlg(bool setFlg)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 LPDIRECT3DTEXTURE9 Board::getTexture()
 {
-	return pD3DTextureBoard;
+	return pD3DTexture;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -854,7 +852,7 @@ LPDIRECT3DTEXTURE9 Board::getTexture()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 LPDIRECT3DVERTEXBUFFER9 Board::getVtxBuff()
 {
-	return pD3DVtxBuffBoard;
+	return pD3DVtxBuff;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -862,21 +860,21 @@ LPDIRECT3DVERTEXBUFFER9 Board::getVtxBuff()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 BOOL Board::getUsedFlg()
 {
-	return bUsed;
+	return isUsed;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 位置セット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Board::setPosition(D3DXVECTOR3 setPos)
+void Board::setPosition(D3DXVECTOR3 SetPos)
 {
-	vertexBoard.pos = setPos;
+	vertexBoard.pos = SetPos;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 移動量セット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Board::setMoveNum(D3DXVECTOR3 MoveNum)
+void Board::setMove(D3DXVECTOR3 MoveNum)
 {
 	pos += MoveNum;
 }
@@ -886,48 +884,24 @@ void Board::setMoveNum(D3DXVECTOR3 MoveNum)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Board::destroyBoard()
 {
-	SAFE_RELEASE(pD3DVtxBuffBoard);	// 頂点解放
-	SAFE_RELEASE(pD3DTextureBoard);	// テクスチャ解放
-}
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// カウンタセット
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Board::setCnt(FLOAT fset)
-{
-	fCnt = fset;
-}
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// カウンタセット
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Board::setCnt(INT nset)
-{
-	nCnt = nset;
+//	SAFE_RELEASE(pD3DVtxBuff);	// 頂点解放
+//	SAFE_RELEASE(pD3DTexture);	// テクスチャ解放
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // アニメパターンセット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Board::setCurrentAnimPattern(INT nsetNum)
+void Board::setCurrentAnimPattern(INT nSetNum)
 {
-	CurrentAnimPattern = nsetNum;
+	currentAnimPattern = nSetNum;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 補間用開始位置セット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Board::setStartCurvePos(D3DXVECTOR3 setStart)
+void Board::setStartCurvePos(D3DXVECTOR3 SetStart)
 {
-	CurvePos[0] = setStart;
-}
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// 線形補間用カウンタ取得
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-FLOAT Board::getCurveCnt()
-{
-	return fCnt;
+	curvePos[0] = SetStart;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -935,5 +909,5 @@ FLOAT Board::getCurveCnt()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 UINT Board::getCurrentAnim()
 {
-	return CurrentAnimPattern;
+	return currentAnimPattern;
 }

@@ -9,7 +9,7 @@
 
 // ===== インクルード部 =====
 #include "audiere.h"
-#include "../DirectX3D.h"
+#include "d3dx9.h"
 #include "../Linklib.h"
 #include <unordered_map>
 

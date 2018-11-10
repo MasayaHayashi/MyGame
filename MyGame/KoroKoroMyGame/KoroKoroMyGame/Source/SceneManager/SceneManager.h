@@ -13,14 +13,16 @@
 #include <memory>
 
 // ===== クラスの前方宣言 =====
-class SceneTitle;
-class SceneMain;
 class FadeUI;
 
 // ===== クラス定義 =====
-class SceneManager
+class SceneManager final
 {
 public:
+
+	SceneManager();
+	~SceneManager();
+
 	enum class SceneState
 	{
 		SceneTitle = 0,
@@ -36,41 +38,36 @@ public:
 		FadeOut,
 	};
 
-	SceneManager();
-	~SceneManager();
-
-	void initialize();
+	static void initialize();
+	static bool create();
 	void update();
 	void updateFade();
-	void draw();
+	static void draw();
 	void drawFade();
-	void finalize();
+	static void finalize();
 
-	void changeScene(SceneState setScene);
-	void setNextScene(SceneState setNextScene);
-	void setcurrentScene(SceneState setSceneType);
+	static void changeScene(SceneState setScene);
+	static void setNextScene(SceneState setNextScene);
+	static void setCurrentScene(SceneState setSceneType);
 
-	C_SCENE_BASE*	   getInstanse();
-	static SceneState  getcurrentSceneType();
-	SceneState		   getNextScene();
-	FadeUI*			   getFade();
+	static C_SCENE_BASE*		getInstanse();
+	static const SceneState		getCurrentSceneType();
+	static const SceneState		getNextScene();
+	const FadeUI*				getFade();
 
 protected:
 
 private:
+
 	static constexpr INT DebugMoveOnFream = 10;
-
 	static SceneState currentSceneType;
+	static SceneState nextSceneType;
 
-	static std::unique_ptr<SceneManager> gameManagerInstancePtr;
+	static std::unique_ptr<SceneManager> sceneManagerInstancePtr;
+	static std::unique_ptr<C_SCENE_BASE> currentScenePtr;
+	static std::unique_ptr <FadeUI>		 fadePtr;
 
-
-	SceneState nextSceneType;
-
-	std::unique_ptr<C_SCENE_BASE> currentScenePtr;
-	std::unique_ptr <FadeUI>	  fadePtr;
-
-	bool	   debugMode;					// デバッグモード管理
+	bool	   debugMode;
 	INT		   frameAdvanceCnt;				// デバック用コマ送り用カウンタ
 };
 

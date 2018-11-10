@@ -33,12 +33,12 @@ public:
 
 	void initialize();
 	void update();
-	const void draw();
+	void draw();
 	void finalize();
 
-	void setColor(D3DCOLOR col);
+	void setcolor(D3DCOLOR col);
 	void setFade(FadeType Fade);
-	void setWorkScene(SceneManager::SceneState);
+//	void setWorkScene(SceneManager::SceneState);
 	
 	FadeType getFadeState();
 
@@ -48,9 +48,9 @@ private:
 	std::string TextureName = "data/TEXTURE/test.png";
 
 
-	SceneManager::SceneState currentScene;
+	SceneManager::SceneState CurrentScene;
 	FadeType  CurentFadeType;		// 現在のフェード状態
-	D3DXCOLOR CurrentColor;			// 現在色状態
+	D3DXCOLOR Currentcolor;			// 現在色状態
 	SceneManager::SceneState WorkScene;
 };
 

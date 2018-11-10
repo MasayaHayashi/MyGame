@@ -244,9 +244,9 @@ namespace audiere {
      * Read size bytes from the file, storing them in buffer.
      *
      * @param buffer  buffer to read into
-     * @param size    number of bytes to read
+     * @param size    idNumber of bytes to read
      *
-     * @return  number of bytes successfully read
+     * @return  idNumber of bytes successfully read
      */
     ADR_METHOD(int) read(void* buffer, int size) = 0;
 
@@ -295,7 +295,7 @@ namespace audiere {
 
   /**
    * Source of raw PCM samples.  Sample sources have an intrinsic format
-   * (@see SampleFormat), sample rate, and number of channels.  They can
+   * (@see SampleFormat), sample rate, and idNumber of channels.  They can
    * be read from or reset.
    *
    * Some sample sources are seekable.  Seekable sources have two additional
@@ -309,7 +309,7 @@ namespace audiere {
 
   public:
     /**
-     * Retrieve the number of channels, sample rate, and sample format of
+     * Retrieve the idNumber of channels, sample rate, and sample format of
      * the sample source.
      */
     ADR_METHOD(void) getFormat(
@@ -321,10 +321,10 @@ namespace audiere {
      * Read frame_count samples into buffer.  buffer must be at least
      * |frame_count * getSampleSize(format) * channel_count| bytes long.
      *
-     * @param frame_count  number of frames to read
+     * @param frame_count  idNumber of frames to read
      * @param buffer       buffer to store samples in
      *
-     * @return  number of frames actually read
+     * @return  idNumber of frames actually read
      */
     ADR_METHOD(int) read(int frame_count, void* buffer) = 0;
 
@@ -341,7 +341,7 @@ namespace audiere {
     ADR_METHOD(bool) isSeekable() = 0;
 
     /**
-     * @return  number of frames in the stream, or 0 if the stream is not
+     * @return  idNumber of frames in the stream, or 0 if the stream is not
      *          seekable
      */
     ADR_METHOD(int) getLength() = 0;
@@ -375,7 +375,7 @@ namespace audiere {
      */
     ADR_METHOD(void) setRepeat(bool repeat) = 0;
 
-    /// Returns number of metadata tags present in this sample source.
+    /// Returns idNumber of metadata tags present in this sample source.
     ADR_METHOD(int) getTagCount() = 0;
 
     /**
@@ -434,7 +434,7 @@ namespace audiere {
      *
      * @param location   frame where loop occurs
      * @param target     frame to jump to after loop point is hit
-     * @param loopCount  number of times to execute this jump.
+     * @param loopCount  idNumber of times to execute this jump.
      */
     ADR_METHOD(void) addLoopPoint(
       int location, int target, int loopCount) = 0;
@@ -447,7 +447,7 @@ namespace audiere {
     ADR_METHOD(void) removeLoopPoint(int index) = 0;
 
     /**
-     * Returns the number of loop points in this stream.
+     * Returns the idNumber of loop points in this stream.
      */
     ADR_METHOD(int) getLoopPointCount() = 0;
 
@@ -457,7 +457,7 @@ namespace audiere {
      * @param index      index of the loop point
      * @param location   frame where loop occurs
      * @param target     loop point's target frame
-     * @param loopCount  number of times to loop from this particular point
+     * @param loopCount  idNumber of times to loop from this particular point
      *
      * @return  true if the index is valid and information is returned
      */
@@ -562,7 +562,7 @@ namespace audiere {
     ADR_METHOD(bool) isSeekable() = 0;
 
     /**
-     * @return  number of frames in the stream, or 0 if the stream is not
+     * @return  idNumber of frames in the stream, or 0 if the stream is not
      *          seekable
      */
     ADR_METHOD(int) getLength() = 0;
@@ -808,7 +808,7 @@ namespace audiere {
      * buffer is |channel_count * frame_count * getSampleSize(sample_format)|
      * bytes long.
      */
-    virtual const void* ADR_CALL getSamples() = 0;
+    virtual void* ADR_CALL getSamples() = 0;
 
     /**
      * Open a seekable sample source using the samples contained in the
@@ -914,7 +914,7 @@ namespace audiere {
     virtual const char* ADR_CALL getName() = 0;
 
     /**
-     * Returns the number of audio tracks on the disc.
+     * Returns the idNumber of audio tracks on the disc.
      */
     ADR_METHOD(int) getTrackCount() = 0;
 
@@ -1110,7 +1110,7 @@ namespace audiere {
       bool writeable);
 
     ADR_FUNCTION(File*) AdrCreateMemoryFile(
-      const void* buffer,
+      void* buffer,
       int size);
 
     ADR_FUNCTION(const char*) AdrEnumerateCDDevices();
@@ -1519,7 +1519,7 @@ namespace audiere {
    * @return  0 if size is non-zero and buffer is nullptr. Otherwise,
    *          returns a valid File object.
    */
-  inline File* CreateMemoryFile(const void* buffer, int size) {
+  inline File* CreateMemoryFile(void* buffer, int size) {
     return hidden::AdrCreateMemoryFile(buffer, size);
   }
 

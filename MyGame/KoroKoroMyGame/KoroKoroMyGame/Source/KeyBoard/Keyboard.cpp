@@ -65,7 +65,7 @@ HRESULT Keyboard::initializeKeyboard(HINSTANCE hInst, HWND hWnd)
 	}
 
 	// データフォーマットを設定
-	hr = pDIDevKeyboard->setDataFormat(&c_dfDIKeyboard);
+	hr = pDIDevKeyboard->SetDataFormat(&c_dfDIKeyboard);
 	if (FAILED(hr))
 	{
 		MessageBox(hWnd, "キーボードのデータフォーマットを設定できませんでした。", "警告！", MB_ICONWARNING);
@@ -73,7 +73,7 @@ HRESULT Keyboard::initializeKeyboard(HINSTANCE hInst, HWND hWnd)
 	}
 
 	// 協調モードを設定（フォアグラウンド＆非排他モード）
-	hr = pDIDevKeyboard->setCooperativeLevel(hWnd, (DISCL_FOREGROUND | DISCL_NONEXCLUSIVE));
+	hr = pDIDevKeyboard->SetCooperativeLevel(hWnd, (DISCL_FOREGROUND | DISCL_NONEXCLUSIVE));
 	if (FAILED(hr))
 	{
 		MessageBox(hWnd, "キーボードの協調モードを設定できませんでした。", "警告！", MB_ICONWARNING);
@@ -104,7 +104,7 @@ HRESULT Keyboard::updateKeyboard()
 	BYTE keyState[MaxKey];
 
 	// デバイスからデータを取得
-	hr = pDIDevKeyboard->getDeviceState(sizeof(keyState), keyState);
+	hr = pDIDevKeyboard->GetDeviceState(sizeof(keyState), keyState);
 	if (SUCCEEDED(hr))
 	{
 		for (int nCntKey = 0; nCntKey < MaxKey; nCntKey++)

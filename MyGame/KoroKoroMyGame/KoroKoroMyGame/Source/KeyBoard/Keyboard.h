@@ -25,7 +25,7 @@ public:
 
 	HRESULT initialize(HINSTANCE hInst, HWND hWnd);
 	void update();
-	const void draw();
+	void draw();
 	void finalize();
 
 	HRESULT initializeKeyboard(HINSTANCE hInst, HWND hWnd);

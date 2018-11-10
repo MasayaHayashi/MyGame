@@ -5,12 +5,11 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
 // ===== 多重インクルード防止 =====
-#ifndef __C_SCENE_RESULT_H__
-#define __C_SCENE_RESULT_H__
+#ifndef SCENE_RESULT
+#define SCENE_RESULT
 
 // ===== インクルード部 =====
-#include "C_SceneBase.h"
-#include "main.h"
+#include "../../SceneInterface/sceneBase.h"
 
 // ===== クラスの前方定義 =====
 class C_SKYDOME;

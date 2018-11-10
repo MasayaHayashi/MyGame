@@ -16,15 +16,15 @@
 
 // ===== 定数・マクロ定義 =====
 
-// ===== クラスの前方定義 =====
+// ===== クラスの前方宣言 =====
 class C_LOAD_UI_ICON;
 class Light;
-class C_camera;
-class C_TITLE_OBJ;
-class C_FADE;
+class C_CAMERA;
+class HeartObj;
+class FadeUI;
 
 // ===== 列挙体定義 =====
-enum LOAD_STATE
+enum class LoadState
 {
 	LOADING = 0,
 	LOAD_COMP,
@@ -38,8 +38,8 @@ public:
 	C_SCENE_LOAD();
 	~C_SCENE_LOAD();
 
-	void InitScene();
-	void finalizeScene();
+	void initialize();
+	void finalize();
 	void EnableLoad();
 	void updateLoad();
 	void drawScene();
@@ -52,10 +52,10 @@ public:
 private:
 	std::mutex mutex;
 
-	C_camera		*pcamera;
+	C_CAMERA		*pCamera;
 	Light			*pLight;
-	C_TITLE_OBJ		*pTitleObj;
-	C_FADE			*pFade;
+	HeartObj		*pTitleObj;
+	FadeUI			*pFade;
 	C_LOAD_UI_ICON	*pLoadIcon;
 
 	// 静的メンバ変数

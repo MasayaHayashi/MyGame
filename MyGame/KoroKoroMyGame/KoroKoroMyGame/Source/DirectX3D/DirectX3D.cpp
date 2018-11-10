@@ -7,10 +7,12 @@
 // ===== インクルード部 =====
 #include "DirectX3D.h"
 #include "../Application/Application.h"
+#include "../SceneManager/SceneManager.h"
 
 // ===== 静的メンバ変数 =====
-CComPtr<IDirect3DDevice9>  DirectX3D::directXDevice = nullptr;
-CComPtr<ID3DXEffect>	   DirectX3D::directXEffect = nullptr;
+Microsoft::WRL::ComPtr<IDirect3DDevice9>   DirectX3D::directXDevice  = nullptr;
+Microsoft::WRL::ComPtr<ID3DXEffect>		   DirectX3D::directXEffect  = nullptr;
+
 CHAR DirectX3D::debug[1024] = {" \0 "};
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -38,9 +40,11 @@ HRESULT DirectX3D::initialize(HWND& wnd)
 
 	// Direct3Dオブジェクトの作成
 	directXObj = Direct3DCreate9(D3D_SDK_VERSION);
-
+	
 	if (directXObj == nullptr)
+	{
 		return E_FAIL;
+	}
 
 	// 現在のディスプレイモードを取得
 	directXObj->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm);
@@ -68,7 +72,7 @@ HRESULT DirectX3D::initialize(HWND& wnd)
 	}
 
 	// 描画と頂点処理をハードウェアで行なう
-	if (FAILED( directXObj->CreateDevice(D3DADAPTER_DEFAULT,
+	if (FAILED( directXObj.Get()->CreateDevice(D3DADAPTER_DEFAULT,
 		D3DDEVTYPE_HAL,
 		wnd,
 		D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_MULTITHREADED,
@@ -95,7 +99,7 @@ HRESULT DirectX3D::initialize(HWND& wnd)
 	}
 
 	//シェーダーを読み込み
-	if (FAILED(D3DXCreateEffectFromFile( directXDevice, "Data/FX/Min.fx", nullptr, nullptr, 0, nullptr, &directXEffect, nullptr)))
+	if (FAILED(D3DXCreateEffectFromFile( directXDevice.Get(), "Data/FX/Min.fx", nullptr, nullptr, 0, nullptr, &directXEffect, nullptr)))
 	{
 		MessageBox(nullptr, "シェーダーファイル読み込み失敗", "", MB_OK);
 		return E_FAIL;
@@ -124,18 +128,18 @@ HRESULT DirectX3D::initialize(HWND& wnd)
 	g_StageNum = 0;	// チュートリアルステージ
 
 	// 入力の初期化処理
-	InitInput(hInstance, hWnd);
+	initializeInput(hInstance, hWnd);
 
 	// Xinput生成
 	Xinput::Create();
 
 	// Xinput初期化
 	g_pXinput = Xinput::GetInstance();
-	g_pXinput->InitXinput();
+	g_pXinput->initializeXinput();
 
 #if _DEBUG
 		// デバッグ表示の初期化処理
-		InitDebugProc();
+		initializeDebugProc();
 #endif
 
 	// サウンド処理の初期化
@@ -143,11 +147,11 @@ HRESULT DirectX3D::initialize(HWND& wnd)
 
 	// シーン初期化
 	g_pSceneManager = NEW C_SCENE_MANAGER();
-	g_pSceneManager->InitScene();
+	g_pSceneManager->initialize();
 
 	// ロードシーン初期化
 	g_pSceneLoad = NEW C_SCENE_LOAD;
-	g_pSceneLoad->InitScene();
+	g_pSceneLoad->initialize();
 
 	return S_OK;
 	*/
@@ -158,9 +162,8 @@ HRESULT DirectX3D::initialize(HWND& wnd)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 描画
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-const void DirectX3D::draw()
+void DirectX3D::draw() const
 {
-	
 	// バックバッファ＆Ｚバッファのクリア
 	directXDevice->Clear(0, nullptr, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 0), 1.0f, 0);
 
@@ -168,7 +171,7 @@ const void DirectX3D::draw()
 	if (SUCCEEDED(directXDevice->BeginScene()))
 	{
 		// シーン描画
-	//	pSceneManager->DrawScene();
+		SceneManager::draw();
 
 		// フェード描画
 	//	g_pSceneManager->DrawFadeScene();
@@ -196,7 +199,7 @@ HRESULT DirectX3D::initializeDebugProc()
 	HRESULT hr;
 
 	// 情報表示用フォントを設定
-	hr = D3DXCreateFont(directXDevice, 18, 0, 0, 0, FALSE, SHIFTJIS_CHARSET,
+	hr = D3DXCreateFont(directXDevice.Get(), 18, 0, 0, 0, FALSE, SHIFTJIS_CHARSET,
 						OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, "Terminal", &directXFont);
 
 	// 情報クリア
@@ -217,7 +220,7 @@ void DirectX3D::updateDebugProc()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // デバッグ描画
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-const void DirectX3D::drawDebugProc()
+void DirectX3D::drawDebugProc() const
 {
 	RECT rect = { 0, 0, Application::ScreenWidth, Application::ScreenHeight };
 
@@ -239,7 +242,7 @@ void DirectX3D::finalizeDebugProc()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // デバッグ描画
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-const void DirectX3D::printDebug(CHAR *fmt,...)
+void DirectX3D::printDebug(CHAR *fmt,...)
 {
 	va_list list;			// 可変引数を処理する為に使用する変数
 	char *pCur;
@@ -303,15 +306,15 @@ const void DirectX3D::printDebug(CHAR *fmt,...)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // デバイス取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-const LPDIRECT3DDEVICE9 DirectX3D::getDevice()
+LPDIRECT3DDEVICE9 DirectX3D::getDevice()
 {
-	return directXDevice;
+	return directXDevice.Get();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // シェーダー用effect取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-const LPD3DXEFFECT DirectX3D::getEffect()
+LPD3DXEFFECT DirectX3D::getEffect()
 {
-	return directXEffect;
+	return directXEffect.Get();
 }

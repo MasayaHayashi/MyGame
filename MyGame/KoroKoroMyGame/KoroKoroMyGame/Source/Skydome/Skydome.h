@@ -17,13 +17,13 @@ public :
 	Skydome();
 	~Skydome();
 	void initialize();
-	void updateObject();
-	void drawObject();
+	void update();
+	void draw();
 	void finalize();
 
-	HRESULT CreateTexture();
+	HRESULT createTexture();
 private:
-	char textureFileName[256];
+	CHAR fileName[256];
 	D3DXVECTOR3	textureSize;
 
 };

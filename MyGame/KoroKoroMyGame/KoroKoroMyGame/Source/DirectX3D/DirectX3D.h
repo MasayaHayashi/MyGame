@@ -10,7 +10,7 @@
 
 // ===== インクルード部 =====
 #include "d3dx9.h"
-#include <atlbase.h>
+#include <wrl.h>
 #include <string>
 
 // ===== クラス定義 =====
@@ -25,17 +25,17 @@ public :
 
 	HRESULT initialize(HWND& wnd);
 
-	const void draw();
-	static const void printDebug(CHAR *fmt,...);
+	void draw() const;
+	static void printDebug(CHAR *fmt,...);
 
-	static const LPDIRECT3DDEVICE9	getDevice();
-	static const LPD3DXEFFECT 		getEffect();
+	static LPDIRECT3DDEVICE9  getDevice();
+	static LPD3DXEFFECT		  getEffect();
 
 private :
-	static CComPtr<IDirect3DDevice9>  directXDevice;
-	static CComPtr<ID3DXEffect>		  directXEffect;
-	CComPtr<IDirect3D9>				  directXObj		= nullptr;
-	CComPtr<ID3DXFont>				  directXFont		= nullptr;
+	static Microsoft::WRL::ComPtr<IDirect3DDevice9>   directXDevice;
+	static Microsoft::WRL::ComPtr<ID3DXEffect>		  directXEffect;
+	Microsoft::WRL::ComPtr<IDirect3D9>				  directXObj		= nullptr;
+	Microsoft::WRL::ComPtr<ID3DXFont>				  directXFont		= nullptr;
 
 	bool		 isWindowMode	= true;
 
@@ -43,7 +43,7 @@ private :
 
 	HRESULT		initializeDebugProc();
 	void		updateDebugProc();
-	const void	drawDebugProc();
+	void		drawDebugProc() const;
 	void		finalizeDebugProc();
 
 };

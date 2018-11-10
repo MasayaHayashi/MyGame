@@ -52,11 +52,11 @@ Figure::Figure()
 	Material.MatD3D.Specular.b = 1.0f;
 	Material.MatD3D.Specular.a = 0.0f;
 
-	bUsed = true;
+	isUsed = true;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// コンストラクタ (引数: C_3DPAWN)
+// コンストラクタ (引数: Pawn)
 // 位置、サイズ指定
 // 頂点情報生成
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -99,17 +99,17 @@ Figure::Figure(D3DXVECTOR3 SetPos, D3DXVECTOR3 SetSize)
 	Material.MatD3D.Specular.a = 0.0f;
 
 	pBBox = nullptr;
-	bUsed = true;
+	isUsed = true;
 
 	// 位置、サイズセット
 	Pos	  = SetPos;
 	Size  = SetSize;
 
-	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
-	Color = D3DXCOLOR(DeaultBoxColor);
+	color = D3DXCOLOR(DeaultBoxcolor);
 
-	D3DXCreateBox(pDevice, Size.x * 2.0f, Size.y * 2.0f, Size.z * 2.0f, &pBBox, nullptr);
+	D3DXCreateBox(devicePtr, Size.x * 2.0f, Size.y * 2.0f, Size.z * 2.0f, &pBBox, nullptr);
 	
 }
 
@@ -124,7 +124,7 @@ Figure::~Figure()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Figure::InitFigure()
+void Figure::initializeFigure()
 {
 	D3DXMatrixTranslation(&mtxWorld, Pos.x, Pos.y * 2, Pos.z);
 
@@ -133,23 +133,23 @@ void Figure::InitFigure()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Figure::InitFigure(D3DXVECTOR3 SetPos, D3DXVECTOR3 SetSize,D3DXVECTOR3 SetCenterPos)
+void Figure::initializeFigure(D3DXVECTOR3 SetPos, D3DXVECTOR3 SetSize,D3DXVECTOR3 SetCenterPos)
 {
-	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	Pos		  = SetPos;
 	Size	  = SetSize;
 	CenterPos = SetCenterPos;
 
-	Color = D3DXCOLOR(DeaultBoxColor);
+	color = D3DXCOLOR(DeaultBoxcolor);
 
-	D3DXCreateBox(pDevice, Size.x * 2.0f, Size.y * 2.0f, Size.z * 2.0f, &pBBox, nullptr);
+	D3DXCreateBox(devicePtr, Size.x * 2.0f, Size.y * 2.0f, Size.z * 2.0f, &pBBox, nullptr);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Figure::UpdateFigure(D3DXMATRIX SetMtx, D3DXCOLOR SetColor)
+void Figure::UpdateFigure(D3DXMATRIX SetMtx, D3DXCOLOR Setcolor)
 {
 	D3DXMATRIX trans;
 
@@ -164,19 +164,19 @@ void Figure::UpdateFigure(D3DXMATRIX SetMtx, D3DXCOLOR SetColor)
 void Figure::DrawFigure()
 {
 	// 例外処理
-	if (!bUsed)
+	if (!isUsed)
 		return;
 
-	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 	
-	pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);
+	devicePtr->SetTransform(D3DTS_WORLD, &mtxWorld);
 
-	pDevice->SetTexture(0, nullptr);
+	devicePtr->SetTexture(0, nullptr);
 
 	ZeroMemory(&Material, sizeof(Material));
 
-	Material.MatD3D.Diffuse = Color;
-	pDevice->SetMaterial(&Material.MatD3D);
+	Material.MatD3D.Diffuse = color;
+	devicePtr->SetMaterial(&Material.MatD3D);
 
 	pBBox->DrawSubset(0);
 	
@@ -195,12 +195,12 @@ void Figure::UninitFigure()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 HRESULT Figure::MakeVtxCube(D3DXVECTOR3 Pos, D3DXVECTOR3 Size)
 {
-	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	nNumVertex = 36;// * 2;	// 頂点数
 
 	// オブジェクトの頂点バッファを生成
-	if (FAILED(pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * nNumVertex ,	// 頂点データ用に確保するバッファサイズ(バイト単位)
+	if (FAILED(devicePtr->CreateVertexBuffer(sizeof(VERTEX_3D) * nNumVertex ,	// 頂点データ用に確保するバッファサイズ(バイト単位)
 		D3DUSAGE_WRITEONLY,			// 頂点バッファの使用法　
 		FVF_VERTEX_3D,				// 使用する頂点フォーマット
 		D3DPOOL_MANAGED,			// リソースのバッファを保持するメモリクラスを指定
@@ -409,15 +409,15 @@ D3DXVECTOR3 Figure::GetSize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 使用フラグセット用
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Figure::SetUsedFlg(bool bSet)
+void Figure::setUsedFlg(bool bSet)
 {
-	bUsed = bSet;
+	isUsed = bSet;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // マテリアル色セット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Figure::SetMatColor(D3DCOLOR SetColor)
+void Figure::SetMatcolor(D3DCOLOR Setcolor)
 {
-	Color = SetColor;
+	color = Setcolor;
 }

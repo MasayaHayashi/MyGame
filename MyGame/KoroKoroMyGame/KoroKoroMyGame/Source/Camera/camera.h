@@ -47,9 +47,9 @@ enum camera_MOVE_TYPE
 class SceneManager;
 class Pawn;
 
-class C_PLAYER;
+class Player;
 class C_GAMEOBJ_BASE;
-class C_BOARD;
+class Board;
 
 // ===== クラス定義 =====
 class Camera final
@@ -59,16 +59,17 @@ public:
 	~Camera();
 
 	void initialize();
-	void finalize(C_PLAYER* pPlayer);
+	void initializeTitle(Player * pPlayer);
+	void finalize(Player* pPlayer);
 	void finalize();
-	void update(C_PLAYER *,C_BOARD *);
+	void update(Player *,Board *);
 	void updateTitle(Pawn*);
 	void updateStageEdit(const D3DXVECTOR3&);
-	void updateGameMain(C_PLAYER*,C_BOARD*);
+	void updateGameMain(Player*,Board*);
 	void setState(camera_MOVE_TYPE setState);
 
 
-	void setcamera();
+	void setCamera();
 
 	D3DXVECTOR3  getRot();
 	D3DXVECTOR3  getPos();
@@ -79,9 +80,12 @@ public:
 	D3DXMATRIX    getMtxView();			// ビューマトリックス取得
 	D3DVIEWPORT9* getViwPort();			// ビューポートマトリックス取得
 
-	D3DXVECTOR3 getcameraFowerd();
+	D3DXVECTOR3 getFowerd();
 
 private:
+
+	static constexpr INT RotSpeed = 10;
+
 	enum class cameraState
 	{
 		Type3Person,
@@ -91,11 +95,10 @@ private:
 
 	static constexpr FLOAT cameraRotSpeed = 22.0f;
 
-	void initializeTitle(C_PLAYER * pPlayer);		// タイトル画面カメラ初期化
-	void initializeStageEdit();					// ステージエディット用カメラ初期化
-	void initializeGameMain(C_PLAYER *pPlayer);	// ゲームメイン用初期化
+	void initializeStageEdit();					
+	void initializeGameMain(Player *pPlayer);
 
-	void rotationcamera(D3DXVECTOR3 Center);
+	void rotationCamera(D3DXVECTOR3 Center);
 
 
 	D3DXVECTOR3 fadePos[MAX_camera_FADE_POS];

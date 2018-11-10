@@ -5,7 +5,7 @@
 
 // ===== インクルード部 =====
 #include "Skydome.h"
-#include "../camera/camera.h"
+#include "../Camera/camera.h"
 #include "../DirectX3D/DirectX3D.h"
 #include <string>
 
@@ -40,7 +40,7 @@ Skydome::~Skydome()
 void Skydome::initialize()
 {
 	makeModel();
-	CreateTexture();
+	createTexture();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -58,28 +58,28 @@ void Skydome::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // スカイドーム更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Skydome::updateObject()
+void Skydome::update()
 {
-	//C_camera *pcamera = C_camera_MANAGER::getUsedcamera(0);
+	//C_CAMERA *pCamera = C_CAMERA_MANAGER::getUsedCamera(0);
 
-	//pos = pcamera->getPoscameraP();
+	//pos = pCamera->getPosCameraP();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // スカイドーム描画
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Skydome::drawObject()
+void Skydome::draw()
 {
-	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 	D3DXMATRIX mtxRot, mtxTranslate, mtxScale;
 	D3DXMATERIAL *pD3DXMat;
 	D3DMATERIAL9 matDef;
 
 	// ライティングしない
-	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+	devicePtr->SetRenderState(D3DRS_LIGHTING, FALSE);
 
 	// Zバッファ更新を無効
-	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
+	devicePtr->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 
 	// ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&worldMtx);
@@ -93,10 +93,10 @@ void Skydome::drawObject()
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mtxTranslate);
 
 	// ワールドマトリックスの設定
-	pDevice->SetTransform(D3DTS_WORLD, &worldMtx);
+	devicePtr->SetTransform(D3DTS_WORLD, &worldMtx);
 
 	// 現在のマテリアルを取得
-	pDevice->GetMaterial(&matDef);
+	devicePtr->GetMaterial(&matDef);
 
 	// マテリアル情報に対するポインタを取得
 	pD3DXMat = (D3DXMATERIAL*)pD3DXBuffMat->GetBufferPointer();
@@ -104,36 +104,36 @@ void Skydome::drawObject()
 	for (int nCntMat = 0; nCntMat < (int)uNumMat; nCntMat++)
 	{
 		// マテリアルの設定
-		pDevice->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
+		devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
 
 		// テクスチャの設定
-		pDevice->SetTexture(0, pD3DTexture);
+		devicePtr->SetTexture(0, pD3DTexture);
 
 		// 描画
 		pD3DXMesh->DrawSubset(nCntMat);
 	}
 
 	// マテリアルをデフォルトに戻す
-	pDevice->SetMaterial(&matDef);
+	devicePtr->SetMaterial(&matDef);
 
 	// 元に戻す
-	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+	devicePtr->SetRenderState(D3DRS_LIGHTING, TRUE);
+	devicePtr->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // テクスチャ生成
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-HRESULT Skydome::CreateTexture()
+HRESULT Skydome::createTexture()
 {
 	// 例外処理
 	if (!texFileName)
 		return E_FAIL;
 
-	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	// テクスチャの読み込み
-	D3DXCreateTextureFromFile(pDevice, texFileName, &pD3DTexture);
+	D3DXCreateTextureFromFile(devicePtr, texFileName, &pD3DTexture);
 
 	return S_OK;
 }

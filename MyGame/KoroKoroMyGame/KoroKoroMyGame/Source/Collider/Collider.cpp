@@ -49,23 +49,23 @@ Collider::~Collider()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コライダー初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Collider::InitCollider()
+void Collider::initializeCollider()
 {
-	figurePtr->InitFigure();
+	figurePtr->initializeFigure();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コライダー初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Collider::InitCollider(D3DXVECTOR3 Pos,D3DXVECTOR3 CollisionSize,D3DXVECTOR3 CenterPos)
+void Collider::initializeCollider(D3DXVECTOR3 Pos,D3DXVECTOR3 CollisionSize,D3DXVECTOR3 CenterPos)
 {
-	figurePtr->InitFigure(Pos,CollisionSize,CenterPos);
+	figurePtr->initializeFigure(Pos,CollisionSize,CenterPos);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コライダー後処理
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Collider::UnInitCollider()
+void Collider::UninitializeCollider()
 {
 
 }
@@ -73,10 +73,10 @@ void Collider::UnInitCollider()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コライダー更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Collider::UpdateCollider(D3DXMATRIX SetMtx,D3DXCOLOR SetColor)
+void Collider::UpdateCollider(D3DXMATRIX SetMtx,D3DXCOLOR Setcolor)
 {
 	mtxWorld = SetMtx;
-	figurePtr->UpdateFigure(mtxWorld,SetColor);
+	figurePtr->UpdateFigure(mtxWorld,Setcolor);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -85,7 +85,7 @@ void Collider::UpdateCollider(D3DXMATRIX SetMtx,D3DXCOLOR SetColor)
 void Collider::DrawCollider()
 {
 	// デバイス取得
-	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	// 描画
 	figurePtr->DrawFigure();
@@ -95,18 +95,18 @@ void Collider::DrawCollider()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 使用フラグセット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Collider::SetUsedFlg(bool bSet)
+void Collider::setUsedFlg(bool bSet)
 {
-	bUsed = bSet;
+	isUsed = bSet;
 
 	// 図形描画クラスに受け渡し
-	figurePtr->SetUsedFlg(bSet);
+	figurePtr->setUsedFlg(bSet);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 位置セット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Collider::SetPosition(D3DXVECTOR3 SetPos)
+void Collider::setPosition(D3DXVECTOR3 SetPos)
 {
 	figurePtr->SetPos(SetPos);
 }

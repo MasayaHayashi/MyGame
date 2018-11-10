@@ -16,6 +16,7 @@
 
 // ===== 前方宣言 =====
 enum class boardType;
+enum class MeshObjType;
 
 // ===== 構造体定義 =====
 typedef struct
@@ -54,9 +55,9 @@ typedef struct
 	FLOAT						collisionRadus;			// あたり判定用サイズ
 
 	LPD3DXFRAME					frameRoot;				// ルート フレーム オブジェクト
-	LPD3DXANIMATIONCONTROLLER	animCtrl;				// アニメーション コントローラ オブジェクト
+	LPD3DXANIMATIONCONTROLLER	animCtrlPtr;			// アニメーション コントローラ オブジェクト
 	UINT						numAnimset;				// アニメーション セット数
-	LPD3DXANIMATIONSET*			ppAnimset;				// アニメーション セット
+	LPD3DXANIMATIONSET*			ppAnimSet;				// アニメーション セット
 	MyHierarchy					hierarchy;				// 階層メモリ確保/解放クラス
 	DWORD						dwPrev;					// 直前の時刻
 } HIERARCHY_MESH_DATA;	// 階層構造用メッシュ情報
@@ -70,13 +71,13 @@ typedef struct
 typedef struct
 {
 	CHAR					name[256];				// 識別名
-	LPDIRECT3DVERTEXBUFFER9 pD3DVtxBuffBoard;		// 頂点バッファインターフェースへのポインタ
+	LPDIRECT3DVERTEXBUFFER9 pD3DVtxBuff;		// 頂点バッファインターフェースへのポインタ
 	boardType				boardType;				// ボードの種類
 	D3DXVECTOR3				pos;					// 位置
 	D3DXVECTOR3				size;					// 大きさ
-	D3DXVECTOR3				scaleBoard;				// 拡大率
-	D3DXVECTOR3				rotBoard;				// 回転角度
-	FLOAT					radAngleBoard;			// 2D用回転角度
+	D3DXVECTOR3				scale;				// 拡大率
+	D3DXVECTOR3				rot;				// 回転角度
+	FLOAT					radAngle;			// 2D用回転角度
 	bool					fade;					// フェード用
 } VERTEX_BOARD_DATA;
 
@@ -85,9 +86,9 @@ class ResourceManager
 {
 public:
 	// 生成
-	static HRESULT makeModel(MESH_DATA &MeshData, CHAR *pszFilename,UINT &uMeshType);
-	static HRESULT CreateTexture(TEXTURE_DATA &TextureData,CHAR *pszFilename);
-	static HRESULT makeModelHierarchy(HIERARCHY_MESH_DATA &HierarchyMedhData, CHAR *pszFilename, UINT &MeshType);
+	static HRESULT makeModel(MESH_DATA &MeshData, CHAR *pszFilename, MeshObjType &uMeshType);
+	static HRESULT createTexture(TEXTURE_DATA &TextureData,CHAR *pszFilename);
+	static HRESULT makeModelHierarchy(HIERARCHY_MESH_DATA &HierarchyMedhData, CHAR *pszFilename, MeshObjType &MeshType);
 	static HRESULT makevertexBoard(VERTEX_BOARD_DATA &VtxBordData, CHAR *pszFilename);
 
 	// 解放

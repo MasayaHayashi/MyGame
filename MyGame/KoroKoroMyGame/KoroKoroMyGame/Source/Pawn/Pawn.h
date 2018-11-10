@@ -43,7 +43,7 @@ typedef struct
 	D3DXVECTOR3				PosData;	// 座標
 	GAME_OBJ_TYPE			ObjType;	// どのオブジェクトか
 	UINT					uNumber;	// 識別番号
-	bool					bUsed;		// 使用されているか
+	bool					isUsed;		// 使用されているか
 } EXPORT_GAMEOBJ_DATA;		// 出力用データ
 
 // ===== クラスの前方宣言 =====
@@ -65,10 +65,10 @@ public:
 	};
 
 	virtual void initialize();
-	virtual void updateObject();
-	virtual void drawObject();
-	virtual void drawObject(D3DXMATRIX,D3DXMATRIX);
-	virtual void drawObject(LPD3DXMESH pMesh, LPDIRECT3DTEXTURE9 pTex, LPD3DXBUFFER pBuff, DWORD uNumMat);
+	virtual void update();
+	virtual void draw();
+	virtual void draw(D3DXMATRIX,D3DXMATRIX);
+	virtual void draw(LPD3DXMESH pMesh, LPDIRECT3DTEXTURE9 pTex, LPD3DXBUFFER pBuff, DWORD uNumMat);
 	virtual void finalize();
 
 	virtual void initializeStatus();	// 各種ステータスを初期値にする
@@ -125,7 +125,7 @@ public:
 
 	// セッター
 	void setMesh(LPD3DXMESH, LPD3DXBUFFER, DWORD);
-	void setMaterialColorEmissive(float, float, float, float);	// マテリアルの自己発光値セット
+	void setMaterialcolorEmissive(float, float, float, float);	// マテリアルの自己発光値セット
 	void setUsedFlg(bool);										// 使用フラグセット
 	void setMoveSpeed(D3DXVECTOR3);								// 移動量セット
 	void setOffset(D3DXVECTOR3 setOffset);						// 行列上の位置セット
@@ -149,7 +149,7 @@ protected:
 	std::unique_ptr <Collider> colliderPtr = nullptr;
 
 	MESH_DATA				meshData;
-	HIERARCHY_MESH_DATA		hierarchymeshData;
+	HIERARCHY_MESH_DATA		hierarchyMeshData;
 	TEXTURE_DATA			textureData;
 
 	LPDIRECT3DVERTEXBUFFER9 pD3DVtxBuffPawn;	// 頂点バッファへのポインタ
@@ -213,9 +213,9 @@ protected:
 	UINT				curSelectAnim;			// 現在選択中のアニメーション番号
 
 	// 階層構造用
-	LPD3DXFRAME					pFrameRoot;		// ルート フレーム オブジェクト
-	LPD3DXANIMATIONCONTROLLER	animCtrl;		// アニメーション コントローラ オブジェクト
-	UINT						numAnimset;	// アニメーション セット数
+	LPD3DXFRAME					frameRoot;		// ルート フレーム オブジェクト
+	LPD3DXANIMATIONCONTROLLER	animCtrlPtr;	// アニメーション コントローラ オブジェクト
+	UINT						numAnimset;		// アニメーション セット数
 	LPD3DXANIMATIONSET*			ppAnimSet;		// アニメーション セット
 	MyHierarchy					Hierarchy;		// 階層メモリ確保/解放クラス
 	DWORD						dwPrev;			// 直前の時刻

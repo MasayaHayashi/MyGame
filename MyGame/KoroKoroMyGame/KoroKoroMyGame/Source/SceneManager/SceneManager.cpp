@@ -7,12 +7,18 @@
 // ===== インクルード部 =====
 #include "SceneManager.h"
 #include "../KeyBoard/Keyboard.h"
+#include "../Scene/Title/SceneTitle.h"
 #include "../Scene/Main/C_SceneMain.h"
+#include "../Scene/Result/C_SceneResult.h"
 #include "../Fade/FadeUI.h"
 
 // ===== 静的メンバ =====
-std::unique_ptr<SceneManager> SceneManager::gameManagerInstancePtr;
-SceneManager::SceneState SceneManager::currentSceneType;
+std::unique_ptr<SceneManager> SceneManager::sceneManagerInstancePtr(nullptr);
+std::unique_ptr<C_SCENE_BASE> SceneManager::currentScenePtr(nullptr);
+std::unique_ptr <FadeUI>	  SceneManager::fadePtr(nullptr);
+
+SceneManager::SceneState	  SceneManager::nextSceneType	 = SceneManager::SceneState::SceneTitle;
+SceneManager::SceneState	  SceneManager::currentSceneType = SceneManager::SceneState::SceneTitle;
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -33,13 +39,9 @@ SceneManager::SceneManager()
 
 
 	// シーン設定初期化
-	currentScenePtr.reset(new SceneMain());
-	currentSceneType	= SceneState::SceneMain;
+	currentScenePtr.reset(new SceneTitle());
+	currentSceneType	= SceneState::SceneTitle;
 	nextSceneType		= SceneState::SceneTitle;
-
-	// フェード初期化
-	fadePtr.reset(new FadeUI);
-	fadePtr->InitObject();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -47,7 +49,23 @@ SceneManager::SceneManager()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 SceneManager::~SceneManager()
 {
-	fadePtr->finalizeObject();
+	fadePtr->finalize();
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// インスタンス生成
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+bool SceneManager::create()
+{
+	if (sceneManagerInstancePtr.get() == nullptr)
+	{
+		sceneManagerInstancePtr.reset(new SceneManager());
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -55,8 +73,12 @@ SceneManager::~SceneManager()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneManager::initialize()
 {
+	// フェード初期化
+	fadePtr.reset(new FadeUI);
+	fadePtr->initialize();
+
 	// シーン初期化
-	currentScenePtr->InitScene();
+	currentScenePtr->initialize();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -65,7 +87,7 @@ void SceneManager::initialize()
 void SceneManager::finalize()
 {
 	// シーン後処理
-	currentScenePtr->finalizeScene();
+	currentScenePtr->finalize();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -86,12 +108,12 @@ void SceneManager::update()
 		if (frameAdvanceCnt <= 0)
 		{
 			frameAdvanceCnt = DebugMoveOnFream;
-			currentScenePtr->updateScene();
+			currentScenePtr->update();
 		}
 	}
 	else
 		// シーン更新
-		currentScenePtr->updateScene();
+		currentScenePtr->update();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -108,7 +130,7 @@ void SceneManager::updateFade()
 void SceneManager::draw()
 {
 	// シーン描画
-	currentScenePtr->drawScene();
+	currentScenePtr->draw();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -128,12 +150,13 @@ void  SceneManager::drawFade()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneManager::changeScene(SceneState Scene)
 {
+	
 	switch (Scene)
 	{
 	case SceneState::SceneTitle:
-		delete currentScenePtr.get();
-		currentScenePtr = new SceneTitle();
+		currentScenePtr.reset(new SceneTitle());
 		break;
+		/*
 	case SceneState::SceneMain:
 		delete currentScenePtr.get();
 		currentScenePtr = new SceneMain();
@@ -146,10 +169,12 @@ void SceneManager::changeScene(SceneState Scene)
 		delete currentScenePtr.get();
 		currentScenePtr = new SceneStageEdit();
 		break;
+		*/
 	// 例外処理
 	default:
 		break;
 	}
+	
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -163,7 +188,7 @@ C_SCENE_BASE* SceneManager::getInstanse()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 現在のシーンenum取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-SceneManager::SceneState SceneManager::getcurrentSceneType()
+const SceneManager::SceneState SceneManager::getCurrentSceneType()
 {
 	return currentSceneType;
 }
@@ -171,7 +196,7 @@ SceneManager::SceneState SceneManager::getcurrentSceneType()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 外部から次のシーンをセット(ロードシーン用)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void SceneManager::setcurrentScene(SceneState setStateType)
+void SceneManager::setCurrentScene(SceneState setStateType)
 {
 	currentSceneType = setStateType;
 }
@@ -188,7 +213,7 @@ void SceneManager::setNextScene(SceneState setNextSceneType)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 次のシーン取得(ロードシーン用)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-SceneManager::SceneState SceneManager::getNextScene()
+const SceneManager::SceneState SceneManager::getNextScene()
 {
 	return nextSceneType;
 }
@@ -196,7 +221,7 @@ SceneManager::SceneState SceneManager::getNextScene()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // フェード取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-FadeUI* SceneManager::getFade()
+const FadeUI* SceneManager::getFade()
 {
 	return fadePtr.get();
 }

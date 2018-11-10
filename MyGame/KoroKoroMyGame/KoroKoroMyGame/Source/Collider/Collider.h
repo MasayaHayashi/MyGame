@@ -27,21 +27,21 @@ public:
 	Collider(D3DXVECTOR3 , D3DXVECTOR3);
 	~Collider();				// デストラクタ
 
-	void InitCollider();
-	void InitCollider(D3DXVECTOR3 Pos, D3DXVECTOR3 CollisionSize, D3DXVECTOR3 CenterPos);
-	void UnInitCollider();
+	void initializeCollider();
+	void initializeCollider(D3DXVECTOR3 Pos, D3DXVECTOR3 CollisionSize, D3DXVECTOR3 CenterPos);
+	void UninitializeCollider();
 	void UpdateCollider(D3DXMATRIX,D3DXCOLOR);
 	void DrawCollider();
 	
-	void SetUsedFlg(bool);
-	void SetPosition(D3DXVECTOR3 SetPos);
+	void setUsedFlg(bool);
+	void setPosition(D3DXVECTOR3 SetPos);
 	std::unique_ptr <Figure> figurePtr = nullptr;
 
 
 private:
 
 
-	bool							bUsed;				// 使用フラグ
+	bool							isUsed;				// 使用フラグ
 	D3DXVECTOR3						Pos;				// 位置
 	D3DXVECTOR3						Size;				// 大きさ
 	INT								nNumVertex;			// 総頂点数

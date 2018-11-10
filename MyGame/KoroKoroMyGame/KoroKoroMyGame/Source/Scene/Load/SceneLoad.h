@@ -4,8 +4,8 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
 // ===== 多重インクルード防止 =====
-#ifndef C_SCENE_LOAD_H
-#define C_SCENE_LOAD_H
+#ifndef SCENE_LOAD_H
+#define SCENE_LOAD_H
 
 // ===== インクルード部 =====
 #include "../SceneInterface/sceneBase.h"
@@ -32,22 +32,19 @@ enum LOAD_STATE
 };
 
 // ===== クラス定義 =====
-class C_SCENE_LOAD
+class SceneLoad
 {
 public:
-	C_SCENE_LOAD();
-	~C_SCENE_LOAD();
+	SceneLoad();
+	~SceneLoad();
 
-	void InitScene();
-	void UninitScene();
-	void EnableLoad();
-	void UpdateLoad();
-	void DrawScene();
+	static void initialize();
+	static void finalize();
+	static void enable();
+	static void update();
+	static void draw();
 
-	// セッター関連
-
-	// 静的メンバ関数
-	static void SetLoadFlg(bool);
+	static void setLoadFlg(bool);
 
 private:
 	C_CAMERA		*pCamera;
@@ -57,7 +54,7 @@ private:
 	C_LOAD_UI_ICON	*pLoadIcon;
 
 	// 静的メンバ変数
-	static bool	   bFinishedLoad;					// ロード終了
+	static bool	   finishedLoad;					// ロード終了
 };
 
 #endif

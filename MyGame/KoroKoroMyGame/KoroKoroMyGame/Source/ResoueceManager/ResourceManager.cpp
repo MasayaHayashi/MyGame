@@ -3,6 +3,7 @@
 // ƒŠƒ\[ƒXŠÇ—(ƒƒbƒVƒ…AƒeƒNƒXƒ`ƒƒŠÇ—)
 // Author : Masaya Hayashi
 //
+#define _CRT_SECURE_NO_WARNINGS
 
 // ===== ƒCƒ“ƒNƒ‹[ƒh•” =====
 #include "ResourceManager.h"
@@ -12,16 +13,17 @@
 #include "../Pawn/Pawn.h"
 #include "../Board/Board.h"
 #include "../DirectX3D/DirectX3D.h"
+#include "../Pawn/Pawn.h"
+
 
 // ===== Ã“Iƒƒ“ƒo•Ï” =====
-ResourceManager*					ResourceManager::pInstance;				// ƒCƒ“ƒXƒ^ƒ“ƒX
+ResourceManager*					ResourceManager::pInstance = new ResourceManager;				// ƒCƒ“ƒXƒ^ƒ“ƒX
 std::vector<MESH_DATA*>				ResourceManager::mesh;					// ƒƒbƒVƒ…î•ñ
 std::vector<HIERARCHY_MESH_DATA*>	ResourceManager::hierarchymesh;			// ŠK‘w\‘¢—pƒƒbƒVƒ…î•ñ
 std::vector<TEXTURE_DATA*>			ResourceManager::texture;				// ƒeƒNƒXƒ`ƒƒî•ñ
 std::vector<TEXTURE_DATA*>			ResourceManager::fadeTexture;			// ƒeƒNƒXƒ`ƒƒî•ñ
 std::vector<VERTEX_BOARD_DATA*>		ResourceManager::vtxBoard;				// ƒ{[ƒh’¸“_î•ñ
 std::vector<VERTEX_BOARD_DATA*>		ResourceManager::vtxFadeBoard;			// ƒ{[ƒh’¸“_î•ñ
-
 
 #define SAFE_DELETE(p)       { if(p!=nullptr) { delete (p);     (p) = nullptr; } }
 #define SAFE_RELEASE(p)      { if(p!=nullptr) { (p)->Release(); (p) = nullptr; } }
@@ -32,7 +34,7 @@ std::vector<VERTEX_BOARD_DATA*>		ResourceManager::vtxFadeBoard;			// ƒ{[ƒh’¸“_
 //
 ResourceManager::ResourceManager()
 {
-	pInstance = new ResourceManager;
+	
 }
 
 //
@@ -46,14 +48,14 @@ ResourceManager::~ResourceManager()
 //
 // ƒ‚ƒfƒ‹¶¬(ŠK‘w\‘¢–³‚µ)
 //
-HRESULT ResourceManager::makeModel(MESH_DATA &meshData, CHAR *pszFilename, UINT &umeshType)
+HRESULT ResourceManager::makeModel(MESH_DATA &meshData, CHAR *pszFilename, MeshObjType &umeshType)
 {
 	// —áŠOˆ—
 	if (!pszFilename)
 		return E_FAIL;
 
 	// ƒƒbƒVƒ…‚Ìí—Ş
-	umeshType = (UINT)NORMAL_MODEL;
+	umeshType = MeshObjType::NormalModel;
 
 	// ƒfƒoƒCƒXæ“¾
 	LPDIRECT3DDEVICE9 devicePtr =  DirectX3D::getDevice();
@@ -63,7 +65,7 @@ HRESULT ResourceManager::makeModel(MESH_DATA &meshData, CHAR *pszFilename, UINT 
 		return S_OK;
 
 	// ƒtƒ@ƒCƒ‹–¼ƒZƒbƒg
-	strcpy(meshData.meshFileName, pszFilename);
+	strcpy_s(meshData.meshFileName, pszFilename);
 
 	// ƒƒbƒVƒ…î•ñƒZƒbƒg
 	mesh.push_back(&meshData);
@@ -190,7 +192,7 @@ HRESULT ResourceManager::makeModel(MESH_DATA &meshData, CHAR *pszFilename, UINT 
 HRESULT ResourceManager::makevertexBoard(VERTEX_BOARD_DATA &VtxBordData, CHAR *pszName)
 {
 	// ¯•Ê—pƒtƒ@ƒCƒ‹–¼ƒZƒbƒg
-	strcpy(VtxBordData.name, pszName);
+	strcpy_s(VtxBordData.name, pszName);
 
 	// ƒtƒF[ƒh—p”»’è
 	if (VtxBordData.fade)
@@ -222,7 +224,7 @@ bool ResourceManager::makeVtx(VERTEX_BOARD_DATA &vtxBoardData)
 			D3DUSAGE_WRITEONLY,							// ’¸“_ƒoƒbƒtƒ@‚Ìg—p–@@
 			FVF_VERTEX_2D,								// g—p‚·‚é’¸“_ƒtƒH[ƒ}ƒbƒg
 			D3DPOOL_MANAGED,							// ƒŠƒ\[ƒX‚Ìƒoƒbƒtƒ@‚ğ•Û‚·‚éƒƒ‚ƒŠƒNƒ‰ƒX‚ğw’è
-			&vtxBoard.back()->pD3DVtxBuffBoard,			// ’¸“_ƒoƒbƒtƒ@ƒCƒ“ƒ^[ƒtƒF[ƒX‚Ö‚Ìƒ|ƒCƒ“ƒ^
+			&vtxBoard.back()->pD3DVtxBuff,			// ’¸“_ƒoƒbƒtƒ@ƒCƒ“ƒ^[ƒtƒF[ƒX‚Ö‚Ìƒ|ƒCƒ“ƒ^
 			nullptr)))										// nullptr‚Éİ’è
 		{
 			return false;
@@ -232,7 +234,7 @@ bool ResourceManager::makeVtx(VERTEX_BOARD_DATA &vtxBoardData)
 			VERTEX_2D *pVtx;
 
 			// ’¸“_ƒf[ƒ^‚Ì”ÍˆÍ‚ğƒƒbƒN‚µA’¸“_ƒoƒbƒtƒ@‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾
-			vtxBoard.back()->pD3DVtxBuffBoard->Lock(0, 0, (void**)&pVtx, 0);
+			vtxBoard.back()->pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 			{
 				// ’¸“_À•W‚Ìİ’è
@@ -261,7 +263,7 @@ bool ResourceManager::makeVtx(VERTEX_BOARD_DATA &vtxBoardData)
 			}
 
 			// ’¸“_ƒf[ƒ^‚ğƒAƒ“ƒƒbƒN‚·‚é
-			vtxBoard.back()->pD3DVtxBuffBoard->Unlock();
+			vtxBoard.back()->pD3DVtxBuff->Unlock();
 		}
 		break;
 	case boardType::Billboard:
@@ -271,7 +273,7 @@ bool ResourceManager::makeVtx(VERTEX_BOARD_DATA &vtxBoardData)
 			D3DUSAGE_WRITEONLY,							// ’¸“_ƒoƒbƒtƒ@‚Ìg—p–@@
 			FVF_VERTEX_3D,								// g—p‚·‚é’¸“_ƒtƒH[ƒ}ƒbƒg
 			D3DPOOL_MANAGED,							// ƒŠƒ\[ƒX‚Ìƒoƒbƒtƒ@‚ğ•Û‚·‚éƒƒ‚ƒŠƒNƒ‰ƒX‚ğw’è
-			&vtxBoard.back()->pD3DVtxBuffBoard,			// ’¸“_ƒoƒbƒtƒ@ƒCƒ“ƒ^[ƒtƒF[ƒX‚Ö‚Ìƒ|ƒCƒ“ƒ^
+			&vtxBoard.back()->pD3DVtxBuff,			// ’¸“_ƒoƒbƒtƒ@ƒCƒ“ƒ^[ƒtƒF[ƒX‚Ö‚Ìƒ|ƒCƒ“ƒ^
 			nullptr)))										// nullptr‚Éİ’è
 		{
 			return false;
@@ -281,7 +283,7 @@ bool ResourceManager::makeVtx(VERTEX_BOARD_DATA &vtxBoardData)
 		VERTEX_3D *pVtx;
 
 		// ’¸“_ƒf[ƒ^‚Ì”ÍˆÍ‚ğƒƒbƒN‚µA’¸“_ƒoƒbƒtƒ@‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾
-		vtxBoard.back()->pD3DVtxBuffBoard->Lock(0, 0, (void**)&pVtx, 0);
+		vtxBoard.back()->pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 		pVtx[0].vtx = D3DXVECTOR3(-vtxBoardData.size.x, vtxBoardData.size.y, 0.0f);
 		pVtx[1].vtx = D3DXVECTOR3(vtxBoardData.size.x, vtxBoardData.size.y, 0.0f);
@@ -327,7 +329,7 @@ bool ResourceManager::makeVtx(VERTEX_BOARD_DATA &vtxBoardData)
 
 		*/
 		// ’¸“_ƒf[ƒ^‚ğƒAƒ“ƒƒbƒN‚·‚é
-		vtxBoard.back()->pD3DVtxBuffBoard->Unlock();
+		vtxBoard.back()->pD3DVtxBuff->Unlock();
 	}
 	break;
 	case boardType::Polygon3d:
@@ -336,7 +338,7 @@ bool ResourceManager::makeVtx(VERTEX_BOARD_DATA &vtxBoardData)
 			D3DUSAGE_WRITEONLY,			// ’¸“_ƒoƒbƒtƒ@‚Ìg—p–@@
 			FVF_VERTEX_3D,				// g—p‚·‚é’¸“_ƒtƒH[ƒ}ƒbƒg
 			D3DPOOL_MANAGED,			// ƒŠƒ\[ƒX‚Ìƒoƒbƒtƒ@‚ğ•Û‚·‚éƒƒ‚ƒŠƒNƒ‰ƒX‚ğw’è
-			&vtxBoardData.pD3DVtxBuffBoard,			// ’¸“_ƒoƒbƒtƒ@ƒCƒ“ƒ^[ƒtƒF[ƒX‚Ö‚Ìƒ|ƒCƒ“ƒ^
+			&vtxBoardData.pD3DVtxBuff,			// ’¸“_ƒoƒbƒtƒ@ƒCƒ“ƒ^[ƒtƒF[ƒX‚Ö‚Ìƒ|ƒCƒ“ƒ^
 			nullptr)))						// nullptr‚Éİ’è
 		{
 			return false;
@@ -346,7 +348,7 @@ bool ResourceManager::makeVtx(VERTEX_BOARD_DATA &vtxBoardData)
 		VERTEX_3D *pVtx;
 
 		// ’¸“_ƒf[ƒ^‚Ì”ÍˆÍ‚ğƒƒbƒN‚µA’¸“_ƒoƒbƒtƒ@‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾
-		vtxBoard.back()->pD3DVtxBuffBoard->Lock(0, 0, (void**)&pVtx, 0);
+		vtxBoard.back()->pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 
 		pVtx[0].vtx = D3DXVECTOR3(-vtxBoardData.size.x, vtxBoardData.size.y, 0.0f);
@@ -401,7 +403,7 @@ bool ResourceManager::makeVtx(VERTEX_BOARD_DATA &vtxBoardData)
 
 		*/
 		// ’¸“_ƒf[ƒ^‚ğƒAƒ“ƒƒbƒN‚·‚é
-		vtxBoard.back()->pD3DVtxBuffBoard->Unlock();
+		vtxBoard.back()->pD3DVtxBuff->Unlock();
 
 		break;
 	default:
@@ -430,7 +432,7 @@ bool ResourceManager::makeVtxFade(VERTEX_BOARD_DATA &vtxBoardData)
 			D3DUSAGE_WRITEONLY,							// ’¸“_ƒoƒbƒtƒ@‚Ìg—p–@@
 			FVF_VERTEX_2D,								// g—p‚·‚é’¸“_ƒtƒH[ƒ}ƒbƒg
 			D3DPOOL_MANAGED,							// ƒŠƒ\[ƒX‚Ìƒoƒbƒtƒ@‚ğ•Û‚·‚éƒƒ‚ƒŠƒNƒ‰ƒX‚ğw’è
-			&vtxFadeBoard.back()->pD3DVtxBuffBoard,			// ’¸“_ƒoƒbƒtƒ@ƒCƒ“ƒ^[ƒtƒF[ƒX‚Ö‚Ìƒ|ƒCƒ“ƒ^
+			&vtxFadeBoard.back()->pD3DVtxBuff,			// ’¸“_ƒoƒbƒtƒ@ƒCƒ“ƒ^[ƒtƒF[ƒX‚Ö‚Ìƒ|ƒCƒ“ƒ^
 			nullptr)))										// nullptr‚Éİ’è
 		{
 			return false;
@@ -440,7 +442,7 @@ bool ResourceManager::makeVtxFade(VERTEX_BOARD_DATA &vtxBoardData)
 			VERTEX_2D *pVtx;
 
 			// ’¸“_ƒf[ƒ^‚Ì”ÍˆÍ‚ğƒƒbƒN‚µA’¸“_ƒoƒbƒtƒ@‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾
-			vtxFadeBoard.back()->pD3DVtxBuffBoard->Lock(0, 0, (void**)&pVtx, 0);
+			vtxFadeBoard.back()->pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 			{
 				// ’¸“_À•W‚Ìİ’è
@@ -469,9 +471,9 @@ bool ResourceManager::makeVtxFade(VERTEX_BOARD_DATA &vtxBoardData)
 			}
 
 			// ’¸“_ƒf[ƒ^‚ğƒAƒ“ƒƒbƒN‚·‚é
-			vtxFadeBoard.back()->pD3DVtxBuffBoard->Unlock();
+			vtxFadeBoard.back()->pD3DVtxBuff->Unlock();
 		}
-		break;
+		return true;
 	case boardType::Billboard:
 	{
 		// ƒIƒuƒWƒFƒNƒg‚Ì’¸“_ƒoƒbƒtƒ@‚ğ¶¬
@@ -479,7 +481,7 @@ bool ResourceManager::makeVtxFade(VERTEX_BOARD_DATA &vtxBoardData)
 			D3DUSAGE_WRITEONLY,							// ’¸“_ƒoƒbƒtƒ@‚Ìg—p–@@
 			FVF_VERTEX_3D,								// g—p‚·‚é’¸“_ƒtƒH[ƒ}ƒbƒg
 			D3DPOOL_MANAGED,							// ƒŠƒ\[ƒX‚Ìƒoƒbƒtƒ@‚ğ•Û‚·‚éƒƒ‚ƒŠƒNƒ‰ƒX‚ğw’è
-			&vtxFadeBoard.back()->pD3DVtxBuffBoard,			// ’¸“_ƒoƒbƒtƒ@ƒCƒ“ƒ^[ƒtƒF[ƒX‚Ö‚Ìƒ|ƒCƒ“ƒ^
+			&vtxFadeBoard.back()->pD3DVtxBuff,			// ’¸“_ƒoƒbƒtƒ@ƒCƒ“ƒ^[ƒtƒF[ƒX‚Ö‚Ìƒ|ƒCƒ“ƒ^
 			nullptr)))										// nullptr‚Éİ’è
 		{
 			return false;
@@ -489,7 +491,7 @@ bool ResourceManager::makeVtxFade(VERTEX_BOARD_DATA &vtxBoardData)
 		VERTEX_3D *pVtx;
 
 		// ’¸“_ƒf[ƒ^‚Ì”ÍˆÍ‚ğƒƒbƒN‚µA’¸“_ƒoƒbƒtƒ@‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾
-		vtxFadeBoard.back()->pD3DVtxBuffBoard->Lock(0, 0, (void**)&pVtx, 0);
+		vtxFadeBoard.back()->pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 		pVtx[0].vtx = D3DXVECTOR3(-vtxBoardData.size.x, vtxBoardData.size.y, 0.0f);
 		pVtx[1].vtx = D3DXVECTOR3(vtxBoardData.size.x, vtxBoardData.size.y, 0.0f);
@@ -526,25 +528,18 @@ bool ResourceManager::makeVtxFade(VERTEX_BOARD_DATA &vtxBoardData)
 		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
 		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 
-
-		/*
-		pVtx[0].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVtx[1].tex = D3DXVECTOR2(0.0f, 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(1.0f, 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(1.0f, 0.0f);
-
-		*/
 		// ’¸“_ƒf[ƒ^‚ğƒAƒ“ƒƒbƒN‚·‚é
-		vtxFadeBoard.back()->pD3DVtxBuffBoard->Unlock();
+		vtxFadeBoard.back()->pD3DVtxBuff->Unlock();
 	}
-	break;
+		return true;
+
 	case boardType::Polygon3d:
 		// ƒIƒuƒWƒFƒNƒg‚Ì’¸“_ƒoƒbƒtƒ@‚ğ¶¬
 		if (FAILED(devicePtr->CreateVertexBuffer(sizeof(VERTEX_3D) * DirectX3D::VertexSize,	// ’¸“_ƒf[ƒ^—p‚ÉŠm•Û‚·‚éƒoƒbƒtƒ@ƒTƒCƒY(ƒoƒCƒg’PˆÊ)
 			D3DUSAGE_WRITEONLY,			// ’¸“_ƒoƒbƒtƒ@‚Ìg—p–@@
 			FVF_VERTEX_3D,				// g—p‚·‚é’¸“_ƒtƒH[ƒ}ƒbƒg
 			D3DPOOL_MANAGED,			// ƒŠƒ\[ƒX‚Ìƒoƒbƒtƒ@‚ğ•Û‚·‚éƒƒ‚ƒŠƒNƒ‰ƒX‚ğw’è
-			&vtxFadeBoard.back()->pD3DVtxBuffBoard,			// ’¸“_ƒoƒbƒtƒ@ƒCƒ“ƒ^[ƒtƒF[ƒX‚Ö‚Ìƒ|ƒCƒ“ƒ^
+			&vtxFadeBoard.back()->pD3DVtxBuff,			// ’¸“_ƒoƒbƒtƒ@ƒCƒ“ƒ^[ƒtƒF[ƒX‚Ö‚Ìƒ|ƒCƒ“ƒ^
 			nullptr)))						// nullptr‚Éİ’è
 		{
 			return false;
@@ -554,41 +549,13 @@ bool ResourceManager::makeVtxFade(VERTEX_BOARD_DATA &vtxBoardData)
 		VERTEX_3D *pVtx;
 
 		// ’¸“_ƒf[ƒ^‚Ì”ÍˆÍ‚ğƒƒbƒN‚µA’¸“_ƒoƒbƒtƒ@‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾
-		vtxFadeBoard.back()->pD3DVtxBuffBoard->Lock(0, 0, (void**)&pVtx, 0);
-
-		/*
-		if (size.z == 0.0f)
-		{
-		// ’¸“_À•W‚Ìİ’è
-		pVtx[0].vtx = D3DXVECTOR3(-size.x / 2.0f, -size.y / 2.0f, 0.0f);
-		pVtx[1].vtx = D3DXVECTOR3(-size.x / 2.0f, size.y / 2.0f, 0.0f);
-		pVtx[2].vtx = D3DXVECTOR3(size.x / 2.0f, -size.y / 2.0f, 0.0f);
-		pVtx[3].vtx = D3DXVECTOR3(size.x / 2.0f, size.y / 2.0f, 0.0f);
-		}
-		else
-		{
-		// ’¸“_À•W‚Ìİ’è
-		pVtx[0].vtx = D3DXVECTOR3(-size.x / 2.0f, 0.0f, -size.z);
-		pVtx[1].vtx = D3DXVECTOR3(-size.x / 2.0f, 0.0f, size.z);
-		pVtx[2].vtx = D3DXVECTOR3(size.x / 2.0f, 0.0f, -size.z);
-		pVtx[3].vtx = D3DXVECTOR3(size.x / 2.0f, 0.0f, size.z);
-		}
-		*/
-
+		vtxFadeBoard.back()->pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 		pVtx[0].vtx = D3DXVECTOR3(-vtxBoardData.size.x, vtxBoardData.size.y, 0.0f);
 		pVtx[1].vtx = D3DXVECTOR3(vtxBoardData.size.x, vtxBoardData.size.y, 0.0f);
 		pVtx[2].vtx = D3DXVECTOR3(-vtxBoardData.size.x, -vtxBoardData.size.y, 0.0f);
 		pVtx[3].vtx = D3DXVECTOR3(vtxBoardData.size.x, -vtxBoardData.size.y, 0.0f);
-		/*
-		{
-		// ’¸“_À•W‚Ìİ’è
-		pVtx[0].vtx = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		pVtx[1].vtx = D3DXVECTOR3(size.x, 0.0f, 0.0f);
-		pVtx[2].vtx = D3DXVECTOR3(0.0f,size.y, 0.0f);
-		pVtx[3].vtx = D3DXVECTOR3(size.x,size.y, 0.0f);
-		}
-		*/
+
 		// –@ü‚Ìİ’è
 		if (vtxBoardData.size.z == 0.0f)
 		{
@@ -619,27 +586,21 @@ bool ResourceManager::makeVtxFade(VERTEX_BOARD_DATA &vtxBoardData)
 		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
 		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 
-
-		/*
-		pVtx[0].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVtx[1].tex = D3DXVECTOR2(0.0f, 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(1.0f, 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(1.0f, 0.0f);
-
-		*/
 		// ’¸“_ƒf[ƒ^‚ğƒAƒ“ƒƒbƒN‚·‚é
-		vtxFadeBoard.back()->pD3DVtxBuffBoard->Unlock();
+		vtxFadeBoard.back()->pD3DVtxBuff->Unlock();
 
-		break;
+		return true;
 	default:
 		break;
 	}
+
+	return false;
 }
 
 //
 // ƒeƒNƒXƒ`ƒƒ¶¬
 //
-HRESULT ResourceManager::CreateTexture(TEXTURE_DATA &TextureData,  CHAR *pszFilename)
+HRESULT ResourceManager::createTexture(TEXTURE_DATA &TextureData,  CHAR *pszFilename)
 {
 	// —áŠOˆ—
 	if (!pszFilename)
@@ -650,7 +611,7 @@ HRESULT ResourceManager::CreateTexture(TEXTURE_DATA &TextureData,  CHAR *pszFile
 		return S_OK;
 
 	// ƒtƒ@ƒCƒ‹–¼ƒZƒbƒg
-	strcpy(TextureData.texFileName, pszFilename);
+	strcpy_s(TextureData.texFileName, pszFilename);
 
 	texture.push_back(&TextureData);
 
@@ -659,23 +620,22 @@ HRESULT ResourceManager::CreateTexture(TEXTURE_DATA &TextureData,  CHAR *pszFile
 
 	// ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İ
 	if (D3DXCreateTextureFromFile(devicePtr, texture.back()->texFileName, &texture.back()->pD3DTexture))
+	{
 		return S_OK;
+	}
 }
 
 
 //
 // ŠK‘w\‘¢—pƒ‚ƒfƒ‹“Ç‚İ‚İ
 //
-HRESULT ResourceManager::makeModelHierarchy(HIERARCHY_MESH_DATA &HierarchyMedhData,CHAR *pszFilename, UINT &umeshType)
+HRESULT ResourceManager::makeModelHierarchy(HIERARCHY_MESH_DATA &HierarchyMedhData,CHAR *pszFilename, MeshObjType &umeshType)
 {
-	// ƒfƒoƒCƒXæ“¾
-	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
-
 	// ƒƒbƒVƒ…‚Ìí—Ş‰Šú‰»
-	umeshType = (INT)HIERARCHY_MODEL;
+	umeshType = MeshObjType::HierarchyModel;
 
 	// ƒƒbƒVƒ…î•ñƒZƒbƒg
-	strcpy(HierarchyMedhData.meshFileName, pszFilename);	// ƒtƒ@ƒCƒ‹–¼ƒZƒbƒg
+	strcpy_s(HierarchyMedhData.meshFileName, pszFilename);	// ƒtƒ@ƒCƒ‹–¼ƒZƒbƒg
 
 	// ƒƒbƒVƒ…î•ñƒZƒbƒg
 	hierarchymesh.push_back(&HierarchyMedhData);
@@ -683,30 +643,38 @@ HRESULT ResourceManager::makeModelHierarchy(HIERARCHY_MESH_DATA &HierarchyMedhDa
 	// ƒfƒBƒŒƒNƒgƒŠ’Šo
 	TCHAR szDir[_MAX_PATH];
 	TCHAR szDirWk[_MAX_DIR];
-	_tsplitpath(hierarchymesh.back()->meshFileName, szDir, szDirWk, nullptr, nullptr);
+	_tsplitpath(hierarchymesh.back()->meshFileName, szDir, szDirWk,  nullptr, nullptr);
 	lstrcat(szDir, szDirWk);
 	hierarchymesh.back()->hierarchy.setDirectory(szDir);
 
+	// ƒfƒoƒCƒXæ“¾
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
+
 	// ŠK‘w\‘¢ƒƒbƒVƒ…‚Ì“Ç‚İ‚İ
-	HRESULT hr = D3DXLoadMeshHierarchyFromX(hierarchymesh.back()->meshFileName, D3DXMESH_MANAGED, devicePtr, &hierarchymesh.back()->hierarchy, nullptr, &hierarchymesh.back()->frameRoot, &hierarchymesh.back()->animCtrl);
+	HRESULT hr = D3DXLoadMeshHierarchyFromX(hierarchymesh.back()->meshFileName, D3DXMESH_MANAGED, devicePtr, &hierarchymesh.back()->hierarchy, nullptr, &hierarchymesh.back()->frameRoot, &hierarchymesh.back()->animCtrlPtr);
 	if (FAILED(hr))
+	{
 		return false;
+	}
 
 	// ƒ{[ƒ“‚ÆƒtƒŒ[ƒ€‚ÌŠÖ˜A•t‚¯
 	hr = AllocAllBoneMatrix(hierarchymesh.back()->frameRoot,pszFilename);
-	if (FAILED(hr)) return false;
+	if (FAILED(hr))
+	{
+		return false;
+	}
 
 	// ƒAƒjƒ[ƒVƒ‡ƒ“ƒZƒbƒgæ“¾
 	hierarchymesh.back()->numAnimset = 0;
-	if (hierarchymesh.back()->animCtrl)
+	if (hierarchymesh.back()->animCtrlPtr)
 	{
-		hierarchymesh.back()->numAnimset = hierarchymesh.back()->animCtrl->GetNumAnimationSets();
+		hierarchymesh.back()->numAnimset = hierarchymesh.back()->animCtrlPtr->GetNumAnimationSets();
 		if (hierarchymesh.back()->numAnimset > 0)
 		{
-			hierarchymesh.back()->ppAnimset = new LPD3DXANIMATIONSET[hierarchymesh.back()->numAnimset];
+			hierarchymesh.back()->ppAnimSet = new LPD3DXANIMATIONSET[hierarchymesh.back()->numAnimset];
 			for (DWORD u = 0; u < hierarchymesh.back()->numAnimset; u++)
 			{
-				hierarchymesh.back()->animCtrl->GetAnimationSet(u, &hierarchymesh.back()->ppAnimset[u]);
+				hierarchymesh.back()->animCtrlPtr->GetAnimationSet(u, &hierarchymesh.back()->ppAnimSet[u]);
 			}
 		}
 	}
@@ -760,16 +728,16 @@ void ResourceManager::updateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX p
 //
 void ResourceManager::setTime(DOUBLE dTime,CHAR *pszFilename)
 {
-	if (hierarchymesh.back()->animCtrl == nullptr)
+	if (hierarchymesh.back()->animCtrlPtr == nullptr)
 		return;
 
-	for (DWORD i = 0; i < hierarchymesh.back()->animCtrl->GetMaxNumTracks(); ++i)
+	for (DWORD i = 0; i < hierarchymesh.back()->animCtrlPtr->GetMaxNumTracks(); ++i)
 	{
-		hierarchymesh.back()->animCtrl->SetTrackPosition(i, 0);
+		hierarchymesh.back()->animCtrlPtr->SetTrackPosition(i, 0);
 	}
 
-	hierarchymesh.back()->animCtrl->ResetTime();
-	hierarchymesh.back()->animCtrl->AdvanceTime(dTime, nullptr);
+	hierarchymesh.back()->animCtrlPtr->ResetTime();
+	hierarchymesh.back()->animCtrlPtr->AdvanceTime(dTime, nullptr);
 }
 
 //
@@ -1003,13 +971,13 @@ bool ResourceManager::destroyHierarchymesh(CHAR *pszChakNeme)
 		{
 			
 			// ƒAƒjƒ[ƒVƒ‡ƒ“‰ğ•ú
-			if (hierarchymesh[i]->ppAnimset)
+			if (hierarchymesh[i]->ppAnimSet)
 			{
 				for (UINT j = 0; j < hierarchymesh[i]->numAnimset; j++)
-					SAFE_RELEASE(hierarchymesh[i]->ppAnimset[j]);
-				SAFE_DELETE_ARRAY(hierarchymesh[i]->ppAnimset);
+					SAFE_RELEASE(hierarchymesh[i]->ppAnimSet[j]);
+				SAFE_DELETE_ARRAY(hierarchymesh[i]->ppAnimSet);
 			}
-			SAFE_RELEASE(hierarchymesh[i]->animCtrl);
+			SAFE_RELEASE(hierarchymesh[i]->animCtrlPtr);
 
 			// ƒƒbƒVƒ…‰ğ•ú
 			if (hierarchymesh[i]->frameRoot)
@@ -1031,13 +999,13 @@ bool ResourceManager::destroyAllHierarchymesh()
 	for (INT i = hierarchymesh.size() - 1; i >= 0; i--)
 	{
 		// ƒAƒjƒ[ƒVƒ‡ƒ“‰ğ•ú
-		if (hierarchymesh[i]->ppAnimset)
+		if (hierarchymesh[i]->ppAnimSet)
 		{
 			for (UINT j = 0; j < hierarchymesh[i]->numAnimset; j++)
-				SAFE_RELEASE(hierarchymesh[i]->ppAnimset[j]);
-			SAFE_DELETE_ARRAY(hierarchymesh[i]->ppAnimset);
+				SAFE_RELEASE(hierarchymesh[i]->ppAnimSet[j]);
+			SAFE_DELETE_ARRAY(hierarchymesh[i]->ppAnimSet);
 		}
-		SAFE_RELEASE(hierarchymesh[i]->animCtrl);
+		SAFE_RELEASE(hierarchymesh[i]->animCtrlPtr);
 
 		// ƒƒbƒVƒ…‰ğ•ú
 		if (hierarchymesh[i]->frameRoot)
@@ -1082,7 +1050,7 @@ bool ResourceManager::destroyVtx()
 
 	// ’¸“_î•ñ‰ğ•ú
 	for (UINT i = 0; i < vtxBoard.size(); i++)
-		SAFE_RELEASE(vtxBoard[i]->pD3DVtxBuffBoard);
+		SAFE_RELEASE(vtxBoard[i]->pD3DVtxBuff);
 
 	vtxBoard.clear();
 	
@@ -1100,7 +1068,7 @@ bool ResourceManager::destroyFadeVtx()
 
 	// ’¸“_î•ñ‰ğ•ú
 	for (UINT i = 0; i < vtxFadeBoard.size(); i++)
-		SAFE_RELEASE(vtxFadeBoard[i]->pD3DVtxBuffBoard);
+		SAFE_RELEASE(vtxFadeBoard[i]->pD3DVtxBuff);
 	vtxFadeBoard.clear();
 
 	return true;
@@ -1112,7 +1080,7 @@ bool ResourceManager::destroyFadeVtx()
 void ResourceManager::CreateFadeTexture(TEXTURE_DATA& TextureData, CHAR *pszFilename)
 {
 	// ƒtƒ@ƒCƒ‹–¼ƒZƒbƒg
-	strcpy(TextureData.texFileName, pszFilename);
+	strcpy_s(TextureData.texFileName, pszFilename);
 
 	fadeTexture.push_back(&TextureData);
 
@@ -1132,7 +1100,7 @@ void  ResourceManager::createNormalTexture(TEXTURE_DATA& TextureData, CHAR *pszF
 		return;
 
 	// ƒtƒ@ƒCƒ‹–¼ƒZƒbƒg
-	strcpy(TextureData.texFileName, pszFilename);
+	strcpy_s(TextureData.texFileName, pszFilename);
 
 	texture.push_back(&TextureData);
 

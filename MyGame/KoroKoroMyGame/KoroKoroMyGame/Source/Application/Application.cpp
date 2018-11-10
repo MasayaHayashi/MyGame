@@ -5,8 +5,9 @@
 
 // ===== インクルード部 =====
 #include "Application.h"
-#include "DirectX3D.h"
-#include "Audio\MyAudiere.h"
+#include "../DirectX3D/DirectX3D.h"
+#include "../Audio/MyAudiere.h"
+#include "../SceneManager/SceneManager.h"
 #include <Windows.h>
 #include <time.h>
 #include <memory>
@@ -18,6 +19,7 @@ Application::Application()
 {
 	directX3dObj.reset(NEW DirectX3D());
 	myAudiereObj.reset(NEW MyAudiere());
+	SceneManager::create();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -48,12 +50,14 @@ void Application::initialize(HINSTANCE& instance, INT& cmdShow)
 	UpdateWindow(windowHandle);
 
 	directX3dObj->initialize(windowHandle);
+
+	SceneManager::getInstanse()->initialize();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // メインループ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-const void Application::mainLoop()
+void Application::mainLoop()
 {
 	// メッセージループ
 	while (1)
@@ -111,7 +115,7 @@ void Application::update()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 描画
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-const void Application::draw()
+void Application::draw() const
 {
 	directX3dObj->draw();
 }

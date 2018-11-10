@@ -94,11 +94,23 @@
     <Filter Include="ソース ファイル\Light">
       <UniqueIdentifier>{24193427-61ec-4433-9fcd-2754479e6a9f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\MainField">
+      <UniqueIdentifier>{c1910810-1203-4cd1-bda0-56a09decbb97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\MeshFieldBase">
+      <UniqueIdentifier>{47d914b2-09e3-47e6-a774-cf65c3496f6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\TitleUI">
+      <UniqueIdentifier>{3f75ee39-0f09-41ea-9582-a4927c380320}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\HeartObj">
+      <UniqueIdentifier>{5b18241c-4f97-4519-93e4-32b6c184b3e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\MyVector3">
+      <UniqueIdentifier>{8fc18516-4889-4946-bd22-582104c42ba0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Main.cpp">
-      <Filter>ソース ファイル\EntryPoint</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Audio\MyAudiere.cpp">
       <Filter>ソース ファイル\Audio</Filter>
     </ClCompile>
@@ -135,6 +147,9 @@
     <ClCompile Include="Source\Scene\Title\SceneTitle.cpp">
       <Filter>ソース ファイル\Scene\Title</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Camera\camera.cpp">
+      <Filter>ソース ファイル\Camera</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Skydome\Skydome.cpp">
       <Filter>ソース ファイル\Skydome</Filter>
     </ClCompile>
@@ -162,8 +177,23 @@
     <ClCompile Include="Source\Light\Light.cpp">
       <Filter>ソース ファイル\Light</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Camera\Camera.cpp">
-      <Filter>ソース ファイル\Camera</Filter>
+    <ClCompile Include="Source\MainField\MainField.cpp">
+      <Filter>ソース ファイル\MainField</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MeshFieldBase\MeshFieldBase.cpp">
+      <Filter>ソース ファイル\MeshFieldBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TitleUI\TitleUI.cpp">
+      <Filter>ソース ファイル\TitleUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HeartObj\HeartObj.cpp">
+      <Filter>ソース ファイル\HeartObj</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MyVector3\MyVector3.cpp">
+      <Filter>ソース ファイル\MyVector3</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EntryPoint\Main.cpp">
+      <Filter>ソース ファイル\EntryPoint</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -209,8 +239,8 @@
     <ClInclude Include="Source\Scene\Title\SceneTitle.h">
       <Filter>ソース ファイル\Scene\Title</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>ソース ファイル\Mesh</Filter>
+    <ClInclude Include="Source\Camera\camera.h">
+      <Filter>ソース ファイル\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Source\Skydome\Skydome.h">
       <Filter>ソース ファイル\Skydome</Filter>
@@ -239,8 +269,23 @@
     <ClInclude Include="Source\Light\Light.h">
       <Filter>ソース ファイル\Light</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Camera\Camera.h">
-      <Filter>ソース ファイル\Camera</Filter>
+    <ClInclude Include="Source\MainField\MainField.h">
+      <Filter>ソース ファイル\MainField</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MeshFieldBase\MeshFieldBase.h">
+      <Filter>ソース ファイル\MeshFieldBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mesh\Mesh.h">
+      <Filter>ソース ファイル\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TitleUI\TitleUI.h">
+      <Filter>ソース ファイル\TitleUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HeartObj\HeartObj.h">
+      <Filter>ソース ファイル\HeartObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MyVector3\MyVector3.h">
+      <Filter>ソース ファイル\MyVector3</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

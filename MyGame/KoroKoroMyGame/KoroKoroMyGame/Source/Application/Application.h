@@ -11,7 +11,7 @@
 // ===== インクルード部 =====
 #include <string>
 #include <memory>
-#include "Linklib.h"
+#include "../Linklib.h"
 #include "d3dx9.h"
 
 #ifdef _DEBUG
@@ -46,10 +46,10 @@ public :
 
 	void initialize(HINSTANCE& instance, INT& cmdShow);
 	void update();
-	const void draw();
+	void draw() const ;
 	void finalize();
 
-	const void mainLoop();
+	void mainLoop();
 
 	HWND createWindow(HINSTANCE instance);
 

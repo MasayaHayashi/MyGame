@@ -8,7 +8,7 @@
 #define C_SCENEBASE_H
 
 // ===== クラスの前方宣言 =====
-class camera;
+class Camera;
 
 // ===== インクルード部 =====
 #include "../Audio/\audiere.h"
@@ -33,15 +33,15 @@ public:
 	C_SCENE_BASE();
 	virtual ~C_SCENE_BASE();
 
-	virtual void InitScene()   = 0;
-	virtual void finalizeScene() = 0;
-	virtual void updateScene() = 0;
-	virtual void drawScene()   = 0;
+	virtual void initialize()   = 0;
+	virtual void finalize() = 0;
+	virtual void update() = 0;
+	virtual void draw()   = 0;
 
-	virtual void InitStatus()  = 0;		// 各種ステータスリセット
+	virtual void initializeStatus()  = 0;		// 各種ステータスリセット
 
 	// ゲッター関連
-	virtual camera* getcamera() = 0;
+	virtual Camera* getCamera() = 0;
 
 	GAME_STATE getGameState();
 

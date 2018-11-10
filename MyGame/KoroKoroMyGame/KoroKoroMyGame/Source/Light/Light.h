@@ -10,17 +10,17 @@
 
 // ===== 定数・マクロ定義 =====
 
-// ===== クラスの前方定義 =====
-class camera;
+// ===== クラスの前方宣言 =====
+class Camera;
 
 // ===== クラス定義 =====
 class Light
 {
 public:
-	HRESULT InitLight();
-	void UninitLight();
-	void UpdateLight(camera *pcamera);
-	void SetLight(D3DLIGHTTYPE LightType, D3DXCOLOR DiffuseColor, D3DXCOLOR AmbientColor, D3DXVECTOR3 vecDir, BYTE LightID);
+	HRESULT initialize();
+	void finalize();
+	void UpdateLight(Camera *pCamera);
+	void SetLight(D3DLIGHTTYPE LightType, D3DXCOLOR Diffusecolor, D3DXCOLOR Ambientcolor, D3DXVECTOR3 vecDir, BYTE LightID);
 	BYTE* GetLightID();
 private:
 	static constexpr UINT MaxLight = 3;

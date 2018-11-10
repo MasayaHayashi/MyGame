@@ -12,6 +12,9 @@
 #include "../KeyBoard/Keyboard.h"
 #include "../Player/Player.h"
 #include "../Board/Board.h"
+#include "../Application/Application.h"
+
+/*
 #include "C_Block.h"
 #include "C_Player.h"
 #include "C_Ready.h"
@@ -20,12 +23,12 @@
 #if _DEBUG
 #include "debugproc.h"
 #endif
+*/
 
 // ===== 定数・マクロ定義 =====
 #define MAX_PITCH_SPEED		(25.0f)	// ピッチの最大値
 #define ACCELE_PITCH_SPEED	(0.5f)	// 1フレームに加速するピッチの値
 #define DECELE_PITCH_SPEED	(0.25f)	// 1フレームに減速するピッチの値
-#define ROT_SPEED (10.0f)
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -60,7 +63,7 @@ Camera::~Camera()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::finalize(C_PLAYER *pPlayer)
+void Camera::finalize(Player *pPlayer)
 {
 
 	// 現在のシーン取得
@@ -126,7 +129,7 @@ void Camera::initialize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ初期化（タイトル）
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::initializeTitle(C_PLAYER *pPlayer)
+void Camera::initializeTitle(Player *pPlayer)
 {
 	// プレイヤー情報取得
 	D3DXVECTOR3 PlayerPos = pPlayer->getOffset();
@@ -137,12 +140,6 @@ void Camera::initializeTitle(C_PLAYER *pPlayer)
 
 	cameraPosDest  = D3DXVECTOR3(0.0f, 0.0f, -9.0f);								// カメラの視点の目的位置
 	cameraLookDest = D3DXVECTOR3(PlayerPos.x, PlayerPos.y + 1.7f, PlayerPos.z);		// カメラの注視点の目的位置
-
-//	D3DXVECTOR3 ForwardVec = pPlayer->getForwardVec();
-//	D3DXVec3Normalize(&ForwardVec, &ForwardVec);
-
-//	ForwardVec *= 5.0f;
-//	cameraPosDest -= ForwardVec;
 
 	cameraRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// カメラの回転量
 
@@ -195,7 +192,7 @@ void Camera::initializeStageEdit()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ初期化(ゲームメイン)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::initializeGameMain(C_PLAYER *pPlayer)
+void Camera::initializeGameMain(Player *pPlayer)
 {
 	D3DXVECTOR3 PlayerPos = pPlayer->getPosition();
 
@@ -239,7 +236,7 @@ void Camera::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ更新処理
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::update(C_PLAYER *pPlayer,C_BOARD *pReadyUI)
+void Camera::update(Player *pPlayer,Board *pReadyUI)
 {
 	// 現在のシーン取得
 	currentScene = SceneManager::getCurrentSceneType();
@@ -280,7 +277,7 @@ void Camera::updateTitle(Pawn *pPlayer)
 
 	cameraFowerd = cameraLook - cameraPos;
 
-	rotationcamera(pPlayer->getOffset());
+//	rotationcamera(pPlayer->getOffset());
 
 	/*
 #if 1 // 線形補間処理
@@ -309,7 +306,7 @@ void Camera::updateTitle(Pawn *pPlayer)
 
 #if _DEBUG
 
-#if 1	// デバッグ用カメラ移動
+#if 0	// デバッグ用カメラ移動
 	if (getKeyboardPress(DIK_A))
 	{
 		if (getKeyboardPress(DIK_W))
@@ -673,7 +670,7 @@ void Camera::updateStageEdit(const D3DXVECTOR3 &Pos)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ更新(ゲームメイン)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::updateGameMain(C_PLAYER *pPlayer,C_BOARD *pReadyUI)
+void Camera::updateGameMain(Player *pPlayer,Board *pReadyUI)
 {
 	D3DXVECTOR3 PlayerPos = pPlayer->getOffset();
 	D3DXVECTOR3 ForwardVec = pPlayer->getForwardVec();
@@ -735,7 +732,7 @@ void Camera::updateGameMain(C_PLAYER *pPlayer,C_BOARD *pReadyUI)
 			D3DXVECTOR3 VecLength = cameraPos - PlayerPos;
 			FLOAT Length = sqrtf(PlayerPos.x * PlayerPos.x + PlayerPos.z * PlayerPos.z);
 
-			rotCnt += ROT_SPEED;
+			rotCnt += RotSpeed;
 			RotMove(&PlayerPos, 10.0f);
 
 			cameraPos.y = 10.0f;
@@ -754,7 +751,7 @@ void Camera::updateGameMain(C_PLAYER *pPlayer,C_BOARD *pReadyUI)
 
 	cameraFowerd = cameraLook - cameraPos;
 
-	rotationcamera(pPlayer->getOffset());
+//	rotationcamera(pPlayer->getOffset());
 
 }
 
@@ -782,9 +779,9 @@ void Camera::RotMove(D3DXVECTOR3* pVecCenter, FLOAT fRadius)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラの設定処理
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::setcamera(void)
+void Camera::setCamera()
 {
-	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	// ビューマトリックスの初期化
 	D3DXMatrixIdentity(&mtxView);
@@ -796,7 +793,7 @@ void Camera::setcamera(void)
 		&cameraUp);			// カメラの上方向
 
 	// ビューマトリックスの設定
-	pDevice->SetTransform(D3DTS_VIEW, &mtxView);
+	devicePtr->SetTransform(D3DTS_VIEW, &mtxView);
 
 	// プロジェクションマトリックスの初期化
 	D3DXMatrixIdentity(&mtxProjection);
@@ -804,22 +801,23 @@ void Camera::setcamera(void)
 	// プロジェクションマトリックスの作成
 	D3DXMatrixPerspectiveFovLH(&mtxProjection,
 		VIEW_ANGLE,			// 視野角
-		VIEW_ASPECT,		// アスペクト比
+		static_cast<FLOAT> (Application::ScreenWidth) / static_cast<FLOAT>(Application::ScreenHeight),		// アスペクト比
 		VIEW_NEAR_Z,		// ビュー平面のNearZ値
 		VIEW_FAR_Z);		// ビュー平面のFarZ値
 
 	// プロジェクションマトリックスの設定
-	pDevice->setTransform(D3DTS_PROJECTION, &mtxProjection);
+	devicePtr->SetTransform(D3DTS_PROJECTION, &mtxProjection);
 	
 //	D3DXVec3Unproject()
-//	pDevice->getViewport()	// ビューポートマトリックス取得
+//	devicePtr->getViewport()	// ビューポートマトリックス取得
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ回転
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::Rotationcamera(D3DXVECTOR3 Center)
+void Camera::rotationCamera(D3DXVECTOR3 Center)
 {
+	/*
 	C_XINPUT *pXinput = C_XINPUT::getInstance();
 
 	short RightStickX = pXinput->getThumbRX();
@@ -836,30 +834,35 @@ void Camera::Rotationcamera(D3DXVECTOR3 Center)
 	if (getKeyboardPress(DIK_I))
 		RightStickY ++;
 
-
-	D3DXVECTOR3 cameraForwrd = getcameraFowerd();
+	*/
+//	D3DXVECTOR3 cameraForwrd = GetCameraFowerd();
 
 	RotMove(&Center, 5.0f);
 
 	// 回転処理
-	nRotCnt += camera_ROT_SPEED * RightStickX;
+//	rotCnt += camera_ROT_SPEED * RightStickX;
 
 
-	D3DXVec3Normalize(&cameraForwrd, &cameraForwrd);
+//	D3DXVec3Normalize(&cameraForwrd, &cameraForwrd);
 
 
-	cameraPos.y += RightStickY;
-	if(RightStickY > 0.0f)
+//	cameraPos.y += RightStickY;
+	/*
+	if (RightStickY > 0.0f)
+	{
 		cameraPos.y -= 0.1f;
-	else if(RightStickY < 0.0f)
+	}
+	else if (RightStickY < 0.0f)
+	{
 		cameraPos.y += 0.1f;
-
+	}
+	*/
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラの向き取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-D3DXVECTOR3 Camera::getcameraRot()
+D3DXVECTOR3 Camera::getRot()
 {
 	return cameraRot;
 }
@@ -885,17 +888,17 @@ D3DXMATRIX Camera::getProjectionMtx()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 D3DVIEWPORT9* Camera::getViwPort()
 {
-	LPDIRECT3DDEVICE9 pDevice = getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
-	pDevice->getViewport(&ViePort);
+	devicePtr->GetViewport(&viewPort);
 
-	return &ViePort;
+	return &viewPort;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ位置取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-D3DXVECTOR3 Camera::getcameraPos()
+D3DXVECTOR3 Camera::getPos()
 {
 	return cameraPos;
 }
@@ -903,7 +906,7 @@ D3DXVECTOR3 Camera::getcameraPos()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ注視点取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-D3DXVECTOR3 Camera::getcameraLook()
+D3DXVECTOR3 Camera::getLook()
 {
 	return cameraLook;
 }
@@ -911,7 +914,7 @@ D3DXVECTOR3 Camera::getcameraLook()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラアップベクトル取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-D3DXVECTOR3* Camera::getcameraUp()
+D3DXVECTOR3* Camera::getUp()
 {
 	return &cameraUp;
 }
@@ -919,7 +922,7 @@ D3DXVECTOR3* Camera::getcameraUp()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラの前ベクトル取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-D3DXVECTOR3 Camera::getcameraFowerd()
+D3DXVECTOR3 Camera::getFowerd()
 {
 	D3DXVECTOR3 cameraFowerd = cameraLook - cameraPos;
 	D3DXVec3Normalize(&cameraFowerd, &cameraFowerd);
@@ -930,7 +933,7 @@ D3DXVECTOR3 Camera::getcameraFowerd()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラステートセット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::setcameraState(camera_MOVE_TYPE setState)
+void Camera::setState(camera_MOVE_TYPE setState)
 {
 	cameraMoveFade = setState;
 }

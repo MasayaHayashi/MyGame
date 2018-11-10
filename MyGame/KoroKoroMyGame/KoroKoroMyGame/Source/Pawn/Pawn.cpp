@@ -122,7 +122,7 @@ void Pawn::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ポーン更新(共通処理)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::updateObject()
+void Pawn::update()
 {
 
 }
@@ -131,10 +131,10 @@ void Pawn::updateObject()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 描画
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::drawObject()
+void Pawn::draw()
 {
 	// デバイス取得
-	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	// 例外処理
 	if (!isUsed)
@@ -162,10 +162,10 @@ void Pawn::drawObject()
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &translateMtx);
 
 	// ワールドマトリックスの設定
-	pDevice->SetTransform(D3DTS_WORLD, &worldMtx);
+	devicePtr->SetTransform(D3DTS_WORLD, &worldMtx);
 
 	// 現在のマテリアルを取得
-	pDevice->GetMaterial(&matDef);
+	devicePtr->GetMaterial(&matDef);
 
 	// マテリアル情報に対するポインタを取得
 	pD3DXMat = (D3DXMATERIAL*)meshData.pD3DXBuffMat->GetBufferPointer();
@@ -173,27 +173,27 @@ void Pawn::drawObject()
 	for (int nCntMat = 0; nCntMat < static_cast<INT>(meshData.numMat); nCntMat++)
 	{
 		// マテリアルの設定
-		pDevice->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
+		devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
 
 		// テクスチャの設定
-		pDevice->SetTexture(0, textureData.pD3DTexture);
+		devicePtr->SetTexture(0, textureData.pD3DTexture);
 
 		// 描画
 		meshData.pD3DXMesh->DrawSubset(nCntMat);
 	}
 
 	// マテリアルをデフォルトに戻す
-	pDevice->SetMaterial(&matDef);
+	devicePtr->SetMaterial(&matDef);
 
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 描画
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::drawObject(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
+void Pawn::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 {
 	// デバイス取得
-	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	// 例外処理
 	if (!isUsed)
@@ -221,10 +221,10 @@ void Pawn::drawObject(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &translateMtx);
 	
 	// ワールドマトリックスの設定
-	pDevice->SetTransform(D3DTS_WORLD, &worldMtx);
+	devicePtr->SetTransform(D3DTS_WORLD, &worldMtx);
 
 	// 現在のマテリアルを取得
-	pDevice->GetMaterial(&matDef);
+	devicePtr->GetMaterial(&matDef);
 
 	// マテリアル情報に対するポインタを取得
  	pD3DXMat = (D3DXMATERIAL*)meshData.pD3DXBuffMat->GetBufferPointer();
@@ -245,10 +245,10 @@ void Pawn::drawObject(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 	{
 
 		// マテリアルの設定
-		pDevice->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
+		devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
 
 		// テクスチャの設定
-		pDevice->SetTexture(0, textureData.pD3DTexture);
+		devicePtr->SetTexture(0, textureData.pD3DTexture);
 
 		// 描画
 		meshData.pD3DXMesh->DrawSubset(nCntMat);
@@ -258,17 +258,17 @@ void Pawn::drawObject(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 	pEffect->End();
 
 	// マテリアルをデフォルトに戻す
-	pDevice->SetMaterial(&matDef);
+	devicePtr->SetMaterial(&matDef);
 	
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 描画
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::drawObject(LPD3DXMESH pMesh, LPDIRECT3DTEXTURE9 pTex, LPD3DXBUFFER pBuff,DWORD uNumMat)
+void Pawn::draw(LPD3DXMESH pMesh, LPDIRECT3DTEXTURE9 pTex, LPD3DXBUFFER pBuff,DWORD uNumMat)
 {
 	// デバイス取得
-	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	// 移動、回転、拡大縮小用行列
 	D3DXMATRIX mtxRot, translateMtx, mtxScale;
@@ -281,7 +281,7 @@ void Pawn::drawObject(LPD3DXMESH pMesh, LPDIRECT3DTEXTURE9 pTex, LPD3DXBUFFER pB
 	D3DXMatrixIdentity(&worldMtx);
 	D3DXMatrixIdentity(&mtxScale);
 
-	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	devicePtr->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 
 	// 拡大縮小
 	D3DXMatrixScaling(&mtxScale, scale.x, scale.y, scale.z);
@@ -296,10 +296,10 @@ void Pawn::drawObject(LPD3DXMESH pMesh, LPDIRECT3DTEXTURE9 pTex, LPD3DXBUFFER pB
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &translateMtx);
 
 	// ワールドマトリックスの設定
-	pDevice->SetTransform(D3DTS_WORLD, &worldMtx);
+	devicePtr->SetTransform(D3DTS_WORLD, &worldMtx);
 
 	// 現在のマテリアルを取得
-	pDevice->GetMaterial(&matDef);
+	devicePtr->GetMaterial(&matDef);
 
 	// マテリアル情報に対するポインタを取得
 	pD3DXMat = (D3DXMATERIAL*)meshData.pD3DXBuffMat->GetBufferPointer();
@@ -307,17 +307,17 @@ void Pawn::drawObject(LPD3DXMESH pMesh, LPDIRECT3DTEXTURE9 pTex, LPD3DXBUFFER pB
 	for (int nCntMat = 0; nCntMat < static_cast<INT>(meshData.numMat); nCntMat++)
 	{
 		// マテリアルの設定
-		pDevice->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
+		devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
 
 		// テクスチャの設定
-		pDevice->SetTexture(0, textureData.pD3DTexture);
+		devicePtr->SetTexture(0, textureData.pD3DTexture);
 
 		// 描画
 		meshData.pD3DXMesh->DrawSubset(nCntMat);
 	}
 
 	// マテリアルをデフォルトに戻す
-	pDevice->SetMaterial(&matDef);
+	devicePtr->SetMaterial(&matDef);
 
 }
 
@@ -331,19 +331,19 @@ void Pawn::drawObjectLocal()
 		return;
 
 	// デバイス取得
-	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
-	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	devicePtr->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 
 	//	D3DXMATRIX mtxRot, translateMtx, mtxScale;
 	D3DXMATERIAL *pD3DXMat;
 	D3DMATERIAL9 matDef;
 
 	// ワールドマトリックスの設定
-	pDevice->SetTransform(D3DTS_WORLD, &worldMtx);
+	devicePtr->SetTransform(D3DTS_WORLD, &worldMtx);
 
 	// 現在のマテリアルを取得
-	pDevice->GetMaterial(&matDef);
+	devicePtr->GetMaterial(&matDef);
 
 	// マテリアル情報に対するポインタを取得
 	pD3DXMat = (D3DXMATERIAL*)meshData.pD3DXBuffMat->GetBufferPointer();
@@ -351,17 +351,17 @@ void Pawn::drawObjectLocal()
 	for (int nCntMat = 0; nCntMat < (int)meshData.numMat; nCntMat++)
 	{
 		// マテリアルの設定
-		pDevice->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
+		devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
 
 		// テクスチャの設定
-		pDevice->SetTexture(0, textureData.pD3DTexture);
+		devicePtr->SetTexture(0, textureData.pD3DTexture);
 
 		// 描画
 		meshData.pD3DXMesh->DrawSubset(nCntMat);
 	}
 
 	// マテリアルをデフォルトに戻す
-	pDevice->SetMaterial(&matDef);
+	devicePtr->SetMaterial(&matDef);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -392,7 +392,7 @@ void Pawn::drawFrame(LPD3DXFRAME pFrame)
 void Pawn::RenderMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase, LPD3DXFRAME pFrameBase)
 {
 	// デバイス取得
-	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	MYMESHCONTAINER* pMeshContainer = (MYMESHCONTAINER*)pMeshContainerBase;
 	MYFRAME* pFrame = (MYFRAME*)pFrameBase;
@@ -411,17 +411,17 @@ void Pawn::RenderMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase, LPD3DXFRA
 				if (pBoneCombi[i].BoneId[k] != UINT_MAX)
 					dwBlendMatrix = k;
 			}
-			pDevice->SetRenderState(D3DRS_VERTEXBLEND, dwBlendMatrix);
+			devicePtr->SetRenderState(D3DRS_VERTEXBLEND, dwBlendMatrix);
 			for (DWORD k = 0; k < pMeshContainer->dwWeight; k++)
 			{
 				DWORD id = pBoneCombi[i].BoneId[k];
 				if (id != UINT_MAX) 
 				{
-					pDevice->SetTransform(D3DTS_WORLDMATRIX(k), &(pMeshContainer->pBoneOffsetMatrix[id] * *pMeshContainer->ppBoneMatrix[id]));
+					devicePtr->SetTransform(D3DTS_WORLDMATRIX(k), &(pMeshContainer->pBoneOffsetMatrix[id] * *pMeshContainer->ppBoneMatrix[id]));
 				}
 			}
-			pDevice->SetMaterial(&pMeshContainer->pMaterials[pBoneCombi[i].AttribId].MatD3D);
-			pDevice->SetTexture(0, pMeshContainer->ppTextures[pBoneCombi[i].AttribId]);
+			devicePtr->SetMaterial(&pMeshContainer->pMaterials[pBoneCombi[i].AttribId].MatD3D);
+			devicePtr->SetTexture(0, pMeshContainer->ppTextures[pBoneCombi[i].AttribId]);
 			dwPrevBoneID = pBoneCombi[i].AttribId;
 
 			pMeshContainer->MeshData.pMesh->DrawSubset(i);
@@ -429,12 +429,12 @@ void Pawn::RenderMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase, LPD3DXFRA
 		return;
 	}
 	// スキン無しモデル
-	pDevice->SetTransform(D3DTS_WORLD, &pFrame->combinedTransformationMatrix);
+	devicePtr->SetTransform(D3DTS_WORLD, &pFrame->combinedTransformationMatrix);
 	for (DWORD iAttrib = 0; iAttrib < pMeshContainer->NumMaterials; iAttrib++)
 	{
 		DWORD dwAttrib = pMeshContainer->pAttributeTable[iAttrib].AttribId;
-		pDevice->SetMaterial(&pMeshContainer->pMaterials[dwAttrib].MatD3D);
-		pDevice->SetTexture(0, pMeshContainer->ppTextures[dwAttrib]);
+		devicePtr->SetMaterial(&pMeshContainer->pMaterials[dwAttrib].MatD3D);
+		devicePtr->SetTexture(0, pMeshContainer->ppTextures[dwAttrib]);
 		pMeshContainer->MeshData.pMesh->DrawSubset(dwAttrib);
 	}
 }
@@ -463,10 +463,10 @@ HRESULT Pawn::makeModel()
 //	if (pD3DXMesh)
 //		return E_FAIL;
 
-	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	// Xファイルの読み込み
-	if (FAILED(D3DXLoadMeshFromX(fileName, D3DXMESH_SYSTEMMEM, pDevice, nullptr, &pD3DXBuffMat, nullptr, &uNumMat, &pD3DXMesh)))
+	if (FAILED(D3DXLoadMeshFromX(fileName, D3DXMESH_SYSTEMMEM, devicePtr, nullptr, &pD3DXBuffMat, nullptr, &uNumMat, &pD3DXMesh)))
 	{
 		return E_FAIL;
 	}
@@ -497,7 +497,7 @@ HRESULT Pawn::makeModel()
 	if (dwFVF != FVF_TVERTEX)
 	{
 		LPD3DXMESH pMeshTmp = pD3DXMesh;
-		pMeshTmp->CloneMeshFVF(pMeshTmp->GetOptions(), FVF_TVERTEX, pDevice, &pD3DXMesh);
+		pMeshTmp->CloneMeshFVF(pMeshTmp->GetOptions(), FVF_TVERTEX, devicePtr, &pD3DXMesh);
 		SAFE_RELEASE(pMeshTmp);
 		// 法線が無い場合は強制的に追加
 		if ((dwFVF & D3DFVF_NORMAL) == 0)
@@ -591,49 +591,49 @@ HRESULT Pawn::makeModel()
 HRESULT Pawn::makeModelHierarchy()
 {
 	// デバイス取得
-	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	// ディレクトリ抽出
 	TCHAR szDir[_MAX_PATH];
 	TCHAR szDirWk[_MAX_DIR];
-	_tsplitpath(fileName, szDir, szDirWk, nullptr, nullptr);
+	_tsplitpath_s(fileName, szDir, sizeof(szDir), szDirWk, sizeof(szDirWk), nullptr, 0, nullptr, 0);
 	lstrcat(szDir, szDirWk);
 	Hierarchy.setDirectory(szDir);
 
 	// 階層構造メッシュの読み込み
-	HRESULT hr = D3DXLoadMeshHierarchyFromX(fileName, D3DXMESH_MANAGED, pDevice, &Hierarchy, nullptr, &pFrameRoot, &animCtrl);
+	HRESULT hr = D3DXLoadMeshHierarchyFromX(fileName, D3DXMESH_MANAGED, devicePtr, &Hierarchy, nullptr, &frameRoot, &animCtrlPtr);
 	if (FAILED(hr))
 		return false;
 
 	// ボーンとフレームの関連付け
-	hr = AllocAllBoneMatrix(pFrameRoot);
+	hr = AllocAllBoneMatrix(frameRoot);
 	if (FAILED(hr)) return false;
 
 	// アニメーションセット取得
 	numAnimset = 0;
-	if (animCtrl)
+	if (animCtrlPtr)
 	{
-		numAnimset = animCtrl->GetNumAnimationSets();
+		numAnimset = animCtrlPtr->GetNumAnimationSets();
 		if (numAnimset > 0)
 		{
 			ppAnimSet = new LPD3DXANIMATIONSET[numAnimset];
 			for (DWORD u = 0; u < numAnimset; u++)
 			{
-				animCtrl->GetAnimationSet(u, &ppAnimSet[u]);
+				animCtrlPtr->GetAnimationSet(u, &ppAnimSet[u]);
 			}
 		}
 	}
 
-	if (pFrameRoot)
+	if (frameRoot)
 	{
 		// マトリックス更新
 		setTime(0.0);
 		D3DXMATRIX world;
 		D3DXMatrixIdentity(&world);
-		updateFrameMatrices(pFrameRoot, &world);
+		updateFrameMatrices(frameRoot, &world);
 
 		// 境界球/境界ボックス取得
-		calcCollision(pFrameRoot);
+		calcCollision(frameRoot);
 	}
 
 	// 経過時間計測用時刻設定
@@ -673,16 +673,16 @@ void Pawn::updateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX pParentMatri
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Pawn::setTime(DOUBLE dTime)
 {
-	if (animCtrl == nullptr) 
+	if (animCtrlPtr == nullptr) 
 		return;
 
-	for (DWORD i = 0; i < animCtrl->GetMaxNumTracks(); ++i) 
+	for (DWORD i = 0; i < animCtrlPtr->GetMaxNumTracks(); ++i) 
 	{
-		animCtrl->SetTrackPosition(i, 0);
+		animCtrlPtr->SetTrackPosition(i, 0);
 	}
 
-	animCtrl->ResetTime();
-	animCtrl->AdvanceTime(dTime, nullptr);
+	animCtrlPtr->ResetTime();
+	animCtrlPtr->AdvanceTime(dTime, nullptr);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -700,7 +700,7 @@ HRESULT Pawn::AllocBoneMatrix(LPD3DXMESHCONTAINER pMeshContainerBase)
 
 	for (DWORD i = 0; i < dwBoneNum; i++)
 	{
-		MYFRAME* pFrame = (MYFRAME*)D3DXFrameFind(pFrameRoot,pMeshContainer->pSkinInfo->GetBoneName(i));
+		MYFRAME* pFrame = (MYFRAME*)D3DXFrameFind(frameRoot,pMeshContainer->pSkinInfo->GetBoneName(i));
 
 		if (pFrame == nullptr)
 			return E_FAIL;
@@ -743,10 +743,10 @@ HRESULT Pawn::createTexture()
 	if (!texFileName)
 		return E_FAIL;
 
-	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	// テクスチャの読み込み
-	if (D3DXCreateTextureFromFile(pDevice, texFileName, &pD3DTexture))
+	if (D3DXCreateTextureFromFile(devicePtr, texFileName, &pD3DTexture))
 		return S_OK;
 
 	return S_OK;
@@ -815,7 +815,7 @@ void Pawn::setOffset(D3DXVECTOR3 SetOffSet)
 	worldMtx._42 = SetOffSet.y;
 	worldMtx._43 = SetOffSet.z;
 
-	colliderPtr->UpdateCollider(worldMtx,Figure::DeaultBoxColor);
+	colliderPtr->UpdateCollider(worldMtx,Figure::DeaultBoxcolor);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -829,7 +829,7 @@ void Pawn::setRotation(D3DXVECTOR3 SetRot)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // マテリアルの色セット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::setMaterialColorEmissive(float fRed,float Green,float Blue,float Alpha)
+void Pawn::setMaterialcolorEmissive(float fRed,float Green,float Blue,float Alpha)
 {
 	D3DXMATERIAL *pD3DXMat;
 
@@ -910,7 +910,7 @@ FLOAT Pawn::getCollisionRadius()
 	case MeshObjType::NormalModel:
 		return meshData.collisionRadus;
 	case MeshObjType::HierarchyModel:
-		return hierarchymeshData.collisionRadus;
+		return hierarchyMeshData.collisionRadus;
 	default:
 		break;
 	}
@@ -923,7 +923,7 @@ FLOAT Pawn::getCollisionRadius()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 D3DXVECTOR3 Pawn::getCenterPos()
 {
-	return hierarchymeshData.centerPos;
+	return hierarchyMeshData.centerPos;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -977,7 +977,7 @@ void Pawn::setUsedFlg(bool setFlg)
 
 	// コライダー使用フラグセット
 	if(colliderPtr)
-		colliderPtr->SetUsedFlg(setFlg);
+		colliderPtr->setUsedFlg(setFlg);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -1054,7 +1054,7 @@ D3DXVECTOR3 Pawn::getCollisionBox()
 	case MeshObjType::NormalModel:
 		return meshData.collitionBox;
 	case MeshObjType::HierarchyModel:
-		return hierarchymeshData.collitionBox;
+		return hierarchyMeshData.collitionBox;
 	default:
 		break;
 	}
@@ -1220,7 +1220,7 @@ void Pawn::updateExportData()
 	exportData.ScaleData = scale;	// 拡大率
 	exportData.ObjType = objType;		// オブジェクトの種類
 	exportData.uNumber = idNumber;		// 識別番号
-	exportData.bUsed = isUsed;		// 使用フラグ
+	exportData.isUsed = isUsed;		// 使用フラグ
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -1233,7 +1233,7 @@ void Pawn::setExportData(EXPORT_GAMEOBJ_DATA SetData)
 	scale = SetData.ScaleData;		// 拡大率
 	objType = SetData.ObjType;		// ブロックの種類
 	idNumber = SetData.uNumber;		// 識別番号
-	isUsed = SetData.bUsed;			// 使用フラグ
+	isUsed = SetData.isUsed;			// 使用フラグ
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -1307,15 +1307,15 @@ void Pawn::setAnimChange(UINT uSetNum,UINT uWorkNum)
 {
 	// 現在のアニメーションセットの設定値を取得
 	D3DXTRACK_DESC TD;   // トラックの能力
-	hierarchymeshData.animCtrl->GetTrackDesc(currentAnim, &TD);
+	hierarchyMeshData.animCtrlPtr->GetTrackDesc(currentAnim, &TD);
 
 	// 今のアニメーションをトラック1に移行し
 	// トラックの設定値も移行
-	hierarchymeshData.animCtrl->SetTrackAnimationSet(uWorkNum, hierarchymeshData.ppAnimset[currentAnim]);
-	hierarchymeshData.animCtrl->SetTrackDesc(uWorkNum, &TD);
+	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(uWorkNum, hierarchyMeshData.ppAnimSet[currentAnim]);
+	hierarchyMeshData.animCtrlPtr->SetTrackDesc(uWorkNum, &TD);
 
 	// 新しいアニメーションセットをトラック0に設定
-	hierarchymeshData.animCtrl->SetTrackAnimationSet(0, hierarchymeshData.ppAnimset[uSetNum]);
+	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[uSetNum]);
 
 	currentAnim = uSetNum;
 }

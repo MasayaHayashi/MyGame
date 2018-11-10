@@ -8,24 +8,25 @@
 #include "SceneLoad.h"
 #include "../DirectX3D/DirectX3D.h"
 #include "../SceneManager/SceneManager.h"
+#include "Load\SceneLoad.h"
 
 /*
 #include "C_LoadUiIcon.h"
 #include "main.h"
 #include "debugproc.h"
-#include "C_camera.h"
+#include "C_Camera.h"
 #include "C_Light.h"
 #include "C_TitleObj.h"
-#include "C_FADE.h"
+#include "FadeUI.h"
 */
 
 // ===== 静的メンバ =====
-bool C_SCENE_LOAD::finishedLoad; // ロード終了判定
+bool SceneLoad::finishedLoad;
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-C_SCENE_LOAD::C_SCENE_LOAD()
+SceneLoad::SceneLoad()
 {
 	finishedLoad = false;
 }
@@ -33,7 +34,7 @@ C_SCENE_LOAD::C_SCENE_LOAD()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // デストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-C_SCENE_LOAD::~C_SCENE_LOAD()
+SceneLoad::~SceneLoad()
 {
 
 }
@@ -41,109 +42,111 @@ C_SCENE_LOAD::~C_SCENE_LOAD()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 別スレッド用ロード
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void InitNextResorce()
+void initializeNextResorce()
 {
 	std::mutex mutexObj;
 	mutexObj.lock();
 
-	SceneManager *pSceneManager = getSceneManager();
+	SceneManager::SceneState nextScene = SceneManager::getNextScene(); SceneManager::getNextScene();
 
-	SceneManager::SceneState nextScene = SceneManager::getNextScene();
-
-	SceneManager::SceneState NextScene = pSceneManager->getNextScene();
-	pSceneManager->setcurrentScene(NextScene);	// 現在のシーンを次のシーンに上書き
-	pSceneManager->setScene(NextScene);
+	SceneManager::SceneState NextScene = SceneManager::getNextScene();
+	SceneManager::setCurrentScene(NextScene);	// 現在のシーンを次のシーンに上書き
+	SceneManager::changeScene(NextScene);
 
 	// 次のシーンの初期化
-	pSceneManager->InitScene();
+	SceneManager::initialize();
 
 
 	mutexObj.unlock();
 
-	C_SCENE_LOAD::setLoadFlg(true);
+	SceneLoad::setLoadFlg(true);
 
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_SCENE_LOAD::InitScene()
+void SceneLoad::initialize()
 {
+	/*
 	// ロードアイコン初期化
-	pLoadIcon = NEW C_LOAD_UI_ICON;
-	pLoadIcon->InitObject();
+	pLoadIcon = new C_LOAD_UI_ICON;
+	pLoadIcon->initialize();
 
 	// カメラ初期化
-	pcamera = NEW C_camera;
-	pcamera->initialize();
+	pCamera = NEW C_CAMERA;
+	pCamera->initializeCamera();
 
 	// ライト初期化
 	pLight = NEW Light;
-	pLight->InitLight();
+	pLight->initializeLight();
 
 	
-	pTitleObj = NEW C_TITLE_OBJ;
-	pTitleObj->InitObject();
+	pTitleObj = NEW HeartObj;
+	pTitleObj->initialize();
+	*/
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // タイトル終了処理
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_SCENE_LOAD::finalizeScene()
+void SceneLoad::finalize()
 {
+	/*
 	// タイトルロゴ後処理
 	pLoadIcon->finalizeObject();
 	SAFE_DELETE(pLoadIcon);
 
-	pcamera->finalizecamera();
-	SAFE_DELETE(pcamera);
+	pCamera->finalizeCamera();
+	SAFE_DELETE(pCamera);
 
 	pLight->finalizeLight();
 	SAFE_DELETE(pLight);
 
 	pTitleObj->finalizeObject();
 	SAFE_DELETE(pTitleObj);
+	*/
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_SCENE_LOAD::updateLoad()
+void SceneLoad::update()
 {
 	// ロードオブジェクト更新
-	pLoadIcon->updateObject();
+//	pLoadIcon->updateObject();
 }
 
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ロード開始
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_SCENE_LOAD::EnableLoad()
+void SceneLoad::enable()
 {
 	DWORD dwExecLastTime;
 	DWORD dwFPSLastTime;
 	DWORD dwCurrentTime;
 	DWORD dwFrameCount;
 
-	dwExecLastTime = dwFPSLastTime = timegetTime();
+	dwExecLastTime = dwFPSLastTime = timeGetTime();
 	dwCurrentTime = dwFrameCount = 0;
 
 #if 1
 
 	// 新規スレッドを作成
-	std::thread Thred(InitNextResorce);
+	std::thread Thred(initializeNextResorce);
 
 	// ロード画面描画
 	while (1)
 	{
-		dwCurrentTime = timegetTime();
+		dwCurrentTime = timeGetTime();
 
 		if ((dwCurrentTime - dwExecLastTime) >= (1000 / 60))
 		{
 			dwExecLastTime = dwCurrentTime;
 
-			updateLoad();
-			drawScene();
+			update();
+			draw();
 
 			// ロード完了
 			if (finishedLoad)
@@ -159,10 +162,10 @@ void C_SCENE_LOAD::EnableLoad()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 描画
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_SCENE_LOAD::drawScene()
+void SceneLoad::draw()
 {
 	// オブジェクト取得
-	LPDIRECT3DDEVICE9 devicePtr = ();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	// バックバッファ＆Ｚバッファのクリア
 	devicePtr->Clear(0, nullptr, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 0), 1.0f, 0);
@@ -170,9 +173,9 @@ void C_SCENE_LOAD::drawScene()
 	// Direct3Dによる描画の開始
 	if (SUCCEEDED(devicePtr->BeginScene()))
 	{
-		pLoadIcon->drawObject();	// ロード
+		//pLoadIcon->drawObject();	// ロード
 
-		pcamera->setcamera();		// カメラセット
+		//pCamera->setCamera();		// カメラセット
 
 		// Direct3Dによる描画の終了
 		devicePtr->EndScene();
@@ -184,7 +187,7 @@ void C_SCENE_LOAD::drawScene()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ロードフラグセット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_SCENE_LOAD::setLoadFlg(bool bset)
+void SceneLoad::setLoadFlg(bool bset)
 {
 	finishedLoad = bset;
 }

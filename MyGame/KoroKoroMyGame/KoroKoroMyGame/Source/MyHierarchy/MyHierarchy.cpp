@@ -229,7 +229,7 @@ HRESULT MyHierarchy::CreateMeshContainer(LPCSTR					name,
 
 		// ƒXƒLƒ“—p‚É•ÏŠ·
 		hr = skinInfoPtr->ConvertToBlendedMesh(
-			meshPtr, nullptr, meshContainerPtr->pAdjacency,
+			meshPtr, 0, meshContainerPtr->pAdjacency,
 			nullptr, nullptr, nullptr,
 			&meshContainerPtr->dwWeight,
 			&meshContainerPtr->dwBone,

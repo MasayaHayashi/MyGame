@@ -8,14 +8,17 @@
 //
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
+#if 0
 // ===== インクルード部 =====
-#include "C_SceneMain.h"
+#include "../Main/C_SceneMain.h"
+
+/*
 #include "C_Board.h"
 #include "C_Pause.h"
 #include "C_Player.h"
 #include "C_Enemy.h"
 #include "C_Light.h"
-#include "C_camera.h"
+#include "C_Camera.h"
 #include "C_Skydome.h"
 #include "C_MoveBlock.h"
 #include "C_GoalObj.h"
@@ -39,6 +42,7 @@
 #if _DEBUG
 	#include "debugproc.h"
 #endif
+*/
 
 // ===== 定数・マクロ定義 =====
 #define RESTART_CNT (120)	// ミスしてから再スタートの間隔
@@ -69,23 +73,24 @@ C_SCENE_MAIN::~C_SCENE_MAIN()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_SCENE_MAIN::InitScene()
+void C_SCENE_MAIN::initialize()
 {
+	/*
 	// プレイヤー初期化
-	pPlayer = NEW C_PLAYER;
-	pPlayer->InitObject();
+	pPlayer = NEW Player;
+	pPlayer->initialize();
 
 	// ライト初期化
 	pLight = NEW Light;
-	pLight->InitLight();
+	pLight->initializeLight();
 
 	// カメラ初期化
-	pcamera = NEW C_camera;
-	pcamera->initialize(pPlayer);
+	pCamera = NEW C_CAMERA;
+	pCamera->initializeCamera(pPlayer);
 
 	// スカイドーム初期化
 	pSkydome = NEW C_SKYDOME;
-	pSkydome->InitObject();
+	pSkydome->initialize();
 
 	// パーティクル初期化
 	for (INT TypeCnt = 0; TypeCnt < MAX_PARTICLE_OBJ_TYPE; TypeCnt++)
@@ -102,7 +107,7 @@ void C_SCENE_MAIN::InitScene()
 				default:
 					break;
 			}
-			pParticleObj[TypeCnt][ObjCnt]->InitObject();
+			pParticleObj[TypeCnt][ObjCnt]->initialize();
 		}
 
 	// UI初期化
@@ -131,7 +136,7 @@ void C_SCENE_MAIN::InitScene()
 		default:
 			break;
 		}
-		pUIObj[UiTypeCnt]->InitObject();
+		pUIObj[UiTypeCnt]->initialize();
 	}
 
 	// ゲームオブジェクト初期化
@@ -155,7 +160,7 @@ void C_SCENE_MAIN::InitScene()
 			default:
 				break;
 			}
-			pGameObj[BlockType][i]->InitObject();
+			pGameObj[BlockType][i]->initialize();
 		}
 
 	// 衝突用クラス生成
@@ -163,7 +168,7 @@ void C_SCENE_MAIN::InitScene()
 
 	// ポーズ用オブジェクト初期化
 	pPause = NEW C_PAUSE;
-	pPause->InitObject();
+	pPause->initialize();
 
 	// ステージ読み込み初期化
 	pStageLoader = NEW C_STAGE_LOADER;
@@ -173,16 +178,16 @@ void C_SCENE_MAIN::InitScene()
 	for (INT i = 0; i < MAX_SCORE_DIGIT; i++)
 	{
 		pUIScore[i] = NEW C_SCORE_UI(i);
-		pUIScore[i]->InitObject();
+		pUIScore[i]->initialize();
 	}
 
 	// ゴール初期化
 	pGoal = NEW C_GOAL;
-	pGoal->InitObject();
+	pGoal->initialize();
 
 	// ハート初期化
 	pHeart = NEW C_HEART_BOARD;
-	pHeart->InitObject();
+	pHeart->initialize();
 
 	// ゲーム状態初期化
 	uGameState  = GAME_TUTORIAL;
@@ -204,13 +209,14 @@ void C_SCENE_MAIN::InitScene()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 後処理
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_SCENE_MAIN::finalizeScene()
+void C_SCENE_MAIN::finalize()
 {
+	/*
 	// BGM停止
 
 	// カメラ後処理
-	pcamera->finalizecamera();
-	SAFE_DELETE(pcamera);
+	pCamera->finalizeCamera();
+	SAFE_DELETE(pCamera);
 
 	// ライト後処理
 	pLight->finalizeLight();
@@ -273,6 +279,7 @@ void C_SCENE_MAIN::finalizeScene()
 	// ハート後処理
 	pHeart->finalizeObject();
 	SAFE_DELETE(pHeart);
+	*/
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -283,7 +290,7 @@ void C_SCENE_MAIN::updateScene()
 	// チュートリアルステージ用処理
 	if (uGameState == GAME_TUTORIAL)
 	{
-		pcamera->setcameraState(MAIN_TUTORIAL);
+		pCamera->setCameraState(MAIN_TUTORIAL);
 		if (getKeyboardPress(DIK_SPACE))
 		{
 			pUIObj[OBJ_NEXT]->setUsedFlg(false);
@@ -293,7 +300,7 @@ void C_SCENE_MAIN::updateScene()
 		if (!pUIObj[OBJ_TUTORIAL]->getUsedFlg())
 		{
 			pUIObj[OBJ_READY]->setUsedFlg(true);
-				pcamera->setcameraState(MAIN_START_FADE);
+				pCamera->setCameraState(MAIN_START_FADE);
 				uGameState = GAME_READY;
 		}
 	}
@@ -331,7 +338,7 @@ void C_SCENE_MAIN::updateScene()
 	{
 		nRestartCnt--;
 		if (nRestartCnt < 0)
-			InitStatus();
+			initializeStatus();
 	}
 
 	// UI更新
@@ -350,7 +357,7 @@ void C_SCENE_MAIN::updateScene()
 	}
 
 	// プレイヤー更新
-	pPlayer->updatePlayer_GameMain(pcamera->getcameraFowerd());
+	pPlayer->updatePlayer_GameMain(pCamera->getCameraFowerd());
 
 	// ゲーム状態更新
 	if (!pUIObj[OBJ_READY]->getUsedFlg() && uGameState != GAME_MISS && uGameState != GAME_GOAL && uGameState != GAME_TUTORIAL)
@@ -366,7 +373,7 @@ void C_SCENE_MAIN::updateScene()
 		return;
 
 	// 死亡判定
-	if (pPlayer->getState() == PLAYER_STATE::TYPE_DEAD)
+	if (pPlayer->getState() == PlayerState::TYPE_DEAD)
 		uGameState = GAME_MISS;
 
 	// スカイドーム更新
@@ -421,7 +428,7 @@ void C_SCENE_MAIN::updateScene()
 	pGoal->updateObject();
 
 	// カメラ更新
-	pcamera->updatecamera_GameMain(pPlayer,pUIObj[OBJ_READY]);
+	pCamera->updateCamera_GameMain(pPlayer,pUIObj[OBJ_READY]);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -442,7 +449,7 @@ void C_SCENE_MAIN::drawScene()
 	// ゲームオブジェクト描画
 	for (INT i = 0; i < MAX_GAME_OBJ_TYPE; i++)
 		for (INT j = 0; j < MAX_GAME_OBJ; j++)
-			pGameObj[i][j]->drawObject(pcamera->getMtxView(),pcamera->getProjectionMtx());
+			pGameObj[i][j]->drawObject(pCamera->getMtxView(),pCamera->getProjectionMtx());
 
 	// スカイドーム描画
 	pSkydome->drawObject();
@@ -453,7 +460,7 @@ void C_SCENE_MAIN::drawScene()
 			pParticleObj[TypeCnt][ObjCnt]->drawObject();
 
 	// カメラセット
-	pcamera->setcamera();
+	pCamera->setCamera();
 
 	// スコア描画
 	for (INT i = 0; i < MAX_SCORE_DIGIT; i++)
@@ -473,13 +480,13 @@ void C_SCENE_MAIN::drawScene()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ステータス初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_SCENE_MAIN::InitStatus()
+void C_SCENE_MAIN::initializeStatus()
 {
 	// BGM再生
 //	PlaySound(SOUND_BGM_MAIN);
 
 	// プレイヤーステータス初期化
-	pPlayer->InitStatus();
+	pPlayer->initializeStatus();
 
 	// UI使用フラグ更新
 	pUIObj[OBJ_MISS]->setUsedFlg(false);
@@ -506,19 +513,19 @@ void C_SCENE_MAIN::InitStatus()
 
 	// パーティクル初期化
 	for (INT i = 0; i < MAX_PARTICLE; i++)
-		pParticleObj[OBJ_2D_STAR_PARTICLE][i]->InitStatus();
+		pParticleObj[OBJ_2D_STAR_PARTICLE][i]->initializeStatus();
 
 	// ステータス初期化
-	pUIObj[OBJ_MISS]->InitStatus();
+	pUIObj[OBJ_MISS]->initializeStatus();
 
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-C_camera* C_SCENE_MAIN::getcamera()
+C_CAMERA* C_SCENE_MAIN::getCamera()
 {
-	return pcamera;
+	return pCamera;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -527,7 +534,7 @@ C_camera* C_SCENE_MAIN::getcamera()
 void C_SCENE_MAIN::CheckCollision()
 {
 	// 例外処理
-	if (pPlayer->getState() == PLAYER_STATE::TYPE_JUMP_UP)
+	if (pPlayer->getState() == PlayerState::TYPE_JUMP_UP)
 		return;
 
 	// ブロックとの判定
@@ -554,7 +561,7 @@ void C_SCENE_MAIN::CheckCollision()
 
 
 
-	if (pPlayer->getState() != PLAYER_STATE::TYPE_JUMP_DOWN)
+	if (pPlayer->getState() != PlayerState::TYPE_JUMP_DOWN)
 	{
 		for (INT i = 0; i < MAX_BLOCK_TYPE; i++)
 		{
@@ -580,7 +587,7 @@ void C_SCENE_MAIN::CheckCollision()
 		{
 			if (fLength.x < 0.4f)
 			{
-				pPlayer->setStatus(PLAYER_STATE::TYPE_MOVE_HIT_WALL);
+				pPlayer->setStatus(PlayerState::TYPE_MOVE_HIT_WALL);
 				pPlayer->setPosition(pPlayer->getPosition() - pPlayer->getMoveVec());
 				PrintDebugProc("てすとおおおおおおおおおおおおおおおおおおおおおお");
 			}
@@ -592,7 +599,7 @@ void C_SCENE_MAIN::CheckCollision()
 
 
 	// 床との判定
-	if (pPlayer->getState() != (PLAYER_STATE::TYPE_MOVE_HIT_WALL))
+	if (pPlayer->getState() != (PlayerState::TYPE_MOVE_HIT_WALL))
 	{
 		for (INT i = 0; i < MAX_BLOCK_TYPE; i++)
 		{
@@ -627,18 +634,18 @@ void C_SCENE_MAIN::CheckCollision()
 				PrintDebugProc("ヒット！！！！！！！！！！１");
 				PrintDebugProc("hit%d", nHitIndex);
 				pPlayer->setPosition(Cross - D3DXVECTOR3(0.0f, 0.01f, 0.0f));
-				pPlayer->setStatus(PLAYER_STATE::TYPE_MOVE);
+				pPlayer->setStatus(PlayerState::TYPE_MOVE);
 			}
 
 			if (fLength.x > 0.0f)
 			{
-				pPlayer->setStatus(PLAYER_STATE::TYPE_JUMP_DOWN);
+				pPlayer->setStatus(PlayerState::TYPE_JUMP_DOWN);
 			}
 		}
 
 		else if (uIsHitBlock == RAY_FALSE)
 		{
-			pPlayer->setStatus(PLAYER_STATE::TYPE_FALL);
+			pPlayer->setStatus(PlayerState::TYPE_FALL);
 			PrintDebugProc("のーひっと！！！！！！！！！！１");
 
 			PrintDebugProc("のーひっと");
@@ -710,7 +717,7 @@ void C_SCENE_MAIN::CheckCollision()
 			if (uGameState != GAME_GOAL)
 			{
 //				PlaySound(SOUND_SE_STAGE_CLEAR);
-				pcamera->setcameraState(MAIN_GOAL_FADE);
+				pCamera->setCameraState(MAIN_GOAL_FADE);
 				uGameState = GAME_GOAL;
 				AddStage();		// ステージ情報加算
 		//		getSceneManager()->setSceneChange(C_SCENE_MANAGER::SCENE_MAIN);
@@ -725,8 +732,8 @@ void C_SCENE_MAIN::CheckCollision()
 void C_SCENE_MAIN::CheckUnProject(INT Indx)
 {
 	D3DXVECTOR3 StarObj = pGameObj[STAR_OBJ][Indx]->getPosition();
-	D3DXMATRIX  ViewMtx = pcamera->getMtxView();
-	D3DXMATRIX  ProjectionMtx = pcamera->getProjectionMtx();
+	D3DXMATRIX  ViewMtx = pCamera->getMtxView();
+	D3DXMATRIX  ProjectionMtx = pCamera->getProjectionMtx();
 
 	D3DXVECTOR3 OutVec;
 	D3DXVECTOR3 OutVec2;
@@ -771,3 +778,5 @@ void C_SCENE_MAIN::setScore()
 {
 
 }
+
+#endif

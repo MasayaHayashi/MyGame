@@ -19,14 +19,15 @@ enum class UIType
 	DescUI,
 };
 
-// ===== クラスの前方定義 =====
+// ===== クラスの前方宣言 =====
 class C_MAIN_FIELD;
-class C_PLAYER;
-class C_TITLE_UI;
+class Player;
+class TitleUI;
 class C_PARTICLE_BASE;
-class C_TITLE_OBJ;
+class HeartObj;
 class Light;
-class C_FADE;
+class Camera;
+class FadeUI;
 class Board;
 
 // ===== クラス定義 =====
@@ -38,27 +39,26 @@ public:
 
 	void initialize();
 	void update();
-	const void draw();
+	void draw();
 	void finalize();
 
-	void initStatus();
+	void initializeStatus();
 
-	const camera* getcamera();
-
+	Camera* getCamera();
 
 private:
 	static constexpr UINT MaxUIType = static_cast<UINT>(UIType::DescUI) + 1;
 
-	camera					*pcamera;							// カメラ
+	Camera					*pCamera;							// カメラ
 	Light					*pLight;							// ライト
 
 	Skydome					*pSkydome;							// スカイドーム
 
 
-	C_PLAYER				*pPlayer;
+	Player				*pPlayer;
 	C_MAIN_FIELD			*pField;
-	C_TITLE_UI				*pTitleUI;							// タイトルUI
-	C_TITLE_OBJ				*pTitleObj;							// タイトルオブジェクト
+	TitleUI					*pTitleUI;							// タイトルUI
+	HeartObj				*pTitleObj;							// タイトルオブジェクト
 	Board					*pBoard[MaxUIType];					// UI関連
 //	C_PARTICLE_BASE			*pParticle[MAX_PARTICLE];			// パーティクル
 

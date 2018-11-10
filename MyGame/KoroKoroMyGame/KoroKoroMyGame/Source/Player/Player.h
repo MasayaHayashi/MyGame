@@ -11,27 +11,10 @@
 #include "../Pawn/Pawn.h"
 #include "../SceneManager/SceneManager.h"
 
-// ===== 定数・マクロ定義 =====
-#define PLAYER_SIDE_MOVE (5)
-
-// ===== クラスの前方参照 =====
+// ===== クラスの前方宣言 =====
 class Collider;
 
 // ===== 構造体定義 =====
-
-// ===== 列挙体定義 =====
-
-	enum PLAYER_STATE
-	{
-		TYPE_STOP = 0,				// 停止
-		TYPE_MOVE,					// 移動可能
-		TYPE_MOVE_HIT_WALL,			// 移動できるが壁に当たっている
-		TYPE_JUMP_UP,				// ジャンプ上昇中
-		TYPE_JUMP_DOWN,				// ジャンプ下降中
-		TYPE_FALL,					// 落下中(死亡へ)
-		TYPE_DEAD,					// 死亡
-		MAX_PLAYER_STATE,
-	};
 
 
 enum HIT_COLLISION_TYPE
@@ -42,48 +25,58 @@ enum HIT_COLLISION_TYPE
 };
 
 // ===== クラス定義 =====
-class C_PLAYER final : public Pawn
+class Player final : public Pawn
 {
 public:
-	C_PLAYER();
-	~C_PLAYER();
+	Player();
+	~Player();
 
-	void InitObject();
-	void UninitObject();
-	void UpdateObject(D3DXVECTOR3);
-	void DrawObject();
+	enum class PlayerState
+	{
+		Stop = 0,	
+		Move,
+		MoveHitWall,			// 移動できるが壁に当たっている
+		JumpUp,				// ジャンプ上昇中
+		JumpDown,			// ジャンプ下降中
+		Fall,
+		Dead
+	};
 
-	virtual void InitStatus();
+	void initialize();
+	void finalize();
+	void update(D3DXVECTOR3);
+	void draw();
+
+	virtual void initializeStatus();
 
 	void UpdatePlayer_SceneEdit();
 	void UpdatePlayer_GameMain(D3DXVECTOR3);
 
-	void SetStatus(PLAYER_STATE SetStatus);
-	PLAYER_STATE GetState();
-	D3DXVECTOR3 GetMoveVec();
+	void setStatus(Player::PlayerState setStatus);
+	PlayerState getState();
+	D3DXVECTOR3 getMoveVec();
 
 	void SetScore(INT);
 	void AddScore();
 	INT  GetScore();
 private:
+	//.. / Data / Model / Character / PenChan /
+	const CHAR* ModelFilePass = "Data/Model/Character/PenChan/PenguinC.x";
 
-	void InitPlayer_Title();
-	void InitPlayer_SceneEdit();
-	void InitPlayer_GameMain();
-	void InitPlayer_Result();
-	void UpdatePlayer_Title(D3DXVECTOR3);
-	void UpdatePlayer_Result();
+	void initializeTitle();
+	void initializeSceneEdit();
+	void initializeGameMain();
+	void initializeResult();
+	void updateTitle(D3DXVECTOR3);
+	void updateResult();
 
 
 	void ChangeStatus();	// ステータス変更処理
 	void ChangeState();		// 状態変更処理
-
 	
-	PLAYER_STATE				 PlayerState;	// プレイヤーの状態
+	PlayerState				 playerStateType;
 
-
-
-	INT nScore;					// スコア
+	INT nScore;
 
 	D3DXVECTOR3		OldPos;
 	D3DXVECTOR3		TestVec;

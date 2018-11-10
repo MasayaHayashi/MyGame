@@ -32,10 +32,10 @@ typedef struct
 
 } TRIANGLE;
 
-// ===== クラスの前方定義 =====
-class C_3DPAWN;
+// ===== クラスの前方宣言 =====
+class Pawn;
 class Collider;
-class C_PLAYER;
+class Player;
 
 // ===== クラス定義 =====
 class C_COLLISION
@@ -44,20 +44,20 @@ public:
 	C_COLLISION();	// コンストラクタ
 	~C_COLLISION();	// デストラクタ
 
-	UINT CheckCollisionField(C_PLAYER *pPlayer, C_3DPAWN *pPawnB, C_3DPAWN *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec);
-	UINT CheckCollisionWall(C_PLAYER *pPlayer, C_3DPAWN *pPawnB, C_3DPAWN *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec);
+	UINT CheckCollisionField(Player *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec);
+	UINT CheckCollisionWall(Player *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec);
 
-	void CheckCollisionBlock(C_3DPAWN *pSelectBlock, C_3DPAWN *pGameObj);
+	void CheckCollisionBlock(Pawn *pSelectBlock, Pawn *pGameObj);
 
-	bool IsHitSphereToSphere(C_3DPAWN *, C_3DPAWN*);					// 球と球のあたり判定
-	bool IsHitAABB(C_3DPAWN * ,C_3DPAWN *);								// AABBのあたり判定
-	bool IsHitAABBItem(C_PLAYER *pPlayer, C_3DPAWN *pPawn);				// AABBのアイテム用判定
-	INT IsHitRayToMesh(C_3DPAWN *, C_3DPAWN *, LPD3DXVECTOR3 , LPD3DXVECTOR3 , bool , LPD3DXVECTOR3 , LPD3DXVECTOR3 ,LPD3DXVECTOR3);			// レイと三角形のあたり判定
+	bool IsHitSphereToSphere(Pawn *, Pawn*);					// 球と球のあたり判定
+	bool IsHitAABB(Pawn * ,Pawn *);								// AABBのあたり判定
+	bool IsHitAABBItem(Player *pPlayer, Pawn *pPawn);				// AABBのアイテム用判定
+	INT IsHitRayToMesh(Pawn *, Pawn *, LPD3DXVECTOR3 , LPD3DXVECTOR3 , bool , LPD3DXVECTOR3 , LPD3DXVECTOR3 ,LPD3DXVECTOR3);			// レイと三角形のあたり判定
 
 private:
-	bool IntersectA(C_3DPAWN* pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXMATRIX pWorld);
-	INT  Intersect(C_3DPAWN *,LPD3DXVECTOR3 , LPD3DXVECTOR3 , bool , LPD3DXVECTOR3 , LPD3DXVECTOR3 , LPD3DXVECTOR3 );
-	void SwitchHitType(C_3DPAWN *, C_3DPAWN *);
+	bool IntersectA(Pawn* pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXMATRIX pWorld);
+	INT  Intersect(Pawn *,LPD3DXVECTOR3 , LPD3DXVECTOR3 , bool , LPD3DXVECTOR3 , LPD3DXVECTOR3 , LPD3DXVECTOR3 );
+	void SwitchHitType(Pawn *, Pawn *);
 };
 
 #endif

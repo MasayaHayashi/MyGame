@@ -5,16 +5,16 @@
 
 // ===== インクルード部 =====
 #include "Light.h"
-#include "../camera/camera.h"
+#include "../Camera/camera.h"
 #include "../DirectX3D/DirectX3D.h"
-#include "../camera/camera.h"
+#include "../Camera/camera.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ライト初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-HRESULT Light::InitLight()
+HRESULT Light::initialize()
 {
-	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	for (auto &light : lightPtrArray)
 	{
@@ -28,7 +28,28 @@ HRESULT Light::InitLight()
 	LightID = 0;
 
 	// ライトのタイプの設定
+	for (auto &light : lightPtrArray)
+	{
+		light->Type = D3DLIGHT_DIRECTIONAL;
 
+		// 拡散光
+		light->Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+
+		// 環境光
+		light->Ambient = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);
+
+		// ライトの方向の設定
+		vecDir = D3DXVECTOR3(0.0f, -1.0f, 0.80f);
+		D3DXVec3Normalize((D3DXVECTOR3*)&light->Direction, &vecDir);
+
+		// ライトをレンダリングパイプラインに設定
+		devicePtr->SetLight(0, light.get());
+
+		// ライトの設定
+		devicePtr->LightEnable(0, true);
+	}
+
+	/*
 	pLight[0]->Type = D3DLIGHT_DIRECTIONAL;
 
 	// 拡散光
@@ -42,10 +63,10 @@ HRESULT Light::InitLight()
 	D3DXVec3Normalize((D3DXVECTOR3*)&pLight[0]->Direction, &vecDir);
 
 	// ライトをレンダリングパイプラインに設定
-	pDevice->SetLight(0, pLight[0]);
+	devicePtr->SetLight(0, pLight[0]);
 
 	// ライトの設定
-	pDevice->LightEnable(0, TRUE);
+	devicePtr->LightEnable(0, TRUE);
 	
 	
 	// D3DLIGHT9構造体を0でクリアする
@@ -65,10 +86,10 @@ HRESULT Light::InitLight()
 	D3DXVec3Normalize((D3DXVECTOR3*)&pLight[1]->Direction, &vecDir);
 
 	// ライトをレンダリングパイプラインに設定
-	pDevice->SetLight(1, pLight[1]);
+	devicePtr->SetLight(1, pLight[1]);
 
 	// ライトの設定
-	pDevice->LightEnable(1, TRUE);
+	devicePtr->LightEnable(1, TRUE);
 
 	// D3DLIGHT9構造体を0でクリアする
 	//ZeroMemory(pLight[2], sizeof(D3DLIGHT9));
@@ -87,55 +108,55 @@ HRESULT Light::InitLight()
 	D3DXVec3Normalize((D3DXVECTOR3*)&pLight[2]->Direction, &vecDir);
 
 	// ライトをレンダリングパイプラインに設定
-	pDevice->SetLight(2, pLight[2]);
+	devicePtr->SetLight(2, pLight[2]);
 
 	// ライトの設定
-	pDevice->LightEnable(2, TRUE);
+	devicePtr->LightEnable(2, TRUE);
 
 	// ライティングモード
-	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	devicePtr->SetRenderState(D3DRS_LIGHTING, TRUE);
 	
-	
+	*/
 	return S_OK;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ライトタイプ用セッター
 // LightType	: 平行光源、拡散光など
-// DiffuseColor	: 
+// Diffusecolor	: 
 // Ambientcolot : 
 // vecDir		: 
 // LightID		: ライトの番号
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Light::SetLight(D3DLIGHTTYPE LightType, D3DXCOLOR DiffuseColor, D3DXCOLOR AmbientColor, D3DXVECTOR3 vecDir,BYTE LightID)
+void Light::SetLight(D3DLIGHTTYPE LightType, D3DXCOLOR Diffusecolor, D3DXCOLOR Ambientcolor, D3DXVECTOR3 vecDir,BYTE LightID)
 {
-	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 	/*
 	// ライトのタイプの設定
 	Light.Type = LightType;
 
 	// 拡散光の質量設定
-	Light.Diffuse = DiffuseColor;
+	Light.Diffuse = Diffusecolor;
 
 	// 環境光の質量設定
-	Light.Ambient = AmbientColor;
+	Light.Ambient = Ambientcolor;
 
 	// ライトの方向ベクトルの設定
 	vecDir = D3DXVECTOR3(0.20f, -0.60f, 0.80f);
 	D3DXVec3Normalize((D3DXVECTOR3*)&Light.Direction, &vecDir);
 
 	// ライトをレンダリングパイプラインに設定
-	pDevice->SetLight(LightID, &Light);
+	devicePtr->SetLight(LightID, &Light);
 
 	// ライトの設定
-	pDevice->LightEnable(LightID, TRUE);
+	devicePtr->LightEnable(LightID, TRUE);
 	*/
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ライト後処理
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Light::UninitLight()
+void Light::finalize()
 {
 
 }
@@ -143,14 +164,14 @@ void Light::UninitLight()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ライト更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Light::UpdateLight(camera *pcamera)
+void Light::UpdateLight(Camera *pCamera)
 {
-	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
-	D3DXVECTOR3 Poscamera = pcamera->getPos();
-	D3DXVECTOR3 Lotcamera = pcamera->getLook();
-	D3DXVECTOR3 Vec		  = Lotcamera - Poscamera;
-	D3DXVec3Normalize(&Poscamera, &Poscamera);
+	D3DXVECTOR3 PosCamera = pCamera->getPos();
+	D3DXVECTOR3 LotCamera = pCamera->getLook();
+	D3DXVECTOR3 Vec		  = LotCamera - PosCamera;
+	D3DXVec3Normalize(&PosCamera, &PosCamera);
 
 	vecDir = Vec;
 	// ライトの方向の設定
@@ -167,10 +188,10 @@ void Light::UpdateLight(camera *pcamera)
 	D3DXVec3Normalize((D3DXVECTOR3 *)&pLight[0]->Direction, &vecDir);
 
 	// ライトをレンダリングパイプラインに設定
-	pDevice->SetLight(0, pLight[0]);
+	devicePtr->SetLight(0, pLight[0]);
 
 	// ライトの設定
-	pDevice->LightEnable(0, TRUE);
+	devicePtr->LightEnable(0, TRUE);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
