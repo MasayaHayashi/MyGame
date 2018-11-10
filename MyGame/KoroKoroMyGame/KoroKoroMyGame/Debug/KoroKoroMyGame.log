@@ -1,3 +1,42 @@
-﻿  SceneTitle.cpp
+﻿  TitleUI.cpp
+  Skydome.cpp
+  SceneTitle.cpp
+  SceneLoad.cpp
+  C_SceneMain.cpp
+  SceneManager.cpp
+  sceneBase.cpp
+  ResourceManager.cpp
+  Player.cpp
+  Pawn.cpp
+  MyVector3.cpp
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\myvector3\myvector3.cpp(69): warning C4244: '=': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\myvector3\myvector3.cpp(263): warning C4244: '=': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\myvector3\myvector3.cpp(292): warning C4244: '=': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
+  MyHierarchy.cpp
+  MeshFieldBase.cpp
+  MainField.cpp
+  Light.cpp
+  Keyboard.cpp
+  HeartObj.cpp
+  GameObjectBase.cpp
+  Figure.cpp
+  FadeUI.cpp
+  コードを生成中...
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\figure\figure.cpp(375): warning C4715: 'Figure::MakeVtxCube': 値を返さないコントロール パスがあります。
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\resourcemanager.cpp(626): warning C4715: 'ResourceManager::createTexture': 値を返さないコントロール パスがあります。
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\resourcemanager.cpp(412): warning C4715: 'ResourceManager::makeVtx': 値を返さないコントロール パスがあります。
+  コンパイル中...
+  Main.cpp
+  DirectX3D.cpp
+  Collision.cpp
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(84): warning C4244: '初期化中': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(85): warning C4244: '初期化中': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
+  Collider.cpp
+  camera.cpp
+  Board.cpp
+  MyAudiere.cpp
+  Application.cpp
+  コードを生成中...
+  LINK : 前回のインクリメンタル リンクで D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
   KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.exe
   KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.pdb (Partial PDB)
