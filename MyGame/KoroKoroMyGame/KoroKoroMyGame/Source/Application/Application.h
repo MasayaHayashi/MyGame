@@ -51,13 +51,15 @@ public :
 
 	void mainLoop();
 
+	static void closeApp();
+
 	HWND createWindow(HINSTANCE instance);
 
 	const bool isAppContinuation();
 
 private :
-	static constexpr CHAR* ClassName   = "aaa";
-	static constexpr CHAR* WindowName  = "aaa";
+	static constexpr CHAR* ClassName   = "KoroKoroMyGame";
+	static constexpr CHAR* WindowName  = "KoroKoroMyGame";
 	static constexpr INT   FvfVertex2d = D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1;
 	static constexpr INT   FvfVertex3d = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1;
 
@@ -73,7 +75,7 @@ private :
 
 	INT fpsCnt;
 
-	bool appContinuation = true;
+	static bool appContinuation;
 };
 
 #endif

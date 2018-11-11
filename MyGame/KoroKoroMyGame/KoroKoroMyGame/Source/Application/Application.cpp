@@ -12,6 +12,9 @@
 #include <time.h>
 #include <memory>
 
+// ===== 静的メンバ =====
+bool Application::appContinuation = true;
+
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -110,6 +113,9 @@ void Application::mainLoop()
 void Application::update()
 {
 	DirectX3D::printDebug("ああああああああああ");
+
+	DirectX3D::update();
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -137,6 +143,7 @@ LRESULT CALLBACK WndProc(HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam)
 	{
 
 	case WM_DESTROY:
+		Application::closeApp();
 		PostQuitMessage(0);
 		break;
 
@@ -144,6 +151,7 @@ LRESULT CALLBACK WndProc(HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam)
 		switch (wparam)
 		{
 		case VK_ESCAPE:					// [ESC]キーが押された
+			
 			DestroyWindow(wnd);			// ウィンドウを破棄するよう指示する
 			break;
 		}
@@ -165,7 +173,15 @@ const bool Application::isAppContinuation()
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// 
+// アプリ終了
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Application::closeApp()
+{
+	appContinuation = false;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// ウィンドウ生成
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 HWND Application::createWindow(HINSTANCE instance)
 {

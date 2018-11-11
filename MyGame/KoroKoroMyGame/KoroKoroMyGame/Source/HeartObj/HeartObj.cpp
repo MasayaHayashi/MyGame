@@ -170,7 +170,7 @@ void HeartObj::initializeTitleObj_Title()
 	pD3DTexture	 = nullptr;
 	pD3DXMesh	 = nullptr;
 	pD3DXBuffMat = nullptr;
-	uNumMat		 = 0;
+	numMat		 = 0;
 
 	// Xファイルの読み込み
 //	ResourceManager *pResourceMgr = GetResourceManager();
@@ -220,7 +220,7 @@ void HeartObj::initializeTitleObj_GameMain()
 	pD3DTexture	 = nullptr;
 	pD3DXMesh	 = nullptr;
 	pD3DXBuffMat = nullptr;
-	uNumMat		 = 0;
+	numMat		 = 0;
 
 	// Xファイルの読み込み
 //	ResourceManager *pResourceMgr = GetResourceManager();
@@ -250,7 +250,7 @@ void HeartObj::initializeTitleObj_Result()
 	pD3DTexture	 = nullptr;
 	pD3DXMesh	 = nullptr;
 	pD3DXBuffMat = nullptr;
-	uNumMat		 = 0;
+	numMat		 = 0;
 
 	// Xファイルの読み込み
 

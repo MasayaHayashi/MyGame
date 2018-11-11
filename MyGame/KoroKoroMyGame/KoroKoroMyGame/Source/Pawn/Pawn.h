@@ -68,7 +68,7 @@ public:
 	virtual void update();
 	virtual void draw();
 	virtual void draw(D3DXMATRIX,D3DXMATRIX);
-	virtual void draw(LPD3DXMESH pMesh, LPDIRECT3DTEXTURE9 pTex, LPD3DXBUFFER pBuff, DWORD uNumMat);
+	virtual void draw(LPD3DXMESH pMesh, LPDIRECT3DTEXTURE9 pTex, LPD3DXBUFFER pBuff, DWORD numMat);
 	virtual void finalize();
 
 	virtual void initializeStatus();	// 各種ステータスを初期値にする
@@ -158,7 +158,7 @@ protected:
 	LPDIRECT3DTEXTURE9	pD3DTexture;		// テクスチャへのポインタ
 	LPD3DXMESH			pD3DXMesh;			// メッシュ情報へのポインタ
 	LPD3DXBUFFER		pD3DXBuffMat;		// マテリアル情報へのポインタ
-	DWORD				uNumMat;			// マテリアル情報の数
+	DWORD				numMat;				// マテリアル情報の数
 	
 	D3DXMATRIX			worldMtx;			// ワールドマトリックス
 	D3DXMATRIX			translateMtx;		// 平行移動用ワールドマトリックス

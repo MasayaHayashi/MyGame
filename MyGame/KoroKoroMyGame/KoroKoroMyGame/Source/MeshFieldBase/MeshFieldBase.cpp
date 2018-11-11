@@ -403,7 +403,7 @@ void C_MESH_FIELD_BASE::DrawMeshField()
 		// マテリアル情報に対するポインタを取得
 		pD3DXMat = (D3DXMATERIAL*)pD3DXBuffMatField->GetBufferPointer();
 
-		for (int nCntMat = 0; nCntMat < (int)nNumMatField; nCntMat++)
+		for (int nCntMat = 0; nCntMat < static_cast<INT>nNumMatField; nCntMat++)
 		{
 			// マテリアルの設定
 			devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
@@ -442,14 +442,14 @@ void C_MESH_FIELD_BASE::DrawMeshField()
 
 		// ワールドマトリックスの設定
 		devicePtr->SetTransform(D3DTS_WORLD, &mtxWorldField);
-
+		
 		// 現在のマテリアルを取得
 		devicePtr->GetMaterial(&matDef);
 
 		// マテリアル情報に対するポインタを取得
 		pD3DXMat = (D3DXMATERIAL*)pD3DXBuffMatField->GetBufferPointer();
 
-		for (int nCntMat = 0; nCntMat < (int)nNumMatField; nCntMat++)
+		for (INT nCntMat = 0; nCntMat < static_cast<INT>(nNumMatField); nCntMat++)
 		{
 			// マテリアルの設定
 			devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);

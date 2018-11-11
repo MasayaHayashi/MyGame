@@ -407,7 +407,7 @@ void C_SCENE_MAIN::updateScene()
 
 		if (pParticleObj[OBJ_2D_STAR_PARTICLE][i]->getCurveCnt() >= 1.0f)
 		{
-			pPlayer->AddScore();
+			pPlayer->addScore();
 			pParticleObj[OBJ_2D_STAR_PARTICLE][i]->setCnt(0.0f);
 			pParticleObj[OBJ_2D_STAR_PARTICLE][i]->setUsedFlg(false);
 		}

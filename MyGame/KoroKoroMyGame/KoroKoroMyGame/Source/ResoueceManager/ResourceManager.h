@@ -12,7 +12,7 @@
 #include "d3dx9.h"
 #include "../Mesh/Mesh.h"
 #include "../MyHierarchy/MyHierarchy.h"
-#include <vector>
+#include <unordered_map>
 
 // ===== 前方宣言 =====
 enum class boardType;
@@ -88,7 +88,7 @@ public:
 	// 生成
 	static HRESULT makeModel(MESH_DATA &MeshData, CHAR *pszFilename, MeshObjType &uMeshType);
 	static HRESULT createTexture(TEXTURE_DATA &TextureData,CHAR *pszFilename);
-	static HRESULT makeModelHierarchy(HIERARCHY_MESH_DATA &HierarchyMedhData, CHAR *pszFilename, MeshObjType &MeshType);
+	static HRESULT makeModelHierarchy(HIERARCHY_MESH_DATA &HierarchyMedhData, CHAR *pszFilename, std::string keyName, MeshObjType &MeshType);
 	static HRESULT makevertexBoard(VERTEX_BOARD_DATA &VtxBordData, CHAR *pszFilename);
 
 	// 解放
@@ -100,9 +100,8 @@ public:
 	static bool destroyVtx();
 	static bool destroyFadeVtx();
 	
-	static void CreateFadeTexture(TEXTURE_DATA& TextureData, CHAR *pszFilename);
+	static void createFadeTexture(TEXTURE_DATA& TextureData, CHAR *pszFilename);
 
-	// インスタンス
 	static ResourceManager *pInstance;
 
 private:
@@ -113,21 +112,21 @@ private:
 	ResourceManager();
 	~ResourceManager();
 
-	static std::vector<MESH_DATA*>				mesh;			
-	static std::vector<HIERARCHY_MESH_DATA*>	hierarchymesh;
-	static std::vector<TEXTURE_DATA*>			texture;		
-	static std::vector<TEXTURE_DATA*>			fadeTexture;	
-	static std::vector<VERTEX_BOARD_DATA*>		vtxBoard;		
+	static std::vector<MESH_DATA*>				mesh;
+	static std::unordered_map<std::string,HIERARCHY_MESH_DATA*>	hierarchyMesh;
+	static std::vector<TEXTURE_DATA*>			texture;
+	static std::vector<TEXTURE_DATA*>			fadeTexture;
+	static std::vector<VERTEX_BOARD_DATA*>		vtxBoard;
 	static std::vector<VERTEX_BOARD_DATA*>		vtxFadeBoard;
 
-	static bool CheckExisting(CHAR *pszChakNeme, MESH_DATA &meshData);
-	static bool CheckExisting(CHAR *pszChakNeme, TEXTURE_DATA &textureData);
-	static bool CheckExisting(CHAR *pszChakNeme, VERTEX_BOARD_DATA &textureData);
+	static bool checkExisting(CHAR *pszChakNeme, MESH_DATA &meshData);
+	static bool checkExisting(CHAR *pszChakNeme, TEXTURE_DATA &textureData);
+	static bool checkExisting(CHAR *pszChakNeme, VERTEX_BOARD_DATA &textureData);
 
-	static void setTime(DOUBLE dTime, CHAR *pszFilename);
+	static void setTime(DOUBLE dTime, CHAR *pszFilename,std::string keyName);
 	
-	static 	HRESULT AllocBoneMatrix(LPD3DXMESHCONTAINER meshContainerPtrBase, CHAR *pszFilename);
-	static 	HRESULT AllocAllBoneMatrix(LPD3DXFRAME pFrameBase, CHAR *pszFilename);
+	static 	HRESULT allocBoneMatrix(LPD3DXMESHCONTAINER meshContainerPtrBase, CHAR *pszFilename);
+	static 	HRESULT allocAllBoneMatrix(LPD3DXFRAME pFrameBase, CHAR *pszFilename);
 	static	void calcCollision(LPD3DXFRAME pFrame, CHAR *pszFilename);
 	static	void calcCollisionFrame(LPD3DXFRAME pFrame, CHAR *pszFilename);
 	static	void calcCollisionMeshContainer(LPD3DXMESHCONTAINER meshContainerPtr, LPD3DXFRAME pFrame, CHAR *pszFilename);

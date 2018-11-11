@@ -241,7 +241,7 @@ void Pawn::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 	pEffect->Begin(nullptr, 0);
 	pEffect->BeginPass(0);
 
-	for (int nCntMat = 0; nCntMat < (int)meshData.numMat; nCntMat++)
+	for (int nCntMat = 0; nCntMat < static_cast<INT>(meshData.numMat); nCntMat++)
 	{
 
 		// マテリアルの設定
@@ -265,7 +265,7 @@ void Pawn::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 描画
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::draw(LPD3DXMESH pMesh, LPDIRECT3DTEXTURE9 pTex, LPD3DXBUFFER pBuff,DWORD uNumMat)
+void Pawn::draw(LPD3DXMESH pMesh, LPDIRECT3DTEXTURE9 pTex, LPD3DXBUFFER pBuff,DWORD numMat)
 {
 	// デバイス取得
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
@@ -348,7 +348,7 @@ void Pawn::drawObjectLocal()
 	// マテリアル情報に対するポインタを取得
 	pD3DXMat = (D3DXMATERIAL*)meshData.pD3DXBuffMat->GetBufferPointer();
 
-	for (int nCntMat = 0; nCntMat < (int)meshData.numMat; nCntMat++)
+	for (int nCntMat = 0; nCntMat < static_cast<INT>(meshData.numMat); nCntMat++)
 	{
 		// マテリアルの設定
 		devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
@@ -466,7 +466,7 @@ HRESULT Pawn::makeModel()
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	// Xファイルの読み込み
-	if (FAILED(D3DXLoadMeshFromX(fileName, D3DXMESH_SYSTEMMEM, devicePtr, nullptr, &pD3DXBuffMat, nullptr, &uNumMat, &pD3DXMesh)))
+	if (FAILED(D3DXLoadMeshFromX(fileName, D3DXMESH_SYSTEMMEM, devicePtr, nullptr, &pD3DXBuffMat, nullptr, &numMat, &pD3DXMesh)))
 	{
 		return E_FAIL;
 	}
@@ -835,7 +835,7 @@ void Pawn::setMaterialcolorEmissive(float fRed,float Green,float Blue,float Alph
 
 	pD3DXMat = (D3DXMATERIAL*)pD3DXBuffMat->GetBufferPointer();
 
-	for (int nCntMat = 0; nCntMat < (int)uNumMat; nCntMat++, pD3DXMat++)
+	for (int nCntMat = 0; nCntMat < static_cast<INT>(numMat); nCntMat++, pD3DXMat++)
 	{
 		pD3DXMat->MatD3D.Emissive.r = fRed;
 		pD3DXMat->MatD3D.Emissive.g = Green;
@@ -941,7 +941,7 @@ void Pawn::setMesh(LPD3DXMESH Mesh, LPD3DXBUFFER mat, DWORD NumMat)
 {
 	pD3DXMesh	 = Mesh;
 	pD3DXBuffMat = mat;
-	uNumMat		 = NumMat;
+	numMat		 = NumMat;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -965,7 +965,7 @@ LPD3DXBUFFER Pawn::getMat()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 DWORD Pawn::getMatNum()
 {
-	return uNumMat;
+	return numMat;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

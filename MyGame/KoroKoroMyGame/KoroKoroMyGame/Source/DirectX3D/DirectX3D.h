@@ -25,6 +25,7 @@ public :
 
 	HRESULT initialize(HWND& wnd);
 
+	static void update();
 	void draw() const;
 	static void printDebug(CHAR *fmt,...);
 

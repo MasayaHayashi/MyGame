@@ -248,7 +248,7 @@ namespace audiere {
      *
      * @return  idNumber of bytes successfully read
      */
-    ADR_METHOD(int) read(void* buffer, int size) = 0;
+    ADR_METHOD (int) read(void* buffer, int size) = 0;
 
     /**
      * Jump to a new position in the file, using the specified seek

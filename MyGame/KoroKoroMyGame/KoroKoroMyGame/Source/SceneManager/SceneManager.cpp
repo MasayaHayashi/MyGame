@@ -1,6 +1,5 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // C_GameSceneManager.cpp
-// ゲームシーンの管理クラス
 // Author : Masaya Hayashi
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
@@ -19,6 +18,9 @@ std::unique_ptr <FadeUI>	  SceneManager::fadePtr(nullptr);
 
 SceneManager::SceneState	  SceneManager::nextSceneType	 = SceneManager::SceneState::SceneTitle;
 SceneManager::SceneState	  SceneManager::currentSceneType = SceneManager::SceneState::SceneTitle;
+
+bool	SceneManager::debugMode		  = false;
+INT		SceneManager::frameAdvanceCnt = DebugMoveOnFream;
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -97,13 +99,17 @@ void SceneManager::update()
 {
 	// デバッグモード切替え
 	if (Keyboard::getTrigger(DIK_V))
+	{
 		debugMode = !debugMode;
+	}
 
 	// デバッグモード判定
 	if (debugMode)
 	{
-		if(Keyboard::getPress(DIK_SPACE))
-			frameAdvanceCnt --;
+		if (Keyboard::getPress(DIK_SPACE))
+		{
+			frameAdvanceCnt--;
+		}
 
 		if (frameAdvanceCnt <= 0)
 		{
@@ -112,8 +118,10 @@ void SceneManager::update()
 		}
 	}
 	else
+	{
 		// シーン更新
 		currentScenePtr->update();
+	}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

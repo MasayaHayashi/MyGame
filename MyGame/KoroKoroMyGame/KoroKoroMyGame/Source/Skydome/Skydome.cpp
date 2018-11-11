@@ -101,16 +101,16 @@ void Skydome::draw()
 	// マテリアル情報に対するポインタを取得
 	pD3DXMat = (D3DXMATERIAL*)pD3DXBuffMat->GetBufferPointer();
 
-	for (int nCntMat = 0; nCntMat < (int)uNumMat; nCntMat++)
+	for (int numMat = 0; numMat < static_cast<INT>(numMat); numMat++)
 	{
 		// マテリアルの設定
-		devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
+		devicePtr->SetMaterial(&pD3DXMat[numMat].MatD3D);
 
 		// テクスチャの設定
 		devicePtr->SetTexture(0, pD3DTexture);
 
 		// 描画
-		pD3DXMesh->DrawSubset(nCntMat);
+		pD3DXMesh->DrawSubset(numMat);
 	}
 
 	// マテリアルをデフォルトに戻す

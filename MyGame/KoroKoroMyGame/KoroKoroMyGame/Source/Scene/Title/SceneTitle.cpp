@@ -172,6 +172,8 @@ void SceneTitle::finalize()
 //
 void SceneTitle::update()
 {
+	pPlayer->update(SceneManager::getInstanse()->getCamera()->getFowerd());
+
 	/*
 	D3DXVECTOR3 CameraFowerd = pCamera->getCameraFowerd();
 

@@ -3,7 +3,7 @@
 //
 // 説明：
 // 判定を取るための更新処理などをまとめたクラス
-// colliderと混同しない。
+// colliderクラスとは別
 //
 // Auhotor : Masaya Hayashi
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -81,8 +81,8 @@ bool C_COLLISION::IsHitSphereToSphere(Pawn *pPawnA,Pawn *pPawnB)
 {
 	D3DXVECTOR3 SphereA = pPawnA->getOffset();
 	D3DXVECTOR3 SphereB = pPawnB->getPosition();
-	FLOAT fRadA = pPawnA->getCollisionRadius() * 1.5;
-	FLOAT fRadB = pPawnB->getCollisionRadius() * 1.5;
+	FLOAT fRadA = pPawnA->getCollisionRadius() * 1.5f;
+	FLOAT fRadB = pPawnB->getCollisionRadius() * 1.5f;
 
 	if (   (SphereA.x - SphereB.x) * (SphereA.x - SphereB.x)
 		+  (SphereA.y - SphereB.y) * (SphereA.y - SphereB.y)

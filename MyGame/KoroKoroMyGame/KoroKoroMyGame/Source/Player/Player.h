@@ -15,8 +15,6 @@
 class Collider;
 
 // ===== 構造体定義 =====
-
-
 enum HIT_COLLISION_TYPE
 {
 	RAY_TRUE = 0,
@@ -33,7 +31,7 @@ public:
 
 	enum class PlayerState
 	{
-		Stop = 0,	
+		Stop = 0,
 		Move,
 		MoveHitWall,			// 移動できるが壁に当たっている
 		JumpUp,				// ジャンプ上昇中
@@ -49,19 +47,20 @@ public:
 
 	virtual void initializeStatus();
 
-	void UpdatePlayer_SceneEdit();
-	void UpdatePlayer_GameMain(D3DXVECTOR3);
+	void updateSceneEdit();
+	void updateGameMain(D3DXVECTOR3);
 
 	void setStatus(Player::PlayerState setStatus);
-	PlayerState getState();
-	D3DXVECTOR3 getMoveVec();
+	PlayerState getState()   const;
 
-	void SetScore(INT);
-	void AddScore();
-	INT  GetScore();
+	void setScore(INT);
+	void addScore();
+	INT  getScore() const;
 private:
-	//.. / Data / Model / Character / PenChan /
 	const CHAR* ModelFilePass = "Data/Model/Character/PenChan/PenguinC.x";
+	static constexpr FLOAT MoveForwardSpeed = 0.45f;
+	static constexpr FLOAT MoveSideSpeed	= 0.3f;
+	static constexpr FLOAT ScaleSize		= 1.0f;
 
 	void initializeTitle();
 	void initializeSceneEdit();
@@ -70,17 +69,17 @@ private:
 	void updateTitle(D3DXVECTOR3);
 	void updateResult();
 
-
-	void ChangeStatus();	// ステータス変更処理
-	void ChangeState();		// 状態変更処理
+	void changeStatus();	// ステータス変更処理
+	void changeState();		// 状態変更処理
 	
+	D3DXVECTOR3		testVec;
+
 	PlayerState				 playerStateType;
 
-	INT nScore;
+	INT score;
 
-	D3DXVECTOR3		OldPos;
-	D3DXVECTOR3		TestVec;
-	D3DXQUATERNION	StartQua;
+	D3DXVECTOR3		oldPos;
+	D3DXQUATERNION	startQuaternion;
 
 };
 

@@ -160,6 +160,14 @@ HRESULT DirectX3D::initialize(HWND& wnd)
 }
 
 //
+// XV 
+//
+void DirectX3D::update()
+{
+	SceneManager::update();
+}
+
+//
 // •`‰æ
 //
 void DirectX3D::draw() const

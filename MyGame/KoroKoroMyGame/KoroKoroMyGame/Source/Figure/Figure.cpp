@@ -372,6 +372,7 @@ HRESULT Figure::MakeVtxCube(D3DXVECTOR3 Pos, D3DXVECTOR3 Size)
 		pVtx[34].diffuse = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.8f);
 		pVtx[35].diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.8f);
 	}
+	return S_OK;
 }
 
 void Figure::CreateTexture()

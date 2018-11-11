@@ -40,10 +40,10 @@ public:
 
 	static void initialize();
 	static bool create();
-	void update();
-	void updateFade();
+	static void update();
+	static void updateFade();
 	static void draw();
-	void drawFade();
+	static void drawFade();
 	static void finalize();
 
 	static void changeScene(SceneState setScene);
@@ -67,8 +67,8 @@ private:
 	static std::unique_ptr<C_SCENE_BASE> currentScenePtr;
 	static std::unique_ptr <FadeUI>		 fadePtr;
 
-	bool	   debugMode;
-	INT		   frameAdvanceCnt;				// デバック用コマ送り用カウンタ
+	static bool	   debugMode;
+	static INT	   frameAdvanceCnt;				// デバック用コマ送り用カウンタ
 };
 
 #endif

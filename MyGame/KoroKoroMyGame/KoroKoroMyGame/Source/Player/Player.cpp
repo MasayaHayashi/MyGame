@@ -8,21 +8,7 @@
 #include "../KeyBoard/Keyboard.h"
 #include "../SceneManager/SceneManager.h"
 #include "../DirectX3D/DirectX3D.h"
-
-/*
-#include "C_Collider.h"
-#include "C_MyVector3.h"
-#include "collision.h"
-#include "main.h"
-#include "C_Xinput.h"
-*/
-
-// ===== 定数・マクロ定義 =====
-#define MOVE_FORWARD_SPEED  (0.45f)		// 前への移動量
-#define MOVE_SIDE_SPEED		(0.3f)		// 横への移動量
-#define VALUE_SCALE_SIZE	(1.0f)		// 拡大率
-
-#define BLOCK_POS_Y (1.84f)
+#include "../MyVector3/MyVector3.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -53,8 +39,7 @@ Player::Player()
 	D3DXMatrixIdentity(&worldMtx);
 	D3DXMatrixIdentity(&translateMtx);
 
-	nScore = 0;
-	OldPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	score = 0;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -92,7 +77,7 @@ void Player::initialize()
 	}
 
 	// 共通処理
-	nScore = 0;
+	score = 0;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -120,7 +105,7 @@ void Player::update(D3DXVECTOR3 CameraForward)
 		updateTitle(CameraForward);
 		break;
 	case  SceneManager::SceneState::SceneMain:
-		UpdatePlayer_GameMain(CameraForward);
+		updateGameMain(CameraForward);
 		break;
 	case  SceneManager::SceneState::SceneResult:
 		updateResult();
@@ -139,7 +124,7 @@ void Player::update(D3DXVECTOR3 CameraForward)
 void Player::draw()
 {
 	// デバイス取得
-	const IDirect3DDevice9* devicePtr = DirectX3D::getDevice();
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 	
 	// 描画
 	Pawn::drawFrame(hierarchyMeshData.frameRoot);
@@ -166,7 +151,7 @@ void Player::initializeTitle()
 	move	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	scale	= D3DXVECTOR3(VALUE_SCALE_SIZE, VALUE_SCALE_SIZE, VALUE_SCALE_SIZE);
+	scale	= D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
 
 	setDefaultValue();
 
@@ -177,7 +162,7 @@ void Player::initializeTitle()
 	pD3DTexture  = nullptr;
 	pD3DXMesh	 = nullptr;
 	pD3DXBuffMat = nullptr;
-	uNumMat		 = 0;
+	numMat		 = 0;
 
 	// Xファイルの読み込み
 	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName, meshType);
@@ -200,6 +185,14 @@ void Player::initializeTitle()
 	D3DXMatrixTranslation(&translate, pos.x, pos.y, pos.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &translate);
 
+
+	testVec = pos;
+
+	testVec.z -= 100.0f;
+	testVec.x -= 100.0f;
+	testVec.y += 0.0f;
+	D3DXVec3Normalize(&testVec, &testVec);
+
 	// コライダー初期化
 	//pCollider = NEW Collider(pos, hierarchyMeshData.collitionBox);
 	//pCollider->initializeCollider();
@@ -219,20 +212,9 @@ void Player::initializeTitle()
 	// 新しいアニメーションセットをトラック0に設定
 	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[2]);
 
-
 	isUsed = true;
 
-	TestVec = pos;
-
-
-	TestVec.z -= 100.0f;
-	TestVec.x -= 100.0f;
-	TestVec.y += 0.0f;
-	D3DXVec3Normalize(&TestVec, &TestVec);
-
-
-
-	D3DXQuaternionRotationAxis(&StartQua, &getUpVec(), 0);		// クォータニオンでの任意軸回転
+	D3DXQuaternionRotationAxis(&startQuaternion, &getUpVec(), 0);		// クォータニオンでの任意軸回転
 	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);	// クォータニオンから回転行列掛け合わせ
 }
 
@@ -246,7 +228,7 @@ void Player::initializeGameMain()
 	move	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot		= D3DXVECTOR3(0.0f, 180.0f, 0.0f);
 	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	scale	= D3DXVECTOR3(VALUE_SCALE_SIZE, VALUE_SCALE_SIZE, VALUE_SCALE_SIZE);
+	scale	= D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
 	playerStateType = PlayerState::Move;
 
 	setDefaultValue();
@@ -258,7 +240,7 @@ void Player::initializeGameMain()
 	pD3DTexture  = nullptr;
 	pD3DXMesh	 = nullptr;
 	pD3DXBuffMat = nullptr;
-	uNumMat		 = 0;
+	numMat		 = 0;
 
 	// Xファイルの読み込み
 	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName,meshType);
@@ -319,17 +301,7 @@ void Player::initializeGameMain()
 
 	isUsed = true;
 
-	TestVec = pos;
-
-
-	TestVec.z -= 100.0f;
-	TestVec.x -= 100.0f;
-	TestVec.y += 0.0f;
-	D3DXVec3Normalize(&TestVec, &TestVec);
-
-
-
-	D3DXQuaternionRotationAxis(&StartQua, &getUpVec(), 0);		// クォータニオンでの任意軸回転
+	D3DXQuaternionRotationAxis(&startQuaternion, &getUpVec(), 0);		// クォータニオンでの任意軸回転
 	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);	// クォータニオンから回転行列掛け合わせ
 
 }
@@ -345,7 +317,7 @@ void Player::initializeSceneEdit()
 	move	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	scale	= D3DXVECTOR3(VALUE_SCALE_SIZE, VALUE_SCALE_SIZE, VALUE_SCALE_SIZE);
+	scale	= D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
 
 	// デバイス取得
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
@@ -354,11 +326,10 @@ void Player::initializeSceneEdit()
 	pD3DTexture		= nullptr;
 	pD3DXMesh		= nullptr;
 	pD3DXBuffMat	= nullptr;
-	uNumMat			= 0;
+	numMat			= 0;
 
 	// Xファイルの読み込み
 	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName,meshType);
-//	ResourceManager::CreateTexture(TextureData, texFileName);
 	
 	// モデル回転
 	pos.y -= hierarchyMeshData.collitionBox.y * 2;
@@ -411,7 +382,7 @@ void Player::initializeResult()
 	rotDest  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// 拡大率設定
-	scale = D3DXVECTOR3(VALUE_SCALE_SIZE, VALUE_SCALE_SIZE, VALUE_SCALE_SIZE);
+	scale = D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
 
 	// デバイス取得
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
@@ -419,7 +390,7 @@ void Player::initializeResult()
 	pD3DTexture		= nullptr;
 	pD3DXMesh		= nullptr;
 	pD3DXBuffMat	= nullptr;
-	uNumMat			= 0;
+	numMat			= 0;
 
 	// Xファイルの読み込み
 	makeModel();
@@ -441,72 +412,75 @@ void Player::initializeStatus()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updateTitle(D3DXVECTOR3 CameraForward)
 {
-#if 0
-	C_XINPUT *pXinput = C_XINPUT::GetInstance();
 
-	short Xnum = pXinput->GetThumbLX();
-	short Ynum = pXinput->GetThumbLY();
+//	C_XINPUT *pXinput = C_XINPUT::GetInstance();
+
+//	short Xnum = pXinput->GetThumbLX();
+//	short Ynum = pXinput->GetThumbLY();
 
 	D3DXVECTOR3 CameraRight = D3DXVECTOR3(CameraForward.z,0.0f,-CameraForward.x);
 
-	PrintDebugProc("xxxxxxxxxxxxxxxxxxxxx:%d\n", Xnum);
-	PrintDebugProc("YYYYYYYYYYYYYYYYYYYYY:%d\n", Ynum);
+//	PrintDebugProc("xxxxxxxxxxxxxxxxxxxxx:%d\n", Xnum);
+//	PrintDebugProc("YYYYYYYYYYYYYYYYYYYYY:%d\n", Ynum);
 
-	D3DXVec3Normalize(&TestVec, &TestVec);
+//	D3DXVec3Normalize(&TestVec, &TestVec);
 
 //	TestVec.x = CameraRight.x * CameraForward.x +Xnum;
 //	TestVec.z = CameraForward.z * CameraRight.z + Ynum;
 
-	TestVec = CameraRight * Xnum + CameraForward * Ynum;
+//	testVec = CameraRight * Xnum + CameraForward * Ynum;
 	
-	D3DXVECTOR3 UpVec = GetUpVec();
+	/*
+	D3DXVECTOR3 UpVec = getUpVec();
 	D3DXVec3Normalize(&UpVec,&UpVec);
 
-	D3DXQuaternionRotationAxis(&Quatanion, &UpVec, 0);			// クォータニオンでの任意軸回転
-	D3DXMatrixRotationQuaternion(&worldMtx, &Quatanion);	// クォータニオンから回転行列掛け合わせ
-	D3DXVec3Normalize(&TestVec, &TestVec);
+	D3DXQuaternionRotationAxis(&quatanion, &UpVec, 0);			// クォータニオンでの任意軸回転
+	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);	// クォータニオンから回転行列掛け合わせ
+	D3DXVec3Normalize(&testVec, &testVec);
 
-	TestVec.y = 0.0f;
-	pos += TestVec * 0.3f;
+	testVec.y = 0.0f;
+	pos += testVec * 0.3f;
 	
-	D3DXVECTOR3 FowrdVec = GetForwardVec();
-	D3DXVECTOR3	RightVec = GetRightVec();
-	D3DXVECTOR3 Upvec	 = GetUpVec();	
+	D3DXVECTOR3 FowrdVec = getForwardVec();
+	D3DXVECTOR3	RightVec = getRightVec();
+	D3DXVECTOR3 Upvec	 = getUpVec();	
 	
-	fRadRot = MyVector3::CalcAngleDegree(TestVec, -FowrdVec);
+	radRot = MyVector3::CalcAngleDegree(testVec, -FowrdVec);
 	D3DXQUATERNION quatanion;
-
-	if (fRadRot == 0.0f)
+	*/
+	/*
+	if (radRot == 0.0f)
 	{
-		D3DXQuaternionRotationAxis(&quatanion, &Upvec, fOldRadRot);
+		D3DXQuaternionRotationAxis(&quatanion, &Upvec, oldRadRot);
 		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
 
-		StartQua = quatanion;
+		startQuaternion = quatanion;
 		fCnt = 0.0f;
 
 		PrintDebugProc("ああああああああああああ");
 	}
 	else
 	{
-		D3DXQuaternionRotationAxis(&DestQua, &Upvec, fRadRot);
+		D3DXQuaternionRotationAxis(&destQua, &Upvec, radRot);
 
 
-		D3DXQuaternionSlerp(&quatanion, &StartQua, &DestQua, fCnt);
+		D3DXQuaternionSlerp(&quatanion, &startQuaternion, &destQua, 1.0f);
 		fCnt += 0.1f;
 
 		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
-		fOldRadRot = fRadRot;
+		oldRadRot = radRot;
 
 	}
 
+	
 	if (fCnt >= 1.0f)
 		fCnt = 1.0f;
-
-	PrintDebugProc("xxx%f\n", TestVec.x);
-	PrintDebugProc("yyy%f\n", TestVec.y);
-	PrintDebugProc("zzz%f\n", TestVec.z);
-
+	
+	PrintDebugProc("xxx%f\n", testVec.x);
+	PrintDebugProc("yyy%f\n", testVec.y);
+	PrintDebugProc("zzz%f\n", testVec.z);
 	PrintDebugProc("ddddddddddd%f",fCnt);
+	*/
 
 	// 位置更新
 	worldMtx._41 = pos.x;
@@ -514,41 +488,42 @@ void Player::updateTitle(D3DXVECTOR3 CameraForward)
 	worldMtx._43 = pos.z;
 
 	// フレーム更新
-	UpdateFrameMatrices(hierarchyMeshData.frameRoot, &worldMtx);
+	updateFrameMatrices(hierarchyMeshData.frameRoot, &worldMtx);
 
 	// アニメーション更新
-	if (hierarchyMeshData.animCtrlPtrPtr)
+	if (hierarchyMeshData.animCtrlPtr)
 	{
 		DWORD dwNow = timeGetTime();
 		DOUBLE d = (dwNow - hierarchyMeshData.dwPrev) / 1000.0;
 		hierarchyMeshData.dwPrev = dwNow;
-		hierarchyMeshData.animCtrlPtrPtr->AdvanceTime(d, nullptr);
+		hierarchyMeshData.animCtrlPtr->AdvanceTime(d, nullptr);
 	}
 
 
 
 	// コライダー更新
-	pCollider->UpdateCollider(worldMtx,DEFAULT_BOXcolor);
+//	pCollider->UpdateCollider(worldMtx,DEFAULT_BOXcolor);
 
 #if _DEBUG
-	PrintDebugProc("ぷれいや～～～X%f\n", pos.x);
-	PrintDebugProc("ぷれいや～～～Y%f\n", pos.y);
-	PrintDebugProc("ぷれいや～～～Z%f\n", pos.z);
+//	PrintDebugProc("ぷれいや～～～X%f\n", pos.x);
+//	PrintDebugProc("ぷれいや～～～Y%f\n", pos.y);
+//	PrintDebugProc("ぷれいや～～～Z%f\n", pos.z);
 #endif
 
+	/*
 	// マテリアル色設定
 	if (bHit)
 		pCollider->figurePtr->SetMatcolor(HIT_BOX_color);
 	else
 		pCollider->figurePtr->SetMatcolor(DEFAULT_BOXcolor);
-#endif
+	*/
 
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // シーンメイン用プレイヤー更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Player::UpdatePlayer_GameMain(D3DXVECTOR3 CameraForward)
+void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 {
 #if 0
 
@@ -557,10 +532,10 @@ void Player::UpdatePlayer_GameMain(D3DXVECTOR3 CameraForward)
 	PrintDebugProc("LangingZZZ::::%f\n", DestLanding.z);
 
 	// ステータス変更処理
-	ChangeStatus();
+	changeStatus();
 
 	// 状態遷移判定
-//	ChangeState();
+//	changeState();
 
 	if(PlayerState == PlayerState::TYPE_JUMP_UP)
 		bIsGround = false;
@@ -703,7 +678,7 @@ void Player::UpdatePlayer_GameMain(D3DXVECTOR3 CameraForward)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // シーンエディット用更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Player::UpdatePlayer_SceneEdit()
+void Player::updateSceneEdit()
 {
 #if 0
 
@@ -748,7 +723,7 @@ void Player::UpdatePlayer_SceneEdit()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ステータス取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-Player::PlayerState Player::getState()
+Player::PlayerState Player::getState() const
 {
 	return playerStateType;
 }
@@ -764,31 +739,31 @@ void Player::setStatus(Player::PlayerState setStatus)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // スコアセット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Player::SetScore(INT nSetNum)
+void Player::setScore(INT nSetNum)
 {
-	nScore = nSetNum;
+	score = nSetNum;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // スコア加算
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Player::AddScore()
+void Player::addScore()
 {
-	nScore ++;
+	score ++;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // スコア取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-INT Player::GetScore()
+INT Player::getScore() const
 {
-	return nScore;
+	return score;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ステータス変更
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Player::ChangeStatus()
+void Player::changeStatus()
 {
 	switch (playerStateType)
 	{
@@ -815,15 +790,6 @@ void Player::ChangeStatus()
 	case PlayerState::Fall:
 	{
 		isGround = false;
-
-	//	PlayerState = TYPE_MOVE;
-		/*
-		pos = DestLanding;
-		bIsGround = true;
-		AccelePawn.y = 0.0f;
-		move.y = 0.0f;
-		PlayerState = TYPE_MOVE;
-		*/
 	}
 		break;
 	case PlayerState::Dead:
@@ -832,26 +798,16 @@ void Player::ChangeStatus()
 		break;
 	}
 
-	// 共通処理
-
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 状態遷移
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Player::ChangeState()
+void Player::changeState()
 {
 	if (playerStateType == PlayerState::JumpUp &&
 		move.y < 0.0f)
 	{
 		playerStateType = PlayerState::Fall;
 	}
-}
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// プレイヤー移動方向ベクトル取得
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-D3DXVECTOR3 Player::getMoveVec()
-{
-	return TestVec;
 }
