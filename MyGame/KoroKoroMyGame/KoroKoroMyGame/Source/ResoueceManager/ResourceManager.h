@@ -38,14 +38,11 @@ typedef struct
 	DWORD				dwNumTriangles;			// 三角形の数 (頂点 * 3)
 	DWORD				dwNumIndx;				// インデックスバッファの数
 	DWORD				dwAttrNum;				// 属性値
-	D3DXATTRIBUTERANGE*	attrPtr;					// 属性値
 
+	std::unique_ptr<D3DXATTRIBUTERANGE> attrPtr;
+	
 	std::unique_ptr<MESH_VTX>	vertexPtr;
 	std::unique_ptr<WORD>		indexPtr;
-
-//	MESH_VTX			*pVtx;					// 頂点情報へのアクセス用ポインタ
-//	WORD				*pIndx;					// インデックスバッファアクセス用ポインタ
-	
 } MeshData;
 
 typedef struct

@@ -95,8 +95,8 @@ HRESULT ResourceManager::makeModel(MeshData &meshData, CHAR *pszFilename, MeshOb
 	// 属性テーブル取得
 	meshes.back()->dwAttrNum = 0;
 	meshes.back()->meshPtr->GetAttributeTable(nullptr, &meshes.back()->dwAttrNum);
-	meshes.back()->attrPtr = new D3DXATTRIBUTERANGE[meshes.back()->dwAttrNum];
-	meshes.back()->meshPtr->GetAttributeTable(meshes.back()->attrPtr, &meshes.back()->dwAttrNum);
+	meshes.back()->attrPtr.reset(new D3DXATTRIBUTERANGE[meshes.back()->dwAttrNum]);
+	meshes.back()->meshPtr->GetAttributeTable(meshes.back()->attrPtr.get(), &meshes.back()->dwAttrNum);
 
 	// 指定の頂点フォーマットに変換
 	DWORD dwFVF = meshes.back()->meshPtr->GetFVF();

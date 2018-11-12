@@ -133,7 +133,7 @@ void Camera::initializeTitle(Player *pPlayer)
 	cameraLook = D3DXVECTOR3(PlayerPos.x, PlayerPos.y -0.7f, PlayerPos.z);	// カメラの注視点
 	cameraUp   = pPlayer->getUpVec();										// カメラの上方向
 
-	cameraPosDest  = D3DXVECTOR3(0.0f, -1.0f, -9.0f);								// カメラの視点の目的位置
+	cameraPosDest  = D3DXVECTOR3(0.0f, 0.0f, -9.0f);								// カメラの視点の目的位置
 	cameraLookDest = D3DXVECTOR3(PlayerPos.x, PlayerPos.y - 25.0f, PlayerPos.z);		// カメラの注視点の目的位置
 
 	cameraRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// カメラの回転量

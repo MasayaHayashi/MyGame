@@ -53,9 +53,7 @@ void Skydome::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Skydome::update()
 {
-	//C_CAMERA *pCamera = C_CAMERA_MANAGER::getUsedCamera(0);
 
-	//pos = pCamera->getPosCameraP();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -64,58 +62,6 @@ void Skydome::update()
 void Skydome::draw()
 {
 	Pawn::draw();
-
-	/*
-	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
-	D3DXMATRIX mtxRot, mtxTranslate, mtxScale;
-	D3DXMATERIAL *pD3DXMat;
-	D3DMATERIAL9 matDef;
-
-	// ライティングしない
-	devicePtr->SetRenderState(D3DRS_LIGHTING, FALSE);
-
-	// Zバッファ更新を無効
-	devicePtr->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
-
-	// ワールドマトリックスの初期化
-	D3DXMatrixIdentity(&worldMtx);
-
-	// スケールを反映
-	D3DXMatrixScaling(&mtxScale, scale.x, scale.y, scale.z);
-	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mtxScale);
-
-	// 移動を反映
-	D3DXMatrixTranslation(&mtxTranslate, pos.x, pos.y, pos.z);
-	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mtxTranslate);
-
-	// ワールドマトリックスの設定
-	devicePtr->SetTransform(D3DTS_WORLD, &worldMtx);
-
-	// 現在のマテリアルを取得
-	devicePtr->GetMaterial(&matDef);
-
-	// マテリアル情報に対するポインタを取得
-	pD3DXMat = (D3DXMATERIAL*)materialBufferPtr->GetBufferPointer();
-
-	for (int mat = 0; mat < static_cast<INT>(numMat); mat++)
-	{
-		// マテリアルの設定
-		devicePtr->SetMaterial(&pD3DXMat[mat].MatD3D);
-
-		// テクスチャの設定
-		devicePtr->SetTexture(0, pD3DTexture);
-
-		// 描画
-		meshPtr->DrawSubset(mat);
-	}
-
-	// マテリアルをデフォルトに戻す
-	devicePtr->SetMaterial(&matDef);
-
-	// 元に戻す
-	devicePtr->SetRenderState(D3DRS_LIGHTING, TRUE);
-	devicePtr->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
-	*/
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -125,7 +71,9 @@ HRESULT Skydome::createTexture()
 {
 	// 例外処理
 	if (!texFileName)
+	{
 		return E_FAIL;
+	}
 
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
