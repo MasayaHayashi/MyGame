@@ -165,7 +165,7 @@ void Player::initializeTitle()
 	numMat		 = 0;
 
 	// Xファイルの読み込み
-	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName, meshType);
+	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName, "Player" , meshType);
 
 	pos.y -= hierarchyMeshData.collitionBox.y * 2;
 
@@ -243,7 +243,7 @@ void Player::initializeGameMain()
 	numMat		 = 0;
 
 	// Xファイルの読み込み
-	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName,meshType);
+	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName,"Player",meshType);
 //	ResourceManager::CreateTexture(TextureData, texFileName);
 
 	// モデル位置調整
@@ -329,7 +329,7 @@ void Player::initializeSceneEdit()
 	numMat			= 0;
 
 	// Xファイルの読み込み
-	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName,meshType);
+	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName,"Player",meshType);
 	
 	// モデル回転
 	pos.y -= hierarchyMeshData.collitionBox.y * 2;

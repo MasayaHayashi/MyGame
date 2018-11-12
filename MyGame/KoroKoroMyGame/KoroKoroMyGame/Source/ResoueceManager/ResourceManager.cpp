@@ -668,7 +668,7 @@ HRESULT ResourceManager::makeModelHierarchy(HIERARCHY_MESH_DATA &setHierarchyMed
 	}
 
 	// ボーンとフレームの関連付け
-	hr = allocAllBoneMatrix(hierarchyMesh[keyName]->frameRoot,pszFilename);
+	hr = allocAllBoneMatrix(hierarchyMesh[keyName]->frameRoot,pszFilename,keyName);
 	if (FAILED(hr))
 	{
 		return false;
@@ -692,13 +692,13 @@ HRESULT ResourceManager::makeModelHierarchy(HIERARCHY_MESH_DATA &setHierarchyMed
 	if (hierarchyMesh[keyName]->frameRoot)
 	{
 		// マトリックス更新
-		setTime(0.0,pszFilename);
+		setTime(0.0,pszFilename,keyName);
 		D3DXMATRIX world;
 		D3DXMatrixIdentity(&world);
 		updateFrameMatrices(hierarchyMesh[keyName]->frameRoot, &world);
 
 		// 境界球/境界ボックス取得
-		calcCollision(hierarchyMesh[keyName]->frameRoot,pszFilename);
+		calcCollision(hierarchyMesh[keyName]->frameRoot,pszFilename,keyName);
 	}
 
 	// 経過時間計測用時刻設定
@@ -753,7 +753,7 @@ void ResourceManager::setTime(DOUBLE dTime,CHAR *pszFilename,std::string keyName
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ボーン用ワールド・マトリックス領域確保
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-HRESULT ResourceManager::allocBoneMatrix(LPD3DXMESHCONTAINER meshContainerPtrBase, CHAR *pszFilename)
+HRESULT ResourceManager::allocBoneMatrix(LPD3DXMESHCONTAINER meshContainerPtrBase, CHAR *pszFilename,std::string keyName)
 {
 	MYMESHCONTAINER* meshContainerPtr = (MYMESHCONTAINER*)meshContainerPtrBase;
 
@@ -777,24 +777,24 @@ HRESULT ResourceManager::allocBoneMatrix(LPD3DXMESHCONTAINER meshContainerPtrBas
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ボーン用ワールド・マトリックス領域確保
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-HRESULT ResourceManager::allocAllBoneMatrix(LPD3DXFRAME pFrameBase, CHAR *pszFilename)
+HRESULT ResourceManager::allocAllBoneMatrix(LPD3DXFRAME pFrameBase, CHAR *pszFilename,std::string keyName)
 {
 	MYFRAME* pFrame = (MYFRAME*)pFrameBase;
 	HRESULT hr = S_OK;
 	if (pFrame->pMeshContainer)
 	{
-		hr = allocBoneMatrix(pFrame->pMeshContainer,pszFilename);
+		hr = allocBoneMatrix(pFrame->pMeshContainer,pszFilename,keyName);
 		if (FAILED(hr))
 			return hr;
 	}
 	if (pFrame->pFrameSibling)
 	{
-		hr = allocAllBoneMatrix(pFrame->pFrameSibling,pszFilename);
+		hr = allocAllBoneMatrix(pFrame->pFrameSibling,pszFilename,keyName);
 		if (FAILED(hr))
 			return hr;
 	}
 	if (pFrame->pFrameFirstChild)
-		hr = allocAllBoneMatrix(pFrame->pFrameFirstChild,pszFilename);
+		hr = allocAllBoneMatrix(pFrame->pFrameFirstChild,pszFilename,keyName);
 
 	return hr;
 }
@@ -811,7 +811,7 @@ void ResourceManager::calcCollision(LPD3DXFRAME pFrame,CHAR *pszFilename,std::st
 	vMin.x = vMin.y = vMin.z = FLT_MAX;
 	
 	hierarchyMesh[keyName]->collisionRadus = -1.0f;
-	calcCollisionFrame(pFrame,pszFilename);
+	calcCollisionFrame(pFrame,pszFilename,keyName);
 	
 	D3DXVECTOR3 vBBox, vCenter;
 	vBBox = (vMax - vMin) / 2.0f;
@@ -820,35 +820,35 @@ void ResourceManager::calcCollision(LPD3DXFRAME pFrame,CHAR *pszFilename,std::st
 	hierarchyMesh[keyName]->collitionBox = vBBox;
 	hierarchyMesh[keyName]->centerPos = vCenter;
 	hierarchyMesh[keyName]->collisionRadus = 0.0f;
-	calcCollisionFrame(pFrame,pszFilename);
+	calcCollisionFrame(pFrame,pszFilename,keyName);
 }
 
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // フレーム毎の頂点座標の抽出
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void ResourceManager::calcCollisionFrame(LPD3DXFRAME pFrame, CHAR *pszFilename)
+void ResourceManager::calcCollisionFrame(LPD3DXFRAME pFrame, CHAR *pszFilename,std::string keyName)
 {
 	LPD3DXMESHCONTAINER meshContainerPtr = pFrame->pMeshContainer;
 	while (meshContainerPtr)
 	{
 		// メッシュコンテナ毎の頂点座標の抽出
-		calcCollisionMeshContainer(meshContainerPtr, pFrame,pszFilename);
+		calcCollisionMeshContainer(meshContainerPtr, pFrame,pszFilename,keyName);
 		// 次のメッシュコンテナ
 		meshContainerPtr = meshContainerPtr->pNextMeshContainer;
 	}
 	// 兄弟フレームがあれば兄弟フレームを描画
 	if (pFrame->pFrameSibling)
-		calcCollisionFrame(pFrame->pFrameSibling,pszFilename);
+		calcCollisionFrame(pFrame->pFrameSibling,pszFilename,keyName);
 	// 子フレームがあれば子フレームを描画
 	if (pFrame->pFrameFirstChild)
-		calcCollisionFrame(pFrame->pFrameFirstChild,pszFilename);
+		calcCollisionFrame(pFrame->pFrameFirstChild,pszFilename,keyName);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // メッシュコンテナ毎の頂点座標の抽出
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void ResourceManager::calcCollisionMeshContainer(LPD3DXMESHCONTAINER meshContainerPtr, LPD3DXFRAME pFrame, CHAR *pszFilename)
+void ResourceManager::calcCollisionMeshContainer(LPD3DXMESHCONTAINER meshContainerPtr, LPD3DXFRAME pFrame, CHAR *pszFilename,std::string keyName)
 {
 	D3DXMATRIX& matrix = ((MYFRAME*)pFrame)->combinedTransformationMatrix;
 	// 頂点座標の抽出
@@ -974,9 +974,10 @@ bool ResourceManager::destroyAllMesh()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 階層構造用モデル解放
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-bool ResourceManager::destroyHierarchymesh(CHAR *pszChakNeme)
+bool ResourceManager::destroyHierarchymesh(CHAR *pszChakNeme,std::string keyName)
 {
-	for (INT i = hierarchymesh.size() - 1; i >= 0; i--)
+	/*
+	for (INT i = hierarchyMesh.size() - 1; i >= 0; i--)
 		if (strcmp(hierarchymesh[i]->meshFileName, pszChakNeme) == 0)
 		{
 			
@@ -999,6 +1000,9 @@ bool ResourceManager::destroyHierarchymesh(CHAR *pszChakNeme)
 			return true;
 		}
 	return false;
+	*/
+
+	return false;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -1006,26 +1010,30 @@ bool ResourceManager::destroyHierarchymesh(CHAR *pszChakNeme)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 bool ResourceManager::destroyAllHierarchymesh()
 {
-	for (INT i = hierarchymesh.size() - 1; i >= 0; i--)
+	/*
+	for (INT i = hierarchyMesh.size() - 1; i >= 0; i--)
 	{
 		// アニメーション解放
-		if (hierarchymesh[i]->ppAnimSet)
+		if (hierarchyMesh[i]->ppAnimSet)
 		{
-			for (UINT j = 0; j < hierarchymesh[i]->numAnimset; j++)
-				SAFE_RELEASE(hierarchymesh[i]->ppAnimSet[j]);
-			SAFE_DELETE_ARRAY(hierarchymesh[i]->ppAnimSet);
+			for (UINT j = 0; j < hierarchyMesh[i]->numAnimset; j++)
+				SAFE_RELEASE(hierarchyMesh[i]->ppAnimSet[j]);
+			SAFE_DELETE_ARRAY(hierarchyMesh[i]->ppAnimSet);
 		}
-		SAFE_RELEASE(hierarchymesh[i]->animCtrlPtr);
+		SAFE_RELEASE(hierarchyMesh[i]->animCtrlPtr);
 
 		// メッシュ解放
-		if (hierarchymesh[i]->frameRoot)
+		if (hierarchyMesh[i]->frameRoot)
 		{
-			D3DXFrameDestroy(hierarchymesh[i]->frameRoot, &hierarchymesh[i]->hierarchy);
-			hierarchymesh[i]->frameRoot = nullptr;
+			D3DXFrameDestroy(hierarchyMesh[i]->frameRoot, &hierarchyMesh[i]->hierarchy);
+			hierarchyMesh[i]->frameRoot = nullptr;
 		}
 
 	}
-	hierarchymesh.clear();
+	hierarchyMesh.clear();
+	return true;
+	*/
+
 	return true;
 }
 

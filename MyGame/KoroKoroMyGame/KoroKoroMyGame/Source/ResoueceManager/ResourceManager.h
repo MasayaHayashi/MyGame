@@ -94,7 +94,7 @@ public:
 	// âï˙
 	static bool destroyMesh(CHAR *pszChakNeme);
 	static bool destroyAllMesh();	// ëSÉÅÉbÉVÉÖÇçÌèú
-	static bool destroyHierarchymesh(CHAR *pszChakNeme);
+	static bool destroyHierarchymesh(CHAR *pszChakNeme,std::string keyName);
 	static bool destroyAllHierarchymesh();
 	static bool destroyAllTexture();
 	static bool destroyVtx();
@@ -125,11 +125,11 @@ private:
 
 	static void setTime(DOUBLE dTime, CHAR *pszFilename,std::string keyName);
 	
-	static 	HRESULT allocBoneMatrix(LPD3DXMESHCONTAINER meshContainerPtrBase, CHAR *pszFilename);
-	static 	HRESULT allocAllBoneMatrix(LPD3DXFRAME pFrameBase, CHAR *pszFilename);
-	static	void calcCollision(LPD3DXFRAME pFrame, CHAR *pszFilename);
-	static	void calcCollisionFrame(LPD3DXFRAME pFrame, CHAR *pszFilename);
-	static	void calcCollisionMeshContainer(LPD3DXMESHCONTAINER meshContainerPtr, LPD3DXFRAME pFrame, CHAR *pszFilename);
+	static 	HRESULT allocBoneMatrix(LPD3DXMESHCONTAINER meshContainerPtrBase, CHAR *pszFilename,std::string keyName);
+	static 	HRESULT allocAllBoneMatrix(LPD3DXFRAME pFrameBase, CHAR *pszFilename,std::string keyName);
+	static	void calcCollision(LPD3DXFRAME pFrame, CHAR *pszFilename,std::string keyName);
+	static	void calcCollisionFrame(LPD3DXFRAME pFrame, CHAR *pszFilename,std::string keyName);
+	static	void calcCollisionMeshContainer(LPD3DXMESHCONTAINER meshContainerPtr, LPD3DXFRAME pFrame, CHAR *pszFilename,std::string keyName);
 	static	void updateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX pParentMatrix);
 	
 	static 	bool makeVtx(VERTEX_BOARD_DATA&);		// í èÌ
