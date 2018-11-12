@@ -17,8 +17,8 @@
 
 // ===== 静的メンバ変数 =====
 ResourceManager*					ResourceManager::pInstance = new ResourceManager;
-std::vector <MESH_DATA*>			ResourceManager::mesh;
-std::unordered_map<std::string, HIERARCHY_MESH_DATA*>	ResourceManager::hierarchyMesh;
+std::vector <MeshData*>				ResourceManager::meshes;
+std::unordered_map<std::string,		HIERARCHY_MESH_DATA*>	ResourceManager::hierarchyMesh;
 std::vector<TEXTURE_DATA*>			ResourceManager::texture;				// テクスチャ情報
 std::vector<TEXTURE_DATA*>			ResourceManager::fadeTexture;			// テクスチャ情報
 std::vector<VERTEX_BOARD_DATA*>		ResourceManager::vtxBoard;				// ボード頂点情報
@@ -47,7 +47,7 @@ ResourceManager::~ResourceManager()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // モデル生成(階層構造無し)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-HRESULT ResourceManager::makeModel(MESH_DATA &meshData, CHAR *pszFilename, MeshObjType &umeshType)
+HRESULT ResourceManager::makeModel(MeshData &meshData, CHAR *pszFilename, MeshObjType &umeshType)
 {
 	// 例外処理
 	if (!pszFilename)
@@ -60,7 +60,7 @@ HRESULT ResourceManager::makeModel(MESH_DATA &meshData, CHAR *pszFilename, MeshO
 	LPDIRECT3DDEVICE9 devicePtr =  DirectX3D::getDevice();
 
 	// 既に生成されているか
-	if (checkExisting(pszFilename, meshData))
+	if (checkExisting(pszFilename, &meshData))
 		return S_OK;
 
 	// ファイル名セット
@@ -68,120 +68,123 @@ HRESULT ResourceManager::makeModel(MESH_DATA &meshData, CHAR *pszFilename, MeshO
 
 	// メッシュ情報セット
 
-	mesh.push_back(&meshData);
+	meshes.push_back(&meshData);
 	
 	// Xファイルの読み込み
-	if (FAILED(D3DXLoadMeshFromX(pszFilename, D3DXMESH_SYSTEMMEM, devicePtr, nullptr, &mesh.back()->pD3DXBuffMat, nullptr, &mesh.back()->numMat, &mesh.back()->pD3DXMesh)))
+	if (FAILED(D3DXLoadMeshFromX(pszFilename, D3DXMESH_SYSTEMMEM, devicePtr, nullptr, &meshes.back()->materialBufferPtr, nullptr, &meshes.back()->numMat, &meshes.back()->meshPtr)))
 	{
+		
 		return E_FAIL;
 	}
 
 	// 属性取得のための下準備
 	LPD3DXMESH pmeshWk;
-	HRESULT hr = mesh.back()->pD3DXMesh->Optimize(D3DXMESHOPT_ATTRSORT, nullptr, nullptr, nullptr, nullptr, &pmeshWk);
+	HRESULT hr = meshes.back()->meshPtr->Optimize(D3DXMESHOPT_ATTRSORT, nullptr, nullptr, nullptr, nullptr, &pmeshWk);
 
 	if (SUCCEEDED(hr))
 	{
-		mesh.back()->pD3DXMesh->Release();
-		mesh.back()->pD3DXMesh = pmeshWk;
+		//meshes.back()->meshPtr->Release();
+		meshes.back()->meshPtr = pmeshWk;
 	}
 	else
 	{
-		SAFE_RELEASE(mesh.back()->pD3DXBuffMat);	// マテリアル解放
+		//SAFE_RELEASE(meshes.back()->materialBufferPtr);	// マテリアル解放
 		return false;
 	}
 
 	// 属性テーブル取得
-	mesh.back()->dwAttrNum = 0;
-	mesh.back()->pD3DXMesh->GetAttributeTable(nullptr, &mesh.back()->dwAttrNum);
-	mesh.back()->pAttr = new D3DXATTRIBUTERANGE[mesh.back()->dwAttrNum];
-	mesh.back()->pD3DXMesh->GetAttributeTable(mesh.back()->pAttr, &mesh.back()->dwAttrNum);
+	meshes.back()->dwAttrNum = 0;
+	meshes.back()->meshPtr->GetAttributeTable(nullptr, &meshes.back()->dwAttrNum);
+	meshes.back()->attrPtr = new D3DXATTRIBUTERANGE[meshes.back()->dwAttrNum];
+	meshes.back()->meshPtr->GetAttributeTable(meshes.back()->attrPtr, &meshes.back()->dwAttrNum);
 
 	// 指定の頂点フォーマットに変換
-	DWORD dwFVF = mesh.back()->pD3DXMesh->GetFVF();
+	DWORD dwFVF = meshes.back()->meshPtr->GetFVF();
 	if (dwFVF != FVF_TVERTEX)
 	{
-		LPD3DXMESH pmeshTmp = mesh.back()->pD3DXMesh;
-		pmeshTmp->CloneMeshFVF(pmeshTmp->GetOptions(), FVF_TVERTEX, devicePtr, &mesh.back()->pD3DXMesh);
+		LPD3DXMESH pmeshTmp = meshes.back()->meshPtr.Get();
+		pmeshTmp->CloneMeshFVF(pmeshTmp->GetOptions(), FVF_TVERTEX, devicePtr, &meshes.back()->meshPtr);
 		SAFE_RELEASE(pmeshTmp);
 		// 法線が無い場合は強制的に追加
 		if ((dwFVF & D3DFVF_NORMAL) == 0)
 		{
-			D3DXComputeNormals(mesh.back()->pD3DXMesh, nullptr);
+			D3DXComputeNormals(meshes.back()->meshPtr.Get(), nullptr);
 		}
 	}
 
 	// 頂点情報サイズ数取得
-	mesh.back()->dwNumVtx = mesh.back()->pD3DXMesh->GetNumVertices();	// 頂点数取得
-	mesh.back()->pVtx = new MESH_VTX[mesh.back()->dwNumVtx];
+	meshes.back()->dwNumVtx = meshes.back()->meshPtr->GetNumVertices();	// 頂点数取得
+	meshes.back()->vertexPtr.reset(new MESH_VTX[meshes.back()->dwNumVtx]);
 	LPVOID pWork;
 
 	// 頂点バッファアンロック
-	mesh.back()->pD3DXMesh->LockVertexBuffer(D3DLOCK_READONLY, &pWork);
-	CopyMemory(mesh.back()->pVtx, pWork, sizeof(MESH_VTX) * mesh.back()->dwNumVtx);
+	meshes.back()->meshPtr->LockVertexBuffer(D3DLOCK_READONLY, &pWork);
+	CopyMemory(meshes.back()->vertexPtr.get(), pWork, sizeof(MESH_VTX) * meshes.back()->dwNumVtx);
 
 	// 頂点バッファロック
-	mesh.back()->pD3DXMesh->UnlockVertexBuffer();
+	meshes.back()->meshPtr->UnlockVertexBuffer();
 
 	// インデックスバッファから読み込み
-	mesh.back()->dwNumIndx = mesh.back()->pD3DXMesh->GetNumFaces() * 3;
-	mesh.back()->pIndx = new WORD[mesh.back()->dwNumIndx];
+	meshes.back()->dwNumIndx = meshes.back()->meshPtr->GetNumFaces() * 3;
+	meshes.back()->indexPtr.reset(new WORD[meshes.back()->dwNumIndx]);
 
 	// インデックスバッファロック
-	mesh.back()->pD3DXMesh->LockIndexBuffer(D3DLOCK_READONLY, &pWork);
-	CopyMemory(mesh.back()->pIndx, pWork, sizeof(WORD) * mesh.back()->dwNumIndx);
+	meshes.back()->meshPtr->LockIndexBuffer(D3DLOCK_READONLY, &pWork);
+	CopyMemory(meshes.back()->indexPtr.get(), pWork, sizeof(WORD) * meshes.back()->dwNumIndx);
 
 	// インデックスバッファアンロック
-	mesh.back()->pD3DXMesh->UnlockIndexBuffer();
+	meshes.back()->meshPtr->UnlockIndexBuffer();
 
 	// 境界ボックスと中心座標を求める
-	mesh.back()->maxVtx = mesh.back()->pVtx[0].VtxPos;
-	mesh.back()->minVtx = mesh.back()->pVtx[0].VtxPos;
-	for (WORD i = 1; i < mesh.back()->dwNumVtx; i++)
+	meshes.back()->maxVtx = meshes.back()->vertexPtr.get()[0].VtxPos;
+	meshes.back()->minVtx = meshes.back()->vertexPtr.get()[0].VtxPos;
+	for (WORD i = 1; i < meshes.back()->dwNumVtx; i++)
 	{
 		// 最大値取得
-		if (mesh.back()->maxVtx.x < mesh.back()->pVtx[i].VtxPos.x)
-			mesh.back()->maxVtx.x = mesh.back()->pVtx[i].VtxPos.x;
+		if (meshes.back()->maxVtx.x < meshes.back()->vertexPtr.get()[i].VtxPos.x)
+			meshes.back()->maxVtx.x = meshes.back()->vertexPtr.get()[i].VtxPos.x;
 
-		if (mesh.back()->maxVtx.y < mesh.back()->pVtx[i].VtxPos.y)
-			mesh.back()->maxVtx.y = mesh.back()->pVtx[i].VtxPos.y;
+		if (meshes.back()->maxVtx.y < meshes.back()->vertexPtr.get()[i].VtxPos.y)
+			meshes.back()->maxVtx.y = meshes.back()->vertexPtr.get()[i].VtxPos.y;
 
-		if (mesh.back()->maxVtx.z < mesh.back()->pVtx[i].VtxPos.z)
-			mesh.back()->maxVtx.z = mesh.back()->pVtx[i].VtxPos.z;
+		if (meshes.back()->maxVtx.z < meshes.back()->vertexPtr.get()[i].VtxPos.z)
+			meshes.back()->maxVtx.z = meshes.back()->vertexPtr.get()[i].VtxPos.z;
 
 		// 最小値取得
-		if (mesh.back()->minVtx.x > mesh.back()->pVtx[i].VtxPos.x)
-			mesh.back()->minVtx.x = mesh.back()->pVtx[i].VtxPos.x;
+		if (meshes.back()->minVtx.x > meshes.back()->vertexPtr.get()[i].VtxPos.x)
+			meshes.back()->minVtx.x = meshes.back()->vertexPtr.get()[i].VtxPos.x;
 
-		if (mesh.back()->minVtx.y > mesh.back()->pVtx[i].VtxPos.y)
-			mesh.back()->minVtx.y = mesh.back()->pVtx[i].VtxPos.y;
+		if (meshes.back()->minVtx.y > meshes.back()->vertexPtr.get()[i].VtxPos.y)
+			meshes.back()->minVtx.y = meshes.back()->vertexPtr.get()[i].VtxPos.y;
 
-		if (mesh.back()->minVtx.z > mesh.back()->pVtx[i].VtxPos.z)
-			mesh.back()->minVtx.z = mesh.back()->pVtx[i].VtxPos.z;
+		if (meshes.back()->minVtx.z > meshes.back()->vertexPtr.get()[i].VtxPos.z)
+			meshes.back()->minVtx.z = meshes.back()->vertexPtr.get()[i].VtxPos.z;
 	}
 
 	// 中心座標、あたり判定取得
-	mesh.back()->centerPos = (mesh.back()->maxVtx + mesh.back()->minVtx) * 0.5f;
-	mesh.back()->collitionBox = (mesh.back()->maxVtx - mesh.back()->minVtx) * 0.5f;
+	meshes.back()->centerPos = (meshes.back()->maxVtx + meshes.back()->minVtx) * 0.5f;
+	meshes.back()->collitionBox = (meshes.back()->maxVtx - meshes.back()->minVtx) * 0.5f;
 
 	// 境界球取得
-	FLOAT dx = mesh.back()->pVtx[0].VtxPos.x - mesh.back()->centerPos.x;
-	FLOAT dy = mesh.back()->pVtx[0].VtxPos.y - mesh.back()->centerPos.y;
-	FLOAT dz = mesh.back()->pVtx[0].VtxPos.z - mesh.back()->centerPos.z;
-	mesh.back()->collisionRadus = sqrtf(dx * dx + dy * dy + dz * dz);
+	FLOAT dx = meshes.back()->vertexPtr.get()[0].VtxPos.x - meshes.back()->centerPos.x;
+	FLOAT dy = meshes.back()->vertexPtr.get()[0].VtxPos.y - meshes.back()->centerPos.y;
+	FLOAT dz = meshes.back()->vertexPtr.get()[0].VtxPos.z - meshes.back()->centerPos.z;
+	meshes.back()->collisionRadus = sqrtf(dx * dx + dy * dy + dz * dz);
 
-	for (DWORD i = 1; i < mesh.back()->dwNumVtx; i++)
+	for (DWORD i = 1; i < meshes.back()->dwNumVtx; i++)
 	{
-		dx = mesh.back()->pVtx[i].VtxPos.x - mesh.back()->centerPos.x;
-		dy = mesh.back()->pVtx[i].VtxPos.y - mesh.back()->centerPos.y;
-		dz = mesh.back()->pVtx[i].VtxPos.z - mesh.back()->centerPos.z;
+		dx = meshes.back()->vertexPtr.get()[i].VtxPos.x - meshes.back()->centerPos.x;
+		dy = meshes.back()->vertexPtr.get()[i].VtxPos.y - meshes.back()->centerPos.y;
+		dz = meshes.back()->vertexPtr.get()[i].VtxPos.z - meshes.back()->centerPos.z;
 		float fRadius = sqrtf(dx * dx + dy * dy + dz * dz);
-		if (mesh.back()->collisionRadus < fRadius)
-			mesh.back()->collisionRadus = fRadius;
+		if (meshes.back()->collisionRadus < fRadius)
+		{
+			meshes.back()->collisionRadus = fRadius;
+		}
 	}
 
 	// 中心座標をワールド座標系に変換
-	//mesh[pszFilename].CenterPos += pos;
+	//meshes[pszFilename].CenterPos += pos;
 
 	return S_OK;
 }
@@ -606,11 +609,15 @@ HRESULT ResourceManager::createTexture(TEXTURE_DATA &TextureData,  CHAR *pszFile
 {
 	// 例外処理
 	if (!pszFilename)
+	{
 		return E_FAIL;
+	}
 
 	// 既に生成されているか
 	if (checkExisting(pszFilename, TextureData))
+	{
 		return S_OK;
+	}
 
 	// ファイル名セット
 	strcpy_s(TextureData.texFileName, pszFilename);
@@ -716,14 +723,19 @@ void ResourceManager::updateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX p
 	MYFRAME* pFrame = (MYFRAME*)pFrameBase;
 	// 親のマトリックスを掛け合わせる
 	if (pParentMatrix)
+	{
 		pFrame->combinedTransformationMatrix = pFrame->TransformationMatrix * *pParentMatrix;
+	}
 	else
+	{
 		pFrame->combinedTransformationMatrix = pFrame->TransformationMatrix;
+	}
 
 	// 兄弟フレームがあればマトリックスを更新
 	if (pFrame->pFrameSibling)
+	{
 		updateFrameMatrices(pFrame->pFrameSibling, pParentMatrix);
-
+	}
 	// 子フレームがあればマトリックスを更新
 	if (pFrame->pFrameFirstChild)
 	{
@@ -739,7 +751,9 @@ void ResourceManager::updateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX p
 void ResourceManager::setTime(DOUBLE dTime,CHAR *pszFilename,std::string keyName)
 {
 	if (hierarchyMesh[keyName]->animCtrlPtr == nullptr)
+	{
 		return;
+	}
 
 	for (DWORD i = 0; i < hierarchyMesh[keyName]->animCtrlPtr->GetMaxNumTracks(); ++i)
 	{
@@ -758,7 +772,9 @@ HRESULT ResourceManager::allocBoneMatrix(LPD3DXMESHCONTAINER meshContainerPtrBas
 	MYMESHCONTAINER* meshContainerPtr = (MYMESHCONTAINER*)meshContainerPtrBase;
 
 	if (meshContainerPtr->pSkinInfo == nullptr)
+	{
 		return S_OK;	// スキン情報が無ければ何もしない
+	}
 
 	DWORD dwBoneNum = meshContainerPtr->pSkinInfo->GetNumBones();
 	meshContainerPtr->ppBoneMatrix = new LPD3DXMATRIX[dwBoneNum];
@@ -768,7 +784,10 @@ HRESULT ResourceManager::allocBoneMatrix(LPD3DXMESHCONTAINER meshContainerPtrBas
 		MYFRAME* pFrame = (MYFRAME*)D3DXFrameFind(hierarchyMesh[keyName]->frameRoot, meshContainerPtr->pSkinInfo->GetBoneName(i));
 
 		if (pFrame == nullptr)
+		{
 			return E_FAIL;
+		}
+
 		meshContainerPtr->ppBoneMatrix[i] = &pFrame->combinedTransformationMatrix;
 	}
 	return S_OK;
@@ -785,16 +804,22 @@ HRESULT ResourceManager::allocAllBoneMatrix(LPD3DXFRAME pFrameBase, CHAR *pszFil
 	{
 		hr = allocBoneMatrix(pFrame->pMeshContainer,pszFilename,keyName);
 		if (FAILED(hr))
+		{
 			return hr;
+		}
 	}
 	if (pFrame->pFrameSibling)
 	{
 		hr = allocAllBoneMatrix(pFrame->pFrameSibling,pszFilename,keyName);
 		if (FAILED(hr))
+		{
 			return hr;
+		}
 	}
 	if (pFrame->pFrameFirstChild)
-		hr = allocAllBoneMatrix(pFrame->pFrameFirstChild,pszFilename,keyName);
+	{
+		hr = allocAllBoneMatrix(pFrame->pFrameFirstChild, pszFilename, keyName);
+	}
 
 	return hr;
 }
@@ -839,10 +864,14 @@ void ResourceManager::calcCollisionFrame(LPD3DXFRAME pFrame, CHAR *pszFilename,s
 	}
 	// 兄弟フレームがあれば兄弟フレームを描画
 	if (pFrame->pFrameSibling)
-		calcCollisionFrame(pFrame->pFrameSibling,pszFilename,keyName);
+	{
+		calcCollisionFrame(pFrame->pFrameSibling, pszFilename, keyName);
+	}
 	// 子フレームがあれば子フレームを描画
 	if (pFrame->pFrameFirstChild)
-		calcCollisionFrame(pFrame->pFrameFirstChild,pszFilename,keyName);
+	{
+		calcCollisionFrame(pFrame->pFrameFirstChild, pszFilename, keyName);
+	}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -865,18 +894,20 @@ void ResourceManager::calcCollisionMeshContainer(LPD3DXMESHCONTAINER meshContain
 		{
 			D3DXVECTOR3& vMax = hierarchyMesh[keyName]->collitionBox;
 			D3DXVECTOR3& vMin = hierarchyMesh[keyName]->centerPos;
-			if (vMax.x < vtx.x) vMax.x = vtx.x;
-			if (vMax.y < vtx.y) vMax.y = vtx.y;
-			if (vMax.z < vtx.z) vMax.z = vtx.z;
-			if (vMin.x > vtx.x) vMin.x = vtx.x;
-			if (vMin.y > vtx.y) vMin.y = vtx.y;
-			if (vMin.z > vtx.z) vMin.z = vtx.z;
+			if (vMax.x < vtx.x) { vMax.x = vtx.x; }
+			if (vMax.y < vtx.y) { vMax.y = vtx.y; }
+			if (vMax.z < vtx.z) { vMax.z = vtx.z; }
+			if (vMin.x > vtx.x) { vMin.x = vtx.x; }
+			if (vMin.y > vtx.y) { vMin.y = vtx.y; }
+			if (vMin.z > vtx.z) { vMin.z = vtx.z; }
 		}
 		else
 		{
 			float fRadius = D3DXVec3Length(&(vtx - hierarchyMesh[keyName]->centerPos));
 			if (hierarchyMesh[keyName]->collisionRadus < fRadius)
+			{
 				hierarchyMesh[keyName]->collisionRadus = fRadius;
+			}
 		}
 	}
 	pmesh->UnlockVertexBuffer();
@@ -886,15 +917,19 @@ void ResourceManager::calcCollisionMeshContainer(LPD3DXMESHCONTAINER meshContain
 // メッシュ情報がすでにあるか検索
 // 生成済みなら元のデータを使用
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-bool ResourceManager::checkExisting(CHAR *pszChakNeme,MESH_DATA &meshData)
+bool ResourceManager::checkExisting(CHAR *pszChakNeme,MeshData *meshDataPtr)
 {
+
+
 	// 全メッシュを検索
-	for (UINT i = 0; i < mesh.size(); i++)
-		if (strcmp(mesh[i]->meshFileName, pszChakNeme) == 0)
+	for (UINT i = 0; i < meshes.size(); i++)
+	{
+		if (strcmp(meshes[i]->meshFileName, pszChakNeme) == 0)
 		{
-			meshData = *mesh[i];	// 生成済みなら元のデータを使用
+			meshDataPtr = meshes[i];	// 生成済みなら元のデータを使用
 			return true;
 		}
+	}
 	return false;
 }
 
@@ -906,11 +941,13 @@ bool ResourceManager::checkExisting(CHAR *pszChakNeme, TEXTURE_DATA &TextureData
 {
 	// 全テクスチャを検索
 	for (UINT i = 0; i < texture.size(); i++)
+	{
 		if (strcmp(texture[i]->texFileName, pszChakNeme) == 0)
 		{
 			TextureData = *texture[i];	// 生成済みなら元のデータを使用
 			return true;
 		}
+	}
 	return false;
 }
 
@@ -922,11 +959,13 @@ bool ResourceManager::checkExisting(CHAR *pszChakNeme, VERTEX_BOARD_DATA &Textur
 {
 	// 全テクスチャを検索
 	for (UINT i = 0; i < vtxBoard.size(); i++)
+	{
 		if (strcmp(vtxBoard[i]->name, pszChakNeme) == 0)
 		{
 			TextureData = *vtxBoard[i];	// 生成済みなら元のデータを使用
 			return true;
 		}
+	}
 	return false;
 }
 
@@ -935,15 +974,20 @@ bool ResourceManager::checkExisting(CHAR *pszChakNeme, VERTEX_BOARD_DATA &Textur
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 bool ResourceManager::destroyMesh(CHAR *pszChakNeme)
 {
-	for (INT i = (INT)mesh.size() - 1; i >= 0; i--)
-		if (strcmp(mesh[i]->meshFileName, pszChakNeme) == 0)
+	/*
+	for (INT i = (INT)meshes.size() - 1; i >= 0; i--)
+	{
+		if (strcmp(meshes[i]->meshFileName, pszChakNeme) == 0)
 		{
-			SAFE_DELETE(mesh[i]->pAttr);
-			SAFE_DELETE(mesh[i]->pIndx);
-			SAFE_DELETE(mesh[i]->pVtx);
-			mesh.erase(mesh.begin() + i);
+			SAFE_DELETE(meshes[i]->attrPtr);
+			SAFE_DELETE(meshes[i]->pIndx);
+			SAFE_DELETE(meshes[i]->pVtx);
+			meshes.erase(meshes.begin() + i);
 			return true;
 		}
+	
+	}
+	*/
 	return false;
 }
 
@@ -952,22 +996,23 @@ bool ResourceManager::destroyMesh(CHAR *pszChakNeme)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 bool ResourceManager::destroyAllMesh()
 {
+	/*
 	// 例外処理
-	if (mesh.size() == 0)
+	if (meshes.size() == 0)
 		return true;
 
-	for (INT i = 0; i < (INT)mesh.size(); i++)
+	for (INT i = 0; i < (INT)meshes.size(); i++)
 	{
-		SAFE_DELETE(mesh[i]->pAttr);
-		SAFE_DELETE(mesh[i]->pIndx);
-		SAFE_DELETE(mesh[i]->pVtx);
-		SAFE_DELETE(mesh[i]->pIndx);
-		SAFE_RELEASE(mesh[i]->pD3DXMesh);
-		SAFE_RELEASE(mesh[i]->pD3DXBuffMat);
-	//	mesh.erase(mesh.begin() + i);
+		SAFE_DELETE(meshes[i]->attrPtr);
+		SAFE_DELETE(meshes[i]->pIndx);
+		SAFE_DELETE(meshes[i]->pVtx);
+		SAFE_DELETE(meshes[i]->pIndx);
+
+	//	meshes.erase(meshes.begin() + i);
 	}
 
-	mesh.clear();
+	meshes.clear();
+	*/
 	return true;
 }
 

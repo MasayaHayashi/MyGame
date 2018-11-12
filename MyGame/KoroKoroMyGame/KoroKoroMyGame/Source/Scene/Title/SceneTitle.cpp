@@ -38,6 +38,14 @@ SceneTitle::SceneTitle()
 	bChangeScene = false;
 	nChangeSceneWaitCnt = 0;
 	uSelectScene = 0;
+
+	lightPtr.reset(new Light());
+	cameraPtr.reset(new Camera());
+	skydomePtr.reset(new Skydome());
+	playerPtr.reset(new Player());
+	fieldPtr.reset(new MainField());
+	titleUiPtr.reset(new TitleUI());
+	heartObjPtr.reset(new HeartObj());
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -53,33 +61,13 @@ SceneTitle::~SceneTitle()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneTitle::initialize()
 {
-	// ライト初期化
-	pLight = new Light;
-	pLight->initialize();
-
-	// プレイヤー初期化
-	pPlayer = new Player;
-	pPlayer->initialize();
-
-	// カメラ初期化
-	pCamera = new Camera;
-	pCamera->initializeTitle(pPlayer);
-
-	// スカイドーム初期化
-	pSkydome = new Skydome;
-	pSkydome->initialize();
-
-	// フィールド初期化
-	pField = new C_MAIN_FIELD;
-	pField->initializeMeshField();
-
-	// タイトルUI初期化
-	pTitleUI = new TitleUI;
-	pTitleUI->initialize();
-
-	// タイトルオブジェクト初期化
-	pTitleObj = new HeartObj;
-	pTitleObj->initialize();
+	playerPtr->initialize();
+	lightPtr->initialize();
+	cameraPtr->initializeTitle(playerPtr.get());
+	skydomePtr->initialize();
+	fieldPtr->initialize();
+	titleUiPtr->initialize();
+	heartObjPtr->initialize();
 
 	/*
 	// パーティクル初期化
@@ -172,7 +160,11 @@ void SceneTitle::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneTitle::update()
 {
-	pPlayer->update(SceneManager::getInstanse()->getCamera()->getFowerd());
+	playerPtr->update(SceneManager::getInstanse()->getCamera()->getFowerd());
+	heartObjPtr->update();
+	skydomePtr->update();
+	fieldPtr->update();
+	cameraPtr->updateTitle(playerPtr.get());
 
 	/*
 	D3DXVECTOR3 CameraFowerd = pCamera->getCameraFowerd();
@@ -254,8 +246,10 @@ void SceneTitle::update()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneTitle::draw()
 {
-	// プレイヤー描画
-	pPlayer->draw();
+	playerPtr->draw();
+	heartObjPtr->draw();
+	skydomePtr->draw();
+	fieldPtr->draw();
 
 	// スカイドーム描画
 //	pSkydome->draw();
@@ -273,7 +267,7 @@ void SceneTitle::draw()
 	*/
 
 	// カメラセット
-	pCamera->setCamera();
+	cameraPtr->setCamera();
 
 	/*
 	// パーティクル描画
@@ -300,5 +294,5 @@ void SceneTitle::initializeStatus()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 Camera* SceneTitle::getCamera()
 {
-	return pCamera;
+	return cameraPtr.get();
 }

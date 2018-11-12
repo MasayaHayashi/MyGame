@@ -26,8 +26,8 @@ Figure::Figure()
 
 	cubeTexture  = nullptr;
 	cubeVtx		 = nullptr;
-	pD3DXBuffMat = nullptr;
-	pD3DXMesh	 = nullptr;
+	materialBufferPtr = nullptr;
+	meshPtr	 = nullptr;
 	lNumMat		 = 0;
 
 	Material.MatD3D.Ambient.r = 1.0f;
@@ -72,8 +72,8 @@ Figure::Figure(D3DXVECTOR3 SetPos, D3DXVECTOR3 SetSize)
 	Scale	  = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 	cubeVtx		= nullptr;
 	cubeTexture = nullptr;
-	pD3DXBuffMat = nullptr;
-	pD3DXMesh	 = nullptr;
+	materialBufferPtr = nullptr;
+	meshPtr	 = nullptr;
 	lNumMat		 = 0;
 
 	Material.MatD3D.Ambient.r = 1.0f;

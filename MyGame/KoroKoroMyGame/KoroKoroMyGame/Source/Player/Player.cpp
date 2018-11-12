@@ -160,8 +160,8 @@ void Player::initializeTitle()
 
 	// 各種変数初期化
 	pD3DTexture  = nullptr;
-	pD3DXMesh	 = nullptr;
-	pD3DXBuffMat = nullptr;
+	meshPtr	 = nullptr;
+	materialBufferPtr = nullptr;
 	numMat		 = 0;
 
 	// Xファイルの読み込み
@@ -238,8 +238,8 @@ void Player::initializeGameMain()
 
 	// 各種変数初期化
 	pD3DTexture  = nullptr;
-	pD3DXMesh	 = nullptr;
-	pD3DXBuffMat = nullptr;
+	meshPtr	 = nullptr;
+	materialBufferPtr = nullptr;
 	numMat		 = 0;
 
 	// Xファイルの読み込み
@@ -324,8 +324,8 @@ void Player::initializeSceneEdit()
 
 	// 各種変数初期化
 	pD3DTexture		= nullptr;
-	pD3DXMesh		= nullptr;
-	pD3DXBuffMat	= nullptr;
+	meshPtr		= nullptr;
+	materialBufferPtr	= nullptr;
 	numMat			= 0;
 
 	// Xファイルの読み込み
@@ -388,12 +388,12 @@ void Player::initializeResult()
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	pD3DTexture		= nullptr;
-	pD3DXMesh		= nullptr;
-	pD3DXBuffMat	= nullptr;
+	meshPtr		= nullptr;
+	materialBufferPtr	= nullptr;
 	numMat			= 0;
 
 	// Xファイルの読み込み
-	makeModel();
+	ResourceManager::makeModel(meshDataObj, fileName, meshType);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

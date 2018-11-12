@@ -116,7 +116,7 @@
     <ClCompile Include="Source\Application\Application.cpp" />
     <ClCompile Include="Source\Audio\MyAudiere.cpp" />
     <ClCompile Include="Source\Board\Board.cpp" />
-    <ClCompile Include="Source\Camera\camera.cpp" />
+    <ClCompile Include="Source\Camera\Camera.cpp" />
     <ClCompile Include="Source\Collider\Collider.cpp" />
     <ClCompile Include="Source\Collision\Collision.cpp" />
     <ClCompile Include="Source\DirectX3D\DirectX3D.cpp" />
@@ -147,7 +147,7 @@
     <ClInclude Include="Source\Audio\audiere.h" />
     <ClInclude Include="Source\Audio\MyAudiere.h" />
     <ClInclude Include="Source\Board\Board.h" />
-    <ClInclude Include="Source\Camera\camera.h" />
+    <ClInclude Include="Source\Camera\Camera.h" />
     <ClInclude Include="Source\Collider\Collider.h" />
     <ClInclude Include="Source\Collision\Collision.h" />
     <ClInclude Include="Source\DirectX3D\DirectX3D.h" />

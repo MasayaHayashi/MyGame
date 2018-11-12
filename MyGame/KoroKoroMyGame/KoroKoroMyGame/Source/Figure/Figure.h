@@ -69,8 +69,8 @@ private:
 	D3DXMATERIAL					Material;			// マテリアル
 	D3DXCOLOR						color;				// マテリアル指定色
 
-	LPD3DXMESH						pD3DXMesh;			// メッシュ情報へのポインタ
-	LPD3DXBUFFER					pD3DXBuffMat;		// マテリアル情報へのポインタ
+	LPD3DXMESH						meshPtr;			// メッシュ情報へのポインタ
+	LPD3DXBUFFER					materialBufferPtr;		// マテリアル情報へのポインタ
 	DWORD							lNumMat;			// マテリアル数
 };
 

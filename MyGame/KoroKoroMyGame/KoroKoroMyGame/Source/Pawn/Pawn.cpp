@@ -31,12 +31,12 @@ Pawn::Pawn()
 	D3DXMatrixIdentity(&translateMtx);
 
 	// 各種ポインタ初期化
-	meshData.pVtx			= nullptr;
-	meshData.pIndx			= nullptr;
-	meshData.pAttr			= nullptr;
-	textureData.pD3DTexture = nullptr;
-	meshData.pD3DXMesh		= nullptr;
-	meshData.pD3DXBuffMat	= nullptr;
+	meshDataObj.vertexPtr			= nullptr;
+	meshDataObj.indexPtr			= nullptr;
+	meshDataObj.attrPtr				= nullptr;
+	textureData.pD3DTexture			= nullptr;
+	meshDataObj.meshPtr				= nullptr;
+	meshDataObj.materialBufferPtr	= nullptr;
 
 	// 位置・向きの初期設定
 	pos				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -73,7 +73,7 @@ Pawn::Pawn()
 Pawn::Pawn(UINT SetuIndxNum)
 {
 	// 描画関連初期化
-//	pD3DXMesh = nullptr;
+//	meshPtr = nullptr;
 
 	// 位置・向きの初期設定
 	pos			  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -168,9 +168,9 @@ void Pawn::draw()
 	devicePtr->GetMaterial(&matDef);
 
 	// マテリアル情報に対するポインタを取得
-	pD3DXMat = (D3DXMATERIAL*)meshData.pD3DXBuffMat->GetBufferPointer();
+	pD3DXMat = (D3DXMATERIAL*)meshDataObj.materialBufferPtr->GetBufferPointer();
 
-	for (int nCntMat = 0; nCntMat < static_cast<INT>(meshData.numMat); nCntMat++)
+	for (int nCntMat = 0; nCntMat < static_cast<INT>(meshDataObj.numMat); nCntMat++)
 	{
 		// マテリアルの設定
 		devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
@@ -179,7 +179,7 @@ void Pawn::draw()
 		devicePtr->SetTexture(0, textureData.pD3DTexture);
 
 		// 描画
-		meshData.pD3DXMesh->DrawSubset(nCntMat);
+		meshDataObj.meshPtr->DrawSubset(nCntMat);
 	}
 
 	// マテリアルをデフォルトに戻す
@@ -227,7 +227,7 @@ void Pawn::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 	devicePtr->GetMaterial(&matDef);
 
 	// マテリアル情報に対するポインタを取得
- 	pD3DXMat = (D3DXMATERIAL*)meshData.pD3DXBuffMat->GetBufferPointer();
+ 	pD3DXMat = (D3DXMATERIAL*)meshDataObj.materialBufferPtr->GetBufferPointer();
 
 
 	LPD3DXEFFECT pEffect = DirectX3D::getEffect();
@@ -241,7 +241,7 @@ void Pawn::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 	pEffect->Begin(nullptr, 0);
 	pEffect->BeginPass(0);
 
-	for (int nCntMat = 0; nCntMat < static_cast<INT>(meshData.numMat); nCntMat++)
+	for (int nCntMat = 0; nCntMat < static_cast<INT>(meshDataObj.numMat); nCntMat++)
 	{
 
 		// マテリアルの設定
@@ -251,7 +251,7 @@ void Pawn::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 		devicePtr->SetTexture(0, textureData.pD3DTexture);
 
 		// 描画
-		meshData.pD3DXMesh->DrawSubset(nCntMat);
+		meshDataObj.meshPtr->DrawSubset(nCntMat);
 	}
 
 	pEffect->EndPass();
@@ -302,9 +302,9 @@ void Pawn::draw(LPD3DXMESH pMesh, LPDIRECT3DTEXTURE9 pTex, LPD3DXBUFFER pBuff,DW
 	devicePtr->GetMaterial(&matDef);
 
 	// マテリアル情報に対するポインタを取得
-	pD3DXMat = (D3DXMATERIAL*)meshData.pD3DXBuffMat->GetBufferPointer();
+	pD3DXMat = (D3DXMATERIAL*)meshDataObj.materialBufferPtr->GetBufferPointer();
 
-	for (int nCntMat = 0; nCntMat < static_cast<INT>(meshData.numMat); nCntMat++)
+	for (int nCntMat = 0; nCntMat < static_cast<INT>(meshDataObj.numMat); nCntMat++)
 	{
 		// マテリアルの設定
 		devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
@@ -313,7 +313,7 @@ void Pawn::draw(LPD3DXMESH pMesh, LPDIRECT3DTEXTURE9 pTex, LPD3DXBUFFER pBuff,DW
 		devicePtr->SetTexture(0, textureData.pD3DTexture);
 
 		// 描画
-		meshData.pD3DXMesh->DrawSubset(nCntMat);
+		meshDataObj.meshPtr->DrawSubset(nCntMat);
 	}
 
 	// マテリアルをデフォルトに戻す
@@ -346,9 +346,9 @@ void Pawn::drawObjectLocal()
 	devicePtr->GetMaterial(&matDef);
 
 	// マテリアル情報に対するポインタを取得
-	pD3DXMat = (D3DXMATERIAL*)meshData.pD3DXBuffMat->GetBufferPointer();
+	pD3DXMat = (D3DXMATERIAL*)meshDataObj.materialBufferPtr->GetBufferPointer();
 
-	for (int nCntMat = 0; nCntMat < static_cast<INT>(meshData.numMat); nCntMat++)
+	for (int nCntMat = 0; nCntMat < static_cast<INT>(meshDataObj.numMat); nCntMat++)
 	{
 		// マテリアルの設定
 		devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
@@ -357,7 +357,7 @@ void Pawn::drawObjectLocal()
 		devicePtr->SetTexture(0, textureData.pD3DTexture);
 
 		// 描画
-		meshData.pD3DXMesh->DrawSubset(nCntMat);
+		meshDataObj.meshPtr->DrawSubset(nCntMat);
 	}
 
 	// マテリアルをデフォルトに戻す
@@ -452,138 +452,6 @@ void Pawn::setTranslate(D3DXVECTOR3 pos)
 	mtxOldTranslate = translateMtx;
 }
 
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// モデル生成(階層構造無し)
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-HRESULT Pawn::makeModel()
-{
-	// 例外処理
-	if (!fileName)
-		return E_FAIL;
-//	if (pD3DXMesh)
-//		return E_FAIL;
-
-	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
-
-	// Xファイルの読み込み
-	if (FAILED(D3DXLoadMeshFromX(fileName, D3DXMESH_SYSTEMMEM, devicePtr, nullptr, &pD3DXBuffMat, nullptr, &numMat, &pD3DXMesh)))
-	{
-		return E_FAIL;
-	}
-
-	// 属性取得のための下準備
-	LPD3DXMESH pMeshWk;
-	HRESULT hr = pD3DXMesh->Optimize(D3DXMESHOPT_ATTRSORT,nullptr, nullptr, nullptr, nullptr, &pMeshWk);
-
-	if (SUCCEEDED(hr)) 
-	{
-		pD3DXMesh->Release();
-		pD3DXMesh = pMeshWk;
-	}
-	else
-	{
-		SAFE_RELEASE(pD3DXBuffMat);
-		return false;
-	}
-
-	// 属性テーブル取得
-	dwAttrNum = 0;
-	pD3DXMesh->GetAttributeTable(nullptr, &dwAttrNum);
-	pAttr = new D3DXATTRIBUTERANGE[dwAttrNum];
-	pD3DXMesh->GetAttributeTable(pAttr, &dwAttrNum);
-
-	// 指定の頂点フォーマットに変換
-	DWORD dwFVF = pD3DXMesh->GetFVF();
-	if (dwFVF != FVF_TVERTEX)
-	{
-		LPD3DXMESH pMeshTmp = pD3DXMesh;
-		pMeshTmp->CloneMeshFVF(pMeshTmp->GetOptions(), FVF_TVERTEX, devicePtr, &pD3DXMesh);
-		SAFE_RELEASE(pMeshTmp);
-		// 法線が無い場合は強制的に追加
-		if ((dwFVF & D3DFVF_NORMAL) == 0)
-		{
-			D3DXComputeNormals(pD3DXMesh, nullptr);
-		}
-	}
-
-
-	// 頂点情報サイズ数取得
-	dwNumVtx = pD3DXMesh->GetNumVertices();	// 頂点数取得
-	pVtx = new MESH_VTX[dwNumVtx];
-	LPVOID pWork;
-
-	// 頂点バッファアンロック
-	pD3DXMesh->LockVertexBuffer(D3DLOCK_READONLY, &pWork);
-	CopyMemory(pVtx, pWork, sizeof(MESH_VTX) * dwNumVtx);
-
-	// 頂点バッファロック
-	pD3DXMesh->UnlockVertexBuffer();
-
-	// インデックスバッファから読み込み
-	dwNumIndx = pD3DXMesh->GetNumFaces() * 3;
-	pIndx = new WORD[dwNumIndx];
-
-	// インデックスバッファロック
-	pD3DXMesh->LockIndexBuffer(D3DLOCK_READONLY, &pWork);
-	CopyMemory(pIndx, pWork, sizeof(WORD) * dwNumIndx);
-
-	// インデックスバッファアンロック
-	pD3DXMesh->UnlockIndexBuffer();
-
-	// 境界ボックスと中心座標を求める
-	maxVtx = pVtx[0].VtxPos;
-	minVtx = pVtx[0].VtxPos;
-	for (WORD i = 1; i < dwNumVtx; i++)
-	{
-		// 最大値取得
-		if (maxVtx.x < pVtx[i].VtxPos.x)
-			maxVtx.x = pVtx[i].VtxPos.x;
-
-		if (maxVtx.y < pVtx[i].VtxPos.y)
-			maxVtx.y = pVtx[i].VtxPos.y;
-
-		if (maxVtx.z < pVtx[i].VtxPos.z)
-			maxVtx.z = pVtx[i].VtxPos.z;
-
-		// 最小値取得
-		if (minVtx.x > pVtx[i].VtxPos.x)
-			minVtx.x = pVtx[i].VtxPos.x;
-
-		if (minVtx.y > pVtx[i].VtxPos.y)
-			minVtx.y = pVtx[i].VtxPos.y;
-
-		if (minVtx.z > pVtx[i].VtxPos.z)
-			minVtx.z = pVtx[i].VtxPos.z;
-	}
-
-	// 最大、最小値をスケールに合わせる
-
-
-	// 中心座標、あたり判定取得
-	centerPos	 = (maxVtx + minVtx) * 0.5f;
-	collitionBox = (maxVtx - minVtx) * 0.5f;
-
-	// 境界球取得
-	float dx = pVtx[0].VtxPos.x - centerPos.x;
-	float dy = pVtx[0].VtxPos.y - centerPos.y;
-	float dz = pVtx[0].VtxPos.z - centerPos.z;
-	collisionRadus = sqrtf(dx * dx + dy * dy + dz * dz);
-
-	for (DWORD i = 1; i < dwNumVtx; i++) 
-	{
-		dx = pVtx[i].VtxPos.x - centerPos.x;
-		dy = pVtx[i].VtxPos.y - centerPos.y;
-		dz = pVtx[i].VtxPos.z - centerPos.z;
-		float fRadius = sqrtf(dx * dx + dy * dy + dz * dz);
-		if (collisionRadus < fRadius)
-			collisionRadus = fRadius;
-	}
-
-	// 中心座標をワールド座標系に変換
-	centerPos += pos;
-
-	return S_OK;
-}
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 階層構造用モデル読み込み
@@ -789,13 +657,9 @@ void Pawn::destroyModelHierarchy()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Pawn::destroyModel()
 {
-	SAFE_DELETE(pVtx);
-	SAFE_DELETE(pIndx);
-	SAFE_DELETE(pAttr);
-
 	SAFE_RELEASE(pD3DTexture);
-	SAFE_RELEASE(pD3DXBuffMat);
-	SAFE_RELEASE(pD3DXMesh);
+	SAFE_RELEASE(materialBufferPtr);
+	SAFE_RELEASE(meshPtr);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -833,7 +697,7 @@ void Pawn::setMaterialcolorEmissive(float fRed,float Green,float Blue,float Alph
 {
 	D3DXMATERIAL *pD3DXMat;
 
-	pD3DXMat = (D3DXMATERIAL*)pD3DXBuffMat->GetBufferPointer();
+	pD3DXMat = (D3DXMATERIAL*)materialBufferPtr->GetBufferPointer();
 
 	for (int nCntMat = 0; nCntMat < static_cast<INT>(numMat); nCntMat++, pD3DXMat++)
 	{
@@ -908,14 +772,14 @@ FLOAT Pawn::getCollisionRadius()
 	switch (meshType)
 	{
 	case MeshObjType::NormalModel:
-		return meshData.collisionRadus;
+		return meshDataObj.collisionRadus;
 	case MeshObjType::HierarchyModel:
 		return hierarchyMeshData.collisionRadus;
 	default:
 		break;
 	}
 
-	return meshData.collisionRadus;
+	return meshDataObj.collisionRadus;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -939,8 +803,8 @@ D3DXVECTOR3 Pawn::getColliderPos()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Pawn::setMesh(LPD3DXMESH Mesh, LPD3DXBUFFER mat, DWORD NumMat)
 {
-	pD3DXMesh	 = Mesh;
-	pD3DXBuffMat = mat;
+	meshPtr	 = Mesh;
+	materialBufferPtr = mat;
 	numMat		 = NumMat;
 }
 
@@ -949,7 +813,7 @@ void Pawn::setMesh(LPD3DXMESH Mesh, LPD3DXBUFFER mat, DWORD NumMat)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 LPD3DXMESH Pawn::getMesh()
 {
-	return meshData.pD3DXMesh;
+	return meshDataObj.meshPtr.Get();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -957,7 +821,7 @@ LPD3DXMESH Pawn::getMesh()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 LPD3DXBUFFER Pawn::getMat()
 {
-	return pD3DXBuffMat;
+	return materialBufferPtr;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -1052,7 +916,7 @@ D3DXVECTOR3 Pawn::getCollisionBox()
 	switch (meshType)
 	{
 	case MeshObjType::NormalModel:
-		return meshData.collitionBox;
+		return meshDataObj.collitionBox;
 	case MeshObjType::HierarchyModel:
 		return hierarchyMeshData.collitionBox;
 	default:
@@ -1082,7 +946,7 @@ void Pawn::setHitFlg(bool bSet)
 WORD* Pawn::getIndxAcess()
 {
 //	return pIndx;
-	return meshData.pIndx;
+	return meshDataObj.indexPtr.get();
 }
 
 
@@ -1091,8 +955,8 @@ WORD* Pawn::getIndxAcess()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 MESH_VTX* Pawn::getVtxAcess()
 {
-	//return pVtx;
-	return meshData.pVtx;
+	//return vertexPtr;
+	return meshDataObj.vertexPtr.get();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -1100,7 +964,7 @@ MESH_VTX* Pawn::getVtxAcess()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 DWORD Pawn::getVertexNum()
 {
-	return meshData.dwNumVtx;
+	return meshDataObj.dwNumVtx;
 
 //	return dwNumVtx;
 }
@@ -1111,7 +975,7 @@ DWORD Pawn::getVertexNum()
 DWORD Pawn::getIndxNum()
 {
 //	return dwNumIndx;
-	return meshData.dwNumIndx;
+	return meshDataObj.dwNumIndx;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -1120,7 +984,7 @@ DWORD Pawn::getIndxNum()
 DWORD Pawn::getTriangleNum()
 {
 //	return dwNumTriangles;
-	return meshData.dwNumTriangles;
+	return meshDataObj.dwNumTriangles;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -1183,12 +1047,12 @@ void Pawn::calcCollisionMeshContainer(LPD3DXMESHCONTAINER pMeshContainer, LPD3DX
 	LPD3DXMESH pMesh = pMeshContainer->MeshData.pMesh;
 	DWORD dwStride = pMesh->GetNumBytesPerVertex();
 	DWORD dwVtx = pMesh->GetNumVertices();
-	LPBYTE pVtx;
+	LPBYTE vertexPtr;
 	D3DXVECTOR3 vtx;
-	pMesh->LockVertexBuffer(0, (LPVOID*)&pVtx);
-	for (DWORD i = 0; i < dwVtx; ++i, pVtx += dwStride)
+	pMesh->LockVertexBuffer(0, (LPVOID*)&vertexPtr);
+	for (DWORD i = 0; i < dwVtx; ++i, vertexPtr += dwStride)
 	{
-		D3DXVec3TransformCoord(&vtx, (LPD3DXVECTOR3)pVtx, &matrix);
+		D3DXVec3TransformCoord(&vtx, (LPD3DXVECTOR3)vertexPtr, &matrix);
 		if (collisionRadus < 0.0f) 
 		{
 			D3DXVECTOR3& vMax = collitionBox;

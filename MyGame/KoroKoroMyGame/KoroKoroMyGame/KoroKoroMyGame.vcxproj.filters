@@ -147,9 +147,6 @@
     <ClCompile Include="Source\Scene\Title\SceneTitle.cpp">
       <Filter>ソース ファイル\Scene\Title</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Camera\camera.cpp">
-      <Filter>ソース ファイル\Camera</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Skydome\Skydome.cpp">
       <Filter>ソース ファイル\Skydome</Filter>
     </ClCompile>
@@ -195,6 +192,9 @@
     <ClCompile Include="Source\EntryPoint\Main.cpp">
       <Filter>ソース ファイル\EntryPoint</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Camera\Camera.cpp">
+      <Filter>ソース ファイル\Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Linklib.h">
@@ -238,9 +238,6 @@
     </ClInclude>
     <ClInclude Include="Source\Scene\Title\SceneTitle.h">
       <Filter>ソース ファイル\Scene\Title</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Camera\camera.h">
-      <Filter>ソース ファイル\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Source\Skydome\Skydome.h">
       <Filter>ソース ファイル\Skydome</Filter>
@@ -286,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="Source\MyVector3\MyVector3.h">
       <Filter>ソース ファイル\MyVector3</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera\Camera.h">
+      <Filter>ソース ファイル\Camera</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

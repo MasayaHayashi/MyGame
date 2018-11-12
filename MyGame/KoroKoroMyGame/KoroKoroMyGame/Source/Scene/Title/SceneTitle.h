@@ -10,6 +10,7 @@
 // ===== インクルード部 =====
 #include "../../SceneInterface/sceneBase.h"
 #include "../../Skydome/Skydome.h"
+#include <memory>
 
 // ===== 列挙体定義 =====
 enum class UIType
@@ -20,7 +21,7 @@ enum class UIType
 };
 
 // ===== クラスの前方宣言 =====
-class C_MAIN_FIELD;
+class MainField;
 class Player;
 class TitleUI;
 class C_PARTICLE_BASE;
@@ -49,18 +50,15 @@ public:
 private:
 	static constexpr UINT MaxUIType = static_cast<UINT>(UIType::DescUI) + 1;
 
-	Camera					*pCamera;							// カメラ
-	Light					*pLight;							// ライト
+	std::unique_ptr <Camera>		cameraPtr   = nullptr;
+	std::unique_ptr <Light>		    lightPtr    = nullptr;
+	std::unique_ptr <Skydome>		skydomePtr  = nullptr;
+	std::unique_ptr <Player>		playerPtr   = nullptr;
+	std::unique_ptr <MainField>		fieldPtr    = nullptr;
+	std::unique_ptr <TitleUI>		titleUiPtr  = nullptr;
+	std::unique_ptr <HeartObj>		heartObjPtr = nullptr;
 
-	Skydome					*pSkydome;							// スカイドーム
-
-
-	Player				*pPlayer;
-	C_MAIN_FIELD			*pField;
-	TitleUI					*pTitleUI;							// タイトルUI
-	HeartObj				*pTitleObj;							// タイトルオブジェクト
 	Board					*pBoard[MaxUIType];					// UI関連
-//	C_PARTICLE_BASE			*pParticle[MAX_PARTICLE];			// パーティクル
 
 	bool					bChangeScene;						// シーン切り替え
 	INT						nChangeSceneWaitCnt;				// 待機用カウンタ

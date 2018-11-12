@@ -13,6 +13,8 @@
 #include "../Mesh/Mesh.h"
 #include "../MyHierarchy/MyHierarchy.h"
 #include <unordered_map>
+#include <memory>
+#include <wrl.h>
 
 // ===== 前方宣言 =====
 enum class boardType;
@@ -22,8 +24,9 @@ enum class MeshObjType;
 typedef struct
 {
 	CHAR				meshFileName[256];	// ファイル名
-	LPD3DXMESH			pD3DXMesh;				// メッシュ情報
-	LPD3DXBUFFER		pD3DXBuffMat;			// マテリアル情報へのポインタ
+	
+	Microsoft::WRL::ComPtr<ID3DXMesh>	meshPtr;
+	Microsoft::WRL::ComPtr<ID3DXBuffer> materialBufferPtr;
 	DWORD				numMat;					// マテリアル情報の数
 	D3DXVECTOR3			maxVtx;					// 最大頂点位置
 	D3DXVECTOR3			minVtx;					// 最小頂点位置
@@ -35,18 +38,21 @@ typedef struct
 	DWORD				dwNumTriangles;			// 三角形の数 (頂点 * 3)
 	DWORD				dwNumIndx;				// インデックスバッファの数
 	DWORD				dwAttrNum;				// 属性値
-	D3DXATTRIBUTERANGE*	pAttr;					// 属性値
+	D3DXATTRIBUTERANGE*	attrPtr;					// 属性値
 
-	MESH_VTX			*pVtx;					// 頂点情報へのアクセス用ポインタ
-	WORD				*pIndx;					// インデックスバッファアクセス用ポインタ
+	std::unique_ptr<MESH_VTX>	vertexPtr;
+	std::unique_ptr<WORD>		indexPtr;
+
+//	MESH_VTX			*pVtx;					// 頂点情報へのアクセス用ポインタ
+//	WORD				*pIndx;					// インデックスバッファアクセス用ポインタ
 	
-} MESH_DATA;	// メッシュ情報
+} MeshData;
 
 typedef struct
 {
 	CHAR						meshFileName[256];		// ファイル名
-	LPD3DXMESH					pD3DXMesh;				// メッシュ情報
-	LPD3DXBUFFER				pD3DXBuffMat;			// マテリアル情報へのポインタ
+	LPD3DXMESH					meshPtr;				// メッシュ情報
+	LPD3DXBUFFER				materialBufferPtr;			// マテリアル情報へのポインタ
 	DWORD						numMat;					// マテリアル情報の数
 	D3DXVECTOR3					maxVtx;					// 最大頂点位置
 	D3DXVECTOR3					minVtx;					// 最小頂点位置
@@ -86,9 +92,10 @@ class ResourceManager
 {
 public:
 	// 生成
-	static HRESULT makeModel(MESH_DATA &MeshData, CHAR *pszFilename, MeshObjType &uMeshType);
+	static HRESULT makeModel(MeshData &MeshData, CHAR *pszFilename, MeshObjType &uMeshType);
 	static HRESULT createTexture(TEXTURE_DATA &TextureData,CHAR *pszFilename);
 	static HRESULT makeModelHierarchy(HIERARCHY_MESH_DATA &HierarchyMedhData, CHAR *pszFilename, std::string keyName, MeshObjType &MeshType);
+
 	static HRESULT makevertexBoard(VERTEX_BOARD_DATA &VtxBordData, CHAR *pszFilename);
 
 	// 解放
@@ -112,14 +119,14 @@ private:
 	ResourceManager();
 	~ResourceManager();
 
-	static std::vector<MESH_DATA*>				mesh;
+	static std::vector<MeshData*>				meshes;
 	static std::unordered_map<std::string,HIERARCHY_MESH_DATA*>	hierarchyMesh;
 	static std::vector<TEXTURE_DATA*>			texture;
 	static std::vector<TEXTURE_DATA*>			fadeTexture;
 	static std::vector<VERTEX_BOARD_DATA*>		vtxBoard;
 	static std::vector<VERTEX_BOARD_DATA*>		vtxFadeBoard;
 
-	static bool checkExisting(CHAR *pszChakNeme, MESH_DATA &meshData);
+	static bool checkExisting(CHAR *pszChakNeme, MeshData *meshData);
 	static bool checkExisting(CHAR *pszChakNeme, TEXTURE_DATA &textureData);
 	static bool checkExisting(CHAR *pszChakNeme, VERTEX_BOARD_DATA &textureData);
 

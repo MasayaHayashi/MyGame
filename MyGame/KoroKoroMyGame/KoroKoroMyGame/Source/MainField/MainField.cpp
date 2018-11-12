@@ -1,42 +1,33 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // C_MainField.cpp
-// メインフィールドクラス
 // Author : Masaya Hayashi
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-
-// ===== 定数・マクロ定義 =====
-#define FILE_NAME	 "data/MODEL/RockLayered_5.x"
-#define TEX_FILENAME "data/TEXTURE/land.tga"
 
 // ===== インクルード部 =====
 #include "MainField.h"
 #include <string>
-#if _DEBUG
-//#include "debugproc.h"
-#endif
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-C_MAIN_FIELD::C_MAIN_FIELD()
+MainField::MainField()
 {
-#if 0
-	strcpy_s(pawnFileName, FILE_NAME);
-	strcpy_s(texFileName, TEX_FILENAME);
-	pos = D3DXVECTOR3(0.0f, -3.0f, 1.0f);
-	
-	scale = D3DXVECTOR3(0.7f, 0.1f, 0.5f);
 
-	pD3DXMeshPawn = nullptr;
+	strcpy_s(fileName, ModelFilePass.c_str());
+	strcpy_s(texFileName, ModelFilePass.c_str());
+	pos		= D3DXVECTOR3(0.0f, -3.0f, 1.0f);
+	scale	= D3DXVECTOR3(0.7f, 0.1f, 0.5f);
+
+	meshPtr = nullptr;
 
 	isUsed = true;
-#endif
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // デストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-C_MAIN_FIELD::~C_MAIN_FIELD()
+MainField::~MainField()
 {
 
 }
@@ -44,17 +35,17 @@ C_MAIN_FIELD::~C_MAIN_FIELD()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // フィールド初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_MAIN_FIELD::initializeMeshField()
+void MainField::initialize()
 {
 	// Xファイルの読み込み
-	ResourceManager::makeModel(meshData, fileName,meshType);
+	ResourceManager::makeModel(meshDataObj, fileName,meshType);
 	ResourceManager::createTexture(textureData, texFileName);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // フィールド後処理
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_MAIN_FIELD::UninitMeshField()
+void MainField::finalize()
 {
 	// メッシュ解放
 	ResourceManager::destroyAllMesh();
@@ -66,7 +57,7 @@ void C_MAIN_FIELD::UninitMeshField()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // フィールド更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_MAIN_FIELD::UpdateMeshField()
+void MainField::update()
 {
 
 }
@@ -74,17 +65,15 @@ void C_MAIN_FIELD::UpdateMeshField()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // フィールド描画
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_MAIN_FIELD::DrawMeshField()
+void MainField::draw()
 {
-	Pawn::drawObject();
-//	ResourceManager *pResourceMgr = GetResourceManager();
-
+	Pawn::draw();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 中心座標取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-D3DXVECTOR3 C_MAIN_FIELD::GetCenterPos()
+D3DXVECTOR3 MainField::getCenterPos() const
 {
 	return centerPos;
 }
@@ -92,22 +81,26 @@ D3DXVECTOR3 C_MAIN_FIELD::GetCenterPos()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 円状のフィールドあたり判定取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-bool C_MAIN_FIELD::GetCollisionCiecle(D3DXVECTOR3 CurrentPos,float Radius)
+bool MainField::getCollisionCiecle(D3DXVECTOR3 CurrentPos,float Radius) const
 {
-	if ((CurrentPos.x - centerPos.x) * (CurrentPos.x - centerPos.x) + (CurrentPos.z - centerPos.z) * (CurrentPos.z - centerPos.z) <= ((collisionRadus - Radius ) * (collisionRadus - Radius ) ))
+	if ((CurrentPos.x - centerPos.x) * (CurrentPos.x - centerPos.x) + (CurrentPos.z - centerPos.z) * (CurrentPos.z - centerPos.z) <= ((collisionRadus - Radius) * (collisionRadus - Radius)))
+	{
 		return false;
-
-	return true;
+	}
+	else
+	{
+		return true;
+	}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // マテリアルの色セット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_MAIN_FIELD::SetMaterialcolorEmissive(float fRed, float Green, float Blue, float Alpha)
+void MainField::setMaterialcolorEmissive(float fRed, float Green, float Blue, float Alpha)
 {
 	D3DXMATERIAL *pD3DXMat;
 
-	pD3DXMat = (D3DXMATERIAL*)pD3DXBuffMat->GetBufferPointer();
+	pD3DXMat = (D3DXMATERIAL*)materialBufferPtr->GetBufferPointer();
 
 	pD3DXMat->MatD3D.Emissive.r = fRed;
 	pD3DXMat->MatD3D.Emissive.g = Green;
@@ -118,7 +111,7 @@ void C_MAIN_FIELD::SetMaterialcolorEmissive(float fRed, float Green, float Blue,
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // あたり判定用サイズ取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-float C_MAIN_FIELD::getCollisionRadius()
+FLOAT MainField::getCollisionRadius() const
 {
 	return collisionRadus;
 }

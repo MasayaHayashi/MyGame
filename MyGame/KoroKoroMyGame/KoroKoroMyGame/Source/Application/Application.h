@@ -52,6 +52,7 @@ public :
 	void mainLoop();
 
 	static void closeApp();
+	static void errorMassage();
 
 	HWND createWindow(HINSTANCE instance);
 

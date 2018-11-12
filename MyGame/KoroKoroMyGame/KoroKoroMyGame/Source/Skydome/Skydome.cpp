@@ -9,21 +9,18 @@
 #include "../DirectX3D/DirectX3D.h"
 #include <string>
 
-// ===== 定数・マクロ定義 =====
-#define FILENAME	"data/MODEL/Skydome151009x.x"
-#define TEX_FILENAME "data/TEXTURE/ocean.jpg"
-#define SCALE (7.0f)
-
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 Skydome::Skydome()
 {
-	strcpy_s(fileName, FILENAME);
-	strcpy_s(texFileName, TEX_FILENAME);
-	scale		 = D3DXVECTOR3(SCALE, SCALE, SCALE);
+	strcpy_s(fileName, ModelFilePass.c_str());
+	strcpy_s(texFileName, TextureFilePass.c_str());
+	scale		 = D3DXVECTOR3(Scale, Scale, Scale);
 	pos			 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	textureSize  = D3DXVECTOR3(10.0f, 10.0f, 10.0f);
+
+	isUsed = true;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -39,8 +36,8 @@ Skydome::~Skydome()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Skydome::initialize()
 {
-	makeModel();
-	createTexture();
+	ResourceManager::makeModel(meshDataObj, fileName, meshType);
+	ResourceManager::createTexture(textureData, texFileName);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -48,10 +45,6 @@ void Skydome::initialize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Skydome::finalize()
 {
-	// モデル解放
-	destroyModel();
-
-	destroyTexture();
 
 }
 
@@ -70,6 +63,9 @@ void Skydome::update()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Skydome::draw()
 {
+	Pawn::draw();
+
+	/*
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 	D3DXMATRIX mtxRot, mtxTranslate, mtxScale;
 	D3DXMATERIAL *pD3DXMat;
@@ -99,18 +95,18 @@ void Skydome::draw()
 	devicePtr->GetMaterial(&matDef);
 
 	// マテリアル情報に対するポインタを取得
-	pD3DXMat = (D3DXMATERIAL*)pD3DXBuffMat->GetBufferPointer();
+	pD3DXMat = (D3DXMATERIAL*)materialBufferPtr->GetBufferPointer();
 
-	for (int numMat = 0; numMat < static_cast<INT>(numMat); numMat++)
+	for (int mat = 0; mat < static_cast<INT>(numMat); mat++)
 	{
 		// マテリアルの設定
-		devicePtr->SetMaterial(&pD3DXMat[numMat].MatD3D);
+		devicePtr->SetMaterial(&pD3DXMat[mat].MatD3D);
 
 		// テクスチャの設定
 		devicePtr->SetTexture(0, pD3DTexture);
 
 		// 描画
-		pD3DXMesh->DrawSubset(numMat);
+		meshPtr->DrawSubset(mat);
 	}
 
 	// マテリアルをデフォルトに戻す
@@ -119,6 +115,7 @@ void Skydome::draw()
 	// 元に戻す
 	devicePtr->SetRenderState(D3DRS_LIGHTING, TRUE);
 	devicePtr->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+	*/
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

@@ -34,7 +34,16 @@ public:
 
 private:
 
-#define TITLE_HART_ROT_SPEED (0.06f)
+	const std::string ModelFilePass		= "Data/Model/Heart/heart.x";
+	const std::string TextureFilePass	= "Data/Model/Heart/heart.png";
+	static constexpr FLOAT TitleRotSpeed = 0.06f;
+
+#define MODEL_NAME	 "data/MODEL/Cute/heart.x"
+#define TEXTURE_NAME "data/TEXTURE/heart.png"
+#define VALUE_SCALE_SIZE (1.0f)		// Šg‘å—¦
+#define ROT_SPEED (50.0f)			// ‰ñ“]‘¬“x
+
+	
 
 	FLOAT rotCnt = 0;
 

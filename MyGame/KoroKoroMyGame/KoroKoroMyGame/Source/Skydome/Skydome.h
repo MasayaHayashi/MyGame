@@ -23,7 +23,10 @@ public :
 
 	HRESULT createTexture();
 private:
-	CHAR fileName[256];
+	static constexpr FLOAT Scale = 7.0f;
+	
+	const std::string ModelFilePass		= "data/MODEL/Skydome/skydome.x";
+	const std::string TextureFilePass	= "data/MODEL/Skydome/ocean.jpg";
 	D3DXVECTOR3	textureSize;
 
 };

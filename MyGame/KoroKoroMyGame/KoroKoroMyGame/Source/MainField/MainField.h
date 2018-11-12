@@ -1,36 +1,36 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// C_MainField.h
-// メインフィールドクラス
+// MainField.h
 // Author : Masaya Hayashi
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
 // ===== 多重インクルード防止 =====
-#ifndef MAINFIELD_H
-#define MAINFIELD_H
+#ifndef MAIN_FIELD_H
+#define MAIN_FIELD_H
 
 // ===== インクルード部 =====
 #include "../Pawn/Pawn.h"
 
 // ===== 定数・マクロ定義 =====
-#define FIELD_SIZE (5300.0f)	//  2/22 5300
-#define FIELD_RADIUS (FIELD_SIZE * 0.5f)
-#define HIGH_POS (50.0f)	// 最大高度
-#define LOW_POS (0.0f)		// 着地位置
 
 // ===== クラス定義 =====
-class C_MAIN_FIELD : public Pawn
+class MainField : public Pawn
 {
 public:
-	C_MAIN_FIELD();
-	~C_MAIN_FIELD();
-	virtual	void initializeMeshField();
-	virtual	void UninitMeshField();
-	virtual	void UpdateMeshField();
-	virtual	void DrawMeshField();
-	D3DXVECTOR3 GetCenterPos();		// 中心座標取得
-	void SetMaterialcolorEmissive(float fRed, float Green, float Blue, float Alpha);
-	bool GetCollisionCiecle(D3DXVECTOR3 CurrentPos, float);
-	FLOAT getCollisionRadius();
+	static constexpr FLOAT Size = 5300.0f;
+	static constexpr FLOAT Radius = Size *0.5f;
+	const std::string ModelFilePass   = "Data/Model/MainField/RockLayered_5.x";
+	const std::string TextureFilePass = "Data/Model/MainField/land.tga";
+
+	MainField();
+	~MainField();
+	void initialize();
+	void finalize();
+	void update();
+	void draw();
+	D3DXVECTOR3 getCenterPos() const;
+	void setMaterialcolorEmissive(float fRed, float Green, float Blue, float Alpha);
+	bool getCollisionCiecle(D3DXVECTOR3 CurrentPos, float) const;
+	FLOAT getCollisionRadius() const;
 
 private:
 };

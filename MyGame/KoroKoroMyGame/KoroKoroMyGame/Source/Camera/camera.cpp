@@ -25,25 +25,20 @@
 #endif
 */
 
-// ===== 定数・マクロ定義 =====
-#define MAX_PITCH_SPEED		(25.0f)	// ピッチの最大値
-#define ACCELE_PITCH_SPEED	(0.5f)	// 1フレームに加速するピッチの値
-#define DECELE_PITCH_SPEED	(0.25f)	// 1フレームに減速するピッチの値
-
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 Camera::Camera()
 {
-	rotMovecamera  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	movecameraDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	rotMoveCamera  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	moveCameraDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	numMovePitch	= 0.0f;
 	rotPitchRadian = 0.0f;
 	cameraUpDest	= D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	currentState	= cameraState::Type1Person;
 
 	cameraFowerd	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	changecamera	= true;
+	changeCamera	= true;
 	lerpCnt		= 0.0f;
 
 	cameraMoveFade = MAIN_START_FADE;
@@ -116,8 +111,8 @@ void Camera::initialize()
 
 	lengthIntervalcamera = sqrt(fVecX * fVecX + fVecZ * fVecZ);		// カメラの視点と注視点の距離
 
-	heightcameraP = CHASE_HEIGHT_P;	// 追跡時の視点の高さ
-	heightcameraL = CHASE_HEIGHT_L;	// 追跡時の注視点の高さ
+//	heightcameraP = CHASE_HEIGHT_P;	// 追跡時の視点の高さ
+//	heightcameraL = CHASE_HEIGHT_L;	// 追跡時の注視点の高さ
 
 										// 行列初期化
 	D3DXMatrixIdentity(&mtxView);
@@ -138,8 +133,8 @@ void Camera::initializeTitle(Player *pPlayer)
 	cameraLook = D3DXVECTOR3(PlayerPos.x, PlayerPos.y -0.7f, PlayerPos.z);	// カメラの注視点
 	cameraUp   = pPlayer->getUpVec();										// カメラの上方向
 
-	cameraPosDest  = D3DXVECTOR3(0.0f, 0.0f, -9.0f);								// カメラの視点の目的位置
-	cameraLookDest = D3DXVECTOR3(PlayerPos.x, PlayerPos.y + 1.7f, PlayerPos.z);		// カメラの注視点の目的位置
+	cameraPosDest  = D3DXVECTOR3(0.0f, -1.0f, -9.0f);								// カメラの視点の目的位置
+	cameraLookDest = D3DXVECTOR3(PlayerPos.x, PlayerPos.y - 25.0f, PlayerPos.z);		// カメラの注視点の目的位置
 
 	cameraRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// カメラの回転量
 
@@ -149,10 +144,6 @@ void Camera::initializeTitle(Player *pPlayer)
 
 	lengthIntervalcamera = sqrt(fVecX * fVecX + fVecZ * fVecZ);		// カメラの視点と注視点の距離
 
-	heightcameraP = CHASE_HEIGHT_P;	// 追跡時の視点の高さ
-	heightcameraL = CHASE_HEIGHT_L;	// 追跡時の注視点の高さ
-
-	// 行列初期化
 	D3DXMatrixIdentity(&mtxView);
 
 
@@ -170,7 +161,7 @@ void Camera::initializeStageEdit()
 	cameraLook = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// カメラの注視点
 	cameraUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);								// カメラの上方向
 
-	cameraPosDest = D3DXVECTOR3(0.0f, 0.0f, -9.0f);								// カメラの視点の目的位置
+	cameraPosDest = D3DXVECTOR3(0.0f, -0.0f, -9.0f);								// カメラの視点の目的位置
 	cameraLookDest = D3DXVECTOR3(0.0f,0.0f,0.0f);		// カメラの注視点の目的位置
 
 	cameraRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// カメラの回転量
@@ -181,8 +172,8 @@ void Camera::initializeStageEdit()
 
 	lengthIntervalcamera = sqrt(fVecX * fVecX + fVecZ * fVecZ);		// カメラの視点と注視点の距離
 
-	heightcameraP = CHASE_HEIGHT_P;	// 追跡時の視点の高さ
-	heightcameraL = CHASE_HEIGHT_L;	// 追跡時の注視点の高さ
+//	heightcameraP = CHASE_HEIGHT_P;	// 追跡時の視点の高さ
+//	heightcameraL = CHASE_HEIGHT_L;	// 追跡時の注視点の高さ
 
 	// 行列初期化
 	D3DXMatrixIdentity(&mtxView);
@@ -200,13 +191,11 @@ void Camera::initializeGameMain(Player *pPlayer)
 	fadePos[1]  = PlayerPos + D3DXVECTOR3(-4.0f, PlayerPos.y  + 4.3f, 5.0f);
 	fadePos[0]  = D3DXVECTOR3(0.0f, 10.0f, -19.0f);
 
-
-	// プレイヤー情報取得
-	cameraPos	= D3DXVECTOR3(0.0f, 10.0f, -19.0f);			// カメラの視点
+	cameraPos	= D3DXVECTOR3(0.0f, 10.0f, -25.0f);			// カメラの視点
 	cameraLook	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// カメラの注視点
 	cameraUp	= D3DXVECTOR3(0.0f, 1.0f, 0.0f);			// カメラの上方向
 
-	cameraPosDest	= D3DXVECTOR3(0.0f, 0.0f, -9.0f);		// カメラの視点の目的位置
+	cameraPosDest	= D3DXVECTOR3(0.0f, -1.0f, -5.0f);		// カメラの視点の目的位置
 	cameraLookDest	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// カメラの注視点の目的位置
 
 
@@ -218,8 +207,8 @@ void Camera::initializeGameMain(Player *pPlayer)
 
 	lengthIntervalcamera = sqrt(fVecX * fVecX + fVecZ * fVecZ);		// カメラの視点と注視点の距離
 
-	heightcameraP = CHASE_HEIGHT_P;	// 追跡時の視点の高さ
-	heightcameraL = CHASE_HEIGHT_L;	// 追跡時の注視点の高さ
+//	heightcameraP = CHASE_HEIGHT_P;	// 追跡時の視点の高さ
+//	heightcameraL = CHASE_HEIGHT_L;	// 追跡時の注視点の高さ
 
 										// 行列初期化
 	D3DXMatrixIdentity(&mtxView);
@@ -266,43 +255,39 @@ void Camera::update(Player *pPlayer,Board *pReadyUI)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Camera::updateTitle(Pawn *pPlayer)
 {
-	D3DXVECTOR3 PlayerPos = pPlayer->getOffset();
+	D3DXVECTOR3 PlayerPos  = pPlayer->getOffset();
 	D3DXVECTOR3 ForwardVec = pPlayer->getForwardVec();
-	D3DXVECTOR3 UpVec = pPlayer->getUpVec();
+	D3DXVECTOR3 UpVec	   = pPlayer->getUpVec();
 	D3DXVec3Normalize(&UpVec, &UpVec);
 	D3DXVec3Normalize(&ForwardVec, &ForwardVec);
 
 	cameraLook = PlayerPos;
-	cameraLook.y += 3.0f;
-
+	cameraLook.y += 2.2f;
 	cameraFowerd = cameraLook - cameraPos;
-
-//	rotationcamera(pPlayer->getOffset());
-
-	/*
+	
 #if 1 // 線形補間処理
 	// 共通処理
-	D3DXVec3Lerp(&cameraPos, &cameraPos, &cameraPosDest, fLerpCnt);
+	D3DXVec3Lerp(&cameraPos, &cameraPos, &cameraPosDest, lerpCnt);
 	D3DXVec3Normalize(&cameraUp, &cameraUp);
 
 	// 線形補間用
-	fLerpCnt += 0.0001f;
-	if (fLerpCnt >= 1.0f)
+	lerpCnt += 0.0001f;
+	if (lerpCnt >= 1.0f)
 	{
-		bChangecamera = false;
-		fLerpCnt = 1.0f;
+		changeCamera = false;
+		lerpCnt = 1.0f;
 	}
 #endif
 
-	/*
+	
 	// 移動量の補正
-	fRotMovecamera += fMovecameraDest;
-	*/
+	rotMoveCamera += moveCameraDest;
+	
 
-	float fVecX, fVecZ;
-	fVecX = cameraPos.x - cameraLook.x;
-	fVecZ = cameraPos.z - cameraLook.z;
-	lengthIntervalcamera = sqrtf(fVecX * fVecX + fVecZ * fVecZ);
+	float vecX, vecZ;
+	vecX = cameraPos.x - cameraLook.x;
+	vecZ = cameraPos.z - cameraLook.z;
+	lengthIntervalcamera = sqrtf(vecX * vecX + vecZ * vecZ);
 
 #if _DEBUG
 
@@ -800,10 +785,10 @@ void Camera::setCamera()
 
 	// プロジェクションマトリックスの作成
 	D3DXMatrixPerspectiveFovLH(&mtxProjection,
-		VIEW_ANGLE,			// 視野角
+		ViewAngle,			// 視野角
 		static_cast<FLOAT> (Application::ScreenWidth) / static_cast<FLOAT>(Application::ScreenHeight),		// アスペクト比
-		VIEW_NEAR_Z,		// ビュー平面のNearZ値
-		VIEW_FAR_Z);		// ビュー平面のFarZ値
+		ViewNearZ,		// ビュー平面のNearZ値
+		ViewFarZ);		// ビュー平面のFarZ値
 
 	// プロジェクションマトリックスの設定
 	devicePtr->SetTransform(D3DTS_PROJECTION, &mtxProjection);

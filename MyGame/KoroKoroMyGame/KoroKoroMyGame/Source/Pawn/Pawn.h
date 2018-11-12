@@ -73,7 +73,7 @@ public:
 
 	virtual void initializeStatus();	// 各種ステータスを初期値にする
 
-	HRESULT makeModel();				// モデル生成
+//	HRESULT makeModel();				// モデル生成
 	HRESULT makeModelHierarchy();		// 階層構造用モデル読み込み
 	HRESULT createTexture();			// テクスチャ生成
 
@@ -148,7 +148,7 @@ public:
 protected:
 	std::unique_ptr <Collider> colliderPtr = nullptr;
 
-	MESH_DATA				meshData;
+	MeshData				meshDataObj;
 	HIERARCHY_MESH_DATA		hierarchyMeshData;
 	TEXTURE_DATA			textureData;
 
@@ -156,8 +156,8 @@ protected:
 	LPDIRECT3DINDEXBUFFER9  pD3DIdxBuffPawn;	// インデックスバッファインターフェースへのポインタ
 
 	LPDIRECT3DTEXTURE9	pD3DTexture;		// テクスチャへのポインタ
-	LPD3DXMESH			pD3DXMesh;			// メッシュ情報へのポインタ
-	LPD3DXBUFFER		pD3DXBuffMat;		// マテリアル情報へのポインタ
+	LPD3DXMESH			meshPtr;			// メッシュ情報へのポインタ
+	LPD3DXBUFFER		materialBufferPtr;		// マテリアル情報へのポインタ
 	DWORD				numMat;				// マテリアル情報の数
 	
 	D3DXMATRIX			worldMtx;			// ワールドマトリックス
@@ -241,17 +241,19 @@ private:
 	DWORD				dwNumTriangles;			// 三角形の数 (頂点 * 3)
 	DWORD				dwNumIndx;				// インデックスバッファの数
 	DWORD				dwAttrNum;				// 属性値
+
+	FLOAT				colorAlpha;				// アルファ値変更用変数
+
+
+	/*
 	D3DXATTRIBUTERANGE*	pAttr;					// 属性値
 
 	MESH_VTX			*pVtx;					// 頂点情報へのアクセス用ポインタ
-	WORD				*pIndx;					// インデックスバッファアクセス用ポインタ
-	FLOAT				colorAlpha;				// アルファ値変更用変数
-
-	CHAR				*pSzPointer;			// 読み込み確認用文字列 
-	CHAR				*szToken;				// 読み込んだトークン
+	WORD				*pIndex;					// インデックスバッファアクセス用ポインタ
 
 	D3DMATERIAL9*		pMaterial;				// マテリアル情報
 	LPDIRECT3DTEXTURE9*	ppTexture;				// テクスチャ情報
+	*/
 };
 
 #endif

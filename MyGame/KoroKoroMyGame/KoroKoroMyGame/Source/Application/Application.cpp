@@ -139,6 +139,7 @@ void Application::finalize()
 //
 LRESULT CALLBACK WndProc(HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
+
 	switch (msg)
 	{
 
