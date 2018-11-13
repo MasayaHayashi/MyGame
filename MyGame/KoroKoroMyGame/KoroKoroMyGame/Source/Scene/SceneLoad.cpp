@@ -70,7 +70,7 @@ void SceneLoad::initialize()
 {
 	/*
 	// ロードアイコン初期化
-	pLoadIcon = new C_LOAD_UI_ICON;
+	pLoadIcon = NEW C_LOAD_UI_ICON;
 	pLoadIcon->initialize();
 
 	// カメラ初期化

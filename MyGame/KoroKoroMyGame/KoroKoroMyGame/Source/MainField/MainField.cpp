@@ -48,10 +48,10 @@ void MainField::initialize()
 void MainField::finalize()
 {
 	// メッシュ解放
-	ResourceManager::destroyAllMesh();
+//	ResourceManager::destroyAllMesh();
 
 	// テクスチャ解放
-	ResourceManager::destroyAllTexture();
+//	ResourceManager::destroyAllTexture();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

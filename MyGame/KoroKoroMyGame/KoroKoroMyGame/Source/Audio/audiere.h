@@ -251,7 +251,7 @@ namespace audiere {
     ADR_METHOD (int) read(void* buffer, int size) = 0;
 
     /**
-     * Jump to a new position in the file, using the specified seek
+     * Jump to a NEW position in the file, using the specified seek
      * mode.  Remember: if mode is END, the position must be negative,
      * to seek backwards from the end of the file into its contents.
      * If the seek fails, the current position is undefined.
@@ -429,7 +429,7 @@ namespace audiere {
   public:
     /**
      * Adds a loop point to the stream.  If a loop point at 'location'
-     * already exists, the new one replaces it.  Location and target are
+     * already exists, the NEW one replaces it.  Location and target are
      * clamped to the actual length of the stream.
      *
      * @param location   frame where loop occurs
@@ -716,7 +716,7 @@ namespace audiere {
      *
      * @param  source  the source used to feed the output stream with samples
      *
-     * @return  new output stream if successful, 0 if failure
+     * @return  NEW output stream if successful, 0 if failure
      */
     ADR_METHOD(OutputStream*) openStream(SampleSource* source) = 0;
 
@@ -740,7 +740,7 @@ namespace audiere {
      *
      * @param sample_format  Format of samples in buffer.
      *
-     * @return  new output stream if successful, 0 if failure
+     * @return  NEW output stream if successful, 0 if failure
      */
     ADR_METHOD(OutputStream*) openBuffer(
       void* samples,
@@ -833,7 +833,7 @@ namespace audiere {
    * mechanism for basic sound playback.  There are two types of sound
    * effects: SINGLE and MULTIPLE.  SINGLE sound effects only allow
    * the sound to be played once at a time.  MULTIPLE sound effects
-   * always open a new stream to the audio device for each time it is
+   * always open a NEW stream to the audio device for each time it is
    * played (cleaning up or reusing old streams if possible).
    */
   class SoundEffect : public RefCounted {
@@ -1026,7 +1026,7 @@ namespace audiere {
     ADR_METHOD(const char*) getName() = 0;
 
     /**
-     * openStream() creates and returns a new MIDIStream object from the
+     * openStream() creates and returns a NEW MIDIStream object from the
      * file with the specified name, which then can be queried and played.
      * This method returns nullptr if the stream cannot be opened.
      *
@@ -1219,7 +1219,7 @@ namespace audiere {
   }
 
   /**
-   * Open a new audio device. If name or parameters are not specified,
+   * Open a NEW audio device. If name or parameters are not specified,
    * defaults are used. Each platform has its own set of audio devices.
    * Every platform supports the "nullptr" audio device.
    *
@@ -1227,7 +1227,7 @@ namespace audiere {
    * @param  parameters  comma delimited list of audio-device parameters;
    *                     for example, "buffer=100,rate=44100"
    *
-   * @return  new audio device object if OpenDevice succeeds, and 0 in case
+   * @return  NEW audio device object if OpenDevice succeeds, and 0 in case
    *          of failure
    */
   inline AudioDevice* OpenDevice(
@@ -1261,7 +1261,7 @@ namespace audiere {
    * @param file_format  Format of the file to load.  If FF_AUTODETECT,
    *                     Audiere will try opening the file in each format.
    *
-   * @return  new SampleSource if OpenSampleSource succeeds, 0 otherwise
+   * @return  NEW SampleSource if OpenSampleSource succeeds, 0 otherwise
    */
   inline SampleSource* OpenSampleSource(
     const FilePtr& file,
@@ -1366,7 +1366,7 @@ namespace audiere {
    *                   open the entire sound into memory.  Otherwise, it
    *                   streams the sound from the file.
    *
-   * @return  new output stream if successful, 0 otherwise
+   * @return  NEW output stream if successful, 0 otherwise
    */
   inline OutputStream* OpenSound(
     const AudioDevicePtr& device,
@@ -1408,7 +1408,7 @@ namespace audiere {
    * Create a SampleBuffer object using the specified samples and formats.
    *
    * @param samples  Pointer to a buffer of samples used to initialize the
-   *                 new object.  If this is 0, the sample buffer contains
+   *                 NEW object.  If this is 0, the sample buffer contains
    *                 just silence.
    *
    * @param frame_count  Size of the sample buffer in frames.
@@ -1419,7 +1419,7 @@ namespace audiere {
    *
    * @param sample_format  Format of each sample.  @see SampleFormat.
    *
-   * @return  new SampleBuffer object
+   * @return  NEW SampleBuffer object
    */
   inline SampleBuffer* CreateSampleBuffer(
     void* samples,
@@ -1440,7 +1440,7 @@ namespace audiere {
    *                If the source is not seekable, then the function
    *                fails.
    *
-   * @return  new sample buffer if success, 0 otherwise
+   * @return  NEW sample buffer if success, 0 otherwise
    */
   inline SampleBuffer* CreateSampleBuffer(const SampleSourcePtr& source) {
     return hidden::AdrCreateSampleBufferFromSource(source.get());
@@ -1458,7 +1458,7 @@ namespace audiere {
    * @param type  The type of the sound effect.  If type is MULTIPLE,
    *              the source must be seekable.
    *
-   * @return  new SoundEffect object if successful, 0 otherwise
+   * @return  NEW SoundEffect object if successful, 0 otherwise
    */
   inline SoundEffect* OpenSoundEffect(
     const AudioDevicePtr& device,

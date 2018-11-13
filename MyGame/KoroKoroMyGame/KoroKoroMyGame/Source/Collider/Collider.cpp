@@ -30,7 +30,7 @@ Collider::Collider()
 Collider::Collider(D3DXVECTOR3 setPos ,D3DXVECTOR3 setSize)
 {
 	// オブジェクト初期化
-	figurePtr.reset(new Figure());
+	figurePtr.reset(NEW Figure());
 
 	// 位置、サイズ初期化
 	Pos   = setPos;

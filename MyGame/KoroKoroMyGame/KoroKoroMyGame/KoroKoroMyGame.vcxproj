@@ -143,6 +143,7 @@
     <ClCompile Include="Source\TitleUI\TitleUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CrtDebug.h" />
     <ClInclude Include="Source\Application\Application.h" />
     <ClInclude Include="Source\Audio\audiere.h" />
     <ClInclude Include="Source\Audio\MyAudiere.h" />

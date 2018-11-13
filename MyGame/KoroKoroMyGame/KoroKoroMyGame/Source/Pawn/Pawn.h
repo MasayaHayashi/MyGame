@@ -74,8 +74,8 @@ public:
 	virtual void initializeStatus();	// 各種ステータスを初期値にする
 
 //	HRESULT makeModel();				// モデル生成
-	HRESULT makeModelHierarchy();		// 階層構造用モデル読み込み
-	HRESULT createTexture();			// テクスチャ生成
+//	HRESULT makeModelHierarchy();		// 階層構造用モデル読み込み
+//	HRESULT createTexture();			// テクスチャ生成
 
 	void destroyResorceModel();			// モデルの解放
 	void destroyModelHierarchy();		// 階層構造用モデル解放

@@ -9,22 +9,11 @@
 #define APPLICATION_H
 
 // ===== インクルード部 =====
+#include "../CrtDebug/CrtDebug.h"
 #include <string>
 #include <memory>
 #include "../Linklib.h"
 #include "d3dx9.h"
-
-#ifdef _DEBUG
-	#define _CRTDBG_MAP_ALLOC
-	#include <crtdbg.h>
-#endif
-
-// ===== 定数・マクロ定義 =====
-#if defined(DEBUG) || defined(_DEBUG)
-	#define NEW  new(_NORMAL_BLOCK, __FILE__, __LINE__)  // new によるメモリリーク検出
-#else
-	#define NEW  new									 // リリースの場合通常のメモリ確保
-#endif
 
 // ===== クラスの前方宣言 =====
 class DirectX3D;

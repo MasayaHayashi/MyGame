@@ -9,6 +9,7 @@
 #define DIRECTX_3D_H
 
 // ===== インクルード部 =====
+#include "../CrtDebug/CrtDebug.h"
 #include "d3dx9.h"
 #include <wrl.h>
 #include <string>

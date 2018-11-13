@@ -9,6 +9,7 @@
 #include <string>
 #include <tchar.h>
 #include <utility>
+#include "../CrtDebug/CrtDebug.h"
 #include "../Pawn/Pawn.h"
 #include "../Board/Board.h"
 #include "../DirectX3D/DirectX3D.h"
@@ -16,17 +17,13 @@
 
 
 // ===== 静的メンバ変数 =====
-ResourceManager*					ResourceManager::pInstance = new ResourceManager;
+std::unique_ptr<ResourceManager>    ResourceManager::instancePtr = nullptr;
 std::vector <MeshData*>				ResourceManager::meshes;
-std::unordered_map<std::string,		HIERARCHY_MESH_DATA*>	ResourceManager::hierarchyMesh;
 std::vector<TEXTURE_DATA*>			ResourceManager::texture;				// テクスチャ情報
 std::vector<TEXTURE_DATA*>			ResourceManager::fadeTexture;			// テクスチャ情報
 std::vector<VERTEX_BOARD_DATA*>		ResourceManager::vtxBoard;				// ボード頂点情報
 std::vector<VERTEX_BOARD_DATA*>		ResourceManager::vtxFadeBoard;			// ボード頂点情報
-
-#define SAFE_DELETE(p)       { if(p!=nullptr) { delete (p);     (p) = nullptr; } }
-#define SAFE_RELEASE(p)      { if(p!=nullptr) { (p)->Release(); (p) = nullptr; } }
-#define SAFE_DELETE_ARRAY(p) { if (p) { delete[] (p);   (p)=nullptr; }}
+std::unordered_map<std::string, HIERARCHY_MESH_DATA*>	ResourceManager::hierarchyMesh;
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -41,7 +38,7 @@ ResourceManager::ResourceManager()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 ResourceManager::~ResourceManager()
 {
-	SAFE_DELETE(pInstance);
+//	SAFE_DELETE(pInstance);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -51,7 +48,9 @@ HRESULT ResourceManager::makeModel(MeshData &meshData, CHAR *pszFilename, MeshOb
 {
 	// 例外処理
 	if (!pszFilename)
+	{
 		return E_FAIL;
+	}
 
 	// メッシュの種類
 	umeshType = MeshObjType::NormalModel;
@@ -61,7 +60,9 @@ HRESULT ResourceManager::makeModel(MeshData &meshData, CHAR *pszFilename, MeshOb
 
 	// 既に生成されているか
 	if (checkExisting(pszFilename, &meshData))
+	{
 		return S_OK;
+	}
 
 	// ファイル名セット
 	strcpy_s(meshData.meshFileName, pszFilename);
@@ -95,7 +96,7 @@ HRESULT ResourceManager::makeModel(MeshData &meshData, CHAR *pszFilename, MeshOb
 	// 属性テーブル取得
 	meshes.back()->dwAttrNum = 0;
 	meshes.back()->meshPtr->GetAttributeTable(nullptr, &meshes.back()->dwAttrNum);
-	meshes.back()->attrPtr.reset(new D3DXATTRIBUTERANGE[meshes.back()->dwAttrNum]);
+	meshes.back()->attrPtr.reset(NEW D3DXATTRIBUTERANGE[meshes.back()->dwAttrNum]);
 	meshes.back()->meshPtr->GetAttributeTable(meshes.back()->attrPtr.get(), &meshes.back()->dwAttrNum);
 
 	// 指定の頂点フォーマットに変換
@@ -104,7 +105,8 @@ HRESULT ResourceManager::makeModel(MeshData &meshData, CHAR *pszFilename, MeshOb
 	{
 		LPD3DXMESH pmeshTmp = meshes.back()->meshPtr.Get();
 		pmeshTmp->CloneMeshFVF(pmeshTmp->GetOptions(), FVF_TVERTEX, devicePtr, &meshes.back()->meshPtr);
-		SAFE_RELEASE(pmeshTmp);
+		delete pmeshTmp;
+	//	SAFE_RELEASE(pmeshTmp);
 		// 法線が無い場合は強制的に追加
 		if ((dwFVF & D3DFVF_NORMAL) == 0)
 		{
@@ -114,7 +116,7 @@ HRESULT ResourceManager::makeModel(MeshData &meshData, CHAR *pszFilename, MeshOb
 
 	// 頂点情報サイズ数取得
 	meshes.back()->dwNumVtx = meshes.back()->meshPtr->GetNumVertices();	// 頂点数取得
-	meshes.back()->vertexPtr.reset(new MESH_VTX[meshes.back()->dwNumVtx]);
+	meshes.back()->vertexPtr.reset(NEW MESH_VTX[meshes.back()->dwNumVtx]);
 	LPVOID pWork;
 
 	// 頂点バッファアンロック
@@ -126,7 +128,7 @@ HRESULT ResourceManager::makeModel(MeshData &meshData, CHAR *pszFilename, MeshOb
 
 	// インデックスバッファから読み込み
 	meshes.back()->dwNumIndx = meshes.back()->meshPtr->GetNumFaces() * 3;
-	meshes.back()->indexPtr.reset(new WORD[meshes.back()->dwNumIndx]);
+	meshes.back()->indexPtr.reset(NEW WORD[meshes.back()->dwNumIndx]);
 
 	// インデックスバッファロック
 	meshes.back()->meshPtr->LockIndexBuffer(D3DLOCK_READONLY, &pWork);
@@ -142,23 +144,34 @@ HRESULT ResourceManager::makeModel(MeshData &meshData, CHAR *pszFilename, MeshOb
 	{
 		// 最大値取得
 		if (meshes.back()->maxVtx.x < meshes.back()->vertexPtr.get()[i].VtxPos.x)
+		{
 			meshes.back()->maxVtx.x = meshes.back()->vertexPtr.get()[i].VtxPos.x;
+		}
 
 		if (meshes.back()->maxVtx.y < meshes.back()->vertexPtr.get()[i].VtxPos.y)
+		{
 			meshes.back()->maxVtx.y = meshes.back()->vertexPtr.get()[i].VtxPos.y;
+		}
 
 		if (meshes.back()->maxVtx.z < meshes.back()->vertexPtr.get()[i].VtxPos.z)
+		{
 			meshes.back()->maxVtx.z = meshes.back()->vertexPtr.get()[i].VtxPos.z;
+		}
 
 		// 最小値取得
 		if (meshes.back()->minVtx.x > meshes.back()->vertexPtr.get()[i].VtxPos.x)
+		{
 			meshes.back()->minVtx.x = meshes.back()->vertexPtr.get()[i].VtxPos.x;
+		}
 
 		if (meshes.back()->minVtx.y > meshes.back()->vertexPtr.get()[i].VtxPos.y)
+		{
 			meshes.back()->minVtx.y = meshes.back()->vertexPtr.get()[i].VtxPos.y;
-
+		}
 		if (meshes.back()->minVtx.z > meshes.back()->vertexPtr.get()[i].VtxPos.z)
+		{
 			meshes.back()->minVtx.z = meshes.back()->vertexPtr.get()[i].VtxPos.z;
+		}
 	}
 
 	// 中心座標、あたり判定取得
@@ -688,7 +701,7 @@ HRESULT ResourceManager::makeModelHierarchy(HIERARCHY_MESH_DATA &setHierarchyMed
 		hierarchyMesh[keyName]->numAnimset = hierarchyMesh[keyName]->animCtrlPtr->GetNumAnimationSets();
 		if (hierarchyMesh[keyName]->numAnimset > 0)
 		{
-			hierarchyMesh[keyName]->ppAnimSet = new LPD3DXANIMATIONSET[hierarchyMesh[keyName]->numAnimset];
+			hierarchyMesh[keyName]->ppAnimSet = NEW LPD3DXANIMATIONSET[hierarchyMesh[keyName]->numAnimset];
 			for (DWORD u = 0; u < hierarchyMesh[keyName]->numAnimset; u++)
 			{
 				hierarchyMesh[keyName]->animCtrlPtr->GetAnimationSet(u, &hierarchyMesh[keyName]->ppAnimSet[u]);
@@ -777,7 +790,7 @@ HRESULT ResourceManager::allocBoneMatrix(LPD3DXMESHCONTAINER meshContainerPtrBas
 	}
 
 	DWORD dwBoneNum = meshContainerPtr->pSkinInfo->GetNumBones();
-	meshContainerPtr->ppBoneMatrix = new LPD3DXMATRIX[dwBoneNum];
+	meshContainerPtr->ppBoneMatrix = NEW LPD3DXMATRIX[dwBoneNum];
 
 	for (DWORD i = 0; i < dwBoneNum; i++)
 	{
@@ -1087,6 +1100,7 @@ bool ResourceManager::destroyAllHierarchymesh()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 bool ResourceManager::destroyAllTexture()
 {
+	/*
 	// 例外処理
 	if (texture.size() <= 0)
 		return false;
@@ -1099,6 +1113,7 @@ bool ResourceManager::destroyAllTexture()
 
 	texture.clear();
 
+	*/
 	return true;
 }
 
@@ -1107,6 +1122,7 @@ bool ResourceManager::destroyAllTexture()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 bool ResourceManager::destroyVtx()
 {
+	/*
 	// 例外処理
 	if (vtxBoard.size() <= 0)
 		return false;
@@ -1117,6 +1133,7 @@ bool ResourceManager::destroyVtx()
 
 	vtxBoard.clear();
 	
+	*/
 	return true;
 }
 
@@ -1125,6 +1142,7 @@ bool ResourceManager::destroyVtx()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 bool ResourceManager::destroyFadeVtx()
 {
+	/*
 	// 例外処理
 	if (vtxFadeBoard.size() <= 0)
 		return false;
@@ -1134,6 +1152,7 @@ bool ResourceManager::destroyFadeVtx()
 		SAFE_RELEASE(vtxFadeBoard[i]->pD3DVtxBuff);
 	vtxFadeBoard.clear();
 
+	*/
 	return true;
 }
 
@@ -1173,4 +1192,21 @@ void  ResourceManager::createNormalTexture(TEXTURE_DATA& TextureData, CHAR *pszF
 	// テクスチャの読み込み
 	if (D3DXCreateTextureFromFile(devicePtr, texture.back()->texFileName, &texture.back()->pD3DTexture))
 		return ;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// インスタンス生成
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+bool ResourceManager::createInstance()
+{
+	if (instancePtr.get() == nullptr)
+	{
+		instancePtr.reset(NEW ResourceManager());
+
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }

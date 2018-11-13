@@ -262,7 +262,7 @@ void Player::initializeGameMain()
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &translate);
 
 	// コライダー初期化
-//	pCollider = new Collider(pos, hierarchyMeshData.collitionBox);
+//	pCollider = NEW Collider(pos, hierarchyMeshData.collitionBox);
 //	pCollider->initializeCollider(pos, hierarchyMeshData.collitionBox, centerPos);
 
 	// 表示フラグ初期化

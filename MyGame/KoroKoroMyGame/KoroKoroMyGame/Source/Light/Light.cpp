@@ -18,7 +18,7 @@ HRESULT Light::initialize()
 
 	for (auto &light : lightPtrArray)
 	{
-		light.reset(new D3DLIGHT9);
+		light.reset(NEW D3DLIGHT9);
 	}
 
 	// D3DLIGHT9\‘¢‘Ì‚ğ0‚ÅƒNƒŠƒA‚·‚é

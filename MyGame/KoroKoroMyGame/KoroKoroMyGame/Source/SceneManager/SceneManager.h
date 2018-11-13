@@ -37,9 +37,9 @@ public:
 		FadeIn,
 		FadeOut,
 	};
+	static bool create();
 
 	static void initialize();
-	static bool create();
 	static void update();
 	static void updateFade();
 	static void draw();
@@ -53,7 +53,7 @@ public:
 	static C_SCENE_BASE*		getInstanse();
 	static const SceneState		getCurrentSceneType();
 	static const SceneState		getNextScene();
-	const FadeUI*				getFade();
+	const FadeUI*				getFade() const;
 
 protected:
 

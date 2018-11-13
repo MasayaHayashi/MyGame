@@ -111,7 +111,7 @@ HRESULT C_MESH_FIELD_BASE::MakeModel()
 
 	// 頂点情報サイズ数取得
 	dwNumVtx = pD3DXMeshField->GetNumVertices();	// 頂点数取得
-	pVtx = new MESH_VTX[dwNumVtx];
+	pVtx = NEW MESH_VTX[dwNumVtx];
 	LPVOID pVtxWork;
 
 	// 頂点バッファロック

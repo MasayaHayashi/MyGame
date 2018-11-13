@@ -5,6 +5,7 @@
 
 // ===== インクルード部 =====
 #include "SceneManager.h"
+#include "../CrtDebug/CrtDebug.h"
 #include "../KeyBoard/Keyboard.h"
 #include "../Scene/Title/SceneTitle.h"
 #include "../Scene/Main/C_SceneMain.h"
@@ -41,7 +42,7 @@ SceneManager::SceneManager()
 
 
 	// シーン設定初期化
-	currentScenePtr.reset(new SceneTitle());
+	currentScenePtr.reset(NEW SceneTitle());
 	currentSceneType	= SceneState::SceneTitle;
 	nextSceneType		= SceneState::SceneTitle;
 }
@@ -61,7 +62,7 @@ bool SceneManager::create()
 {
 	if (sceneManagerInstancePtr.get() == nullptr)
 	{
-		sceneManagerInstancePtr.reset(new SceneManager());
+		sceneManagerInstancePtr.reset(NEW SceneManager());
 		return true;
 	}
 	else
@@ -76,7 +77,7 @@ bool SceneManager::create()
 void SceneManager::initialize()
 {
 	// フェード初期化
-	fadePtr.reset(new FadeUI);
+	fadePtr.reset(NEW FadeUI);
 	fadePtr->initialize();
 
 	// シーン初期化
@@ -162,20 +163,20 @@ void SceneManager::changeScene(SceneState Scene)
 	switch (Scene)
 	{
 	case SceneState::SceneTitle:
-		currentScenePtr.reset(new SceneTitle());
+		currentScenePtr.reset(NEW SceneTitle());
 		break;
 		/*
 	case SceneState::SceneMain:
 		delete currentScenePtr.get();
-		currentScenePtr = new SceneMain();
+		currentScenePtr = NEW SceneMain();
 		break;
 	case SceneState::SceneResult:
 		delete currentScenePtr.get();
-		currentScenePtr = new SceneResult();
+		currentScenePtr = NEW SceneResult();
 		break;
 	case SceneState::SceneStageEdit:
 		delete currentScenePtr.get();
-		currentScenePtr = new SceneStageEdit();
+		currentScenePtr = NEW SceneStageEdit();
 		break;
 		*/
 	// 例外処理
@@ -229,7 +230,7 @@ const SceneManager::SceneState SceneManager::getNextScene()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // フェード取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-const FadeUI* SceneManager::getFade()
+const FadeUI* SceneManager::getFade() const
 {
 	return fadePtr.get();
 }

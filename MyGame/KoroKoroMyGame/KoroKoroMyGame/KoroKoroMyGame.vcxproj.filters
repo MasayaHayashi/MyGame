@@ -109,6 +109,9 @@
     <Filter Include="ソース ファイル\MyVector3">
       <UniqueIdentifier>{8fc18516-4889-4946-bd22-582104c42ba0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\CrtDebug">
+      <UniqueIdentifier>{2442e6bf-8065-44c3-ba9d-8e8a33fb3021}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Audio\MyAudiere.cpp">
@@ -286,6 +289,9 @@
     </ClInclude>
     <ClInclude Include="Source\Camera\Camera.h">
       <Filter>ソース ファイル\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="CrtDebug.h">
+      <Filter>ソース ファイル\CrtDebug</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

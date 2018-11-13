@@ -40,9 +40,8 @@ typedef struct
 	DWORD				dwAttrNum;				// 属性値
 
 	std::unique_ptr<D3DXATTRIBUTERANGE> attrPtr;
-	
-	std::unique_ptr<MESH_VTX>	vertexPtr;
-	std::unique_ptr<WORD>		indexPtr;
+	std::unique_ptr<MESH_VTX>			vertexPtr;
+	std::unique_ptr<WORD>				indexPtr;
 } MeshData;
 
 typedef struct
@@ -60,6 +59,7 @@ typedef struct
 	LPD3DXFRAME					frameRoot;				// ルート フレーム オブジェクト
 	LPD3DXANIMATIONCONTROLLER	animCtrlPtr;			// アニメーション コントローラ オブジェクト
 	UINT						numAnimset;				// アニメーション セット数
+
 	LPD3DXANIMATIONSET*			ppAnimSet;				// アニメーション セット
 	MyHierarchy					hierarchy;				// 階層メモリ確保/解放クラス
 	DWORD						dwPrev;					// 直前の時刻
@@ -88,6 +88,9 @@ typedef struct
 class ResourceManager
 {
 public:
+	ResourceManager();
+	~ResourceManager();
+
 	// 生成
 	static HRESULT makeModel(MeshData &MeshData, CHAR *pszFilename, MeshObjType &uMeshType);
 	static HRESULT createTexture(TEXTURE_DATA &TextureData,CHAR *pszFilename);
@@ -106,15 +109,13 @@ public:
 	
 	static void createFadeTexture(TEXTURE_DATA& TextureData, CHAR *pszFilename);
 
-	static ResourceManager *pInstance;
+	static bool createInstance();
+	static std::unique_ptr<ResourceManager> instancePtr;
 
 private:
 #define FVF_TVERTEX	    (D3DFVF_XYZ|D3DFVF_NORMAL|D3DFVF_TEX1)
 #define	FVF_VERTEX_2D	(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1)
 #define	FVF_VERTEX_3D	(D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1)
-
-	ResourceManager();
-	~ResourceManager();
 
 	static std::vector<MeshData*>				meshes;
 	static std::unordered_map<std::string,HIERARCHY_MESH_DATA*>	hierarchyMesh;

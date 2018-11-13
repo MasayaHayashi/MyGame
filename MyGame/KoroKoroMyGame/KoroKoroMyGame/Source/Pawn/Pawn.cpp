@@ -453,63 +453,6 @@ void Pawn::setTranslate(D3DXVECTOR3 pos)
 }
 
 
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// 階層構造用モデル読み込み
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-HRESULT Pawn::makeModelHierarchy()
-{
-	// デバイス取得
-	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
-
-	// ディレクトリ抽出
-	TCHAR szDir[_MAX_PATH];
-	TCHAR szDirWk[_MAX_DIR];
-	_tsplitpath_s(fileName, szDir, sizeof(szDir), szDirWk, sizeof(szDirWk), nullptr, 0, nullptr, 0);
-	lstrcat(szDir, szDirWk);
-	Hierarchy.setDirectory(szDir);
-
-	// 階層構造メッシュの読み込み
-	HRESULT hr = D3DXLoadMeshHierarchyFromX(fileName, D3DXMESH_MANAGED, devicePtr, &Hierarchy, nullptr, &frameRoot, &animCtrlPtr);
-	if (FAILED(hr))
-		return false;
-
-	// ボーンとフレームの関連付け
-	hr = AllocAllBoneMatrix(frameRoot);
-	if (FAILED(hr)) return false;
-
-	// アニメーションセット取得
-	numAnimset = 0;
-	if (animCtrlPtr)
-	{
-		numAnimset = animCtrlPtr->GetNumAnimationSets();
-		if (numAnimset > 0)
-		{
-			ppAnimSet = new LPD3DXANIMATIONSET[numAnimset];
-			for (DWORD u = 0; u < numAnimset; u++)
-			{
-				animCtrlPtr->GetAnimationSet(u, &ppAnimSet[u]);
-			}
-		}
-	}
-
-	if (frameRoot)
-	{
-		// マトリックス更新
-		setTime(0.0);
-		D3DXMATRIX world;
-		D3DXMatrixIdentity(&world);
-		updateFrameMatrices(frameRoot, &world);
-
-		// 境界球/境界ボックス取得
-		calcCollision(frameRoot);
-	}
-
-	// 経過時間計測用時刻設定
-	dwPrev = timeGetTime();
-
-	return SUCCEEDED(hr);
-}
-
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // フレームのマトリックスを更新
@@ -564,7 +507,7 @@ HRESULT Pawn::AllocBoneMatrix(LPD3DXMESHCONTAINER pMeshContainerBase)
 		return S_OK;	// スキン情報が無ければ何もしない
 
 	DWORD dwBoneNum = pMeshContainer->pSkinInfo->GetNumBones();
-	pMeshContainer->ppBoneMatrix = new LPD3DXMATRIX[dwBoneNum];
+	pMeshContainer->ppBoneMatrix = NEW LPD3DXMATRIX[dwBoneNum];
 
 	for (DWORD i = 0; i < dwBoneNum; i++)
 	{
@@ -602,23 +545,6 @@ HRESULT Pawn::AllocAllBoneMatrix(LPD3DXFRAME pFrameBase)
 	return hr;
 }
 
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// テクスチャ生成
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-HRESULT Pawn::createTexture()
-{
-	// 例外処理
-	if (!texFileName)
-		return E_FAIL;
-
-	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
-
-	// テクスチャの読み込み
-	if (D3DXCreateTextureFromFile(devicePtr, texFileName, &pD3DTexture))
-		return S_OK;
-
-	return S_OK;
-}
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // モデルの解放

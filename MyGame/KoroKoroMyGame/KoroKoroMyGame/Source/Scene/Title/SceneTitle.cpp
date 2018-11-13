@@ -39,13 +39,13 @@ SceneTitle::SceneTitle()
 	nChangeSceneWaitCnt = 0;
 	uSelectScene = 0;
 
-	lightPtr.reset(new Light());
-	cameraPtr.reset(new Camera());
-	skydomePtr.reset(new Skydome());
-	playerPtr.reset(new Player());
-	fieldPtr.reset(new MainField());
-	titleUiPtr.reset(new TitleUI());
-	heartObjPtr.reset(new HeartObj());
+	lightPtr.reset(NEW Light());
+	cameraPtr.reset(NEW Camera());
+	skydomePtr.reset(NEW Skydome());
+	playerPtr.reset(NEW Player());
+	fieldPtr.reset(NEW MainField());
+	titleUiPtr.reset(NEW TitleUI());
+	heartObjPtr.reset(NEW HeartObj());
 }
 
 //
