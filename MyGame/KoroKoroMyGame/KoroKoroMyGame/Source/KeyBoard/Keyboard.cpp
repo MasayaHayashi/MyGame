@@ -7,6 +7,9 @@
 #include "Keyboard.h"
 
 // ===== 静的メンバ =====
+LPDIRECTINPUT8			Keyboard::pDInput;
+LPDIRECTINPUTDEVICE8	Keyboard::pDIDevKeyboard;
+
 BYTE	Keyboard::keyState[MaxKey];
 BYTE	Keyboard::keyStateTrigger[MaxKey];
 BYTE	Keyboard::keyStateRelease[MaxKey];
@@ -101,24 +104,24 @@ void Keyboard::update()
 HRESULT Keyboard::updateKeyboard()
 {
 	HRESULT hr;
-	BYTE keyState[MaxKey];
+	BYTE aKeyState[2500];
 
 	// デバイスからデータを取得
-	hr = pDIDevKeyboard->GetDeviceState(sizeof(keyState), keyState);
+	hr = pDIDevKeyboard->GetDeviceState(sizeof(aKeyState), aKeyState);
 	if (SUCCEEDED(hr))
 	{
-		for (int nCntKey = 0; nCntKey < MaxKey; nCntKey++)
+		for (int nCntKey = 0; nCntKey < 256; nCntKey++)
 		{
-			keyStateTrigger[nCntKey] = (keyState[nCntKey] ^ keyState[nCntKey]) & keyState[nCntKey];
-			keyStateRelease[nCntKey] = (keyState[nCntKey] ^ keyState[nCntKey]) & keyState[nCntKey];
-			keyStateRepeat[nCntKey]	 = keyStateTrigger[nCntKey];
+			keyStateTrigger[nCntKey] = (keyState[nCntKey] ^ aKeyState[nCntKey]) & aKeyState[nCntKey];
+			keyStateRelease[nCntKey] = (keyState[nCntKey] ^ aKeyState[nCntKey]) & ~aKeyState[nCntKey];
+			keyStateRepeat[nCntKey] = keyStateTrigger[nCntKey];
 
-			if (keyState[nCntKey])
+			if (aKeyState[nCntKey])
 			{
 				keyStateRepeatCnt[nCntKey]++;
 				if (keyStateRepeatCnt[nCntKey] >= 20)
 				{
-					keyStateRepeat[nCntKey] = keyState[nCntKey];
+					keyStateRepeat[nCntKey] = aKeyState[nCntKey];
 				}
 			}
 			else
@@ -127,7 +130,7 @@ HRESULT Keyboard::updateKeyboard()
 				keyStateRepeat[nCntKey] = 0;
 			}
 
-			keyState[nCntKey] = keyState[nCntKey];
+			keyState[nCntKey] = aKeyState[nCntKey];
 		}
 	}
 	else
@@ -151,7 +154,7 @@ void Keyboard::finalize()
 //=============================================================================
 // キーボードのプレス状態を取得
 //=============================================================================
-const bool Keyboard::getPress(INT nKey)
+bool Keyboard::getPress(INT nKey)
 {
 	return (keyState[nKey] & 0x80) ? true : false;
 }

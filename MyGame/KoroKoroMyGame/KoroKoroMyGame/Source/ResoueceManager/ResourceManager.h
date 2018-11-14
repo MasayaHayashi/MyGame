@@ -60,9 +60,9 @@ typedef struct
 	LPD3DXANIMATIONCONTROLLER	animCtrlPtr;			// アニメーション コントローラ オブジェクト
 	UINT						numAnimset;				// アニメーション セット数
 
-	Microsoft::WRL::ComPtr<LPD3DXANIMATIONSET> ppAnimSet;
+	std::unique_ptr<LPD3DXANIMATIONSET> pAnimSetPtr;
 
-//	LPD3DXANIMATIONSET*			ppAnimSet;				// アニメーション セット
+	LPD3DXANIMATIONSET*			ppAnimSet;				// アニメーション セット
 	MyHierarchy					hierarchy;				// 階層メモリ確保/解放クラス
 	DWORD						dwPrev;					// 直前の時刻
 } HIERARCHY_MESH_DATA;	// 階層構造用メッシュ情報
@@ -97,7 +97,6 @@ public:
 	static HRESULT makeModel(MeshData &MeshData, CHAR *pszFilename, MeshObjType &uMeshType);
 	static HRESULT createTexture(TEXTURE_DATA &TextureData,CHAR *pszFilename);
 	static HRESULT makeModelHierarchy(HIERARCHY_MESH_DATA &HierarchyMedhData, CHAR *pszFilename, std::string keyName, MeshObjType &MeshType);
-
 	static HRESULT makevertexBoard(VERTEX_BOARD_DATA &VtxBordData, CHAR *pszFilename);
 
 	// 解放

@@ -187,7 +187,6 @@ protected:
 	D3DXQUATERNION		quatanion;				// 任意軸の回転用クォータニオン
 	D3DXQUATERNION		destQua;				// 目的クオータニオン
 
-
 	CHAR				fileName[256];			// モデルのファイル名
 	FLOAT				speed;					// 速度
 	FLOAT				radRot;					// 回転角度

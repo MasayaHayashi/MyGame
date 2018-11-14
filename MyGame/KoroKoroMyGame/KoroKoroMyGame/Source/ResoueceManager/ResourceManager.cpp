@@ -74,7 +74,6 @@ HRESULT ResourceManager::makeModel(MeshData &meshData, CHAR *pszFilename, MeshOb
 	// Xファイルの読み込み
 	if (FAILED(D3DXLoadMeshFromX(pszFilename, D3DXMESH_SYSTEMMEM, devicePtr, nullptr, &meshes.back()->materialBufferPtr, nullptr, &meshes.back()->numMat, &meshes.back()->meshPtr)))
 	{
-		
 		return E_FAIL;
 	}
 
@@ -683,10 +682,12 @@ HRESULT ResourceManager::makeModelHierarchy(HIERARCHY_MESH_DATA &setHierarchyMed
 		hierarchyMesh[keyName]->numAnimset = hierarchyMesh[keyName]->animCtrlPtr->GetNumAnimationSets();
 		if (hierarchyMesh[keyName]->numAnimset > 0)
 		{
-			hierarchyMesh[keyName]->ppAnimSet.Reset = NEW LPD3DXANIMATIONSET[hierarchyMesh[keyName]->numAnimset];
+			hierarchyMesh[keyName]->pAnimSetPtr.reset(NEW LPD3DXANIMATIONSET[hierarchyMesh[keyName]->numAnimset]);
+
 			for (DWORD u = 0; u < hierarchyMesh[keyName]->numAnimset; u++)
 			{
-				hierarchyMesh[keyName]->animCtrlPtr->GetAnimationSet(u, &hierarchyMesh[keyName]->ppAnimSet[u]);
+				hierarchyMesh[keyName]->animCtrlPtr->GetAnimationSet(u, &hierarchyMesh[keyName]->pAnimSetPtr.get()[u]);
+
 			}
 		}
 	}
@@ -1016,32 +1017,39 @@ bool ResourceManager::destroyAllMesh()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 bool ResourceManager::destroyHierarchymesh(CHAR *pszChakNeme,std::string keyName)
 {
-	/*
-	for (INT i = hierarchyMesh.size() - 1; i >= 0; i--)
-		if (strcmp(hierarchymesh[i]->meshFileName, pszChakNeme) == 0)
+	
+	// アニメーション解放
+	if (hierarchyMesh[keyName]->pAnimSetPtr)
+	{
+		for (UINT j = 0; j < hierarchyMesh[keyName]->numAnimset; j++)
 		{
-			
-			// アニメーション解放
-			if (hierarchymesh[i]->ppAnimSet)
-			{
-				for (UINT j = 0; j < hierarchymesh[i]->numAnimset; j++)
-					SAFE_RELEASE(hierarchymesh[i]->ppAnimSet[j]);
-				SAFE_DELETE_ARRAY(hierarchymesh[i]->ppAnimSet);
-			}
-			SAFE_RELEASE(hierarchymesh[i]->animCtrlPtr);
-
-			// メッシュ解放
-			if (hierarchymesh[i]->frameRoot)
-			{
-				D3DXFrameDestroy(hierarchymesh[i]->frameRoot, &hierarchymesh[i]->hierarchy);
-				hierarchymesh[i]->frameRoot = nullptr;
-			}
-			
-			return true;
+			hierarchyMesh[keyName]->pAnimSetPtr.get()[j]->Release();
+			hierarchyMesh[keyName]->pAnimSetPtr.get()[j] = nullptr;
 		}
-	return false;
-	*/
+	}
+	else
+	{
+		return false;
+	}
 
+	hierarchyMesh[keyName]->animCtrlPtr->Release();
+	hierarchyMesh[keyName]->animCtrlPtr = nullptr;
+
+//	SAFE_RELEASE(hierarchyMesh[i]->animCtrlPtr);
+
+	// メッシュ解放
+	if (hierarchyMesh[keyName]->frameRoot)
+	{
+		D3DXFrameDestroy(hierarchyMesh[keyName]->frameRoot, &hierarchyMesh[keyName]->hierarchy);
+		hierarchyMesh[keyName]->frameRoot = nullptr;
+
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+	
 	return false;
 }
 

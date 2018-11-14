@@ -109,6 +109,9 @@ void SceneTitle::initialize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneTitle::finalize()
 {
+	cameraPtr->finalize();
+	playerPtr->finalize();
+
 	/*
 	// カメラ後処理
 	pCamera->finalizeCamera();
@@ -271,7 +274,7 @@ void SceneTitle::draw()
 
 	/*
 	// パーティクル描画
-	for (int i = 0; i < MAX_PARTICLE; i++)
+	for (int i = 0; i < MAX_PARTICLE; i+)+
 		pParticle[i]->drawObject();
 
 	// UI描画

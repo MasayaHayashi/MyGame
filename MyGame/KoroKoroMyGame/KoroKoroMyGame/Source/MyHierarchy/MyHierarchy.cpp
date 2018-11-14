@@ -222,7 +222,9 @@ HRESULT MyHierarchy::CreateMeshContainer(LPCSTR					name,
 		DWORD dwBoneNum = skinInfoPtr->GetNumBones();
 		meshContainerPtr->pBoneOffsetMatrix = NEW D3DXMATRIX[dwBoneNum];
 		if (meshContainerPtr->pBoneOffsetMatrix == nullptr)
+		{
 			return E_OUTOFMEMORY;
+		}
 
 		// ワールド・マトリックスを初期化
 		for (DWORD i = 0; i < dwBoneNum; ++i)

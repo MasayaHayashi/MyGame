@@ -8,6 +8,7 @@
 #include "../DirectX3D/DirectX3D.h"
 #include "../Audio/MyAudiere.h"
 #include "../SceneManager/SceneManager.h"
+#include "../KeyBoard/Keyboard.h"
 #include <Windows.h>
 #include <time.h>
 #include <memory>
@@ -20,8 +21,8 @@ bool Application::appContinuation = true;
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 Application::Application()
 {
-	directX3dObj.reset(NEW DirectX3D());
-	myAudiereObj.reset(NEW MyAudiere());
+	directX3dPtr.reset(NEW DirectX3D());
+	myAudierePtr.reset(NEW MyAudiere());
 	SceneManager::create();
 }
 
@@ -52,8 +53,8 @@ void Application::initialize(HINSTANCE& instance, INT& cmdShow)
 	ShowWindow(windowHandle, cmdShow);
 	UpdateWindow(windowHandle);
 
-	directX3dObj->initialize(windowHandle);
-
+	directX3dPtr->initialize(windowHandle);
+	keyBoardPtr->initialize(instance,windowHandle);
 	SceneManager::getInstanse()->initialize();
 }
 
@@ -112,10 +113,13 @@ void Application::mainLoop()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Application::update()
 {
-	DirectX3D::printDebug("ああああああああああ");
+	Keyboard::update();
 
+	if(Keyboard::getPress(DIK_0))
+	{
+		int a = 0;
+	}
 	DirectX3D::update();
-
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -123,7 +127,7 @@ void Application::update()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Application::draw() const
 {
-	directX3dObj->draw();
+	directX3dPtr->draw();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -145,6 +149,7 @@ LRESULT CALLBACK WndProc(HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam)
 
 	case WM_DESTROY:
 		Application::closeApp();
+
 		PostQuitMessage(0);
 		break;
 
@@ -152,8 +157,11 @@ LRESULT CALLBACK WndProc(HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam)
 		switch (wparam)
 		{
 		case VK_ESCAPE:					// [ESC]キーが押された
-			
-			DestroyWindow(wnd);			// ウィンドウを破棄するよう指示する
+			Application::closeApp();
+
+		//	DestroyWindow(wnd);			// ウィンドウを破棄するよう指示する
+			PostQuitMessage(0);
+
 			break;
 		}
 		break;
@@ -178,6 +186,8 @@ const bool Application::isAppContinuation()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Application::closeApp()
 {
+	SceneManager::finalize();
+
 	appContinuation = false;
 }
 

@@ -18,6 +18,7 @@
 // ===== クラスの前方宣言 =====
 class DirectX3D;
 class MyAudiere;
+class Keyboard;
 
 // ===== クラス定義 =====
 class Application
@@ -53,8 +54,9 @@ private :
 	static constexpr INT   FvfVertex2d = D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1;
 	static constexpr INT   FvfVertex3d = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1;
 
-	std::unique_ptr <DirectX3D> directX3dObj;
-	std::unique_ptr <MyAudiere> myAudiereObj;
+	std::unique_ptr <DirectX3D> directX3dPtr;
+	std::unique_ptr <MyAudiere> myAudierePtr;
+	std::unique_ptr <Keyboard>  keyBoardPtr;
 
 	DWORD execLastTime;
 	DWORD fpsLastTime;

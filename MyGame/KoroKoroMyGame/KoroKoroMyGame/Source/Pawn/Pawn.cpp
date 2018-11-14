@@ -1101,11 +1101,11 @@ void Pawn::setAnimChange(UINT uSetNum,UINT uWorkNum)
 
 	// 今のアニメーションをトラック1に移行し
 	// トラックの設定値も移行
-	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(uWorkNum, hierarchyMeshData.ppAnimSet[currentAnim]);
+//	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(uWorkNum, hierarchyMeshData.ppAnimSet[currentAnim]);
 	hierarchyMeshData.animCtrlPtr->SetTrackDesc(uWorkNum, &TD);
 
 	// 新しいアニメーションセットをトラック0に設定
-	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[uSetNum]);
+//	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[uSetNum]);
 
 	currentAnim = uSetNum;
 }

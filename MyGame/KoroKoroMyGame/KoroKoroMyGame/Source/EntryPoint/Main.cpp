@@ -20,7 +20,7 @@ int APIENTRY WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdLine, 
 
 	while (applivationObj.isAppContinuation())
 	{
-		applivationObj.mainLoop();	
+		applivationObj.mainLoop();
 	}
 
 	applivationObj.finalize();

@@ -30,6 +30,7 @@ struct MYMESHCONTAINER : public D3DXMESHCONTAINER
 	DWORD			dwBone;		// ボーンの数
 	LPD3DXBUFFER	pBoneBuffer;// ボーン・テーブル
 	LPD3DXMATRIX*	ppBoneMatrix;// ボーンのワールド行列の先頭
+//	std::unique_ptr <LPD3DXMATRIX> ppBoneMatrix;
 	LPD3DXMATRIX	pBoneOffsetMatrix;// フレームとしてのボーンのワールド行列
 };
 

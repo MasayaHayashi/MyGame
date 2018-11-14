@@ -9,6 +9,7 @@
 #include "../SceneManager/SceneManager.h"
 #include "../DirectX3D/DirectX3D.h"
 #include "../MyVector3/MyVector3.h"
+#include "../ResoueceManager/ResourceManager.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -85,11 +86,8 @@ void Player::initialize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::finalize()
 {
-	// コライダー解放
-//	SAFE_DELETE(pCollider);
+	ResourceManager::destroyHierarchymesh(fileName, "Player");
 
-	// メッシュ解放
-	destroyModelHierarchy();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -206,11 +204,11 @@ void Player::initializeTitle()
 
 	// 今のアニメーションをトラック1に移行し
 	// トラックの設定値も移行
-	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(1, hierarchyMeshData.ppAnimSet[0]);
+	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(1, hierarchyMeshData.pAnimSetPtr.get()[0]);
 	hierarchyMeshData.animCtrlPtr->SetTrackDesc(1, &TD);
 
 	// 新しいアニメーションセットをトラック0に設定
-	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[2]);
+	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(0, hierarchyMeshData.pAnimSetPtr.get()[2]);
 
 	isUsed = true;
 
@@ -274,11 +272,11 @@ void Player::initializeGameMain()
 
 	// 今のアニメーションをトラック1に移行し
 	// トラックの設定値も移行
-	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(1, hierarchyMeshData.ppAnimSet[1]);
+//	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(1, hierarchyMeshData.ppAnimSet[1]);
 	hierarchyMeshData.animCtrlPtr->SetTrackDesc(1, &TD);
 
 	// 新しいアニメーションセットをトラック0に設定
-	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[1]);
+//	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[1]);
 
 	playerStateType = PlayerState::Stop;
 	isGround	= true;
@@ -364,11 +362,11 @@ void Player::initializeSceneEdit()
 
 	// 今のアニメーションをトラック1に移行し
 	// トラックの設定値も移行
-	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(1, hierarchyMeshData.ppAnimSet[0]);
+//	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(1, hierarchyMeshData.ppAnimSet[0]);
 	hierarchyMeshData.animCtrlPtr->SetTrackDesc(1, &TD);
 
 	// 新しいアニメーションセットをトラック0に設定
-	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[0]);
+//	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[0]);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -412,6 +410,15 @@ void Player::initializeStatus()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updateTitle(D3DXVECTOR3 CameraForward)
 {
+	if (Keyboard::getTrigger(DIK_SPACE))
+	{
+		SceneManager::changeScene(SceneManager::SceneState::SceneMain);
+	}
+
+	if (Keyboard::getRelease(DIK_2))
+	{
+		int a = 0;
+	}
 
 //	C_XINPUT *pXinput = C_XINPUT::GetInstance();
 
