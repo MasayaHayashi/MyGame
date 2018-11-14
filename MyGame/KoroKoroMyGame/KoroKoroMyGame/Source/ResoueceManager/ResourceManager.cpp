@@ -196,9 +196,6 @@ HRESULT ResourceManager::makeModel(MeshData &meshData, CHAR *pszFilename, MeshOb
 		}
 	}
 
-	// 中心座標をワールド座標系に変換
-	//meshes[pszFilename].CenterPos += pos;
-
 	return S_OK;
 }
 
@@ -212,9 +209,13 @@ HRESULT ResourceManager::makevertexBoard(VERTEX_BOARD_DATA &VtxBordData, CHAR *p
 
 	// フェード用判定
 	if (VtxBordData.fade)
+	{
 		makeVtxFade(VtxBordData);
+	}
 	else
+	{
 		makeVtx(VtxBordData);
+	}
 
 	return S_OK;
 }
@@ -336,14 +337,6 @@ bool ResourceManager::makeVtx(VERTEX_BOARD_DATA &vtxBoardData)
 		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
 		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 
-
-		/*
-		pVtx[0].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVtx[1].tex = D3DXVECTOR2(0.0f, 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(1.0f, 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(1.0f, 0.0f);
-
-		*/
 		// 頂点データをアンロックする
 		vtxBoard.back()->pD3DVtxBuff->Unlock();
 	}
@@ -371,15 +364,7 @@ bool ResourceManager::makeVtx(VERTEX_BOARD_DATA &vtxBoardData)
 		pVtx[1].vtx = D3DXVECTOR3(vtxBoardData.size.x, vtxBoardData.size.y, 0.0f);
 		pVtx[2].vtx = D3DXVECTOR3(-vtxBoardData.size.x, -vtxBoardData.size.y, 0.0f);
 		pVtx[3].vtx = D3DXVECTOR3(vtxBoardData.size.x, -vtxBoardData.size.y, 0.0f);
-		/*
-		{
-		// 頂点座標の設定
-		pVtx[0].vtx = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		pVtx[1].vtx = D3DXVECTOR3(size.x, 0.0f, 0.0f);
-		pVtx[2].vtx = D3DXVECTOR3(0.0f,size.y, 0.0f);
-		pVtx[3].vtx = D3DXVECTOR3(size.x,size.y, 0.0f);
-		}
-		*/
+
 		// 法線の設定
 		if (vtxBoardData.size.z == 0.0f)
 		{
@@ -665,10 +650,7 @@ HRESULT ResourceManager::makeModelHierarchy(HIERARCHY_MESH_DATA &setHierarchyMed
 
 	// メッシュ情報セット
 	std::pair<std::string, HIERARCHY_MESH_DATA*> setPair = std::make_pair(keyName, &setHierarchyMedhData);
-//	hierarchyMesh.insert( std::make_pair<std::string, Hie> )
 	hierarchyMesh.insert(setPair);
-
-	// hierarchyMesh.push_back(&setHierarchyMedhData);
 
 	// ディレクトリ抽出
 	TCHAR szDir[_MAX_PATH];
@@ -701,7 +683,7 @@ HRESULT ResourceManager::makeModelHierarchy(HIERARCHY_MESH_DATA &setHierarchyMed
 		hierarchyMesh[keyName]->numAnimset = hierarchyMesh[keyName]->animCtrlPtr->GetNumAnimationSets();
 		if (hierarchyMesh[keyName]->numAnimset > 0)
 		{
-			hierarchyMesh[keyName]->ppAnimSet = NEW LPD3DXANIMATIONSET[hierarchyMesh[keyName]->numAnimset];
+			hierarchyMesh[keyName]->ppAnimSet.Reset = NEW LPD3DXANIMATIONSET[hierarchyMesh[keyName]->numAnimset];
 			for (DWORD u = 0; u < hierarchyMesh[keyName]->numAnimset; u++)
 			{
 				hierarchyMesh[keyName]->animCtrlPtr->GetAnimationSet(u, &hierarchyMesh[keyName]->ppAnimSet[u]);

@@ -1,3 +1,25 @@
-﻿  SceneTitle.cpp
-  KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.exe
-  KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.pdb (Partial PDB)
+﻿  Skydome.cpp
+  ResourceManager.cpp
+  Player.cpp
+  MainField.cpp
+  HeartObj.cpp
+  コードを生成中...
+  コンパイル中...
+  TitleUI.cpp
+  SceneTitle.cpp
+  SceneManager.cpp
+  Pawn.cpp
+c:\program files (x86)\windows kits\8.1\include\winrt\wrl\client.h(186): error C2227: '->Release' : 左側がクラス、構造体、共用体、ジェネリック型へのポインターではありません。
+  c:\program files (x86)\windows kits\8.1\include\winrt\wrl\client.h(186): note: 型は 'LPD3DXANIMATIONSET *' です。
+  c:\program files (x86)\windows kits\8.1\include\winrt\wrl\client.h(179): note: クラス テンプレート のメンバー関数 'unsigned long Microsoft::WRL::ComPtr<LPD3DXANIMATIONSET>::InternalRelease(void) throw()' のコンパイル中
+  c:\program files (x86)\windows kits\8.1\include\winrt\wrl\client.h(241): note: コンパイル対象の関数 テンプレート インスタンス化 'unsigned long Microsoft::WRL::ComPtr<LPD3DXANIMATIONSET>::InternalRelease(void) throw()' のリファレンスを確認してください
+  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\resourcemanager.h(63): note: コンパイル対象のクラス テンプレート インスタンス化 'Microsoft::WRL::ComPtr<LPD3DXANIMATIONSET>' のリファレンスを確認してください
+  MeshFieldBase.cpp
+  FadeUI.cpp
+  Collision.cpp
+  Camera.cpp
+  Board.cpp
+  コードを生成中...
+  スキップ中... (関連する変更は検出されませんでした)
+  SceneLoad.cpp
+  Figure.cpp

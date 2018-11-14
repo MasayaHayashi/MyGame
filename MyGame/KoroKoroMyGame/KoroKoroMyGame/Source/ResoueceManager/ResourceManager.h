@@ -60,7 +60,9 @@ typedef struct
 	LPD3DXANIMATIONCONTROLLER	animCtrlPtr;			// アニメーション コントローラ オブジェクト
 	UINT						numAnimset;				// アニメーション セット数
 
-	LPD3DXANIMATIONSET*			ppAnimSet;				// アニメーション セット
+	Microsoft::WRL::ComPtr<LPD3DXANIMATIONSET> ppAnimSet;
+
+//	LPD3DXANIMATIONSET*			ppAnimSet;				// アニメーション セット
 	MyHierarchy					hierarchy;				// 階層メモリ確保/解放クラス
 	DWORD						dwPrev;					// 直前の時刻
 } HIERARCHY_MESH_DATA;	// 階層構造用メッシュ情報
