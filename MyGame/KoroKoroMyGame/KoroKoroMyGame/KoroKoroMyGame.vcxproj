@@ -127,6 +127,7 @@
     <ClCompile Include="Source\HeartObj\HeartObj.cpp" />
     <ClCompile Include="Source\KeyBoard\Keyboard.cpp" />
     <ClCompile Include="Source\Light\Light.cpp" />
+    <ClCompile Include="Source\LoadIcon\MyLoadIcon.cpp" />
     <ClCompile Include="Source\MainField\MainField.cpp" />
     <ClCompile Include="Source\MeshFieldBase\MeshFieldBase.cpp" />
     <ClCompile Include="Source\MyHierarchy\MyHierarchy.cpp" />
@@ -136,8 +137,8 @@
     <ClCompile Include="Source\ResoueceManager\ResourceManager.cpp" />
     <ClCompile Include="Source\SceneInterface\sceneBase.cpp" />
     <ClCompile Include="Source\SceneManager\SceneManager.cpp" />
-    <ClCompile Include="Source\Scene\Main\C_SceneMain.cpp" />
-    <ClCompile Include="Source\Scene\SceneLoad.cpp" />
+    <ClCompile Include="Source\Scene\Load\SceneLoad.cpp" />
+    <ClCompile Include="Source\Scene\Main\SceneMain.cpp" />
     <ClCompile Include="Source\Scene\Title\SceneTitle.cpp" />
     <ClCompile Include="Source\Skydome\Skydome.cpp" />
     <ClCompile Include="Source\TitleUI\TitleUI.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Source\KeyBoard\Keyboard.h" />
     <ClInclude Include="Source\Light\Light.h" />
     <ClInclude Include="Source\Linklib.h" />
+    <ClInclude Include="Source\LoadIcon\MyLoadIcon.h" />
     <ClInclude Include="Source\MainField\MainField.h" />
     <ClInclude Include="Source\MeshFieldBase\MeshFieldBase.h" />
     <ClInclude Include="Source\Mesh\Mesh.h" />
@@ -169,8 +171,8 @@
     <ClInclude Include="Source\ResoueceManager\ResourceManager.h" />
     <ClInclude Include="Source\SceneInterface\sceneBase.h" />
     <ClInclude Include="Source\SceneManager\SceneManager.h" />
-    <ClInclude Include="Source\Scene\Main\C_SceneMain.h" />
-    <ClInclude Include="Source\Scene\SceneLoad.h" />
+    <ClInclude Include="Source\Scene\Load\SceneLoad.h" />
+    <ClInclude Include="Source\Scene\Main\SceneMain.h" />
     <ClInclude Include="Source\Scene\Title\SceneTitle.h" />
     <ClInclude Include="Source\Skydome\Skydome.h" />
     <ClInclude Include="Source\TitleUI\TitleUI.h" />

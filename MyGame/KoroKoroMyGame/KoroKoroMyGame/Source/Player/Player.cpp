@@ -410,15 +410,17 @@ void Player::initializeStatus()
 //
 void Player::updateTitle(D3DXVECTOR3 CameraForward)
 {
-	if (Keyboard::getTrigger(DIK_SPACE))
-	{
-		SceneManager::changeScene(SceneManager::SceneState::SceneMain);
-	}
 
+	if (Keyboard::getTrigger(DIK_2))
+	{
+		SceneManager::setNextScene(SceneManager::SceneState::SceneMain);
+	}
+/*
 	if (Keyboard::getRelease(DIK_2))
 	{
 		int a = 0;
 	}
+	*/
 
 //	C_XINPUT *pXinput = C_XINPUT::GetInstance();
 

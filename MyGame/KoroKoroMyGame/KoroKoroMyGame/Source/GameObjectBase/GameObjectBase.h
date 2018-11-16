@@ -19,8 +19,8 @@ class GameObjectBase
 
 		virtual void initialize();
 		virtual void finalize();
-		virtual void updateObject();
-		virtual void drawObject();
+		virtual void update();
+		virtual void draw();
 
 	protected:
 

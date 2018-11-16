@@ -8,14 +8,14 @@
 #include "../CrtDebug/CrtDebug.h"
 #include "../KeyBoard/Keyboard.h"
 #include "../Scene/Title/SceneTitle.h"
-#include "../Scene/Main/C_SceneMain.h"
+#include "../Scene/Main/SceneMain.h"
 #include "../Scene/Result/C_SceneResult.h"
 #include "../Fade/FadeUI.h"
 
 // ===== 静的メンバ =====
 std::unique_ptr<SceneManager> SceneManager::sceneManagerInstancePtr(nullptr);
 std::unique_ptr<C_SCENE_BASE> SceneManager::currentScenePtr(nullptr);
-std::unique_ptr <FadeUI>	  SceneManager::fadePtr(nullptr);
+std::unique_ptr<FadeUI>	  SceneManager::fadePtr(nullptr);
 
 SceneManager::SceneState	  SceneManager::nextSceneType	 = SceneManager::SceneState::SceneTitle;
 SceneManager::SceneState	  SceneManager::currentSceneType = SceneManager::SceneState::SceneTitle;
@@ -34,17 +34,18 @@ SceneManager::SceneManager()
 	// C_SCENE_STAGE_EDIT
 	// SCENE_STAGE_EDIT
 
-	// C_SCENE_MAIN
+	// SceneMain
 	// SCENE_MAIN
 
 	// C_SCENE_TITLE
 	// SCENE_TITLE
 
-
 	// シーン設定初期化
 	currentScenePtr.reset(NEW SceneTitle());
 	currentSceneType	= SceneState::SceneTitle;
 	nextSceneType		= SceneState::SceneTitle;
+
+	fadePtr.reset(NEW FadeUI);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -76,8 +77,6 @@ bool SceneManager::create()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneManager::initialize()
 {
-	// フェード初期化
-	fadePtr.reset(NEW FadeUI);
 	fadePtr->initialize();
 
 	// シーン初期化
@@ -130,7 +129,7 @@ void SceneManager::update()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneManager::updateFade()
 {
-	fadePtr->updateObject();
+	fadePtr->update();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -150,7 +149,7 @@ void  SceneManager::drawFade()
 	if (fadePtr->getFadeState() != FadeUI::FadeType::FadeNone)
 	{
 		// フェード描画
-		fadePtr->drawObject();
+		fadePtr->draw();
 	}
 }
 
@@ -165,11 +164,11 @@ void SceneManager::changeScene(SceneState Scene)
 	case SceneState::SceneTitle:
 		currentScenePtr.reset(NEW SceneTitle());
 		break;
-		/*
+		
 	case SceneState::SceneMain:
-		delete currentScenePtr.get();
-		currentScenePtr = NEW SceneMain();
+		currentScenePtr.reset(NEW SceneMain());
 		break;
+	/*
 	case SceneState::SceneResult:
 		delete currentScenePtr.get();
 		currentScenePtr = NEW SceneResult();

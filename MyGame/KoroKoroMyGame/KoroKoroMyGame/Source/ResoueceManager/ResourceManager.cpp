@@ -38,7 +38,7 @@ ResourceManager::ResourceManager()
 //
 ResourceManager::~ResourceManager()
 {
-//	SAFE_DELETE(pInstance);
+
 }
 
 //

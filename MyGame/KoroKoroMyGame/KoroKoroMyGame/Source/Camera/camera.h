@@ -36,20 +36,9 @@
 #define MAX_camera_FADE_POS (3)
 */
 
-// ===== 列挙体定義 =====
-enum camera_MOVE_TYPE
-{
-	MAIN_TUTORIAL,
-	MAIN_START_FADE,
-	MAIN_NORMAL,
-	MAIN_GOAL_FADE,
-	MAX_camera_MOVE_TYPE,
-};
-
 // ===== クラスの前方宣言 =====
 class SceneManager;
 class Pawn;
-
 class Player;
 class C_GAMEOBJ_BASE;
 class Board;
@@ -61,15 +50,25 @@ public:
 	Camera();
 	~Camera();
 
+	enum class MoceType
+	{
+		Tutorial,
+		Start,
+		Normal,
+		Goal,
+	};
+
 	void initialize();
 	void initializeTitle(Player * pPlayer);
+	void initializeMain(Player *pPlayer);
+
 	void finalize(Player* pPlayer);
 	void finalize();
 	void update(Player *,Board *);
 	void updateTitle(Pawn*);
 	void updateStageEdit(const D3DXVECTOR3&);
 	void updateGameMain(Player*,Board*);
-	void setState(camera_MOVE_TYPE setState);
+	void setState(MoceType setState);
 
 
 	void setCamera();
@@ -125,7 +124,7 @@ private:
 	};
 
 	void initializeStageEdit();					
-	void initializeGameMain(Player *pPlayer);
+//	void initializeGameMain(Player *pPlayer);
 
 	void rotationCamera(D3DXVECTOR3 Center);
 
@@ -135,7 +134,7 @@ private:
 
 	void RotMove(D3DXVECTOR3* pVecCenter, FLOAT fRadius);
 
-	camera_MOVE_TYPE cameraMoveFade;
+	MoceType cameraMoveFade;
 
 	SceneManager::SceneState currentScene;  // シーン識別用
 	D3DXVECTOR3		cameraPos;				// カメラの視点

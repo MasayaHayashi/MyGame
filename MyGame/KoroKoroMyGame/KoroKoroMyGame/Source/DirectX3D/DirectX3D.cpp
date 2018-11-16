@@ -164,6 +164,7 @@ HRESULT DirectX3D::initialize(HWND& wnd)
 //
 void DirectX3D::update()
 {
+
 	SceneManager::update();
 }
 

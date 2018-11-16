@@ -28,7 +28,7 @@ Board::Board()
 	tempQuaternion		= D3DXQUATERNION(0, 0, 0, 1);
 	radAngle		= 0.0f;
 	rotSpeed		= 0.0f;
-	alphaBlend		= false;
+	isAlphaBlend		= false;
 	isMoveUV			= false;
 	isNarrow				= false;
 	boardType			= boardType::Polygon2d;
@@ -118,7 +118,7 @@ void Board::draw()
 			devicePtr->SetTexture(0, texture.pD3DTexture);
 
 			// アルファブレンド設定
-			if (alphaBlend)
+			if (isAlphaBlend)
 				devicePtr->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 
 			// テクスチャの設定（フレーム部分）
@@ -181,7 +181,7 @@ void Board::draw()
 			devicePtr->SetTexture(0, texture.pD3DTexture);
 	
 			// アルファブレンド
-			if (alphaBlend)
+			if (isAlphaBlend)
 				devicePtr->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 
 			// 半透明処理を行う

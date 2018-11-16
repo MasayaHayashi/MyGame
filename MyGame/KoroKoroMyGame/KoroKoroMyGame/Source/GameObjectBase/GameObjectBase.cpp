@@ -41,7 +41,7 @@ void GameObjectBase::finalize()
 //
 // XV
 //
-void GameObjectBase::updateObject()
+void GameObjectBase::update()
 {
 
 }
@@ -49,7 +49,7 @@ void GameObjectBase::updateObject()
 //
 // •`‰æ
 //
-void GameObjectBase::drawObject()
+void GameObjectBase::draw()
 {
 
 }

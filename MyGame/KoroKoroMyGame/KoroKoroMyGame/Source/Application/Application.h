@@ -14,6 +14,8 @@
 #include <memory>
 #include "../Linklib.h"
 #include "d3dx9.h"
+#include "../KeyBoard/Keyboard.h"
+#include "../Scene/Load/SceneLoad.h"
 
 // ===== ƒNƒ‰ƒX‚Ì‘O•ûéŒ¾ =====
 class DirectX3D;
@@ -56,7 +58,9 @@ private :
 
 	std::unique_ptr <DirectX3D> directX3dPtr;
 	std::unique_ptr <MyAudiere> myAudierePtr;
-	std::unique_ptr <Keyboard>  keyBoardPtr;
+	
+	Keyboard  keyBoardObj;
+	SceneLoad sceneLoadObj;
 
 	DWORD execLastTime;
 	DWORD fpsLastTime;

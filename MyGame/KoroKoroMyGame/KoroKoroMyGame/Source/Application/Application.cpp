@@ -54,8 +54,10 @@ void Application::initialize(HINSTANCE& instance, INT& cmdShow)
 	UpdateWindow(windowHandle);
 
 	directX3dPtr->initialize(windowHandle);
-	keyBoardPtr->initialize(instance,windowHandle);
-	SceneManager::getInstanse()->initialize();
+	keyBoardObj.initialize(instance,windowHandle);
+	SceneManager::initialize();
+
+	sceneLoadObj.initialize();
 }
 
 //
@@ -113,13 +115,13 @@ void Application::mainLoop()
 //
 void Application::update()
 {
-	Keyboard::update();
+	keyBoardObj.update();
 
-	if(Keyboard::getPress(DIK_0))
-	{
-		int a = 0;
-	}
+	sceneLoadObj.update();
+
 	DirectX3D::update();
+
+	SceneManager::updateFade();
 }
 
 //
@@ -128,6 +130,8 @@ void Application::update()
 void Application::draw() const
 {
 	directX3dPtr->draw();
+
+	SceneManager::drawFade();
 }
 
 //
@@ -143,7 +147,6 @@ void Application::finalize()
 //
 LRESULT CALLBACK WndProc(HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
-
 	switch (msg)
 	{
 

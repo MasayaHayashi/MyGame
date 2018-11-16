@@ -112,6 +112,9 @@
     <Filter Include="ソース ファイル\CrtDebug">
       <UniqueIdentifier>{2442e6bf-8065-44c3-ba9d-8e8a33fb3021}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\LoadIcon">
+      <UniqueIdentifier>{57fb7207-16cb-41e4-bc9d-5b80f06ca3c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Audio\MyAudiere.cpp">
@@ -122,9 +125,6 @@
     </ClCompile>
     <ClCompile Include="Source\SceneManager\SceneManager.cpp">
       <Filter>ソース ファイル\SceneManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene\SceneLoad.cpp">
-      <Filter>ソース ファイル\Scene\Load</Filter>
     </ClCompile>
     <ClCompile Include="Source\Fade\FadeUI.cpp">
       <Filter>ソース ファイル\Fade</Filter>
@@ -143,9 +143,6 @@
     </ClCompile>
     <ClCompile Include="Source\KeyBoard\Keyboard.cpp">
       <Filter>ソース ファイル\KeyBoard</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene\Main\C_SceneMain.cpp">
-      <Filter>ソース ファイル\Scene\Main</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene\Title\SceneTitle.cpp">
       <Filter>ソース ファイル\Scene\Title</Filter>
@@ -198,6 +195,15 @@
     <ClCompile Include="Source\Camera\Camera.cpp">
       <Filter>ソース ファイル\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Scene\Main\SceneMain.cpp">
+      <Filter>ソース ファイル\Scene\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\Load\SceneLoad.cpp">
+      <Filter>ソース ファイル\Scene\Load</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadIcon\MyLoadIcon.cpp">
+      <Filter>ソース ファイル\LoadIcon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Linklib.h">
@@ -214,9 +220,6 @@
     </ClInclude>
     <ClInclude Include="Source\SceneManager\SceneManager.h">
       <Filter>ソース ファイル\SceneManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene\SceneLoad.h">
-      <Filter>ソース ファイル\Scene\Load</Filter>
     </ClInclude>
     <ClInclude Include="Source\Fade\FadeUI.h">
       <Filter>ソース ファイル\Fade</Filter>
@@ -235,9 +238,6 @@
     </ClInclude>
     <ClInclude Include="Source\KeyBoard\Keyboard.h">
       <Filter>ソース ファイル\KeyBoard</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene\Main\C_SceneMain.h">
-      <Filter>ソース ファイル\Scene\Main</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene\Title\SceneTitle.h">
       <Filter>ソース ファイル\Scene\Title</Filter>
@@ -287,11 +287,20 @@
     <ClInclude Include="Source\MyVector3\MyVector3.h">
       <Filter>ソース ファイル\MyVector3</Filter>
     </ClInclude>
+    <ClInclude Include="CrtDebug.h">
+      <Filter>ソース ファイル\CrtDebug</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\Main\SceneMain.h">
+      <Filter>ソース ファイル\Scene\Main</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Camera\Camera.h">
       <Filter>ソース ファイル\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="CrtDebug.h">
-      <Filter>ソース ファイル\CrtDebug</Filter>
+    <ClInclude Include="Source\Scene\Load\SceneLoad.h">
+      <Filter>ソース ファイル\Scene\Load</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadIcon\MyLoadIcon.h">
+      <Filter>ソース ファイル\LoadIcon</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

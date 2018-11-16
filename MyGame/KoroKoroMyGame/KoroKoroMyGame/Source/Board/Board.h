@@ -60,18 +60,16 @@ public:
 	FLOAT					getCurveCnt();		// 線形補間用カウンタ取得
 	UINT					getCurrentAnim();	// アニメパターン取得
 
-	// セッター
-
 protected:
 	static constexpr INT MaxLerp = 4;
 	static constexpr INT Vertex  = 4;
 	static constexpr INT Polygon = 2;
 
-
 	VERTEX_BOARD_DATA		vertexBoard;		// 頂点情報データ
 	TEXTURE_DATA			texture;			// テクスチャデータ
 
-	CHAR					fileName[256];	// 読み込むファイル名
+	CHAR				fileName[256];		// 読み込むファイル名
+	CHAR				textureFileName[256];
 	LPDIRECT3DTEXTURE9		pD3DTexture;	// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 pD3DVtxBuff;	// 頂点バッファインターフェースへのポインタ
 	LPDIRECT3DINDEXBUFFER9	pD3DIdxBuff;	// インデックスバッファへのポインタ
@@ -87,7 +85,7 @@ protected:
 	D3DMATERIAL9			mat;				// マテリアル
 	FLOAT					radAngle;		// ポリゴンの回転角度(ラジアン値)
 	FLOAT					rotSpeed;		// ポリゴンの回転速度
-	bool					alphaBlend;	// テクスチャの加算合成設定
+	bool					isAlphaBlend;	// テクスチャの加算合成設定
 	boardType				boardType;			// 2Dポリゴンか、ビルボードかの識別
 
 	// テクスチャ関連

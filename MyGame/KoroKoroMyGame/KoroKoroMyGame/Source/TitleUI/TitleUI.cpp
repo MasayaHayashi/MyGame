@@ -25,7 +25,7 @@ TitleUI::TitleUI()
 	vertexBoard.size					 = D3DXVECTOR3(921.0f, 177.0f, 0.0f);
 	vertexBoard.radAngle = 0.0f;
 	posDestBoard				 = D3DXVECTOR3(Application::ScreenCenterX * 0.5f, Application::ScreenCenterY * 0.25f, 0.0f);
-	alphaBlend			 = false;
+	isAlphaBlend			 = false;
 	vertexBoard.boardType		 = boardType::Polygon2d;
 
 	texPatternDivideX = 1;

@@ -11,7 +11,7 @@
 #include "../Scene/Load/SceneLoad.h"
 
 // ===== 定数・マクロ定義 =====
-#define TEXTURE_NAME		"data/TEXTURE/test.png"
+#define TEXTURE_NAME		"Data/Texture/fade.png"
 #define TEXTURE_NAME_STAR	"data/TEXTURE/Background.png"
 #define FADE_RATE (0.02f)
 
@@ -31,7 +31,7 @@ FadeUI::FadeUI()
 	vertexBoard.scale		 = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 	vertexBoard.radAngle	 = D3DXToRadian(0);
 	vertexBoard.boardType		= boardType::Polygon2d;
-	alphaBlend = false;
+	isAlphaBlend = false;
 	idNumber			 = 0;
 
 	texPatternDivideX		= 1;
@@ -101,10 +101,6 @@ void FadeUI::update()
 				SceneManager::finalize();
 			//	SAFE_DELETE(pCurrentScene);
 
-
-				// ロード開始
-		//		C_SCENE_LOAD *pSceneLoad = pSceneLoad();
-
 				SceneLoad::enable();
 				setFade(FadeUI::FadeType::FadeIn);
 			}
@@ -128,7 +124,7 @@ void FadeUI::update()
 			setcolor(Currentcolor);
 		}
 	}
-	//setTexture();
+	setTexture();
 	setVtx();
 	setcolor(Currentcolor);
 }
@@ -138,9 +134,8 @@ void FadeUI::update()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void FadeUI::draw()
 {
-	Board::drawObject();
+	Board::draw();
 }
-
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 色を設定

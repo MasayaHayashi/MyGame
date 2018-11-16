@@ -1,21 +1,3 @@
-﻿  Application.cpp
-  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-  コードを生成中...
-  コンパイル中...
-  SceneManager.cpp
-  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-  Player.cpp
-  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-  Pawn.cpp
-  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-  Keyboard.cpp
-  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-  HeartObj.cpp
-  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-  Figure.cpp
-  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-  Camera.cpp
-  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-  コードを生成中...
+﻿  FadeUI.cpp
   KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.exe
   KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.pdb (Partial PDB)

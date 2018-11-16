@@ -14,17 +14,6 @@ class Camera;
 #include "../Audio/\audiere.h"
 #include "d3dx9.h"
 
-// ===== 列挙体定義 =====
-enum class GAME_STATE
-{
-	GAME_READY = 0,	// 準備状態
-	GAME_TUTORIAL,	// チュートリアル表示
-	GAME_NORMAL,	// 通常状態
-	GAME_PAUSE,		// ポーズ状態
-	GAME_GOAL,		// ゴール状態
-	GAME_MISS,		// 落下状態
-	MAX_GAME_STATE,
-};
 
 // ===== クラス定義 =====
 class C_SCENE_BASE
@@ -43,14 +32,9 @@ public:
 	// ゲッター関連
 	virtual Camera* getCamera() = 0;
 
-	GAME_STATE getGameState();
-
 protected:
 	audiere::OutputStreamPtr bgmPtr;
 	audiere::SoundEffectPtr	 sePtr;
-
-	UINT gameState;
-	
 private:
 };
 

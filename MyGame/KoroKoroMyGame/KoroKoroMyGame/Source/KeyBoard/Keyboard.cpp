@@ -7,14 +7,13 @@
 #include "Keyboard.h"
 
 // ===== 静的メンバ =====
-LPDIRECTINPUT8			Keyboard::pDInput;
-LPDIRECTINPUTDEVICE8	Keyboard::pDIDevKeyboard;
-
-BYTE	Keyboard::keyState[MaxKey];
-BYTE	Keyboard::keyStateTrigger[MaxKey];
-BYTE	Keyboard::keyStateRelease[MaxKey];
-BYTE	Keyboard::keyStateRepeat[MaxKey];
-INT		Keyboard::keyStateRepeatCnt[MaxKey];
+LPDIRECTINPUT8			Keyboard::dInputPtr;				// IDirectInput8インターフェースへのポインタ
+LPDIRECTINPUTDEVICE8	Keyboard::devKeyboardPtr;			// IDirectInputDevice8インターフェースへのポインタ(キーボード)
+BYTE					Keyboard::keyState[MaxKey];					// キーボードの押下状態を保持するワーク
+BYTE					Keyboard::keyStateTrigger[MaxKey];			// キーボードのトリガー状態を保持するワーク
+BYTE					Keyboard::keyStateRelease[MaxKey];			// キーボードのリリース状態を保持するワーク
+BYTE					Keyboard::keyStateRepeat[MaxKey];				// キーボードのリピート状態を保持するワーク
+INT						Keyboard::keyStateRepeatCnt[MaxKey];			// キーボードのリピートカウンタ
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -39,11 +38,11 @@ HRESULT Keyboard::initialize(HINSTANCE hInst, HWND hWnd)
 {
 	HRESULT hr;
 
-	if (!pDInput)
+	if (!dInputPtr)
 	{
 		// DirectInputオブジェクトの作成
 		hr = DirectInput8Create(hInst, DIRECTINPUT_VERSION,
-			 IID_IDirectInput8, (void**)&pDInput, nullptr);
+			IID_IDirectInput8, (void**)&dInputPtr, nullptr);
 	}
 
 	// キーボードの初期化
@@ -57,18 +56,19 @@ HRESULT Keyboard::initialize(HINSTANCE hInst, HWND hWnd)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 HRESULT Keyboard::initializeKeyboard(HINSTANCE hInst, HWND hWnd)
 {
+
 	HRESULT hr;
 
 	// デバイスオブジェクトを作成
-	hr = pDInput->CreateDevice(GUID_SysKeyboard, &pDIDevKeyboard, nullptr);
-	if (FAILED(hr) || pDIDevKeyboard == nullptr)
+	hr = dInputPtr->CreateDevice(GUID_SysKeyboard, &devKeyboardPtr, nullptr);
+	if (FAILED(hr) || devKeyboardPtr == nullptr)
 	{
 		MessageBox(hWnd, "キーボードがありません", "警告！", MB_ICONWARNING);
 		return hr;
 	}
 
 	// データフォーマットを設定
-	hr = pDIDevKeyboard->SetDataFormat(&c_dfDIKeyboard);
+	hr = devKeyboardPtr->SetDataFormat(&c_dfDIKeyboard);
 	if (FAILED(hr))
 	{
 		MessageBox(hWnd, "キーボードのデータフォーマットを設定できませんでした。", "警告！", MB_ICONWARNING);
@@ -76,7 +76,7 @@ HRESULT Keyboard::initializeKeyboard(HINSTANCE hInst, HWND hWnd)
 	}
 
 	// 協調モードを設定（フォアグラウンド＆非排他モード）
-	hr = pDIDevKeyboard->SetCooperativeLevel(hWnd, (DISCL_FOREGROUND | DISCL_NONEXCLUSIVE));
+	hr = devKeyboardPtr->SetCooperativeLevel(hWnd, (DISCL_FOREGROUND | DISCL_NONEXCLUSIVE));
 	if (FAILED(hr))
 	{
 		MessageBox(hWnd, "キーボードの協調モードを設定できませんでした。", "警告！", MB_ICONWARNING);
@@ -84,7 +84,7 @@ HRESULT Keyboard::initializeKeyboard(HINSTANCE hInst, HWND hWnd)
 	}
 
 	// キーボードへのアクセス権を獲得(入力制御開始)
-	pDIDevKeyboard->Acquire();
+	devKeyboardPtr->Acquire();
 
 	return S_OK;
 }
@@ -104,13 +104,13 @@ void Keyboard::update()
 HRESULT Keyboard::updateKeyboard()
 {
 	HRESULT hr;
-	BYTE aKeyState[2500];
+	BYTE aKeyState[MaxKey];
 
 	// デバイスからデータを取得
-	hr = pDIDevKeyboard->GetDeviceState(sizeof(aKeyState), aKeyState);
+	hr = devKeyboardPtr->GetDeviceState(sizeof(aKeyState), aKeyState);
 	if (SUCCEEDED(hr))
 	{
-		for (int nCntKey = 0; nCntKey < 256; nCntKey++)
+		for (int nCntKey = 0; nCntKey < MaxKey; nCntKey++)
 		{
 			keyStateTrigger[nCntKey] = (keyState[nCntKey] ^ aKeyState[nCntKey]) & aKeyState[nCntKey];
 			keyStateRelease[nCntKey] = (keyState[nCntKey] ^ aKeyState[nCntKey]) & ~aKeyState[nCntKey];
@@ -136,7 +136,7 @@ HRESULT Keyboard::updateKeyboard()
 	else
 	{
 		// キーボードへのアクセス権を取得
-		pDIDevKeyboard->Acquire();
+		devKeyboardPtr->Acquire();
 	}
 
 	return S_OK;
@@ -162,7 +162,7 @@ bool Keyboard::getPress(INT nKey)
 //=============================================================================
 // キーボードのトリガー状態を取得
 //=============================================================================
-const bool Keyboard::getTrigger(int nKey)
+bool Keyboard::getTrigger(INT nKey)
 {
 	return (keyStateTrigger[nKey] & 0x80) ? true : false;
 }
@@ -170,7 +170,7 @@ const bool Keyboard::getTrigger(int nKey)
 //=============================================================================
 // キーボードのリピート状態を取得
 //=============================================================================
-const bool Keyboard::getRepeat(int nKey)
+bool Keyboard::getRepeat(INT nKey)
 {
 	return (keyStateRepeat[nKey] & 0x80) ? true : false;
 }
@@ -178,7 +178,8 @@ const bool Keyboard::getRepeat(int nKey)
 //=============================================================================
 // キーボードのリリ－ス状態を取得
 //=============================================================================
-const bool Keyboard::getRelease(int nKey)
+bool Keyboard::getRelease(INT nKey)
 {
 	return (keyStateRelease[nKey] & 0x80) ? true : false;
+
 }

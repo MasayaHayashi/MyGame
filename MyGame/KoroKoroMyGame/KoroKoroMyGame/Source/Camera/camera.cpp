@@ -41,7 +41,7 @@ Camera::Camera()
 	changeCamera	= true;
 	lerpCnt		= 0.0f;
 
-	cameraMoveFade = MAIN_START_FADE;
+	cameraMoveFade = MoceType::Start;
 
 	rot = 0;
 	rotCnt = 0;
@@ -69,15 +69,15 @@ void Camera::finalize(Player *pPlayer)
 	switch (currentScene)
 	{
 	case SceneManager::SceneState::SceneTitle:
-		initializeTitle(pPlayer);
+		
 		break;
 	case SceneManager::SceneState::SceneMain:
-		initializeGameMain(pPlayer);
+		
 		break;
 	case SceneManager::SceneState::SceneResult:
 		break;
 	case SceneManager::SceneState::SceneStageEdit:
-		initializeStageEdit();
+		
 		break;
 	default:
 		break;
@@ -183,7 +183,7 @@ void Camera::initializeStageEdit()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ初期化(ゲームメイン)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::initializeGameMain(Player *pPlayer)
+void Camera::initializeMain(Player *pPlayer)
 {
 	D3DXVECTOR3 PlayerPos = pPlayer->getPosition();
 
@@ -666,7 +666,7 @@ void Camera::updateGameMain(Player *pPlayer,Board *pReadyUI)
 
 	switch (cameraMoveFade)
 	{
-		case MAIN_TUTORIAL:
+	case MoceType::Tutorial:
 			{
 
 			cameraPos = D3DXVECTOR3(0.0f, 10.0f, -19.0f);		// カメラの視点
@@ -676,7 +676,7 @@ void Camera::updateGameMain(Player *pPlayer,Board *pReadyUI)
 			}
 			break;
 
-		case MAIN_START_FADE:
+	case MoceType::Start:
 			{
 				UINT Indx = pReadyUI->getCurrentAnim();
 
@@ -685,13 +685,13 @@ void Camera::updateGameMain(Player *pPlayer,Board *pReadyUI)
 
 				if (Indx == 0)
 				{
-					cameraMoveFade = MAIN_NORMAL;
+					cameraMoveFade = MoceType::Normal;
 					cameraPos = D3DXVECTOR3(0.0f, 10.0f, -19.0f);		// カメラの視点
 					cameraLook = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// カメラの注視点
 				}
 			}
 		break;
-		case MAIN_NORMAL:
+	case MoceType::Normal:
 			{
 				D3DXVECTOR3 PlayerPos = pPlayer->getOffset();
 
@@ -709,7 +709,7 @@ void Camera::updateGameMain(Player *pPlayer,Board *pReadyUI)
 			}
 
 			break;
-		case MAIN_GOAL_FADE:
+	case MoceType::Goal:
 		{
 
 			D3DXVECTOR3 PlayerPos = pPlayer->getOffset();
@@ -918,7 +918,7 @@ D3DXVECTOR3 Camera::getFowerd()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラステートセット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::setState(camera_MOVE_TYPE setState)
+void Camera::setState(MoceType setState)
 {
 	cameraMoveFade = setState;
 }
