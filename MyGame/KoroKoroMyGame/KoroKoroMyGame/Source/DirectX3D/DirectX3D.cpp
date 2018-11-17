@@ -99,7 +99,7 @@ HRESULT DirectX3D::initialize(HWND& wnd)
 	}
 
 	//シェーダーを読み込み
-	if (FAILED(D3DXCreateEffectFromFile( directXDevice.Get(), "Data/FX/Min.fx", nullptr, nullptr, 0, nullptr, &directXEffect, nullptr)))
+	if (FAILED(D3DXCreateEffectFromFile( directXDevice.Get(), "Test.fx", nullptr, nullptr, 0, nullptr, &directXEffect, nullptr)))
 	{
 		MessageBox(nullptr, "シェーダーファイル読み込み失敗", "", MB_OK);
 		return E_FAIL;

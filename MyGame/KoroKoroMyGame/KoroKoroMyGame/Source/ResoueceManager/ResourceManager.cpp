@@ -19,10 +19,10 @@
 ResourceManager*					ResourceManager::pInstance = new ResourceManager;
 std::vector <MeshData*>				ResourceManager::meshes;
 std::unordered_map<std::string,		HIERARCHY_MESH_DATA*>	ResourceManager::hierarchyMesh;
-std::vector<TEXTURE_DATA*>			ResourceManager::texture;				// テクスチャ情報
-std::vector<TEXTURE_DATA*>			ResourceManager::fadeTexture;			// テクスチャ情報
-std::vector<VERTEX_BOARD_DATA*>		ResourceManager::vtxBoard;				// ボード頂点情報
-std::vector<VERTEX_BOARD_DATA*>		ResourceManager::vtxFadeBoard;			// ボード頂点情報
+std::vector<TEXTURE_DATA*>			ResourceManager::texture;
+std::vector<TEXTURE_DATA*>			ResourceManager::fadeTexture;
+std::vector<VERTEX_BOARD_DATA*>		ResourceManager::vtxBoard;
+std::vector<VERTEX_BOARD_DATA*>		ResourceManager::vtxFadeBoard;	
 
 #define SAFE_DELETE(p)       { if(p!=nullptr) { delete (p);     (p) = nullptr; } }
 #define SAFE_RELEASE(p)      { if(p!=nullptr) { (p)->Release(); (p) = nullptr; } }

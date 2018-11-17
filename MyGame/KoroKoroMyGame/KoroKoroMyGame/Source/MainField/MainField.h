@@ -19,7 +19,7 @@ public:
 	static constexpr FLOAT Size = 5300.0f;
 	static constexpr FLOAT Radius = Size *0.5f;
 	const std::string ModelFilePass   = "Data/Model/MainField/RockLayered_5.x";
-	const std::string TextureFilePass = "Data/Model/MainField/land.tga";
+	const std::string TextureFilePass = "Data/Model/Heart/heart.png";
 
 	MainField();
 	~MainField();

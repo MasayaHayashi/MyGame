@@ -10,6 +10,8 @@
 #include "../Figure/Figure.h"
 #include <tchar.h>
 #include "../KeyBoard/Keyboard.h"
+#include "../SceneManager/SceneManager.h"
+#include "../Camera/Camera.h"
 
 // ===== グローバル変数宣言 =====
 #define SAFE_DELETE(p)       { if(p!=nullptr) { delete (p);     (p) = nullptr; } }
@@ -172,14 +174,53 @@ void Pawn::draw()
 
 	for (int nCntMat = 0; nCntMat < static_cast<INT>(meshDataObj.numMat); nCntMat++)
 	{
+		auto effect = DirectX3D::getEffect();
+		auto camera = SceneManager::getInstanse()->getCamera();
+		D3DXVECTOR3 cameraPos = camera->getPos();
+		auto diffuse = pD3DXMat->MatD3D.Diffuse;
+
+		effect->SetMatrix("WorldMat", &worldMtx);
+		effect->SetMatrix("ViewMat", &camera->getMtxView());
+		effect->SetMatrix("ProjMat", &camera->getProjectionMtx());
+
+		effect->SetVector("LightDir", &D3DXVECTOR4(0.0f, 1.0f, 1.0f, 0.0f));
+		effect->SetVector("ViewPos", &D3DXVECTOR4(cameraPos.x, cameraPos.y, cameraPos.z,1.0f));
+		effect->SetVector("MaterialDiffuse", &D3DXVECTOR4(diffuse.r, diffuse.g, diffuse.b, diffuse.a));
+
 		// マテリアルの設定
-		devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
+	//	devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
 
 		// テクスチャの設定
-		devicePtr->SetTexture(0, textureData.pD3DTexture);
+	//	devicePtr->SetTexture(0, textureData.pD3DTexture);
+
+		UINT numPass;
+		//----- テクニックを指定 --------------------------------------------
+		if (FAILED(effect->SetTechnique("main")))
+			return;
+
+		//----- レンダリング開始 --------------------------------------------
+		if (FAILED(effect->Begin(&numPass, 0)))
+			return;
+
+		//---- パスの開始 ---------------------------------------------------
+		if (FAILED(effect->BeginPass(0)))
+			return;
 
 		// 描画
 		meshDataObj.meshPtr->DrawSubset(nCntMat);
+
+		auto hr = effect->EndPass();
+		if (FAILED(hr))
+		{
+			return;
+		}
+
+		hr = effect->End();
+
+		if (FAILED(hr))
+		{
+			return;
+		}
 	}
 
 	// マテリアルをデフォルトに戻す
@@ -245,13 +286,68 @@ void Pawn::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 	{
 
 		// マテリアルの設定
-		devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
+//		devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
 
 		// テクスチャの設定
-		devicePtr->SetTexture(0, textureData.pD3DTexture);
+//		devicePtr->SetTexture(0, textureData.pD3DTexture);
 
 		// 描画
 		meshDataObj.meshPtr->DrawSubset(nCntMat);
+
+
+
+		auto effect = DirectX3D::getEffect();
+		auto camera = SceneManager::getInstanse()->getCamera();
+		D3DXVECTOR3 cameraPos = camera->getPos();
+		auto diffuse = pD3DXMat->MatD3D.Diffuse;
+
+		effect->SetMatrix("WorldMat", &worldMtx);
+		effect->SetMatrix("ViewMat", &camera->getMtxView());
+		effect->SetMatrix("ProjMat", &camera->getProjectionMtx());
+
+		effect->SetVector("LightDir", &D3DXVECTOR4(0.0f, 1.0f, 1.0f, 0.0f));
+		effect->SetVector("ViewPos", &D3DXVECTOR4(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f));
+		effect->SetVector("MaterialDiffuse", &D3DXVECTOR4(diffuse.r, diffuse.g, diffuse.b, diffuse.a));
+
+		// マテリアルの設定
+		//	devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
+
+		// テクスチャの設定
+		//	devicePtr->SetTexture(0, textureData.pD3DTexture);
+
+		UINT numPass;
+		//----- テクニックを指定 --------------------------------------------
+		if (FAILED(effect->SetTechnique("main")))
+			return;
+
+		//----- レンダリング開始 --------------------------------------------
+		if (FAILED(effect->Begin(&numPass, 0)))
+			return;
+
+		//---- パスの開始 ---------------------------------------------------
+		if (FAILED(effect->BeginPass(0)))
+			return;
+
+		// 描画
+		meshDataObj.meshPtr->DrawSubset(nCntMat);
+
+		auto hr = effect->EndPass();
+		if (FAILED(hr))
+		{
+			return;
+		}
+
+		hr = effect->End();
+
+		if (FAILED(hr))
+		{
+			return;
+		}
+
+
+
+
+
 	}
 
 	pEffect->EndPass();
@@ -351,13 +447,90 @@ void Pawn::drawObjectLocal()
 	for (int nCntMat = 0; nCntMat < static_cast<INT>(meshDataObj.numMat); nCntMat++)
 	{
 		// マテリアルの設定
-		devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
+//		devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
 
 		// テクスチャの設定
-		devicePtr->SetTexture(0, textureData.pD3DTexture);
+//		devicePtr->SetTexture(0, textureData.pD3DTexture);
+
+/*
+float4 Color;
+
+
+float Diffuse = dot(normalize(In.Normal.xyz), normalize(-LightDir));
+
+float3 HarfVec = (normalize(-LightDir.xyz) + normalize(In.ViewVec.xyz));
+float  Speculer = dot(normalize(HarfVec), normalize(In.Normal.xyz));
+
+float SpeculerPower = 18.0f;
+Speculer = pow(Speculer, SpeculerPower);
+
+Color.rbg = MaterialDiffuse.rbg * max(Diffuse,0.2f) + Speculer ;
+Color.a = MaterialDiffuse.a;
+
+return Color;
+*/
+
+
+
+
+
+		auto effect = DirectX3D::getEffect();
+		auto camera = SceneManager::getInstanse()->getCamera();
+		D3DXVECTOR3 cameraPos = camera->getPos();
+		auto diffuse = pD3DXMat->MatD3D.Diffuse;
+
+		effect->SetMatrix("WorldMat", &worldMtx);
+		effect->SetMatrix("ViewMat", &camera->getMtxView());
+		effect->SetMatrix("ProjMat", &camera->getProjectionMtx());
+
+		effect->SetVector("LightDir", &D3DXVECTOR4(0.0f, 1.0f, 1.0f, 0.0f));
+		effect->SetVector("ViewPos", &D3DXVECTOR4(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f));
+		effect->SetVector("MaterialDiffuse", &D3DXVECTOR4(diffuse.r, diffuse.g, diffuse.b, diffuse.a));
+
+		// マテリアルの設定
+		//	devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
+
+		// テクスチャの設定
+		//	devicePtr->SetTexture(0, textureData.pD3DTexture);
+
+		UINT numPass;
+		//----- テクニックを指定 --------------------------------------------
+		if (FAILED(effect->SetTechnique("main")))
+			return;
+
+		//----- レンダリング開始 --------------------------------------------
+		if (FAILED(effect->Begin(&numPass, 0)))
+			return;
+
+		//---- パスの開始 ---------------------------------------------------
+		if (FAILED(effect->BeginPass(0)))
+			return;
 
 		// 描画
 		meshDataObj.meshPtr->DrawSubset(nCntMat);
+
+		auto hr = effect->EndPass();
+		if (FAILED(hr))
+		{
+			return;
+		}
+
+		hr = effect->End();
+
+		if (FAILED(hr))
+		{
+			return;
+		}
+
+
+
+
+
+
+
+
+		// 描画
+	//	meshDataObj.meshPtr->DrawSubset(nCntMat);
 	}
 
 	// マテリアルをデフォルトに戻す

@@ -39,7 +39,7 @@ void MainField::initialize()
 {
 	// Xファイルの読み込み
 	ResourceManager::makeModel(meshDataObj, fileName,meshType);
-	ResourceManager::createTexture(textureData, texFileName);
+//	ResourceManager::createTexture(textureData, texFileName);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -48,10 +48,10 @@ void MainField::initialize()
 void MainField::finalize()
 {
 	// メッシュ解放
-	ResourceManager::destroyAllMesh();
+//	ResourceManager::destroyAllMesh();
 
 	// テクスチャ解放
-	ResourceManager::destroyAllTexture();
+//	ResourceManager::destroyAllTexture();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
