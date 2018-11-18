@@ -1,2 +1,33 @@
-﻿  KoroKoroMyGame.vcxproj -> D:\git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.exe
+﻿  TitleUI.cpp
+  Skydome.cpp
+  SceneTitle.cpp
+  SceneLoad.cpp
+  C_SceneMain.cpp
+  SceneManager.cpp
+  sceneBase.cpp
+  ResourceManager.cpp
+  Player.cpp
+  Pawn.cpp
+  MyHierarchy.cpp
+  MeshFieldBase.cpp
+  MainField.cpp
+  Light.cpp
+  Keyboard.cpp
+  HeartObj.cpp
+  GameObjectBase.cpp
+  Figure.cpp
+  FadeUI.cpp
+  Main.cpp
+  コードを生成中...
+  コンパイル中...
+  DirectX3D.cpp
+  Collision.cpp
+  Collider.cpp
+  Camera.cpp
+  Board.cpp
+  MyAudiere.cpp
+  Application.cpp
+  コードを生成中...
+  LINK : 前回のインクリメンタル リンクで D:\git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
+  KoroKoroMyGame.vcxproj -> D:\git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.exe
   KoroKoroMyGame.vcxproj -> D:\git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.pdb (Partial PDB)
