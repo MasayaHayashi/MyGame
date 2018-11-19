@@ -8,6 +8,8 @@
 #include "../../Light/Light.h"
 #include "../../Camera/Camera.h"
 #include "../../Player/Player.h"
+#include "../../Skydome/Skydome.h"
+#include "../../MainField/MainField.h"
 
 /*
 #include "C_Board.h"
@@ -51,9 +53,17 @@ UINT	SceneMain::prevScore = 0;
 SceneMain::SceneMain()
 {
 	prevScore = 0;
-	lightPtr.reset(NEW Light);
-	cameraPtr.reset(NEW Camera);
-	playerPtr.reset(NEW Player);
+	lightPtr.reset(NEW Light());
+	cameraPtr.reset(NEW Camera());
+	playeresPtr.push_back( std::unique_ptr<Player>(NEW Player()) );
+	playeresPtr.push_back( std::unique_ptr<Player>(NEW Player()) );
+
+	gameObjectesPtr.push_back( std::unique_ptr<Pawn>(NEW Skydome())   );
+	gameObjectesPtr.push_back( std::unique_ptr<Pawn>(NEW MainField()) );
+
+
+//	gameObjectesPtr[0].reset(NEW Skydome());
+//	gameObjectesPtr[1].reset(NEW MainField());
 }
 
 //
@@ -70,8 +80,18 @@ SceneMain::~SceneMain()
 void SceneMain::initialize()
 {
 	lightPtr->initialize();
-	cameraPtr->initializeMain(playerPtr.get());
-	playerPtr->initialize();
+	cameraPtr->initializeMain(playeresPtr.back().get());
+
+	for (auto &player : playeresPtr)
+	{
+		player->initialize();
+	}
+
+	for (auto &gameObject : gameObjectesPtr)
+	{
+		gameObject->initialize();
+	}
+
 
 	/*
 	// ƒvƒŒƒCƒ„[‰Šú‰»
@@ -209,7 +229,11 @@ void SceneMain::initialize()
 //
 void SceneMain::finalize()
 {
-//	playerPtr->finalize();
+	for (auto &player : playeresPtr)
+	{
+		player->finalize();
+	}
+
 	/*
 	// BGM’âŽ~
 
@@ -286,8 +310,15 @@ void SceneMain::finalize()
 //
 void SceneMain::update()
 {
-	playerPtr->update(cameraPtr.get()->getPos());
+	for (auto &gameObject : gameObjectesPtr)
+	{
+		gameObject->update();
+	}
 
+	for (auto &player : playeresPtr)
+	{
+		player->update(cameraPtr.get()->getFowerd());
+	}
 
 #if 0
 	if (currentGameState == SceneMain::GameState::Tutorial)
@@ -429,8 +460,15 @@ void SceneMain::update()
 //
 void SceneMain::draw()
 {
+	for (auto &gameObjectPtr : gameObjectesPtr)
+	{
+		gameObjectPtr->draw();
+	}
 
-//	playerPtr->draw();
+	for (auto & player : playeresPtr)
+	{
+		playeresPtr.back()->draw();
+	}
 
 	cameraPtr->setCamera();
 

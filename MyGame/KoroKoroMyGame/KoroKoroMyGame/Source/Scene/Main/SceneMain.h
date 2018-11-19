@@ -8,6 +8,7 @@
 #include "../../SceneInterface/sceneBase.h"
 #include "../../DirectX3D/DirectX3D.h"
 #include <memory>
+#include <list>
 
 /*
 #include "C_Block.h"
@@ -42,6 +43,7 @@ enum UI_OBJ_TYPE
 class Light;
 class Camera;
 class Player;
+class Pawn;
 
 // ===== ƒNƒ‰ƒX’è‹` =====
 class SceneMain : public C_SCENE_BASE
@@ -86,8 +88,9 @@ private:
 
 	std::unique_ptr<Light>  lightPtr;
 	std::unique_ptr<Camera> cameraPtr;
-	std::unique_ptr<Player> playerPtr;
 
+	std::list<std::unique_ptr<Player>>	 playeresPtr;
+	std::list<std::unique_ptr<Pawn>>	 gameObjectesPtr;
 
 	GameState				currentGameState;
 	static UINT				currentStage;

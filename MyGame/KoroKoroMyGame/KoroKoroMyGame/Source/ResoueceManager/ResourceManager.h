@@ -119,7 +119,7 @@ private:
 #define	FVF_VERTEX_3D	(D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1)
 
 	static std::vector<MeshData*>				meshes;
-	static std::unordered_map<std::string,HIERARCHY_MESH_DATA*>	hierarchyMesh;
+	static std::vector<HIERARCHY_MESH_DATA*>	hierarchyMesh;
 	static std::vector<TEXTURE_DATA*>			texture;
 	static std::vector<TEXTURE_DATA*>			fadeTexture;
 	static std::vector<VERTEX_BOARD_DATA*>		vtxBoard;

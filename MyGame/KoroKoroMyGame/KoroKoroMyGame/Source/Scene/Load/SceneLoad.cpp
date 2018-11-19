@@ -83,7 +83,7 @@ void SceneLoad::initialize()
 {
 	cameraPtr->initialize();
 	lightPtr->initialize();
-//	myLoadIConPtr->initialize();
+	myLoadIConPtr->initialize();
 
 
 	/*
@@ -119,7 +119,7 @@ void SceneLoad::finalize()
 void SceneLoad::update()
 {
 	// ロードオブジェクト更新
-//	myLoadIConPtr->update();
+	myLoadIConPtr->update();
 }
 
 
@@ -178,7 +178,7 @@ void SceneLoad::draw()
 	// Direct3Dによる描画の開始
 	if (SUCCEEDED(pDevice->BeginScene()))
 	{
-//		myLoadIConPtr->draw();	// ロード
+		myLoadIConPtr->draw();	// ロード
 
 		cameraPtr->setCamera();		// カメラセット
 

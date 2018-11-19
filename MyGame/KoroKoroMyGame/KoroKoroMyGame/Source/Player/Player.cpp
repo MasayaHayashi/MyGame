@@ -241,7 +241,7 @@ void Player::initializeGameMain()
 	numMat		 = 0;
 
 	// Xファイルの読み込み
-	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName,"Player2",meshType);
+	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName,"Player",meshType);
 //	ResourceManager::CreateTexture(TextureData, texFileName);
 
 	// モデル位置調整
@@ -386,7 +386,7 @@ void Player::initializeResult()
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	pD3DTexture		= nullptr;
-	meshPtr		= nullptr;
+	meshPtr			= nullptr;
 	materialBufferPtr	= nullptr;
 	numMat			= 0;
 
@@ -534,6 +534,93 @@ void Player::updateTitle(D3DXVECTOR3 CameraForward)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 {
+	updateFrameMatrices(hierarchyMeshData.frameRoot, &worldMtx);
+
+	if (hierarchyMeshData.animCtrlPtr)
+	{
+		DWORD dwNow = timeGetTime();
+		DOUBLE d = (dwNow - hierarchyMeshData.dwPrev) / 1000.0;
+		hierarchyMeshData.dwPrev = dwNow;
+		hierarchyMeshData.animCtrlPtr->AdvanceTime(d, nullptr);
+	}
+
+	short Xnum = 0.0f;
+	short Ynum = 0.0f;
+
+
+	if (Keyboard::getPress(DIK_D))
+	{
+		Xnum++;
+	}
+	if (Keyboard::getPress(DIK_A))
+	{
+		Xnum--;
+	}
+	if (Keyboard::getPress(DIK_S))
+	{
+		Ynum--;
+	}
+	if (Keyboard::getPress(DIK_W))
+	{
+		Ynum++;
+	}
+
+	D3DXVECTOR3 testVec;
+
+	D3DXVECTOR3 CameraRight = D3DXVECTOR3(CameraForward.z, 0.0f, -CameraForward.x);
+
+	D3DXVec3Normalize(&testVec, &testVec);
+
+	testVec = CameraRight * Xnum + CameraForward * Ynum;
+
+	D3DXVECTOR3 UpVec = getUpVec();
+	D3DXVec3Normalize(&UpVec, &UpVec);
+
+	D3DXQuaternionRotationAxis(&quatanion, &UpVec, 0);			// クォータニオンでの任意軸回転
+	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);	// クォータニオンから回転行列掛け合わせ
+	D3DXVec3Normalize(&testVec, &testVec);
+
+	testVec.y = 0.0f;
+	pos += testVec * 0.3f;
+
+	D3DXVECTOR3 FowrdVec = getForwardVec();
+	D3DXVECTOR3	RightVec = getRightVec();
+	D3DXVECTOR3 Upvec = getUpVec();
+
+	radRot = MyVector3::CalcAngleDegree(testVec, -FowrdVec);
+	D3DXQUATERNION quatanion;
+
+	static float cnt = 0.0f;
+
+	if (radRot == 0.0f)
+	{
+		D3DXQuaternionRotationAxis(&quatanion, &Upvec, oldRadRot);
+		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
+
+		startQuaternion = quatanion;
+		cnt = 0.0f;
+	}
+	else
+	{
+		D3DXQuaternionRotationAxis(&destQua, &Upvec, radRot);
+
+		D3DXQuaternionSlerp(&quatanion, &startQuaternion, &destQua, cnt);
+		cnt += 0.1f;
+
+		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
+		oldRadRot = radRot;
+
+	}
+
+	if (cnt >= 1.0f)
+	{
+		cnt = 1.0f;
+	}
+
+	worldMtx._41 = pos.x;
+	worldMtx._42 = pos.y;
+	worldMtx._43 = pos.z;
+
 #if 0
 
 	PrintDebugProc("LangingXXX::::%f\n", DestLanding.x);
@@ -546,18 +633,18 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	// 状態遷移判定
 //	changeState();
 
-	if(PlayerState == PlayerState::TYPE_JUMP_UP)
+	if (PlayerState == PlayerState::TYPE_JUMP_UP)
 		bIsGround = false;
 
 	C_SCENE_MANAGER *pScene = GetSceneManager();
 	GAME_STATE uCurrentState = pScene->GetInstanse()->GetGameState();
-	
+
 	C_XINPUT *pXinput = C_XINPUT::GetInstance();
 
 	short Xnum = pXinput->GetThumbLX();
 	short Ynum = pXinput->GetThumbLY();
 
-	
+
 	if (GetKeyboardPress(DIK_D))
 		Xnum++;
 	if (GetKeyboardPress(DIK_A))
@@ -567,7 +654,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	if (GetKeyboardPress(DIK_W))
 		Ynum++;
 
-	if(Xnum == 0.0f && Ynum == 0.0f)
+	if (Xnum == 0.0f && Ynum == 0.0f)
 		PlayerState = PlayerState::Stop;
 	else
 		PlayerState = PlayerState::TYPE_MOVE;
@@ -594,7 +681,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 
 	D3DXVECTOR3 FowrdVec = GetForwardVec();
 	D3DXVECTOR3	RightVec = GetRightVec();
-	D3DXVECTOR3 Upvec	 = GetUpVec();
+	D3DXVECTOR3 Upvec = GetUpVec();
 
 	fRadRot = MyVector3::CalcAngleDegree(TestVec, -FowrdVec);
 	D3DXQUATERNION quatanion;
@@ -623,8 +710,8 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 		fCnt = 1.0f;
 
 	// ジャンプ
-	if(uCurrentState == GAME_NORMAL)
-		if ( pXinput->GetButtonTriger(XINPUT_GAMEPAD_A) || GetKeyboardTrigger(DIK_SPACE) && bIsGround)
+	if (uCurrentState == GAME_NORMAL)
+		if (pXinput->GetButtonTriger(XINPUT_GAMEPAD_A) || GetKeyboardTrigger(DIK_SPACE) && bIsGround)
 		{
 			PlayerState = PlayerState::TYPE_JUMP_UP;
 			AccelePawn.y = 0.555f;
@@ -682,6 +769,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	}
 
 #endif
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
