@@ -17,10 +17,10 @@ class GameObjectBase
 		GameObjectBase();
 		virtual ~GameObjectBase();
 
-		virtual void initialize();
-		virtual void finalize();
-		virtual void update();
-		virtual void draw();
+		virtual void initialize() = 0;
+		virtual void finalize() = 0;
+		virtual void update() = 0;
+		virtual void draw() = 0;
 
 	protected:
 

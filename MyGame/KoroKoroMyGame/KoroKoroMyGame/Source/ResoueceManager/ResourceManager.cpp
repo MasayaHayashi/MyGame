@@ -15,7 +15,6 @@
 #include "../DirectX3D/DirectX3D.h"
 #include "../Pawn/Pawn.h"
 
-
 // ===== 静的メンバ変数 =====
 std::unique_ptr<ResourceManager>    ResourceManager::instancePtr = nullptr;
 std::vector <MeshData*>				ResourceManager::meshes;
@@ -1038,8 +1037,6 @@ bool ResourceManager::destroyHierarchymesh(CHAR *pszChakNeme,std::string keyName
 
 		hierarchyMesh.back()->animCtrlPtr->Release();
 		hierarchyMesh.back()->animCtrlPtr = nullptr;
-
-		//	SAFE_RELEASE(hierarchyMesh[i]->animCtrlPtr);
 
 			// メッシュ解放
 		if (hierarchyMesh.back()->frameRoot)

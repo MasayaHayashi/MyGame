@@ -27,6 +27,7 @@ class Player final : public Pawn
 {
 public:
 	Player();
+	Player(D3DXVECTOR3 startPos,UINT setNumber);
 	~Player();
 
 	enum class PlayerState
@@ -39,6 +40,9 @@ public:
 		Fall,
 		Dead
 	};
+
+	CHAR* ModelPenchanPass   = "Data/Model/Character/PenChan/PenguinC.x";
+	CHAR* ModelPenNoHahaPass = "Data/Model/Character/PenNoHaha/PenguinA.x";
 
 	void initialize();
 	void finalize();
@@ -57,21 +61,24 @@ public:
 	void addScore();
 	INT  getScore() const;
 private:
-	const CHAR* ModelFilePass = "Data/Model/Character/PenChan/PenguinC.x";
 	static constexpr FLOAT MoveForwardSpeed = 0.45f;
 	static constexpr FLOAT MoveSideSpeed	= 0.3f;
 	static constexpr FLOAT ScaleSize		= 1.0f;
 
 	void initializeTitle();
 	void initializeSceneEdit();
-	void initializeGameMain();
+	void initializeGameMain(CHAR* setFilePass);
 	void initializeResult();
 	void updateTitle(D3DXVECTOR3);
 	void updateResult();
+	void input();
 
 	void changeStatus();	// ステータス変更処理
 	void changeState();		// 状態変更処理
-	
+
+
+	FLOAT rotCnt = 0.0f;
+
 	D3DXVECTOR3		testVec;
 
 	PlayerState				 playerStateType;

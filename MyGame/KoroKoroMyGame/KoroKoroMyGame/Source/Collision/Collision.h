@@ -14,6 +14,7 @@
 
 // ===== インクルード部 =====
 #include "../Pawn/Pawn.h"
+#include <list>
 
 // ===== 列挙体定義 =====
 
@@ -38,11 +39,18 @@ class Collider;
 class Player;
 
 // ===== クラス定義 =====
-class C_COLLISION
+class Collision
 {
 public:
-	C_COLLISION();	// コンストラクタ
-	~C_COLLISION();	// デストラクタ
+	Collision();	// コンストラクタ
+	~Collision();	// デストラクタ
+
+	void update();
+
+	void registerList(TransformData& setTransformData,std::string keyName);
+
+
+
 
 	UINT CheckCollisionField(Player *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec);
 	UINT CheckCollisionWall(Player *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec);
@@ -58,6 +66,10 @@ private:
 	bool IntersectA(Pawn* pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXMATRIX pWorld);
 	INT  Intersect(Pawn *,LPD3DXVECTOR3 , LPD3DXVECTOR3 , bool , LPD3DXVECTOR3 , LPD3DXVECTOR3 , LPD3DXVECTOR3 );
 	void SwitchHitType(Pawn *, Pawn *);
+
+
+
+	std::unordered_map<std::string, std::list<TransformData>> collisionList;
 };
 
 #endif

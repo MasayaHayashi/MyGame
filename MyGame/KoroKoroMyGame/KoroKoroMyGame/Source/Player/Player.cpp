@@ -28,7 +28,7 @@ Player::Player()
 	setDefaultValue();
 
 	// ファイルパス設定
-	strcpy_s(fileName, ModelFilePass);
+	strcpy_s(fileName, ModelPenchanPass);
 
 	// 識別用タグ設定
 	tagName		= TagType::Player;
@@ -41,6 +41,40 @@ Player::Player()
 	D3DXMatrixIdentity(&translateMtx);
 
 	score = 0;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// コンストラクタ
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+Player::Player(D3DXVECTOR3 startPos,UINT setNumber)
+{
+	// 位置・向きの初期設定
+	pos = startPos;
+	move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	// 拡大率設定
+	scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+
+	setDefaultValue();
+
+	// ファイルパス設定
+	strcpy_s(fileName, ModelPenchanPass);
+
+	// 識別用タグ設定
+	tagName = TagType::Player;
+
+	// 状態初期化
+	playerStateType = PlayerState::Stop;
+
+	// 行列初期化
+	D3DXMatrixIdentity(&worldMtx);
+	D3DXMatrixIdentity(&translateMtx);
+
+	score = 0;
+
+	idNumber = setNumber;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -64,7 +98,14 @@ void Player::initialize()
 		initializeTitle();
 		break;
 	case SceneManager::SceneState::SceneMain:
-		initializeGameMain();
+		if (idNumber == 0)
+		{
+			initializeGameMain(ModelPenchanPass);
+		}
+		else if(idNumber == 1)
+		{
+			initializeGameMain(ModelPenNoHahaPass);
+		}
 		break;
 	case SceneManager::SceneState::SceneResult:
 		initializeResult();
@@ -157,9 +198,9 @@ void Player::initializeTitle()
 	IDirect3DDevice9 * devicePtr = DirectX3D::getDevice();
 
 	// 各種変数初期化
-	pD3DTexture  = nullptr;
-	meshPtr	 = nullptr;
-	materialBufferPtr = nullptr;
+	pD3DTexture			 = nullptr;
+	meshPtr				 = nullptr;
+	materialBufferPtr	 = nullptr;
 	numMat		 = 0;
 
 	// Xファイルの読み込み
@@ -219,10 +260,8 @@ void Player::initializeTitle()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // シーンメイン用プレイヤー初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Player::initializeGameMain()
+void Player::initializeGameMain(CHAR *setFilePass)
 {
-	// 位置、移動量、拡大率初期化
-	pos		= D3DXVECTOR3(0.0f, 1.84f, -5.0f);
 	move	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot		= D3DXVECTOR3(0.0f, 180.0f, 0.0f);
 	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -235,13 +274,13 @@ void Player::initializeGameMain()
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	// 各種変数初期化
-	pD3DTexture  = nullptr;
-	meshPtr	 = nullptr;
+	pD3DTexture		  = nullptr;
+	meshPtr			  = nullptr;
 	materialBufferPtr = nullptr;
 	numMat		 = 0;
 
 	// Xファイルの読み込み
-	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName,"Player",meshType);
+	ResourceManager::makeModelHierarchy(hierarchyMeshData, setFilePass,"Player",meshType);
 //	ResourceManager::CreateTexture(TextureData, texFileName);
 
 	// モデル位置調整
@@ -547,25 +586,44 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	short Xnum = 0.0f;
 	short Ynum = 0.0f;
 
-
-	if (Keyboard::getPress(DIK_D))
+	if (idNumber == 0)
 	{
-		Xnum++;
+		if (Keyboard::getPress(DIK_D))
+		{
+			Xnum++;
+		}
+		if (Keyboard::getPress(DIK_A))
+		{
+			Xnum--;
+		}
+		if (Keyboard::getPress(DIK_S))
+		{
+			Ynum--;
+		}
+		if (Keyboard::getPress(DIK_W))
+		{
+			Ynum++;
+		}
 	}
-	if (Keyboard::getPress(DIK_A))
+	else if (idNumber == 1)
 	{
-		Xnum--;
+		if (Keyboard::getPress(DIK_L))
+		{
+			Xnum++;
+		}
+		if (Keyboard::getPress(DIK_J))
+		{
+			Xnum--;
+		}
+		if (Keyboard::getPress(DIK_K))
+		{
+			Ynum--;
+		}
+		if (Keyboard::getPress(DIK_I))
+		{
+			Ynum++;
+		}
 	}
-	if (Keyboard::getPress(DIK_S))
-	{
-		Ynum--;
-	}
-	if (Keyboard::getPress(DIK_W))
-	{
-		Ynum++;
-	}
-
-	D3DXVECTOR3 testVec;
 
 	D3DXVECTOR3 CameraRight = D3DXVECTOR3(CameraForward.z, 0.0f, -CameraForward.x);
 
@@ -590,31 +648,29 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	radRot = MyVector3::CalcAngleDegree(testVec, -FowrdVec);
 	D3DXQUATERNION quatanion;
 
-	static float cnt = 0.0f;
-
 	if (radRot == 0.0f)
 	{
 		D3DXQuaternionRotationAxis(&quatanion, &Upvec, oldRadRot);
 		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
 
 		startQuaternion = quatanion;
-		cnt = 0.0f;
+		rotCnt = 0.0f;
 	}
 	else
 	{
 		D3DXQuaternionRotationAxis(&destQua, &Upvec, radRot);
 
-		D3DXQuaternionSlerp(&quatanion, &startQuaternion, &destQua, cnt);
-		cnt += 0.1f;
+		D3DXQuaternionSlerp(&quatanion, &startQuaternion, &destQua, rotCnt);
+		rotCnt += 0.1f;
 
 		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
 		oldRadRot = radRot;
 
 	}
 
-	if (cnt >= 1.0f)
+	if (rotCnt >= 1.0f)
 	{
-		cnt = 1.0f;
+		rotCnt = 1.0f;
 	}
 
 	worldMtx._41 = pos.x;
@@ -644,7 +700,6 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	short Xnum = pXinput->GetThumbLX();
 	short Ynum = pXinput->GetThumbLY();
 
-
 	if (GetKeyboardPress(DIK_D))
 		Xnum++;
 	if (GetKeyboardPress(DIK_A))
@@ -658,10 +713,6 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 		PlayerState = PlayerState::Stop;
 	else
 		PlayerState = PlayerState::TYPE_MOVE;
-
-
-
-
 
 	D3DXVECTOR3 CameraRight = D3DXVECTOR3(CameraForward.z, 0.0f, -CameraForward.x);
 
@@ -907,4 +958,51 @@ void Player::changeState()
 	{
 		playerStateType = PlayerState::Fall;
 	}
+}
+
+void Player::input()
+{
+	/*
+	Xnum = 0.0f;
+	Ynum = 0.0f;
+
+	if (idNumber == 0)
+	{
+		if (Keyboard::getPress(DIK_D))
+		{
+			Xnum++;
+		}
+		if (Keyboard::getPress(DIK_A))
+		{
+			Xnum--;
+		}
+		if (Keyboard::getPress(DIK_S))
+		{
+			Ynum--;
+		}
+		if (Keyboard::getPress(DIK_W))
+		{
+			Ynum++;
+		}
+	}
+	else if (idNumber == 1)
+	{
+		if (Keyboard::getPress(DIK_L))
+		{
+			Xnum++;
+		}
+		if (Keyboard::getPress(DIK_J))
+		{
+			Xnum--;
+		}
+		if (Keyboard::getPress(DIK_K))
+		{
+			Ynum--;
+		}
+		if (Keyboard::getPress(DIK_I))
+		{
+			Ynum++;
+		}
+	}
+	*/
 }

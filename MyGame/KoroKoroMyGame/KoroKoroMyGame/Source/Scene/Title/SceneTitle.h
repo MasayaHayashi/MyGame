@@ -32,7 +32,7 @@ class FadeUI;
 class Board;
 
 // ===== ƒNƒ‰ƒX’è‹` =====
-class SceneTitle final : public C_SCENE_BASE
+class SceneTitle final : public SceneBase
 {
 public:
 	SceneTitle();

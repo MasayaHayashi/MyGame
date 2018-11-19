@@ -16,22 +16,39 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-C_COLLISION::C_COLLISION()
+Collision::Collision()
 {
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // デストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-C_COLLISION::~C_COLLISION()
+Collision::~Collision()
 {
+
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 更新
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Collision::update()
+{
+	
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 登録
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Collision::registerList(TransformData &setTransformData,std::string keyName)
+{
+	collisionList[keyName].push_back = setTransformData;
 
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 地面とプレイヤーの衝突処理更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-UINT C_COLLISION::CheckCollisionField(Player *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength,D3DXVECTOR3 DestVec)
+UINT Collision::CheckCollisionField(Player *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength,D3DXVECTOR3 DestVec)
 {
 	INT	nIndx;
 
@@ -47,7 +64,7 @@ UINT C_COLLISION::CheckCollisionField(Player *pPlayer, Pawn *pPawnB, Pawn *pFiel
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 壁とプレイヤーの衝突処理更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-UINT C_COLLISION::CheckCollisionWall(Player *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec)
+UINT Collision::CheckCollisionWall(Player *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec)
 {
 	INT	nIndx;
 
@@ -55,16 +72,20 @@ UINT C_COLLISION::CheckCollisionWall(Player *pPlayer, Pawn *pPawnB, Pawn *pField
 	nIndx = IsHitRayToMesh(pField, pPlayer, &(pPlayer->getPosition() + D3DXVECTOR3(0.0f,2.0f,0.0f)), &(pPlayer->getPosition() + DestVec), true, &Cross, &Normal, &fLength);
 
 	if (nIndx >= 0)
+	{
 		return RAY_TRUE;
-	return RAY_FALSE;
-
+	}
+	else
+	{
+		return RAY_FALSE;
+	}
 }
 
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 衝突処理(削除用) (オブジェクトとオブジェクト)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_COLLISION::CheckCollisionBlock(Pawn *pSelectBlock, Pawn *pGameObj)
+void Collision::CheckCollisionBlock(Pawn *pSelectBlock, Pawn *pGameObj)
 {
 	// AABB判定
 	if (IsHitAABB(pSelectBlock, pGameObj))
@@ -77,7 +98,7 @@ void C_COLLISION::CheckCollisionBlock(Pawn *pSelectBlock, Pawn *pGameObj)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 球と球のあたり判定
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-bool C_COLLISION::IsHitSphereToSphere(Pawn *pPawnA,Pawn *pPawnB)
+bool Collision::IsHitSphereToSphere(Pawn *pPawnA,Pawn *pPawnB)
 {
 	D3DXVECTOR3 SphereA = pPawnA->getOffset();
 	D3DXVECTOR3 SphereB = pPawnB->getPosition();
@@ -206,7 +227,7 @@ bool CheckSegment2Triangle(const SEGMENT& _segment, const TRIANGLE& _triangle, D
 //		  当たっている		⇒ 当たっている三角形の添え字
 //		  当たっていない	⇒ -1
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-INT C_COLLISION::IsHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal,LPD3DXVECTOR3 Length)
+INT Collision::IsHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal,LPD3DXVECTOR3 Length)
 {
 		// ワールドマトリックスの逆マトリックスを生成
 		D3DXMATRIX mInvWorld;
@@ -243,7 +264,7 @@ INT C_COLLISION::IsHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPo
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 線分の判定
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-INT C_COLLISION::Intersect(Pawn *pField,LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal ,LPD3DXVECTOR3 pFLength)
+INT Collision::Intersect(Pawn *pField,LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal ,LPD3DXVECTOR3 pFLength)
 {
 	if (!pRayPos || !pRayDir)
 		return -1;
@@ -325,7 +346,7 @@ INT C_COLLISION::Intersect(Pawn *pField,LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRa
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 線分の判定
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-bool C_COLLISION::IntersectA(Pawn* pField,LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXMATRIX pWorld)
+bool Collision::IntersectA(Pawn* pField,LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXMATRIX pWorld)
 {
 	bool ans = false;
 
@@ -433,7 +454,7 @@ bool C_COLLISION::IntersectA(Pawn* pField,LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 p
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // AABBのあたり判定
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-bool C_COLLISION::IsHitAABB(Pawn *pPawnA, Pawn *pPawnB)
+bool Collision::IsHitAABB(Pawn *pPawnA, Pawn *pPawnB)
 {
 	D3DXVECTOR3 BoxAPos = pPawnA->getPosition();
 	D3DXVECTOR3 BoxBPos = pPawnB->getPosition();
@@ -458,7 +479,7 @@ bool C_COLLISION::IsHitAABB(Pawn *pPawnA, Pawn *pPawnB)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // プレイヤーとアイテム関連用AABB判定
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-bool C_COLLISION::IsHitAABBItem(Player *pPlayer,Pawn *pPawn)
+bool Collision::IsHitAABBItem(Player *pPlayer,Pawn *pPawn)
 {
 	D3DXVECTOR3 BoxASize = pPlayer->getCollisionBox()	* 2;
 	D3DXVECTOR3 BoxBSize = pPawn->getCollisionBox()		* 2;
@@ -482,7 +503,7 @@ bool C_COLLISION::IsHitAABBItem(Player *pPlayer,Pawn *pPawn)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // タグに応じて分岐用 (現在A側にプレイヤーを置く仕様)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void C_COLLISION::SwitchHitType(Pawn *pPawnA, Pawn *pPawnB)
+void Collision::SwitchHitType(Pawn *pPawnA, Pawn *pPawnB)
 {
 	// プレイヤーの処理
 	if (pPawnA->getTag() == Pawn::TagType::Player)

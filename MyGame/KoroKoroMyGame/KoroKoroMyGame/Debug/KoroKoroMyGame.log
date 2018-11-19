@@ -1,3 +1,21 @@
-﻿  ResourceManager.cpp
-  KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.exe
-  KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.pdb (Partial PDB)
+﻿  Skydome.cpp
+  SceneTitle.cpp
+  SceneMain.cpp
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(71): error C2059: 構文エラー: '}'
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(71): error C2143: 構文エラー: ';' が '}' の前にありません。
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(71): error C2238: ';' の前に無効なトークンがあります。
+  SceneManager.cpp
+  ResourceManager.cpp
+  Player.cpp
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\player\player.cpp(586): warning C4244: '初期化中': 'float' から 'short' への変換です。データが失われる可能性があります。
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\player\player.cpp(587): warning C4244: '初期化中': 'float' から 'short' への変換です。データが失われる可能性があります。
+  Pawn.cpp
+  MeshFieldBase.cpp
+  MainField.cpp
+  HeartObj.cpp
+  Collision.cpp
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(71): error C2059: 構文エラー: '}'
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(71): error C2143: 構文エラー: ';' が '}' の前にありません。
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.h(71): error C2238: ';' の前に無効なトークンがあります。
+  Camera.cpp
+  コードを生成中...

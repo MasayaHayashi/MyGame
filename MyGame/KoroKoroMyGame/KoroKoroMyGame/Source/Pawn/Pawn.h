@@ -17,7 +17,7 @@
 #include <memory>
 
 // ===== 列挙体定義 =====
-enum GAME_OBJ_TYPE
+enum class GameObjType
 {
 	NORMAL_BLOCK_OBJ = 0,	// 通常ブロック
 	MOVE_BLOCK_OBJ,			// 移動ブロック
@@ -32,19 +32,17 @@ enum class MeshObjType
 	HierarchyModel,	
 };
 
-// ===== 定数・マクロ定義 =====
-#define MAX_BLOCK_TYPE (2)
-
 // ===== 構造体定義 =====
 typedef struct
 {
-	D3DXVECTOR3				ScaleData;	// 拡大
-	D3DXVECTOR3				RotData;	// 回転
-	D3DXVECTOR3				PosData;	// 座標
-	GAME_OBJ_TYPE			ObjType;	// どのオブジェクトか
-	UINT					uNumber;	// 識別番号
+	D3DXVECTOR3				scaleData;	// 拡大
+	D3DXVECTOR3				rotData;	// 回転
+	D3DXVECTOR3				posData;	// 座標
+	GameObjType				objType;	// どのオブジェクトか
+	UINT					idNumber;	// 識別番号
+
 	bool					isUsed;		// 使用されているか
-} EXPORT_GAMEOBJ_DATA;		// 出力用データ
+} TransformData;
 
 // ===== クラスの前方宣言 =====
 class Collider;
@@ -65,6 +63,7 @@ public:
 	};
 
 	virtual void initialize();
+	virtual void initialize(std::string fileName);
 	virtual void update();
 	virtual void draw();
 	virtual void draw(D3DXMATRIX,D3DXMATRIX);
@@ -143,8 +142,8 @@ public:
 	void setAnimChange(UINT, UINT);				// アニメーション切り替え
 
 	void updateExportData();
-	void setExportData(EXPORT_GAMEOBJ_DATA);
-	EXPORT_GAMEOBJ_DATA* getExportData();
+	void setExportData(TransformData);
+	TransformData* getExportData();
 protected:
 	std::unique_ptr <Collider> colliderPtr = nullptr;
 
@@ -219,8 +218,8 @@ protected:
 	MyHierarchy					Hierarchy;		// 階層メモリ確保/解放クラス
 	DWORD						dwPrev;			// 直前の時刻
 	
-	EXPORT_GAMEOBJ_DATA			exportData;				// 書き出す際の保存用データ
-	GAME_OBJ_TYPE				objType;				// オブジェクトの種類
+	TransformData				exportData;				// 書き出す際の保存用データ
+	GameObjType					objType;				// オブジェクトの種類
 	MeshObjType					meshType;				// メッシュの種類
 	UINT						currentAnim;			// アニメーション
 private:

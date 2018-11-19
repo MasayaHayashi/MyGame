@@ -50,7 +50,7 @@ public:
 	static void setNextScene(SceneState setNextScene);
 	static void setCurrentScene(SceneState setSceneType);
 
-	static C_SCENE_BASE*		getInstanse();
+	static SceneBase*		getInstanse();
 	static const SceneState		getCurrentSceneType();
 	static const SceneState		getNextScene();
 	const FadeUI*				getFade() const;
@@ -64,7 +64,7 @@ private:
 	static SceneState nextSceneType;
 
 	static std::unique_ptr<SceneManager> sceneManagerInstancePtr;
-	static std::unique_ptr<C_SCENE_BASE> currentScenePtr;
+	static std::unique_ptr<SceneBase>	 currentScenePtr;
 	static std::unique_ptr <FadeUI>		 fadePtr;
 
 	static bool	   debugMode;

@@ -13,9 +13,9 @@
 #include "../Fade/FadeUI.h"
 
 // ===== 静的メンバ =====
-std::unique_ptr<SceneManager> SceneManager::sceneManagerInstancePtr(nullptr);
-std::unique_ptr<C_SCENE_BASE> SceneManager::currentScenePtr(nullptr);
-std::unique_ptr<FadeUI>	  SceneManager::fadePtr(nullptr);
+std::unique_ptr<SceneManager>	SceneManager::sceneManagerInstancePtr(nullptr);
+std::unique_ptr<SceneBase>		SceneManager::currentScenePtr(nullptr);
+std::unique_ptr<FadeUI>			SceneManager::fadePtr(nullptr);
 
 SceneManager::SceneState	  SceneManager::nextSceneType	 = SceneManager::SceneState::SceneTitle;
 SceneManager::SceneState	  SceneManager::currentSceneType = SceneManager::SceneState::SceneTitle;
@@ -158,7 +158,6 @@ void  SceneManager::drawFade()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneManager::changeScene(SceneState Scene)
 {
-	
 	switch (Scene)
 	{
 	case SceneState::SceneTitle:
@@ -188,7 +187,7 @@ void SceneManager::changeScene(SceneState Scene)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 現在のシーンのインスタンス取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-C_SCENE_BASE* SceneManager::getInstanse()
+SceneBase* SceneManager::getInstanse()
 {
 	return currentScenePtr.get();
 }

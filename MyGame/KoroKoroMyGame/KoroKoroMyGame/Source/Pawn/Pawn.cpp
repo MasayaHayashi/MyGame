@@ -110,6 +110,16 @@ void Pawn::initialize()
 
 }
 
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 初期化
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Pawn::initialize(std::string fileName)
+{
+
+}
+
+
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 後処理
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -452,8 +462,6 @@ void Pawn::setTranslate(D3DXVECTOR3 pos)
 	mtxOldTranslate = translateMtx;
 }
 
-
-
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // フレームのマトリックスを更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -477,7 +485,6 @@ void Pawn::updateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX pParentMatri
 		updateFrameMatrices(pFrame->pFrameFirstChild, &pFrame->combinedTransformationMatrix);
 	}
 }
-
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // アニメーション開始時間設定
@@ -531,13 +538,17 @@ HRESULT Pawn::AllocAllBoneMatrix(LPD3DXFRAME pFrameBase)
 	{
 		hr = AllocBoneMatrix(pFrame->pMeshContainer);
 		if (FAILED(hr))
+		{
 			return hr;
+		}
 	}
 	if (pFrame->pFrameSibling) 
 	{
 		hr = AllocAllBoneMatrix(pFrame->pFrameSibling);
 		if (FAILED(hr))
+		{
 			return hr;
+		}
 	}
 	if (pFrame->pFrameFirstChild) 
 		hr = AllocAllBoneMatrix(pFrame->pFrameFirstChild);
@@ -1005,31 +1016,31 @@ void Pawn::calcCollisionMeshContainer(LPD3DXMESHCONTAINER pMeshContainer, LPD3DX
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Pawn::updateExportData()
 {
-	exportData.PosData = pos;		// 位置
-	exportData.RotData = rot;		// 回転
-	exportData.ScaleData = scale;	// 拡大率
-	exportData.ObjType = objType;		// オブジェクトの種類
-	exportData.uNumber = idNumber;		// 識別番号
+	exportData.posData = pos;		// 位置
+	exportData.rotData = rot;		// 回転
+	exportData.scaleData = scale;	// 拡大率
+	exportData.objType = objType;		// オブジェクトの種類
+	exportData.idNumber = idNumber;		// 識別番号
 	exportData.isUsed = isUsed;		// 使用フラグ
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 書き出し用データセット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::setExportData(EXPORT_GAMEOBJ_DATA SetData)
+void Pawn::setExportData(TransformData SetData)
 {
-	pos = SetData.PosData;		// 位置
-	rot = SetData.RotData;		// 回転
-	scale = SetData.ScaleData;		// 拡大率
-	objType = SetData.ObjType;		// ブロックの種類
-	idNumber = SetData.uNumber;		// 識別番号
-	isUsed = SetData.isUsed;			// 使用フラグ
+	pos = SetData.posData;		// 位置
+	rot = SetData.rotData;		// 回転
+	scale = SetData.scaleData;	// 拡大率
+	objType = SetData.objType;	// ブロックの種類
+	idNumber = SetData.idNumber;	// 識別番号
+	isUsed = SetData.isUsed;		// 使用フラグ
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 書き出し用データ取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-EXPORT_GAMEOBJ_DATA* Pawn::getExportData()
+TransformData* Pawn::getExportData()
 {
 	return &exportData;
 }
