@@ -71,6 +71,7 @@ void SceneMain::initialize()
 {
 	lightPtr->initialize();
 	cameraPtr->initializeMain(playerPtr.get());
+	playerPtr->initialize();
 
 	/*
 	// ƒvƒŒƒCƒ„[‰Šú‰»
@@ -208,6 +209,7 @@ void SceneMain::initialize()
 //
 void SceneMain::finalize()
 {
+//	playerPtr->finalize();
 	/*
 	// BGM’âŽ~
 
@@ -284,7 +286,7 @@ void SceneMain::finalize()
 //
 void SceneMain::update()
 {
-
+	playerPtr->update(cameraPtr.get()->getPos());
 
 
 #if 0
@@ -428,7 +430,7 @@ void SceneMain::update()
 void SceneMain::draw()
 {
 
-	playerPtr->draw();
+//	playerPtr->draw();
 
 	cameraPtr->setCamera();
 

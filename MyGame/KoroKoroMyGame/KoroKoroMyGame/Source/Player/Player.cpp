@@ -241,7 +241,7 @@ void Player::initializeGameMain()
 	numMat		 = 0;
 
 	// Xファイルの読み込み
-	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName,"Player",meshType);
+	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName,"Player2",meshType);
 //	ResourceManager::CreateTexture(TextureData, texFileName);
 
 	// モデル位置調整

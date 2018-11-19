@@ -632,7 +632,7 @@ HRESULT ResourceManager::createTexture(TEXTURE_DATA &TextureData,  CHAR *pszFile
 	}
 	else
 	{
-		MessageBox(nullptr, TEXT("テクスチャ読み込みエラー"), TEXT("Error"), MB_ICONERROR);
+	//	MessageBox(nullptr, TEXT("テクスチャ読み込みエラー"), TEXT("Error"), MB_ICONERROR);
 		return E_FAIL;
 	}
 }
@@ -1046,12 +1046,15 @@ bool ResourceManager::destroyHierarchymesh(CHAR *pszChakNeme,std::string keyName
 		D3DXFrameDestroy(hierarchyMesh[keyName]->frameRoot, &hierarchyMesh[keyName]->hierarchy);
 		hierarchyMesh[keyName]->frameRoot = nullptr;
 
+		hierarchyMesh.clear();
+
 		return true;
 	}
 	else
 	{
 		return false;
 	}
+
 	
 	return false;
 }
