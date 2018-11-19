@@ -7,13 +7,13 @@
 #include "Keyboard.h"
 
 // ===== 静的メンバ =====
-LPDIRECTINPUT8			Keyboard::dInputPtr;				// IDirectInput8インターフェースへのポインタ
-LPDIRECTINPUTDEVICE8	Keyboard::devKeyboardPtr;			// IDirectInputDevice8インターフェースへのポインタ(キーボード)
+LPDIRECTINPUT8			Keyboard::dInputPtr;						// IDirectInput8インターフェースへのポインタ
+LPDIRECTINPUTDEVICE8	Keyboard::devKeyboardPtr;					// IDirectInputDevice8インターフェースへのポインタ(キーボード)
 BYTE					Keyboard::keyState[MaxKey];					// キーボードの押下状態を保持するワーク
 BYTE					Keyboard::keyStateTrigger[MaxKey];			// キーボードのトリガー状態を保持するワーク
 BYTE					Keyboard::keyStateRelease[MaxKey];			// キーボードのリリース状態を保持するワーク
-BYTE					Keyboard::keyStateRepeat[MaxKey];				// キーボードのリピート状態を保持するワーク
-INT						Keyboard::keyStateRepeatCnt[MaxKey];			// キーボードのリピートカウンタ
+BYTE					Keyboard::keyStateRepeat[MaxKey];			// キーボードのリピート状態を保持するワーク
+INT						Keyboard::keyStateRepeatCnt[MaxKey];		// キーボードのリピートカウンタ
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ

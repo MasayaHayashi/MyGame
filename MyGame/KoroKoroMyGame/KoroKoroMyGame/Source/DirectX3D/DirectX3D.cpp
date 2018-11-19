@@ -164,7 +164,6 @@ HRESULT DirectX3D::initialize(HWND& wnd)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void DirectX3D::update()
 {
-
 	SceneManager::update();
 }
 
@@ -182,8 +181,7 @@ void DirectX3D::draw() const
 		// シーン描画
 		SceneManager::draw();
 
-		// フェード描画
-	//	g_pSceneManager->DrawFadeScene();
+		SceneManager::drawFade();
 
 		// デバッグ表示の描画処理
 #if _DEBUG
