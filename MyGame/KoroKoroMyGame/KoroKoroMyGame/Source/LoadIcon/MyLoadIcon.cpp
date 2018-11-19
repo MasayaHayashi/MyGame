@@ -53,7 +53,6 @@ MyLoadIcon::~MyLoadIcon()
 void MyLoadIcon::initialize()
 {
 	ResourceManager::makevertexBoard(vertexBoard, fileName);
-//	ResourceManager::createTexture(texture, textureFileName);
 
 	setVtx();
 	setTexture();
@@ -64,11 +63,7 @@ void MyLoadIcon::initialize()
 //
 void MyLoadIcon::finalize()
 {
-	/*
-	C_RESOURCE_MANAGER *pResourceMgr = GetResourceManager();
-	pResourceMgr->DestroyAllTexture();
-	pResourceMgr->DestroyFadeVtx();
-	*/
+
 }
 
 //

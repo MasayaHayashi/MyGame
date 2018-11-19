@@ -12,7 +12,6 @@
 
 // ===== 定数・マクロ定義 =====
 #define TEXTURE_NAME		"Data/Texture/fade.png"
-#define TEXTURE_NAME_STAR	"data/TEXTURE/Background.png"
 #define FADE_RATE (0.02f)
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -23,8 +22,6 @@ FadeUI::FadeUI()
 	vertexBoard.fade = true;
 	CurentFadeType	= FadeType::FadeNone;
 	Currentcolor	= D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f);
-	//Currentcolor	= D3DXCOLOR(0.0f, 0.635f, 0.91f, 0.0f);
-	//color = D3DXCOLOR(0.0f, 0.0f, 0.8f, 0.0f);
 	strcpy_s(fileName, &TextureName.front());
 	vertexBoard.size		 = D3DXVECTOR3(static_cast<FLOAT>( Application::ScreenWidth), static_cast<FLOAT>(Application::ScreenHeight), 0.0f);
 	vertexBoard.pos			 = D3DXVECTOR3(static_cast<FLOAT>( Application::ScreenWidth) * 0.5f, static_cast<FLOAT>(Application::ScreenHeight) * 0.5f, 0.0f);
@@ -59,8 +56,6 @@ FadeUI::~FadeUI()
 void FadeUI::initialize()
 {
 	strcpy_s(fileName, TEXTURE_NAME);
-//	Texture.pD3DTexture = nullptr;
-	//	CurentFadeType = FADE_IN;
 	Currentcolor = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.2f);
 
 	ResourceManager::makevertexBoard(vertexBoard,fileName);	// 頂点情報生成
@@ -74,8 +69,6 @@ void FadeUI::initialize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void FadeUI::finalize()
 {
-//	Board::finalizeObject();
-	
 	// 頂点情報解放
 	ResourceManager::destroyFadeVtx();
 }
@@ -99,7 +92,6 @@ void FadeUI::update()
 
 				// シーン後処理
 				SceneManager::finalize();
-			//	SAFE_DELETE(pCurrentScene);
 
 				SceneLoad::enable();
 				setFade(FadeUI::FadeType::FadeIn);
@@ -172,13 +164,3 @@ FadeUI::FadeType FadeUI::getFadeState()
 {
 	return CurentFadeType;
 }
-
-/*
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// ワーク用シーンセット
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void FadeUI::setWorkScene(C_SCENE_MANAGER::SCENE_STATE setScene)
-{
-	WorkScene = setScene;
-}
-*/

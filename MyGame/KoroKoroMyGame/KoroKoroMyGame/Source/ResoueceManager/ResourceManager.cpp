@@ -74,6 +74,7 @@ HRESULT ResourceManager::makeModel(MeshData &meshData, CHAR *pszFilename, MeshOb
 	// Xファイルの読み込み
 	if (FAILED(D3DXLoadMeshFromX(pszFilename, D3DXMESH_SYSTEMMEM, devicePtr, nullptr, &meshes.back()->materialBufferPtr, nullptr, &meshes.back()->numMat, &meshes.back()->meshPtr)))
 	{
+		MessageBox(nullptr, TEXT("Error"), TEXT("モデル読み込みエラー"), MB_ICONERROR);
 		return E_FAIL;
 	}
 
@@ -631,6 +632,7 @@ HRESULT ResourceManager::createTexture(TEXTURE_DATA &TextureData,  CHAR *pszFile
 	}
 	else
 	{
+		MessageBox(nullptr, TEXT("テクスチャ読み込みエラー"), TEXT("Error"), MB_ICONERROR);
 		return E_FAIL;
 	}
 }
@@ -665,6 +667,7 @@ HRESULT ResourceManager::makeModelHierarchy(HIERARCHY_MESH_DATA &setHierarchyMed
 	HRESULT hr = D3DXLoadMeshHierarchyFromX(hierarchyMesh[keyName]->meshFileName, D3DXMESH_MANAGED, devicePtr, &hierarchyMesh[keyName]->hierarchy, nullptr, &hierarchyMesh[keyName]->frameRoot, &hierarchyMesh[keyName]->animCtrlPtr);
 	if (FAILED(hr))
 	{
+		MessageBox(nullptr, TEXT("Error"), TEXT("階層メッシュ読み込みエラー"), MB_ICONERROR);
 		return false;
 	}
 
