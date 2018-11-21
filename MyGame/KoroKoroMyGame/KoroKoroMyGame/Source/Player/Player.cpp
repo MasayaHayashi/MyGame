@@ -10,6 +10,7 @@
 #include "../DirectX3D/DirectX3D.h"
 #include "../MyVector3/MyVector3.h"
 #include "../ResoueceManager/ResourceManager.h"
+#include "../Collision/Collision.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -128,7 +129,6 @@ void Player::initialize()
 void Player::finalize()
 {
 	ResourceManager::destroyHierarchymesh(fileName, "Player");
-
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -185,6 +185,8 @@ void Player::updateResult()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::initializeTitle()
 {
+
+
 	// 位置、移動量、拡大率初期化
 	pos		= D3DXVECTOR3(0.0f, -0.01f, -5.0f);
 	move	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -262,6 +264,8 @@ void Player::initializeTitle()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::initializeGameMain(CHAR *setFilePass)
 {
+	Collision::registerList(myTransformData, "Player");
+
 	move	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot		= D3DXVECTOR3(0.0f, 180.0f, 0.0f);
 	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -270,10 +274,8 @@ void Player::initializeGameMain(CHAR *setFilePass)
 
 	setDefaultValue();
 
-	// デバイス取得
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
-	// 各種変数初期化
 	pD3DTexture		  = nullptr;
 	meshPtr			  = nullptr;
 	materialBufferPtr = nullptr;
@@ -281,7 +283,6 @@ void Player::initializeGameMain(CHAR *setFilePass)
 
 	// Xファイルの読み込み
 	ResourceManager::makeModelHierarchy(hierarchyMeshData, setFilePass,"Player",meshType);
-//	ResourceManager::CreateTexture(TextureData, texFileName);
 
 	// モデル位置調整
 	pos.y -= hierarchyMeshData.collitionBox.y * 2;
@@ -298,44 +299,13 @@ void Player::initializeGameMain(CHAR *setFilePass)
 	D3DXMatrixTranslation(&translate, pos.x, pos.y, pos.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &translate);
 
-	// コライダー初期化
-//	pCollider = NEW Collider(pos, hierarchyMeshData.collitionBox);
-//	pCollider->initializeCollider(pos, hierarchyMeshData.collitionBox, centerPos);
-
-	// 表示フラグ初期化
-//	pCollider->setUsedFlg(false);
-
 	// 現在のアニメーションセットの設定値を取得
 	D3DXTRACK_DESC TD;   // トラックの能力
 	hierarchyMeshData.animCtrlPtr->GetTrackDesc(0, &TD);
-
-	// 今のアニメーションをトラック1に移行し
-	// トラックの設定値も移行
-//	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(1, hierarchyMeshData.ppAnimSet[1]);
 	hierarchyMeshData.animCtrlPtr->SetTrackDesc(1, &TD);
-
-	// 新しいアニメーションセットをトラック0に設定
-//	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[1]);
 
 	playerStateType = PlayerState::Stop;
 	isGround	= true;
-
-	/*
-
-	// 現在のアニメーションセットの設定値を取得
-	D3DXTRACK_DESC TD;   // トラックの能力
-	hierarchyMeshData.animCtrlPtrPtr->GetTrackDesc(0, &TD);
-
-	// 今のアニメーションをトラック1に移行し
-	// トラックの設定値も移行
-	hierarchyMeshData.animCtrlPtrPtr->SetTrackAnimationSet(1, hierarchyMeshData.ppAnimSet[0]);
-	hierarchyMeshData.animCtrlPtrPtr->SetTrackDesc(1, &TD);
-
-	// 新しいアニメーションセットをトラック0に設定
-	hierarchyMeshData.animCtrlPtrPtr->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[2]);
-
-	*/
-
 	isUsed = true;
 
 	D3DXQuaternionRotationAxis(&startQuaternion, &getUpVec(), 0);		// クォータニオンでの任意軸回転
@@ -449,6 +419,7 @@ void Player::initializeStatus()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updateTitle(D3DXVECTOR3 CameraForward)
 {
+	updateTransformData();
 
 	if (Keyboard::getTrigger(DIK_2))
 	{
@@ -535,17 +506,7 @@ void Player::updateTitle(D3DXVECTOR3 CameraForward)
 	worldMtx._42 = pos.y;
 	worldMtx._43 = pos.z;
 
-	// フレーム更新
-	updateFrameMatrices(hierarchyMeshData.frameRoot, &worldMtx);
-
-	// アニメーション更新
-	if (hierarchyMeshData.animCtrlPtr)
-	{
-		DWORD dwNow = timeGetTime();
-		DOUBLE d = (dwNow - hierarchyMeshData.dwPrev) / 1000.0;
-		hierarchyMeshData.dwPrev = dwNow;
-		hierarchyMeshData.animCtrlPtr->AdvanceTime(d, nullptr);
-	}
+	updateAnimation();
 
 
 
@@ -573,18 +534,10 @@ void Player::updateTitle(D3DXVECTOR3 CameraForward)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 {
-	updateFrameMatrices(hierarchyMeshData.frameRoot, &worldMtx);
+	updateAnimation();
 
-	if (hierarchyMeshData.animCtrlPtr)
-	{
-		DWORD dwNow = timeGetTime();
-		DOUBLE d = (dwNow - hierarchyMeshData.dwPrev) / 1000.0;
-		hierarchyMeshData.dwPrev = dwNow;
-		hierarchyMeshData.animCtrlPtr->AdvanceTime(d, nullptr);
-	}
-
-	short Xnum = 0.0f;
-	short Ynum = 0.0f;
+	FLOAT Xnum = 0.0f;
+	FLOAT Ynum = 0.0f;
 
 	if (idNumber == 0)
 	{

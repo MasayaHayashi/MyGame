@@ -34,7 +34,7 @@ public:
 	{
 		Stop = 0,
 		Move,
-		MoveHitWall,			// 移動できるが壁に当たっている
+		MoveHitWall,		// 移動できるが壁に当たっている
 		JumpUp,				// ジャンプ上昇中
 		JumpDown,			// ジャンプ下降中
 		Fall,
@@ -51,15 +51,18 @@ public:
 
 	virtual void initializeStatus();
 
+	// シーン別更新
 	void updateSceneEdit();
 	void updateGameMain(D3DXVECTOR3);
 
 	void setStatus(Player::PlayerState setStatus);
-	PlayerState getState()   const;
-
 	void setScore(INT);
+
 	void addScore();
+
+	PlayerState getState()   const;
 	INT  getScore() const;
+
 private:
 	static constexpr FLOAT MoveForwardSpeed = 0.45f;
 	static constexpr FLOAT MoveSideSpeed	= 0.3f;

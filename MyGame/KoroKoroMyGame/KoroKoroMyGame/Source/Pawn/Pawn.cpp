@@ -556,49 +556,6 @@ HRESULT Pawn::AllocAllBoneMatrix(LPD3DXFRAME pFrameBase)
 	return hr;
 }
 
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// モデルの解放
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::destroyResorceModel()
-{
-	ResourceManager::destroyAllMesh();
-}
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// テクスチャ解放
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::destroyTexture()
-{
-	SAFE_DELETE(pD3DTexture);
-}
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// テクスチャ解放
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::destroyResorceTexture()
-{
-	ResourceManager::destroyAllTexture();
-}
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// 階層構造用モデル解放
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::destroyModelHierarchy()
-{
-	ResourceManager::destroyAllHierarchymesh();
-}
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// モデルの解放
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::destroyModel()
-{
-	SAFE_RELEASE(pD3DTexture);
-	SAFE_RELEASE(materialBufferPtr);
-	SAFE_RELEASE(meshPtr);
-}
-
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 位置座標セット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -882,7 +839,6 @@ void Pawn::setHitFlg(bool bSet)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 WORD* Pawn::getIndxAcess()
 {
-//	return pIndx;
 	return meshDataObj.indexPtr.get();
 }
 
@@ -892,7 +848,6 @@ WORD* Pawn::getIndxAcess()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 MESH_VTX* Pawn::getVtxAcess()
 {
-	//return vertexPtr;
 	return meshDataObj.vertexPtr.get();
 }
 
@@ -902,8 +857,6 @@ MESH_VTX* Pawn::getVtxAcess()
 DWORD Pawn::getVertexNum()
 {
 	return meshDataObj.dwNumVtx;
-
-//	return dwNumVtx;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -920,7 +873,6 @@ DWORD Pawn::getIndxNum()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 DWORD Pawn::getTriangleNum()
 {
-//	return dwNumTriangles;
 	return meshDataObj.dwNumTriangles;
 }
 
@@ -941,7 +893,7 @@ void Pawn::calcCollision(LPD3DXFRAME pFrame)
 	D3DXVECTOR3& vMax = collitionBox;
 	D3DXVECTOR3& vMin = centerPos;
 	vMax.x = vMax.y = vMax.z = -FLT_MAX;
-	vMin.x = vMin.y = vMin.z = FLT_MAX;
+	vMin.x = vMin.y = vMin.z =  FLT_MAX;
 	collisionRadus = -1.0f;
 	calcCollisionFrame(pFrame);
 	D3DXVECTOR3 vBBox, vCenter;
@@ -968,10 +920,14 @@ void Pawn::calcCollisionFrame(LPD3DXFRAME pFrame)
 	}
 	// 兄弟フレームがあれば兄弟フレームを描画
 	if (pFrame->pFrameSibling)
+	{
 		calcCollisionFrame(pFrame->pFrameSibling);
+	}
 	// 子フレームがあれば子フレームを描画
 	if (pFrame->pFrameFirstChild)
+	{
 		calcCollisionFrame(pFrame->pFrameFirstChild);
+	}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -994,18 +950,20 @@ void Pawn::calcCollisionMeshContainer(LPD3DXMESHCONTAINER pMeshContainer, LPD3DX
 		{
 			D3DXVECTOR3& vMax = collitionBox;
 			D3DXVECTOR3& vMin = centerPos;
-			if (vMax.x < vtx.x) vMax.x = vtx.x;
-			if (vMax.y < vtx.y) vMax.y = vtx.y;
-			if (vMax.z < vtx.z) vMax.z = vtx.z;
-			if (vMin.x > vtx.x) vMin.x = vtx.x;
-			if (vMin.y > vtx.y) vMin.y = vtx.y;
-			if (vMin.z > vtx.z) vMin.z = vtx.z;
+			if (vMax.x < vtx.x) {	vMax.x = vtx.x; }
+			if (vMax.y < vtx.y) {	vMax.y = vtx.y;	}
+			if (vMax.z < vtx.z) {	vMax.z = vtx.z;	}
+			if (vMin.x > vtx.x) {	vMin.x = vtx.x;	}
+			if (vMin.y > vtx.y) {	vMin.y = vtx.y;	}
+			if (vMin.z > vtx.z) {	vMin.z = vtx.z;	}
 		}
 		else
 		{
 			float fRadius = D3DXVec3Length(&(vtx - centerPos));
 			if (collisionRadus < fRadius)
+			{
 				collisionRadus = fRadius;
+			}
 		}
 	}
 	pMesh->UnlockVertexBuffer();
@@ -1014,35 +972,35 @@ void Pawn::calcCollisionMeshContainer(LPD3DXMESHCONTAINER pMeshContainer, LPD3DX
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 書き出し用データ更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::updateExportData()
+void Pawn::updateTransformData()
 {
-	exportData.posData = pos;		// 位置
-	exportData.rotData = rot;		// 回転
-	exportData.scaleData = scale;	// 拡大率
-	exportData.objType = objType;		// オブジェクトの種類
-	exportData.idNumber = idNumber;		// 識別番号
-	exportData.isUsed = isUsed;		// 使用フラグ
+	myTransformData.posData		= pos;
+	myTransformData.rotDegData	= rot;
+	myTransformData.scaleData	= scale;
+//	myTransformData.objType		= objType;
+	myTransformData.idNumber	= idNumber;
+	myTransformData.isUsed		= isUsed;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 書き出し用データセット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::setExportData(TransformData SetData)
+void Pawn::setTransformData(TransformData setData)
 {
-	pos = SetData.posData;		// 位置
-	rot = SetData.rotData;		// 回転
-	scale = SetData.scaleData;	// 拡大率
-	objType = SetData.objType;	// ブロックの種類
-	idNumber = SetData.idNumber;	// 識別番号
-	isUsed = SetData.isUsed;		// 使用フラグ
+	pos			= setData.posData;		// 位置
+	rot			= setData.rotDegData;	// 回転
+	scale		= setData.scaleData;	// 拡大率
+//	objType		= setData.objType;		// ブロックの種類
+	idNumber	= setData.idNumber;		// 識別番号
+	isUsed		= setData.isUsed;		// 使用フラグ
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 書き出し用データ取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-TransformData* Pawn::getExportData()
+const TransformData& Pawn::getTransformData()
 {
-	return &exportData;
+	return myTransformData;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -1080,9 +1038,6 @@ void Pawn::initializeStatus()
 	D3DXMATRIX translateMtx;
 	D3DXMatrixTranslation(&translateMtx, pos.x, pos.y, pos.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &translateMtx);
-
-
-
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -1119,4 +1074,20 @@ void Pawn::setAnimChange(UINT uSetNum,UINT uWorkNum)
 //	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[uSetNum]);
 
 	currentAnim = uSetNum;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// アニメーション更新
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Pawn::updateAnimation()
+{
+	updateFrameMatrices(hierarchyMeshData.frameRoot, &worldMtx);
+
+	if (hierarchyMeshData.animCtrlPtr)
+	{
+		DWORD dwNow = timeGetTime();
+		DOUBLE d = (dwNow - hierarchyMeshData.dwPrev) / 1000.0;
+		hierarchyMeshData.dwPrev = dwNow;
+		hierarchyMeshData.animCtrlPtr->AdvanceTime(d, nullptr);
+	}
 }

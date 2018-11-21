@@ -115,6 +115,9 @@
     <Filter Include="ソース ファイル\LoadIcon">
       <UniqueIdentifier>{57fb7207-16cb-41e4-bc9d-5b80f06ca3c7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Transform">
+      <UniqueIdentifier>{dfe2081c-a2a4-4d5f-ad8e-0c8d259c95bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Audio\MyAudiere.cpp">
@@ -203,6 +206,9 @@
     </ClCompile>
     <ClCompile Include="Source\LoadIcon\MyLoadIcon.cpp">
       <Filter>ソース ファイル\LoadIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Transform\Transform.cpp">
+      <Filter>ソース ファイル\Transform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -301,6 +307,9 @@
     </ClInclude>
     <ClInclude Include="Source\LoadIcon\MyLoadIcon.h">
       <Filter>ソース ファイル\LoadIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Transform\Transform.h">
+      <Filter>ソース ファイル\Transform</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

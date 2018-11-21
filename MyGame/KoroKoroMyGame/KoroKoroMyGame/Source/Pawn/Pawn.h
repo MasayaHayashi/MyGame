@@ -13,36 +13,15 @@
 #include "../Mesh/Mesh.h"
 #include "../MyHierarchy/MyHierarchy.h"
 #include "../ResoueceManager/ResourceManager.h"
+#include "../Transform/Transform.h"
 #include <vector>
 #include <memory>
-
-// ===== 列挙体定義 =====
-enum class GameObjType
-{
-	NORMAL_BLOCK_OBJ = 0,	// 通常ブロック
-	MOVE_BLOCK_OBJ,			// 移動ブロック
-	STAR_OBJ,				// 星
-	GOAL_OBJ,				// ゴール
-	MAX_GAME_OBJ_TYPE,
-};	// オブジェクトの種類
 
 enum class MeshObjType
 {
 	NormalModel,
 	HierarchyModel,	
 };
-
-// ===== 構造体定義 =====
-typedef struct
-{
-	D3DXVECTOR3				scaleData;	// 拡大
-	D3DXVECTOR3				rotData;	// 回転
-	D3DXVECTOR3				posData;	// 座標
-	GameObjType				objType;	// どのオブジェクトか
-	UINT					idNumber;	// 識別番号
-
-	bool					isUsed;		// 使用されているか
-} TransformData;
 
 // ===== クラスの前方宣言 =====
 class Collider;
@@ -65,22 +44,13 @@ public:
 	virtual void initialize();
 	virtual void initialize(std::string fileName);
 	virtual void update();
+	virtual void updateAnimation();
 	virtual void draw();
 	virtual void draw(D3DXMATRIX,D3DXMATRIX);
 	virtual void draw(LPD3DXMESH pMesh, LPDIRECT3DTEXTURE9 pTex, LPD3DXBUFFER pBuff, DWORD numMat);
 	virtual void finalize();
 
 	virtual void initializeStatus();	// 各種ステータスを初期値にする
-
-//	HRESULT makeModel();				// モデル生成
-//	HRESULT makeModelHierarchy();		// 階層構造用モデル読み込み
-//	HRESULT createTexture();			// テクスチャ生成
-
-	void destroyResorceModel();			// モデルの解放
-	void destroyModelHierarchy();		// 階層構造用モデル解放
-	void destroyModel();				// モデルの解放
-	void destroyTexture();				// テクスチャ解放
-	void destroyResorceTexture();		// テクスチャ解放
 
 	void drawObjectLocal();
 
@@ -109,7 +79,6 @@ public:
 	LPD3DXBUFFER getMat();
 	DWORD		 getMatNum();
 
-
 	LPDIRECT3DVERTEXBUFFER9 getVtxBuff();		// 頂点情報取得
 	LPDIRECT3DTEXTURE9		getTexture();		// テクスチャ取得
 	BOOL					getUsedFlg();		// 使用フラグ取得
@@ -118,7 +87,6 @@ public:
 	HRESULT AllocAllBoneMatrix(LPD3DXFRAME);
 
 	void setTime(DOUBLE);
-	void updateFrameMatrices(LPD3DXFRAME , LPD3DXMATRIX );
 	void drawFrame(LPD3DXFRAME);
 	void RenderMeshContainer(LPD3DXMESHCONTAINER, LPD3DXFRAME );
 
@@ -141,9 +109,9 @@ public:
 
 	void setAnimChange(UINT, UINT);				// アニメーション切り替え
 
-	void updateExportData();
-	void setExportData(TransformData);
-	TransformData* getExportData();
+	void updateTransformData();
+	void setTransformData(TransformData);
+	const TransformData& getTransformData();
 protected:
 	std::unique_ptr <Collider> colliderPtr = nullptr;
 
@@ -218,14 +186,15 @@ protected:
 	MyHierarchy					Hierarchy;		// 階層メモリ確保/解放クラス
 	DWORD						dwPrev;			// 直前の時刻
 	
-	TransformData				exportData;				// 書き出す際の保存用データ
-	GameObjType					objType;				// オブジェクトの種類
+	TransformData				myTransformData;		// 書き出す際の保存用データ
+	GameObjType					objType;
 	MeshObjType					meshType;				// メッシュの種類
 	UINT						currentAnim;			// アニメーション
 private:
 
 #define FVF_TVERTEX	(D3DFVF_XYZ|D3DFVF_NORMAL|D3DFVF_TEX1)
 
+	void updateFrameMatrices(LPD3DXFRAME, LPD3DXMATRIX);
 
 	void calcCollision(LPD3DXFRAME);			// 階層構造用、境界球/境界ボックス取得
 	void calcCollisionFrame(LPD3DXFRAME);
@@ -241,17 +210,6 @@ private:
 	DWORD				dwAttrNum;				// 属性値
 
 	FLOAT				colorAlpha;				// アルファ値変更用変数
-
-
-	/*
-	D3DXATTRIBUTERANGE*	pAttr;					// 属性値
-
-	MESH_VTX			*pVtx;					// 頂点情報へのアクセス用ポインタ
-	WORD				*pIndex;					// インデックスバッファアクセス用ポインタ
-
-	D3DMATERIAL9*		pMaterial;				// マテリアル情報
-	LPDIRECT3DTEXTURE9*	ppTexture;				// テクスチャ情報
-	*/
 };
 
 #endif

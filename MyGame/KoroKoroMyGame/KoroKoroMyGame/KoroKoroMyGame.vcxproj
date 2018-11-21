@@ -142,6 +142,7 @@
     <ClCompile Include="Source\Scene\Title\SceneTitle.cpp" />
     <ClCompile Include="Source\Skydome\Skydome.cpp" />
     <ClCompile Include="Source\TitleUI\TitleUI.cpp" />
+    <ClCompile Include="Source\Transform\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CrtDebug.h" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Source\Scene\Title\SceneTitle.h" />
     <ClInclude Include="Source\Skydome\Skydome.h" />
     <ClInclude Include="Source\TitleUI\TitleUI.h" />
+    <ClInclude Include="Source\Transform\Transform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -10,6 +10,15 @@
 // ===== インクルード部 =====
 #include "GameObjectBase.h"
 
+// ===== 列挙体定義 =====
+enum class GameObjType
+{
+	NormalBlockObj = 0,
+	MoveBlockObj,
+	StarObj,
+	GoalObj,
+};
+
 // ===== クラス定義 =====
 class GameObjectBase
 {

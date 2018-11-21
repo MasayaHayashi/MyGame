@@ -14,6 +14,7 @@
 
 // ===== インクルード部 =====
 #include "../Pawn/Pawn.h"
+#include "../Transform/Transform.h"
 #include <list>
 
 // ===== 列挙体定義 =====
@@ -47,7 +48,7 @@ public:
 
 	void update();
 
-	void registerList(TransformData& setTransformData,std::string keyName);
+	static void registerList(TransformData setTransformData,std::string keyName);
 
 
 
@@ -68,8 +69,7 @@ private:
 	void SwitchHitType(Pawn *, Pawn *);
 
 
-
-	std::unordered_map<std::string, std::list<TransformData>> collisionList;
+	static std::unordered_map<std::string, Transform> collisionMapes;
 };
 
 #endif

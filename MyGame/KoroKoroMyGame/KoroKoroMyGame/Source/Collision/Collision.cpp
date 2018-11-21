@@ -12,12 +12,17 @@
 #include "Collision.h"
 #include "../Player/Player.h"
 #include "../Pawn/Pawn.h"
+#include "../DirectX3D/DirectX3D.h"
+
+// ===== 静的メンバ =====
+std::unordered_map<std::string, Transform> Collision::collisionMapes;
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 Collision::Collision()
 {
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -33,16 +38,17 @@ Collision::~Collision()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Collision::update()
 {
-	
+
+//	DirectX3D::printDebug("posdata %f", *itr->getData()->posData);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 登録
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Collision::registerList(TransformData &setTransformData,std::string keyName)
+void Collision::registerList(TransformData setTransformData,std::string keyName)
 {
-	collisionList[keyName].push_back = setTransformData;
 
+//	collisionMapes[keyName] = setTransformData;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -56,9 +62,13 @@ UINT Collision::CheckCollisionField(Player *pPlayer, Pawn *pPawnB, Pawn *pField,
 	nIndx = IsHitRayToMesh(pField, pPlayer, &pPlayer->getPosition(), &(pPlayer->getPosition() + DestVec), true, &Cross, &Normal,&fLength);
 
 	if (nIndx >= 0)
+	{
 		return RAY_TRUE;
-	return RAY_FALSE;
-
+	}
+	else
+	{
+		return RAY_FALSE;
+	}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -112,8 +122,10 @@ bool Collision::IsHitSphereToSphere(Pawn *pPawnA,Pawn *pPawnB)
 	{
 		return true;
 	}
-
-	return false;
+	else
+	{
+		return false;
+	}
 }
 
 /*
