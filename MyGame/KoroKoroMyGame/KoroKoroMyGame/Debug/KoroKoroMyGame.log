@@ -14,3 +14,26 @@ d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\sourc
           [
               _Ty=TransformData
           ]
+  TitleUI.cpp
+  Skydome.cpp
+  SceneTitle.cpp
+  SceneMain.cpp
+  SceneLoad.cpp
+  SceneManager.cpp
+  sceneBase.cpp
+  ResourceManager.cpp
+  Player.cpp
+  Pawn.cpp
+  MyVector3.cpp
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\myvector3\myvector3.cpp(69): warning C4244: '=': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\myvector3\myvector3.cpp(257): warning C4244: '=': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\myvector3\myvector3.cpp(286): warning C4244: '=': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
+  MyHierarchy.cpp
+  MeshFieldBase.cpp
+  MainField.cpp
+  MyLoadIcon.cpp
+  Light.cpp
+  Keyboard.cpp
+  HeartObj.cpp
+  GameObjectBase.cpp
+  コードを生成中...
