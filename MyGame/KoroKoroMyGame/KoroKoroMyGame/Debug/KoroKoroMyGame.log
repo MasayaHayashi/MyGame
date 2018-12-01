@@ -1,6 +1,0 @@
-﻿  PostSpriteRendere.cpp
-d:\git\mygame\korokoromygame\korokoromygame\postspriterendere.cpp(45): warning C4244: '引数': 'const UINT' から 'FLOAT' への変換です。データが失われる可能性があります。
-d:\git\mygame\korokoromygame\korokoromygame\postspriterendere.cpp(46): warning C4244: '引数': 'const UINT' から 'FLOAT' への変換です。データが失われる可能性があります。
-d:\git\mygame\korokoromygame\korokoromygame\postspriterendere.cpp(47): warning C4244: '引数': 'const UINT' から 'FLOAT' への変換です。データが失われる可能性があります。
-  KoroKoroMyGame.vcxproj -> D:\git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.exe
-  KoroKoroMyGame.vcxproj -> D:\git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.pdb (Partial PDB)

@@ -17,7 +17,7 @@ class C_PLAYER;
 class C_CAMERA;
 
 // ===== ƒNƒ‰ƒX’è‹` =====
-class C_SCENE_RESULT : public C_SCENE_BASE
+class C_SCENE_RESULT : public SceneBase
 {
 public:
 	C_SCENE_RESULT();

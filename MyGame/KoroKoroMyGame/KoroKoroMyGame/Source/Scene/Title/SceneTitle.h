@@ -33,7 +33,7 @@ class Board;
 class Texture;
 
 // ===== ƒNƒ‰ƒX’è‹` =====
-class SceneTitle final : public C_SCENE_BASE
+class SceneTitle final : public SceneBase
 {
 public:
 	SceneTitle();

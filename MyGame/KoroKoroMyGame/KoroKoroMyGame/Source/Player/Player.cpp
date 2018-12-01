@@ -10,6 +10,7 @@
 #include "../DirectX3D/DirectX3D.h"
 #include "../MyVector3/MyVector3.h"
 #include "../ResoueceManager/ResourceManager.h"
+#include "../Collision/Collision.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -28,7 +29,7 @@ Player::Player()
 	setDefaultValue();
 
 	// ファイルパス設定
-	strcpy_s(fileName, ModelFilePass);
+	strcpy_s(fileName, ModelPenchanPass);
 
 	// 識別用タグ設定
 	tagName		= TagType::Player;
@@ -41,6 +42,40 @@ Player::Player()
 	D3DXMatrixIdentity(&translateMtx);
 
 	score = 0;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// コンストラクタ
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+Player::Player(D3DXVECTOR3 startPos,UINT setNumber)
+{
+	// 位置・向きの初期設定
+	pos = startPos;
+	move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	// 拡大率設定
+	scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+
+	setDefaultValue();
+
+	// ファイルパス設定
+	strcpy_s(fileName, ModelPenchanPass);
+
+	// 識別用タグ設定
+	tagName = TagType::Player;
+
+	// 状態初期化
+	playerStateType = PlayerState::Stop;
+
+	// 行列初期化
+	D3DXMatrixIdentity(&worldMtx);
+	D3DXMatrixIdentity(&translateMtx);
+
+	score = 0;
+
+	idNumber = setNumber;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -64,7 +99,14 @@ void Player::initialize()
 		initializeTitle();
 		break;
 	case SceneManager::SceneState::SceneMain:
-		initializeGameMain();
+		if (idNumber == 0)
+		{
+			initializeGameMain(ModelPenchanPass);
+		}
+		else if(idNumber == 1)
+		{
+			initializeGameMain(ModelPenNoHahaPass);
+		}
 		break;
 	case SceneManager::SceneState::SceneResult:
 		initializeResult();
@@ -87,7 +129,6 @@ void Player::initialize()
 void Player::finalize()
 {
 	ResourceManager::destroyHierarchymesh(fileName, "Player");
-
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -144,6 +185,8 @@ void Player::updateResult()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::initializeTitle()
 {
+
+
 	// 位置、移動量、拡大率初期化
 	pos		= D3DXVECTOR3(0.0f, -0.01f, -5.0f);
 	move	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -157,9 +200,9 @@ void Player::initializeTitle()
 	IDirect3DDevice9 * devicePtr = DirectX3D::getDevice();
 
 	// 各種変数初期化
-	pD3DTexture  = nullptr;
-	meshPtr	 = nullptr;
-	materialBufferPtr = nullptr;
+	pD3DTexture			 = nullptr;
+	meshPtr				 = nullptr;
+	materialBufferPtr	 = nullptr;
 	numMat		 = 0;
 
 	// Xファイルの読み込み
@@ -219,10 +262,10 @@ void Player::initializeTitle()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // シーンメイン用プレイヤー初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Player::initializeGameMain()
+void Player::initializeGameMain(CHAR *setFilePass)
 {
-	// 位置、移動量、拡大率初期化
-	pos		= D3DXVECTOR3(0.0f, 1.84f, -5.0f);
+	Collision::registerList(myTransformData, "Player");
+
 	move	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot		= D3DXVECTOR3(0.0f, 180.0f, 0.0f);
 	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -231,18 +274,15 @@ void Player::initializeGameMain()
 
 	setDefaultValue();
 
-	// デバイス取得
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
-	// 各種変数初期化
-	pD3DTexture  = nullptr;
-	meshPtr	 = nullptr;
+	pD3DTexture		  = nullptr;
+	meshPtr			  = nullptr;
 	materialBufferPtr = nullptr;
 	numMat		 = 0;
 
 	// Xファイルの読み込み
-	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName,"Player",meshType);
-//	ResourceManager::CreateTexture(TextureData, texFileName);
+	ResourceManager::makeModelHierarchy(hierarchyMeshData, setFilePass,"Player",meshType);
 
 	// モデル位置調整
 	pos.y -= hierarchyMeshData.collitionBox.y * 2;
@@ -259,44 +299,13 @@ void Player::initializeGameMain()
 	D3DXMatrixTranslation(&translate, pos.x, pos.y, pos.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &translate);
 
-	// コライダー初期化
-//	pCollider = NEW Collider(pos, hierarchyMeshData.collitionBox);
-//	pCollider->initializeCollider(pos, hierarchyMeshData.collitionBox, centerPos);
-
-	// 表示フラグ初期化
-//	pCollider->setUsedFlg(false);
-
 	// 現在のアニメーションセットの設定値を取得
 	D3DXTRACK_DESC TD;   // トラックの能力
 	hierarchyMeshData.animCtrlPtr->GetTrackDesc(0, &TD);
-
-	// 今のアニメーションをトラック1に移行し
-	// トラックの設定値も移行
-//	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(1, hierarchyMeshData.ppAnimSet[1]);
 	hierarchyMeshData.animCtrlPtr->SetTrackDesc(1, &TD);
-
-	// 新しいアニメーションセットをトラック0に設定
-//	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[1]);
 
 	playerStateType = PlayerState::Stop;
 	isGround	= true;
-
-	/*
-
-	// 現在のアニメーションセットの設定値を取得
-	D3DXTRACK_DESC TD;   // トラックの能力
-	hierarchyMeshData.animCtrlPtrPtr->GetTrackDesc(0, &TD);
-
-	// 今のアニメーションをトラック1に移行し
-	// トラックの設定値も移行
-	hierarchyMeshData.animCtrlPtrPtr->SetTrackAnimationSet(1, hierarchyMeshData.ppAnimSet[0]);
-	hierarchyMeshData.animCtrlPtrPtr->SetTrackDesc(1, &TD);
-
-	// 新しいアニメーションセットをトラック0に設定
-	hierarchyMeshData.animCtrlPtrPtr->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[2]);
-
-	*/
-
 	isUsed = true;
 
 	D3DXQuaternionRotationAxis(&startQuaternion, &getUpVec(), 0);		// クォータニオンでの任意軸回転
@@ -386,7 +395,7 @@ void Player::initializeResult()
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	pD3DTexture		= nullptr;
-	meshPtr		= nullptr;
+	meshPtr			= nullptr;
 	materialBufferPtr	= nullptr;
 	numMat			= 0;
 
@@ -410,6 +419,7 @@ void Player::initializeStatus()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updateTitle(D3DXVECTOR3 CameraForward)
 {
+	updateTransformData();
 
 	if (Keyboard::getTrigger(DIK_2))
 	{
@@ -496,17 +506,7 @@ void Player::updateTitle(D3DXVECTOR3 CameraForward)
 	worldMtx._42 = pos.y;
 	worldMtx._43 = pos.z;
 
-	// フレーム更新
-	updateFrameMatrices(hierarchyMeshData.frameRoot, &worldMtx);
-
-	// アニメーション更新
-	if (hierarchyMeshData.animCtrlPtr)
-	{
-		DWORD dwNow = timeGetTime();
-		DOUBLE d = (dwNow - hierarchyMeshData.dwPrev) / 1000.0;
-		hierarchyMeshData.dwPrev = dwNow;
-		hierarchyMeshData.animCtrlPtr->AdvanceTime(d, nullptr);
-	}
+	updateAnimation();
 
 
 
@@ -534,6 +534,102 @@ void Player::updateTitle(D3DXVECTOR3 CameraForward)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 {
+	updateAnimation();
+
+	FLOAT Xnum = 0.0f;
+	FLOAT Ynum = 0.0f;
+
+	if (idNumber == 0)
+	{
+		if (Keyboard::getPress(DIK_D))
+		{
+			Xnum++;
+		}
+		if (Keyboard::getPress(DIK_A))
+		{
+			Xnum--;
+		}
+		if (Keyboard::getPress(DIK_S))
+		{
+			Ynum--;
+		}
+		if (Keyboard::getPress(DIK_W))
+		{
+			Ynum++;
+		}
+	}
+	else if (idNumber == 1)
+	{
+		if (Keyboard::getPress(DIK_L))
+		{
+			Xnum++;
+		}
+		if (Keyboard::getPress(DIK_J))
+		{
+			Xnum--;
+		}
+		if (Keyboard::getPress(DIK_K))
+		{
+			Ynum--;
+		}
+		if (Keyboard::getPress(DIK_I))
+		{
+			Ynum++;
+		}
+	}
+
+	D3DXVECTOR3 CameraRight = D3DXVECTOR3(CameraForward.z, 0.0f, -CameraForward.x);
+
+	D3DXVec3Normalize(&testVec, &testVec);
+
+	testVec = CameraRight * Xnum + CameraForward * Ynum;
+
+	D3DXVECTOR3 UpVec = getUpVec();
+	D3DXVec3Normalize(&UpVec, &UpVec);
+
+	D3DXQuaternionRotationAxis(&quatanion, &UpVec, 0);			// クォータニオンでの任意軸回転
+	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);	// クォータニオンから回転行列掛け合わせ
+	D3DXVec3Normalize(&testVec, &testVec);
+
+	testVec.y = 0.0f;
+	pos += testVec * 0.3f;
+
+	D3DXVECTOR3 FowrdVec = getForwardVec();
+	D3DXVECTOR3	RightVec = getRightVec();
+	D3DXVECTOR3 Upvec = getUpVec();
+
+	radRot = MyVector3::CalcAngleDegree(testVec, -FowrdVec);
+	D3DXQUATERNION quatanion;
+
+	if (radRot == 0.0f)
+	{
+		D3DXQuaternionRotationAxis(&quatanion, &Upvec, oldRadRot);
+		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
+
+		startQuaternion = quatanion;
+		rotCnt = 0.0f;
+	}
+	else
+	{
+		D3DXQuaternionRotationAxis(&destQua, &Upvec, radRot);
+
+		D3DXQuaternionSlerp(&quatanion, &startQuaternion, &destQua, rotCnt);
+		rotCnt += 0.1f;
+
+		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
+		oldRadRot = radRot;
+
+	}
+
+	if (rotCnt >= 1.0f)
+	{
+		rotCnt = 1.0f;
+	}
+
+	worldMtx._41 = pos.x;
+	worldMtx._42 = pos.y;
+	worldMtx._43 = pos.z;
+
 #if 0
 
 	PrintDebugProc("LangingXXX::::%f\n", DestLanding.x);
@@ -546,18 +642,17 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	// 状態遷移判定
 //	changeState();
 
-	if(PlayerState == PlayerState::TYPE_JUMP_UP)
+	if (PlayerState == PlayerState::TYPE_JUMP_UP)
 		bIsGround = false;
 
 	C_SCENE_MANAGER *pScene = GetSceneManager();
 	GAME_STATE uCurrentState = pScene->GetInstanse()->GetGameState();
-	
+
 	C_XINPUT *pXinput = C_XINPUT::GetInstance();
 
 	short Xnum = pXinput->GetThumbLX();
 	short Ynum = pXinput->GetThumbLY();
 
-	
 	if (GetKeyboardPress(DIK_D))
 		Xnum++;
 	if (GetKeyboardPress(DIK_A))
@@ -567,14 +662,10 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	if (GetKeyboardPress(DIK_W))
 		Ynum++;
 
-	if(Xnum == 0.0f && Ynum == 0.0f)
+	if (Xnum == 0.0f && Ynum == 0.0f)
 		PlayerState = PlayerState::Stop;
 	else
 		PlayerState = PlayerState::TYPE_MOVE;
-
-
-
-
 
 	D3DXVECTOR3 CameraRight = D3DXVECTOR3(CameraForward.z, 0.0f, -CameraForward.x);
 
@@ -594,7 +685,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 
 	D3DXVECTOR3 FowrdVec = GetForwardVec();
 	D3DXVECTOR3	RightVec = GetRightVec();
-	D3DXVECTOR3 Upvec	 = GetUpVec();
+	D3DXVECTOR3 Upvec = GetUpVec();
 
 	fRadRot = MyVector3::CalcAngleDegree(TestVec, -FowrdVec);
 	D3DXQUATERNION quatanion;
@@ -623,8 +714,8 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 		fCnt = 1.0f;
 
 	// ジャンプ
-	if(uCurrentState == GAME_NORMAL)
-		if ( pXinput->GetButtonTriger(XINPUT_GAMEPAD_A) || GetKeyboardTrigger(DIK_SPACE) && bIsGround)
+	if (uCurrentState == GAME_NORMAL)
+		if (pXinput->GetButtonTriger(XINPUT_GAMEPAD_A) || GetKeyboardTrigger(DIK_SPACE) && bIsGround)
 		{
 			PlayerState = PlayerState::TYPE_JUMP_UP;
 			AccelePawn.y = 0.555f;
@@ -682,6 +773,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	}
 
 #endif
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -819,4 +911,51 @@ void Player::changeState()
 	{
 		playerStateType = PlayerState::Fall;
 	}
+}
+
+void Player::input()
+{
+	/*
+	Xnum = 0.0f;
+	Ynum = 0.0f;
+
+	if (idNumber == 0)
+	{
+		if (Keyboard::getPress(DIK_D))
+		{
+			Xnum++;
+		}
+		if (Keyboard::getPress(DIK_A))
+		{
+			Xnum--;
+		}
+		if (Keyboard::getPress(DIK_S))
+		{
+			Ynum--;
+		}
+		if (Keyboard::getPress(DIK_W))
+		{
+			Ynum++;
+		}
+	}
+	else if (idNumber == 1)
+	{
+		if (Keyboard::getPress(DIK_L))
+		{
+			Xnum++;
+		}
+		if (Keyboard::getPress(DIK_J))
+		{
+			Xnum--;
+		}
+		if (Keyboard::getPress(DIK_K))
+		{
+			Ynum--;
+		}
+		if (Keyboard::getPress(DIK_I))
+		{
+			Ynum++;
+		}
+	}
+	*/
 }

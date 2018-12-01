@@ -5,12 +5,12 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
 // ===== インクルード部 =====
-#include "sceneBase.h"
+#include "SceneBase.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-C_SCENE_BASE::C_SCENE_BASE()
+SceneBase::SceneBase()
 {
 
 }
@@ -18,7 +18,7 @@ C_SCENE_BASE::C_SCENE_BASE()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // デストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-C_SCENE_BASE::~C_SCENE_BASE()
+SceneBase::~SceneBase()
 {
 
 }

@@ -1,11 +1,11 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// C_SceneBase.h
+// SceneBase.h
 // Author : Masaya Hayashi
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
 // ===== 多重インクルード防止 =====
-#ifndef C_SCENEBASE_H
-#define C_SCENEBASE_H
+#ifndef SCENEBASE_H
+#define SCENEBASE_H
 
 // ===== クラスの前方宣言 =====
 class Camera;
@@ -16,11 +16,11 @@ class Camera;
 
 
 // ===== クラス定義 =====
-class C_SCENE_BASE
+class SceneBase
 {
 public:
-	C_SCENE_BASE();
-	virtual ~C_SCENE_BASE();
+	SceneBase();
+	virtual ~SceneBase();
 
 	virtual void initialize()   = 0;
 	virtual void finalize() = 0;

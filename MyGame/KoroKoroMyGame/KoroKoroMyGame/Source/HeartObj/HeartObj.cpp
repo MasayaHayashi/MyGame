@@ -88,11 +88,7 @@ void HeartObj::initialize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void HeartObj::finalize()
 {
-	// モデル解放
-	destroyResorceModel();
 
-	// テクスチャ解放
-	destroyResorceTexture();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

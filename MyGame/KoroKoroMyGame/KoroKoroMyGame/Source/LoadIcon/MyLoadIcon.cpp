@@ -11,7 +11,7 @@
 #include <stdio.h>	// ファイル入出力用
 
 // ===== 定数・マクロ定義 =====
-#define TEX_FILENAME "data/TEXTURE/Loadeffect.png"
+#define TEX_FILENAME "Data/Texture/Loadeffect.png"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -53,7 +53,7 @@ MyLoadIcon::~MyLoadIcon()
 void MyLoadIcon::initialize()
 {
 	ResourceManager::makevertexBoard(vertexBoard, fileName);
-//	ResourceManager::createTexture(texture, textureFileName);
+	ResourceManager::createTexture(texture, fileName);
 
 	setVtx();
 	setTexture();
@@ -64,11 +64,7 @@ void MyLoadIcon::initialize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void MyLoadIcon::finalize()
 {
-	/*
-	C_RESOURCE_MANAGER *pResourceMgr = GetResourceManager();
-	pResourceMgr->DestroyAllTexture();
-	pResourceMgr->DestroyFadeVtx();
-	*/
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

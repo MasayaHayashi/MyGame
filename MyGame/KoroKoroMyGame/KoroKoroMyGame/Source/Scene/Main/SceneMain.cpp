@@ -8,6 +8,9 @@
 #include "../../Light/Light.h"
 #include "../../Camera/Camera.h"
 #include "../../Player/Player.h"
+#include "../../Skydome/Skydome.h"
+#include "../../MainField/MainField.h"
+#include "../../Collision/Collision.h"
 
 /*
 #include "C_Board.h"
@@ -51,9 +54,20 @@ UINT	SceneMain::prevScore = 0;
 SceneMain::SceneMain()
 {
 	prevScore = 0;
-	lightPtr.reset(NEW Light);
-	cameraPtr.reset(NEW Camera);
-	playerPtr.reset(NEW Player);
+	lightPtr.reset(NEW Light());
+	cameraPtr.reset(NEW Camera());
+	collisionPtr.reset(NEW Collision());
+
+	playeresPtr.push_back( static_cast<std::unique_ptr<Player>>( NEW Player(D3DXVECTOR3(-2.0f, 0.0f, 0.0f) , playeresPtr.size() )));
+	playeresPtr.push_back( static_cast<std::unique_ptr<Player>>( NEW Player(D3DXVECTOR3(4.0f, 0.0f, 2.0f),	 playeresPtr.size()	)));
+
+	gameObjectesPtr.push_back( std::unique_ptr<Pawn>(NEW Skydome())   );
+	gameObjectesPtr.push_back( std::unique_ptr<Pawn>(NEW MainField()) );
+
+
+
+//	gameObjectesPtr[0].reset(NEW Skydome());
+//	gameObjectesPtr[1].reset(NEW MainField());
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -70,137 +84,17 @@ SceneMain::~SceneMain()
 void SceneMain::initialize()
 {
 	lightPtr->initialize();
-	cameraPtr->initializeMain(playerPtr.get());
+	cameraPtr->initializeMain(playeresPtr.back().get());
 
-	/*
-	// プレイヤー初期化
-	pPlayer = NEW Player;
-	pPlayer->initialize();
-
-	// ライト初期化
-	pLight = NEW Light;
-	pLight->initializeLight();
-
-	// カメラ初期化
-	pCamera = NEW C_CAMERA;
-	pCamera->initializeCamera(pPlayer);
-
-	// スカイドーム初期化
-	pSkydome = NEW C_SKYDOME;
-	pSkydome->initialize();
-
-	// パーティクル初期化
-	for (INT TypeCnt = 0; TypeCnt < MAX_PARTICLE_OBJ_TYPE; TypeCnt++)
-		for (INT ObjCnt = 0; ObjCnt < MAX_PARTICLE; ObjCnt++)
-		{
-			switch (TypeCnt)
-			{
-				case OBJ_BILLBOARD_STAR_PARTICLE:
-					pParticleObj[TypeCnt][ObjCnt] = NEW C_STAR_PARTICLE();
-					break;
-				case OBJ_2D_STAR_PARTICLE:
-					pParticleObj[TypeCnt][ObjCnt] = NEW C_PARTICLE_BASE(ObjCnt);
-					break;
-				default:
-					break;
-			}
-			pParticleObj[TypeCnt][ObjCnt]->initialize();
-		}
-
-	// UI初期化
-	for (INT UiTypeCnt = 0; UiTypeCnt < MAX_UI_OBJ_TYPE; UiTypeCnt++)
+	for (const auto &player : playeresPtr)
 	{
-		switch (UiTypeCnt)
-		{
-		case OBJ_READY :
-			pUIObj[UiTypeCnt] = NEW C_READY();
-			break;
-		case OBJ_MISS :
-			pUIObj[UiTypeCnt] = NEW C_MISS_UI();
-			break;
-		case OBJ_BG:
-			pUIObj[UiTypeCnt] = NEW C_BG_EFFECT();
-			break;
-		case OBJ_STAR:
-			pUIObj[UiTypeCnt] = NEW C_STAR_UI();
-			break;
-		case OBJ_TUTORIAL:
-			pUIObj[UiTypeCnt] = NEW C_TUTORIAL_UI();
-			break;
-		case OBJ_NEXT:
-			pUIObj[UiTypeCnt] = NEW C_NEXT_UI();
-			break;
-		default:
-			break;
-		}
-		pUIObj[UiTypeCnt]->initialize();
+		player->initialize();
 	}
 
-	// ゲームオブジェクト初期化
-	for (INT BlockType = 0; BlockType < MAX_GAME_OBJ_TYPE; BlockType++)
-		for (INT i = 0; i < MAX_GAME_OBJ; i++)
-		{
-			switch (BlockType)
-			{
-			case NORMAL_BLOCK_OBJ:
-				pGameObj[BlockType][i] = NEW C_BLOCK(i);
-				break;
-			case MOVE_BLOCK_OBJ:
-				pGameObj[BlockType][i] = NEW C_MOVE_BLOCK(i);
-				break;
-			case STAR_OBJ:
-				pGameObj[BlockType][i] = NEW C_ITEM_STAR();
-				break;
-			case GOAL_OBJ:
-				pGameObj[BlockType][i] = NEW C_GOAL_OBJ();
-				break;				
-			default:
-				break;
-			}
-			pGameObj[BlockType][i]->initialize();
-		}
-
-	// 衝突用クラス生成
-	pCollision = NEW C_COLLISION;
-
-	// ポーズ用オブジェクト初期化
-	pPause = NEW C_PAUSE;
-	pPause->initialize();
-
-	// ステージ読み込み初期化
-	pStageLoader = NEW C_STAGE_LOADER;
-	pStageLoader->LoadStage(pGameObj, getCurrentStageNum());
-
-	// スコア初期化
-	for (INT i = 0; i < MAX_SCORE_DIGIT; i++)
+	for (const auto &gameObject : gameObjectesPtr)
 	{
-		pUIScore[i] = NEW C_SCORE_UI(i);
-		pUIScore[i]->initialize();
+		gameObject->initialize();
 	}
-
-	// ゴール初期化
-	pGoal = NEW C_GOAL;
-	pGoal->initialize();
-
-	// ハート初期化
-	pHeart = NEW C_HEART_BOARD;
-	pHeart->initialize();
-
-	// ゲーム状態初期化
-	uGameState  = GAME_TUTORIAL;
-
-	nRestartCnt = RESTART_CNT;
-
-	/*
-	// BGM再生
-	auto Bgm = C_AUDIO::getBgm(AUDIO::BGM_MAIN);
-
-	
-	float vol = 0.3f;
-	Bgm->setVolume(vol);
-
-	Bgm->play();
-	*/
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -208,75 +102,10 @@ void SceneMain::initialize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneMain::finalize()
 {
-	/*
-	// BGM停止
-
-	// カメラ後処理
-	pCamera->finalizeCamera();
-	SAFE_DELETE(pCamera);
-
-	// ライト後処理
-	pLight->finalizeLight();
-	SAFE_DELETE(pLight);
-
-	// プレイヤー後処理
-	pPlayer->finalizeObject();
-	SAFE_DELETE(pPlayer);
-
-	// スカイドーム後処理
-	pSkydome->finalizeObject();
-	SAFE_DELETE(pSkydome);
-
-	// 衝突用後処理
-	SAFE_DELETE(pCollision);
-
-	// ポーズ後処理
-	pPause->finalizeObject();
-	SAFE_DELETE(pPause);
-
-	// パーティクル後処理
-	for (INT TypeCnt = 0; TypeCnt < MAX_PARTICLE_OBJ_TYPE; TypeCnt++)
-		for (INT ObjCnt = 0; ObjCnt < MAX_PARTICLE; ObjCnt++)
-		{
-			pParticleObj[TypeCnt][ObjCnt]->finalizeObject();
-			SAFE_DELETE(pParticleObj[TypeCnt][ObjCnt]);
-		}
-
-
-	// ゲームオブジェクト後処理
-	for (INT i = 0; i < MAX_GAME_OBJ_TYPE; i++)
-		for (INT j = 0; j < MAX_GAME_OBJ; j++)
-		{
-			pGameObj[i][j]->finalizeObject();
-			SAFE_DELETE(pGameObj[i][j]);
-		}
-
-	// UI後処理
-	for (INT TypeCnt = 0; TypeCnt < MAX_UI_OBJ_TYPE; TypeCnt++)
+	for (const auto &player : playeresPtr)
 	{
-		pUIObj[TypeCnt]->finalizeObject();
-		SAFE_DELETE(pUIObj[TypeCnt]);
+		player->finalize();
 	}
-
-	// スコア後処理
-	for (INT i = 0; i < MAX_SCORE_DIGIT; i++)
-	{
-		pUIScore[i]->finalizeObject();
-		SAFE_DELETE(pUIScore[i]);
-	}
-
-	// ステージローダー後処理
-	pStageLoader->finalizeObject();
-	SAFE_DELETE(pStageLoader);
-
-	// ゴール後処理
-	pGoal->finalizeObject();
-	SAFE_DELETE(pGoal);
-
-	// ハート後処理
-	pHeart->finalizeObject();
-	SAFE_DELETE(pHeart);
-	*/
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -284,8 +113,19 @@ void SceneMain::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneMain::update()
 {
+	collisionPtr->update();
 
+	for (const auto &gameObject : gameObjectesPtr)
+	{
+		gameObject->update();
+	}
 
+	for (const auto &player : playeresPtr)
+	{
+		player->update(cameraPtr->getFowerd());
+	}
+
+	
 
 #if 0
 	if (currentGameState == SceneMain::GameState::Tutorial)
@@ -427,8 +267,15 @@ void SceneMain::update()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneMain::draw()
 {
+	for (const auto &gameObject : gameObjectesPtr)
+	{
+		gameObject->draw();
+	}
 
-	playerPtr->draw();
+	for (const auto &player : playeresPtr)
+	{
+		player->draw();
+	}
 
 	cameraPtr->setCamera();
 

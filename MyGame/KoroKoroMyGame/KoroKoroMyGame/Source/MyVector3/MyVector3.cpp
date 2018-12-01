@@ -238,27 +238,21 @@ FLOAT MyVector3::CalcAngle(D3DXVECTOR3 vectorA, D3DXVECTOR3 vectorB)
 	FLOAT fLengthA = D3DXVec3Length(&vectorA);
 	FLOAT fLengthB = D3DXVec3Length(&vectorB);
 
-	/*
-	double dLengthAxLengthB = vectorA.CalcLength() * vectorB.CalcLength();
-	if (0 == dLengthAxLengthB)
-	{
-		assert(!"ゼロベクトルエラー");
-		return false;
-	}
-	*/
-
 	D3DXVec3Normalize(&vectorA, &vectorA);
 	D3DXVec3Normalize(&vectorB, &vectorB);
 	
 
 	FLOAT fCosAlpha = D3DXVec3Dot(&vectorA, &vectorB);
 
-//	FLOAT  fCosAlpha = Vec3Dot(vectorA, vectorB);
 	FLOAT  fAngleRad;
 	if (fCosAlpha > 1.0f)
+	{
 		fCosAlpha = 1.0f;
+	}
 	if (fCosAlpha < -1.0f)
+	{
 		fCosAlpha = -1.0f;
+	}
 
 	fAngleRad = acos(fCosAlpha);
 

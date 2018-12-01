@@ -130,8 +130,6 @@ void Application::update()
 void Application::draw() const
 {
 	directX3dPtr->draw();
-
-	SceneManager::drawFade();
 }
 
 //

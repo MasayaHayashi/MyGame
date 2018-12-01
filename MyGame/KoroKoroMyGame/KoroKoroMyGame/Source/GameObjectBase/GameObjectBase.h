@@ -10,6 +10,15 @@
 // ===== インクルード部 =====
 #include "GameObjectBase.h"
 
+// ===== 列挙体定義 =====
+enum class GameObjType
+{
+	NormalBlockObj = 0,
+	MoveBlockObj,
+	StarObj,
+	GoalObj,
+};
+
 // ===== クラス定義 =====
 class GameObjectBase
 {
@@ -17,10 +26,10 @@ class GameObjectBase
 		GameObjectBase();
 		virtual ~GameObjectBase();
 
-		virtual void initialize();
-		virtual void finalize();
-		virtual void update();
-		virtual void draw();
+		virtual void initialize() = 0;
+		virtual void finalize() = 0;
+		virtual void update() = 0;
+		virtual void draw() = 0;
 
 	protected:
 
