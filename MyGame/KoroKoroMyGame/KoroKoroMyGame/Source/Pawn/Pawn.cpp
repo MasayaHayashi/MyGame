@@ -230,16 +230,16 @@ void Pawn::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
  	pD3DXMat = (D3DXMATERIAL*)meshDataObj.materialBufferPtr->GetBufferPointer();
 
 
-	LPD3DXEFFECT pEffect = DirectX3D::getEffect();
+	//LPD3DXEFFECT pEffect = DirectX3D::getEffect();
 
-	// 
-	pEffect->SetTechnique("tecMinimum");
+	//// 
+	//pEffect->SetTechnique("tecMinimum");
 
-	D3DXMATRIX mtxAll = worldMtx * mtxView * mtxProj;
-	pEffect->SetMatrix("mWVP", &mtxAll);
+	//D3DXMATRIX mtxAll = worldMtx * mtxView * mtxProj;
+	//pEffect->SetMatrix("mWVP", &mtxAll);
 
-	pEffect->Begin(nullptr, 0);
-	pEffect->BeginPass(0);
+	//pEffect->Begin(nullptr, 0);
+	//pEffect->BeginPass(0);
 
 	for (int nCntMat = 0; nCntMat < static_cast<INT>(meshDataObj.numMat); nCntMat++)
 	{
@@ -254,8 +254,6 @@ void Pawn::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 		meshDataObj.meshPtr->DrawSubset(nCntMat);
 	}
 
-	pEffect->EndPass();
-	pEffect->End();
 
 	// マテリアルをデフォルトに戻す
 	devicePtr->SetMaterial(&matDef);

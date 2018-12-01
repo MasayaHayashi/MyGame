@@ -106,14 +106,14 @@
     <Filter Include="ソース ファイル\HeartObj">
       <UniqueIdentifier>{5b18241c-4f97-4519-93e4-32b6c184b3e1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\MyVector3">
-      <UniqueIdentifier>{8fc18516-4889-4946-bd22-582104c42ba0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\CrtDebug">
       <UniqueIdentifier>{2442e6bf-8065-44c3-ba9d-8e8a33fb3021}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\LoadIcon">
       <UniqueIdentifier>{57fb7207-16cb-41e4-bc9d-5b80f06ca3c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\MyVector3">
+      <UniqueIdentifier>{8fc18516-4889-4946-bd22-582104c42ba0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -203,6 +203,15 @@
     </ClCompile>
     <ClCompile Include="Source\LoadIcon\MyLoadIcon.cpp">
       <Filter>ソース ファイル\LoadIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="PostSpriteRendere.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="shader.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -301,6 +310,15 @@
     </ClInclude>
     <ClInclude Include="Source\LoadIcon\MyLoadIcon.h">
       <Filter>ソース ファイル\LoadIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="PostSpriteRenderer.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="shader.h">
+      <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -113,6 +113,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="shader.cpp" />
     <ClCompile Include="Source\Application\Application.cpp" />
     <ClCompile Include="Source\Audio\MyAudiere.cpp" />
     <ClCompile Include="Source\Board\Board.cpp" />
@@ -142,9 +143,12 @@
     <ClCompile Include="Source\Scene\Title\SceneTitle.cpp" />
     <ClCompile Include="Source\Skydome\Skydome.cpp" />
     <ClCompile Include="Source\TitleUI\TitleUI.cpp" />
+    <ClCompile Include="PostSpriteRendere.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CrtDebug.h" />
+    <ClInclude Include="shader.h" />
     <ClInclude Include="Source\Application\Application.h" />
     <ClInclude Include="Source\Audio\audiere.h" />
     <ClInclude Include="Source\Audio\MyAudiere.h" />
@@ -176,6 +180,8 @@
     <ClInclude Include="Source\Scene\Title\SceneTitle.h" />
     <ClInclude Include="Source\Skydome\Skydome.h" />
     <ClInclude Include="Source\TitleUI\TitleUI.h" />
+    <ClInclude Include="PostSpriteRenderer.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
