@@ -35,17 +35,44 @@ void Transform::create()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝
 // データ取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝
-const TransformData* Transform::getData() const
+const TransformData* Transform::getData(INT index) const
 {
-	auto itr = transformList.begin();
+	if (transformList.empty())
+	{
+		throw std::runtime_error("transform is empty");
+	}
 
-	return nullptr;
+	for (auto transform : transformList)
+	{
+		if (transform->idNumber == index)
+		{
+			return transform;
+		}
+	}
+
+	throw std::runtime_error("index do not match");
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝
 // データセット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Transform::setData(TransformData setData)
+void Transform::setData(TransformData *setData)
 {
-	transformList.push_back(new TransformData);
+	transformList.push_back(setData);
+
+	setData->idNumber = transformList.size() - 1;	// IDナンパ―は0スタートで統一
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝
+// フラグセット
+//＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Transform::setHit(INT index,bool setFlg)
+{
+	for (auto transform : transformList)
+	{
+		if (transform->idNumber == index)
+		{
+			transform->isHit = setFlg;
+		}
+	}
 }

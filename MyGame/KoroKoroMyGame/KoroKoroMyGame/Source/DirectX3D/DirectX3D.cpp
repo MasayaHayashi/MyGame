@@ -8,7 +8,6 @@
 #include "DirectX3D.h"
 #include "../Application/Application.h"
 #include "../SceneManager/SceneManager.h"
-#include "../../shader.h"
 
 // ===== 静的メンバ変数 =====
 Microsoft::WRL::ComPtr<IDirect3DDevice9>   DirectX3D::directXDevice  = nullptr;
@@ -99,7 +98,12 @@ HRESULT DirectX3D::initialize(HWND& wnd)
 		}
 	}
 
-	Shader::create();
+	//シェーダーを読み込み
+	if (FAILED(D3DXCreateEffectFromFile( directXDevice.Get(), "Data/FX/Min.fx", nullptr, nullptr, 0, nullptr, &directXEffect, nullptr)))
+	{
+		MessageBox(nullptr, "シェーダーファイル読み込み失敗", "", MB_OK);
+		return E_FAIL;
+	}
 
 	// レンダーステートパラメータの設定	
 	directXDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);			// 裏面をカリング
@@ -228,7 +232,7 @@ void DirectX3D::drawDebugProc() const
 	RECT rect = { 0, 0, Application::ScreenWidth, Application::ScreenHeight };
 
 	// 情報表示
-	directXFont->DrawText(nullptr, debug, -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xFF, 0xFF, 0xFF, 0x00));
+	directXFont->DrawText(nullptr, debug, -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xFF, 0xFF, 0x00, 0x00));
 
 	// 情報クリア
 	memset(debug, 0, sizeof debug);

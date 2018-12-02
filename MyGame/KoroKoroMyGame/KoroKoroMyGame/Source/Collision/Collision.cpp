@@ -22,7 +22,7 @@ std::unordered_map<std::string, Transform> Collision::collisionMapes;
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 Collision::Collision()
 {
-
+	
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -38,17 +38,29 @@ Collision::~Collision()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Collision::update()
 {
+ 	FLOAT test = collisionMapes["Player"].getData(0)->posData.x;
+	DirectX3D::printDebug("posdata %f\n", test);
 
-//	DirectX3D::printDebug("posdata %f", *itr->getData()->posData);
+	if (isHitAABB(*collisionMapes["Player"].getData(0), *collisionMapes["Player"].getData(1)))
+	{
+		collisionMapes["Player"].setHit(0, true);
+		collisionMapes["Player"].setHit(1, true);
+		DirectX3D::printDebug("あたる");
+	}
+	else
+	{
+		collisionMapes["Player"].setHit(0, false);
+		collisionMapes["Player"].setHit(1, false);
+		DirectX3D::printDebug("いません");
+	}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 登録
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Collision::registerList(TransformData setTransformData,std::string keyName)
+void Collision::registerList(TransformData *setTransformData,std::string keyName)
 {
-
-//	collisionMapes[keyName] = setTransformData;
+	collisionMapes[keyName].setData(setTransformData);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -97,12 +109,13 @@ UINT Collision::CheckCollisionWall(Player *pPlayer, Pawn *pPawnB, Pawn *pField, 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Collision::CheckCollisionBlock(Pawn *pSelectBlock, Pawn *pGameObj)
 {
-	// AABB判定
+	/*
 	if (IsHitAABB(pSelectBlock, pGameObj))
 	{
 		pGameObj->setPosition( D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		pGameObj->setUsedFlg(false);
 	}
+	*/
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -252,9 +265,13 @@ INT Collision::IsHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos,
 		D3DXVec3TransformCoord(&vRayPos, pRayPos, &mInvWorld);
 		
 		if (bSegment)
+		{
 			D3DXVec3TransformCoord(&vRayDir, pRayDir, &mInvWorld);
+		}
 		else
+		{
 			D3DXVec3TransformNormal(&vRayDir, pRayDir, &mInvWorld);
+		}
 
 		// レイとメッシュの交差判定
 		INT nIndex = Intersect(pPawnA,&vRayPos, &vRayDir, bSegment, pCross, pNormal,Length);
@@ -263,9 +280,13 @@ INT Collision::IsHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos,
 		{	
 			// 交点、法線をワールド変換
 			if (pCross)
+			{
 				D3DXVec3TransformCoord(pCross, pCross, pPawnA->getWorldMtx());
+			}
 			if (pNormal)
+			{
 				D3DXVec3TransformNormal(pNormal, pNormal, pPawnA->getWorldMtx());
+			}
 		}
 		return nIndex;
 
@@ -314,26 +335,34 @@ INT Collision::Intersect(Pawn *pField,LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayD
 		D3DXVec3Normalize(&N, D3DXVec3Cross(&N, &V1, &V2));
 		// 分母を算出
 		FLOAT deno = D3DXVec3Dot(&N, &W);
-		if (deno >= 0.0f) 
+		if (deno >= 0.0f)
+		{
 			continue;	// 平行(==0)か裏から表(>0)
-	
+		}
+
 		// 内外判定
 		D3DXVECTOR3 N1;	
 		D3DXVec3Cross(&N1, &V1, &W);
 		if (D3DXVec3Dot(&N1, &(P0 - P1)) < 0.0f)
+		{
 			continue;
-		
+		}
+
 		D3DXVec3Cross(&N1, &V2, &W);
 		
 		if (D3DXVec3Dot(&N1, &(P0 - P2)) < 0.0f)
+		{
 			continue;
-		
+		}
+
 		D3DXVECTOR3 V3(P1 - P3);
 		D3DXVec3Cross(&N1, &V3, &W);
 		
 		if (D3DXVec3Dot(&N1, &(P0 - P3)) < 0.0f)
+		{
 			continue;
-		
+		}
+
 		// 媒介変数算出
 		float T = D3DXVec3Dot(&N, &(P1 - P0)) / deno;
 	
@@ -365,12 +394,14 @@ bool Collision::IntersectA(Pawn* pField,LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRa
 	D3DXVECTOR3 W;
 	D3DXVECTOR3 H;
 	D3DXMATRIX matInv;
-	if (pWorld) {
+	if (pWorld) 
+	{
 		D3DXMatrixInverse(&matInv, nullptr, pWorld);
 		D3DXVec3TransformCoord(&W, pRayPos, &matInv);
 		D3DXVec3TransformNormal(&H, pRayDir, &matInv);
 	}
-	else {
+	else 
+	{
 		W = *pRayPos;
 		H = *pRayDir;
 	}
@@ -395,18 +426,20 @@ bool Collision::IntersectA(Pawn* pField,LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRa
 		P[1] = &pVtx[pIdx[i++]].VtxPos;
 		P[2] = &pVtx[pIdx[i++]].VtxPos;
 		P[3] = P[0];
-		int j = 0;
+		INT j = 0;
 		for (; j < 3; j++) {
 			// 三角形を囲む平面の法線ベクトルを求める
 			D3DXVec3Cross(&N, &H, &(*(P[j + 1]) - *(P[j])));
 			// 始点が平面の表なら当たっていない
-			float dot = D3DXVec3Dot(&N, &(W - *(P[j])));
+			FLOAT dot = D3DXVec3Dot(&N, &(W - *(P[j])));
 
-			if (dot > 0.0f) {
+			if (dot > 0.0f) 
+			{
 				break;
 			}
 		}
-		if (j < 3) {
+		if (j < 3) 
+		{
 			continue;
 		}
 
@@ -422,32 +455,42 @@ bool Collision::IntersectA(Pawn* pField,LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRa
 		}
 
 		// tを求める
-		float t = D3DXVec3Dot(&N, &(*(P[0]) - W)) / base;
+		FLOAT t = D3DXVec3Dot(&N, &(*(P[0]) - W)) / base;
 
 	//	PrintDebugProc("aaaaaaa:%f\n", t);
 
 		// 交点がレイの後ろ
 		if (t < 0.0f)
+		{
 			continue;
+		}
 		// 交点がレイの前
-		if (t > 1.0f) 
+		if (t > 1.0f)
+		{
 			continue;
+		}
 
 		// 交点を求める
 		D3DXVECTOR3 X = W + t * H;
-		if (pCross) {
-			if (pWorld) {
+		if (pCross) 
+		{
+			if (pWorld)
+			{
 				D3DXVec3TransformCoord(pCross, &X, pWorld);
 			}
-			else {
+			else 
+			{
 				*pCross = X;
 			}
 		}
-		if (pNormal) {
-			if (pWorld) {
+		if (pNormal)
+		{
+			if (pWorld) 
+			{
 				D3DXVec3TransformNormal(pNormal, &N, pWorld);
 			}
-			else {
+			else
+			{
 				*pNormal = N;
 			}
 		}
@@ -466,26 +509,28 @@ bool Collision::IntersectA(Pawn* pField,LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRa
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // AABBのあたり判定
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-bool Collision::IsHitAABB(Pawn *pPawnA, Pawn *pPawnB)
+bool Collision::isHitAABB(const TransformData transformA, const TransformData transformB) const
 {
-	D3DXVECTOR3 BoxAPos = pPawnA->getPosition();
-	D3DXVECTOR3 BoxBPos = pPawnB->getPosition();
+	// 移動量を足した先を計算する
+	D3DXVECTOR3 aBoxPos = transformA.posData + transformA.velocityData;
+	D3DXVECTOR3 bBoxPos = transformB.posData + transformB.velocityData;
 
-	D3DXVECTOR3 BoxASize = pPawnA->getCollisionBox() * 2;
-	D3DXVECTOR3 BoxBSize = pPawnB->getCollisionBox() * 2;
+	D3DXVECTOR3 aBoxSize = transformA.collisionBox;
+	D3DXVECTOR3 bBoxSize = transformB.collisionBox;
 
-
-	if (BoxAPos.x + BoxASize.x > BoxBPos.x				 &&
-		BoxAPos.x			   < BoxBPos.x + BoxBSize.x  &&
-		BoxAPos.y + BoxASize.y > BoxBPos.y				 &&
-		BoxAPos.y			   < BoxBPos.y + BoxBSize.y  &&
-		BoxAPos.z + BoxASize.z > BoxBPos.z				 &&
-		BoxAPos.z			   < BoxBPos.z + BoxBSize.z )
+	if (aBoxPos.x + bBoxSize.x > bBoxPos.x				 &&
+		aBoxPos.x			   < bBoxPos.x + bBoxSize.x  &&
+		aBoxPos.y + bBoxSize.y > bBoxPos.y				 &&
+		aBoxPos.y			   < bBoxPos.y + bBoxSize.y  &&
+		aBoxPos.z + bBoxSize.z > bBoxPos.z				 &&
+		aBoxPos.z			   < bBoxPos.z + bBoxSize.z )
 	{
 		return true;
 	}
-	
-	return false;
+	else
+	{
+		return false;
+	}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -523,4 +568,17 @@ void Collision::SwitchHitType(Pawn *pPawnA, Pawn *pPawnB)
 		if (pPawnB->getTag() == Pawn::TagType::Enemy)
 			pPawnA->setHitFlg(true);
 	}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 取得
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+const TransformData* Collision::getTransformData(std::string keyName,INT index)
+{
+	return collisionMapes[keyName].getData(index);
+}
+
+void Collision::checkPlayerCollision()
+{
+
 }

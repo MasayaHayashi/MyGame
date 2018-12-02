@@ -79,12 +79,13 @@ private:
 	void changeStatus();	// ステータス変更処理
 	void changeState();		// 状態変更処理
 
+	std::unique_ptr<Pawn> ballPtr;
 
 	FLOAT rotCnt = 0.0f;
 
-	D3DXVECTOR3		testVec;
+	D3DXVECTOR3	testVec;
 
-	PlayerState				 playerStateType;
+	PlayerState	playerStateType;
 
 	INT score;
 

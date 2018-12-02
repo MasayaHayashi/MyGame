@@ -48,26 +48,26 @@ public:
 
 	void update();
 
-	static void registerList(TransformData setTransformData,std::string keyName);
-
-
-
+	static void registerList(TransformData *setTransformData,std::string keyName);
 
 	UINT CheckCollisionField(Player *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec);
-	UINT CheckCollisionWall(Player *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec);
+	UINT CheckCollisionWall( Player *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec);
 
 	void CheckCollisionBlock(Pawn *pSelectBlock, Pawn *pGameObj);
 
 	bool IsHitSphereToSphere(Pawn *, Pawn*);					// 球と球のあたり判定
-	bool IsHitAABB(Pawn * ,Pawn *);								// AABBのあたり判定
+	bool isHitAABB(const TransformData pawnA, const TransformData pawnB) const;
 	bool IsHitAABBItem(Player *pPlayer, Pawn *pPawn);				// AABBのアイテム用判定
 	INT IsHitRayToMesh(Pawn *, Pawn *, LPD3DXVECTOR3 , LPD3DXVECTOR3 , bool , LPD3DXVECTOR3 , LPD3DXVECTOR3 ,LPD3DXVECTOR3);			// レイと三角形のあたり判定
+	
+	static const TransformData* getTransformData(std::string keyName, INT index);
 
 private:
 	bool IntersectA(Pawn* pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXMATRIX pWorld);
 	INT  Intersect(Pawn *,LPD3DXVECTOR3 , LPD3DXVECTOR3 , bool , LPD3DXVECTOR3 , LPD3DXVECTOR3 , LPD3DXVECTOR3 );
 	void SwitchHitType(Pawn *, Pawn *);
 
+	void checkPlayerCollision();
 
 	static std::unordered_map<std::string, Transform> collisionMapes;
 };

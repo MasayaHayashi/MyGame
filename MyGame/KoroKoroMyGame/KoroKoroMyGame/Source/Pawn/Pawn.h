@@ -74,6 +74,7 @@ public:
 	MESH_VTX*			getVtxAcess();			// 頂点情報アクセス用ポインタ取得		
 	WORD*				getIndxAcess();			// インデックスバッファアクセス用ポインタ取得
 	bool				getIsGround();			// 地面上状態取得
+	bool				isUsedShader();			// シェーダー使用
 
 	LPD3DXMESH	 getMesh();
 	LPD3DXBUFFER getMat();
@@ -159,6 +160,7 @@ protected:
 	FLOAT				radRot;					// 回転角度
 	FLOAT				oldRadRot;				// 前の回転角度
 	FLOAT				collisionRadus;			// あたり判定用サイズ
+	bool				isShader;				// シェーダー使用
 	bool				isHit;					// 当たっているかどうか
 	bool				isGround;				// 地面の上か
 	bool				isUsed;					// 使用中か

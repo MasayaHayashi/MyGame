@@ -1,0 +1,324 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソース ファイル\DirectX">
+      <UniqueIdentifier>{247aa3ac-8c0d-4dc2-bfd3-5f5d3c672e65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Application">
+      <UniqueIdentifier>{f734c863-0559-489d-946d-aaa65847fe8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Link">
+      <UniqueIdentifier>{3b2748a0-7800-42ba-b8b5-833f079f4938}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\EntryPoint">
+      <UniqueIdentifier>{e2319ec7-3446-40a0-9a98-da4035201a1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Xinput">
+      <UniqueIdentifier>{eae1e5c1-08a1-435a-9d59-7264bbfbf9a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Audio">
+      <UniqueIdentifier>{2efdb7eb-cd7a-4be8-b431-938ee920b9d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\SceneInterface">
+      <UniqueIdentifier>{c452406a-a577-42c4-9180-89bf161b8754}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene">
+      <UniqueIdentifier>{4e050983-3ea3-47b2-a5e2-28ced001ab5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\SceneManager">
+      <UniqueIdentifier>{3db57d59-f2f3-47ce-a69a-5625c6bda439}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene\Load">
+      <UniqueIdentifier>{e7062d5a-fca1-4466-b35e-7b14e3f6a606}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Fade">
+      <UniqueIdentifier>{3467c0b9-addd-47d0-af9a-342e73ebaf1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Board">
+      <UniqueIdentifier>{025c88cc-b3b2-4452-8e89-137dac92b3ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameObjectBase">
+      <UniqueIdentifier>{bd137a9c-6310-4b88-aa30-9c757d135dfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ResourceManager">
+      <UniqueIdentifier>{c12d60f8-38cc-4523-839e-d862b562895f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\MyHierarchy">
+      <UniqueIdentifier>{ece24c4b-15ad-413e-9568-bc0bcf40bf5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\KeyBoard">
+      <UniqueIdentifier>{55769192-4e2f-4795-8b87-c4f5e98681dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene\Main">
+      <UniqueIdentifier>{f1437d95-95a5-4da9-a94e-06e50cd008dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene\Title">
+      <UniqueIdentifier>{2113b544-b467-4013-953c-ffab0d725f1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Camera">
+      <UniqueIdentifier>{1303f139-1e34-4efd-82c3-94cf0a4a6277}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Mesh">
+      <UniqueIdentifier>{c29bd3c3-3771-40b8-804d-c1578706d92f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Skydome">
+      <UniqueIdentifier>{16017cc1-2607-4478-ad7c-8519a52e2547}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Pawn">
+      <UniqueIdentifier>{dcbe32eb-ddc9-4e73-a4a9-2a0896d92ec6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Collision">
+      <UniqueIdentifier>{3b7ffa1c-1456-4538-8cce-6975496e057b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Player">
+      <UniqueIdentifier>{ab84e46d-a145-4b67-8c97-8ca946abc283}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Collider">
+      <UniqueIdentifier>{3231a8a8-79fe-456b-ba95-691052666bfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Figure">
+      <UniqueIdentifier>{c24ab079-075f-46e1-8619-8fd848798e5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Light">
+      <UniqueIdentifier>{24193427-61ec-4433-9fcd-2754479e6a9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\MainField">
+      <UniqueIdentifier>{c1910810-1203-4cd1-bda0-56a09decbb97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\MeshFieldBase">
+      <UniqueIdentifier>{47d914b2-09e3-47e6-a774-cf65c3496f6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\TitleUI">
+      <UniqueIdentifier>{3f75ee39-0f09-41ea-9582-a4927c380320}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\HeartObj">
+      <UniqueIdentifier>{5b18241c-4f97-4519-93e4-32b6c184b3e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\MyVector3">
+      <UniqueIdentifier>{8fc18516-4889-4946-bd22-582104c42ba0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\CrtDebug">
+      <UniqueIdentifier>{2442e6bf-8065-44c3-ba9d-8e8a33fb3021}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\LoadIcon">
+      <UniqueIdentifier>{57fb7207-16cb-41e4-bc9d-5b80f06ca3c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Transform">
+      <UniqueIdentifier>{dfe2081c-a2a4-4d5f-ad8e-0c8d259c95bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Ball">
+      <UniqueIdentifier>{7beb89ec-0581-456e-9b11-9a97521ddd23}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Audio\MyAudiere.cpp">
+      <Filter>ソース ファイル\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneInterface\sceneBase.cpp">
+      <Filter>ソース ファイル\SceneInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneManager\SceneManager.cpp">
+      <Filter>ソース ファイル\SceneManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Fade\FadeUI.cpp">
+      <Filter>ソース ファイル\Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Board\Board.cpp">
+      <Filter>ソース ファイル\Board</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameObjectBase\GameObjectBase.cpp">
+      <Filter>ソース ファイル\GameObjectBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ResoueceManager\ResourceManager.cpp">
+      <Filter>ソース ファイル\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MyHierarchy\MyHierarchy.cpp">
+      <Filter>ソース ファイル\MyHierarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KeyBoard\Keyboard.cpp">
+      <Filter>ソース ファイル\KeyBoard</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\Title\SceneTitle.cpp">
+      <Filter>ソース ファイル\Scene\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Skydome\Skydome.cpp">
+      <Filter>ソース ファイル\Skydome</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Pawn\Pawn.cpp">
+      <Filter>ソース ファイル\Pawn</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DirectX3D\DirectX3D.cpp">
+      <Filter>ソース ファイル\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision\Collision.cpp">
+      <Filter>ソース ファイル\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player\Player.cpp">
+      <Filter>ソース ファイル\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collider\Collider.cpp">
+      <Filter>ソース ファイル\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Figure\Figure.cpp">
+      <Filter>ソース ファイル\Figure</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\Application.cpp">
+      <Filter>ソース ファイル\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Light\Light.cpp">
+      <Filter>ソース ファイル\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MainField\MainField.cpp">
+      <Filter>ソース ファイル\MainField</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MeshFieldBase\MeshFieldBase.cpp">
+      <Filter>ソース ファイル\MeshFieldBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TitleUI\TitleUI.cpp">
+      <Filter>ソース ファイル\TitleUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HeartObj\HeartObj.cpp">
+      <Filter>ソース ファイル\HeartObj</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MyVector3\MyVector3.cpp">
+      <Filter>ソース ファイル\MyVector3</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EntryPoint\Main.cpp">
+      <Filter>ソース ファイル\EntryPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera\Camera.cpp">
+      <Filter>ソース ファイル\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\Main\SceneMain.cpp">
+      <Filter>ソース ファイル\Scene\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\Load\SceneLoad.cpp">
+      <Filter>ソース ファイル\Scene\Load</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadIcon\MyLoadIcon.cpp">
+      <Filter>ソース ファイル\LoadIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Transform\Transform.cpp">
+      <Filter>ソース ファイル\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Ball\BallObj.cpp">
+      <Filter>ソース ファイル\Ball</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Linklib.h">
+      <Filter>ソース ファイル\Link</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Audio\audiere.h">
+      <Filter>ソース ファイル\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Audio\MyAudiere.h">
+      <Filter>ソース ファイル\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneInterface\sceneBase.h">
+      <Filter>ソース ファイル\SceneInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneManager\SceneManager.h">
+      <Filter>ソース ファイル\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Fade\FadeUI.h">
+      <Filter>ソース ファイル\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Board\Board.h">
+      <Filter>ソース ファイル\Board</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameObjectBase\GameObjectBase.h">
+      <Filter>ソース ファイル\GameObjectBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ResoueceManager\ResourceManager.h">
+      <Filter>ソース ファイル\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MyHierarchy\MyHierarchy.h">
+      <Filter>ソース ファイル\MyHierarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\KeyBoard\Keyboard.h">
+      <Filter>ソース ファイル\KeyBoard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\Title\SceneTitle.h">
+      <Filter>ソース ファイル\Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Skydome\Skydome.h">
+      <Filter>ソース ファイル\Skydome</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Pawn\Pawn.h">
+      <Filter>ソース ファイル\Pawn</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DirectX3D\DirectX3D.h">
+      <Filter>ソース ファイル\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision\Collision.h">
+      <Filter>ソース ファイル\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Player\Player.h">
+      <Filter>ソース ファイル\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collider\Collider.h">
+      <Filter>ソース ファイル\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Figure\Figure.h">
+      <Filter>ソース ファイル\Figure</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application\Application.h">
+      <Filter>ソース ファイル\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Light\Light.h">
+      <Filter>ソース ファイル\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MainField\MainField.h">
+      <Filter>ソース ファイル\MainField</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MeshFieldBase\MeshFieldBase.h">
+      <Filter>ソース ファイル\MeshFieldBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mesh\Mesh.h">
+      <Filter>ソース ファイル\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TitleUI\TitleUI.h">
+      <Filter>ソース ファイル\TitleUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HeartObj\HeartObj.h">
+      <Filter>ソース ファイル\HeartObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MyVector3\MyVector3.h">
+      <Filter>ソース ファイル\MyVector3</Filter>
+    </ClInclude>
+    <ClInclude Include="CrtDebug.h">
+      <Filter>ソース ファイル\CrtDebug</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\Main\SceneMain.h">
+      <Filter>ソース ファイル\Scene\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera\Camera.h">
+      <Filter>ソース ファイル\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\Load\SceneLoad.h">
+      <Filter>ソース ファイル\Scene\Load</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadIcon\MyLoadIcon.h">
+      <Filter>ソース ファイル\LoadIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Transform\Transform.h">
+      <Filter>ソース ファイル\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Ball\BallObj.h">
+      <Filter>ソース ファイル\Ball</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

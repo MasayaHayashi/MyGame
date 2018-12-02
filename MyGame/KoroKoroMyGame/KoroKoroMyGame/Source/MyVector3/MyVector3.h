@@ -21,12 +21,13 @@ public:
 	static bool CalcHermiteCurve(D3DXVECTOR3 *pOut, const D3DXVECTOR3& Pos1, const D3DXVECTOR3& Pos2, const D3DXVECTOR3& Vec1, const D3DXVECTOR3& Vec2, const FLOAT& fMax, const FLOAT& fCurrent);	// エルミート曲線
 	static void CalcBezierCurve(D3DXVECTOR3* pOut, const D3DXVECTOR3& Pos1, const D3DXVECTOR3& Pos2, const D3DXVECTOR3& Pos3, const D3DXVECTOR3& Pos4, const FLOAT& fMax, const FLOAT& fCurrent);
 	
-	// 3×3の 2D用
+	// 3×3 2D用
 	static D3DXMATRIX* Mtx2DIdentity(D3DXMATRIX* pOut);
 	static D3DXMATRIX* Mtx2DScaling(D3DXMATRIX* pOut, FLOAT Sx, FLOAT Sy);
 	static D3DXMATRIX* Mtx2DTranslation(D3DXMATRIX* pOut, FLOAT x, FLOAT y);
 	static D3DXMATRIX* Mtx2DRotation(D3DXMATRIX* pOut, FLOAT Angle);
 
+	static const FLOAT getLength(const D3DXVECTOR3& setVector);
 
 
 	static void Lerp(D3DXVECTOR3* pOut, const D3DXVECTOR3& fStart, const D3DXVECTOR3& fEnd, const FLOAT& fMin, const FLOAT& fMax, const FLOAT& fCurrent);																// 線形補間

@@ -119,7 +119,9 @@ void Board::draw()
 
 			// アルファブレンド設定
 			if (isAlphaBlend)
+			{
 				devicePtr->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+			}
 
 			// テクスチャの設定（フレーム部分）
 			//	devicePtr->SetTexture(0,pD3DTexture);
@@ -144,7 +146,6 @@ void Board::draw()
 
 			// ラインティングを無効にする
 			devicePtr->SetRenderState(D3DRS_LIGHTING, FALSE);
-
 
 			// ビューマトリックスを取得
 			mtxTempView = pCamera->getMtxView();

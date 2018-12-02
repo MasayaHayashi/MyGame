@@ -43,6 +43,7 @@ class Camera;
 class Player;
 class Pawn;
 class Collision;
+class BallObj;
 
 // ===== ƒNƒ‰ƒX’è‹` =====
 class SceneMain : public SceneBase

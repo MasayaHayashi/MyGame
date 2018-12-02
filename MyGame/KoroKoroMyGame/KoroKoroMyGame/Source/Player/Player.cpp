@@ -11,6 +11,7 @@
 #include "../MyVector3/MyVector3.h"
 #include "../ResoueceManager/ResourceManager.h"
 #include "../Collision/Collision.h"
+#include "../Ball/BallObj.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -72,6 +73,14 @@ Player::Player(D3DXVECTOR3 startPos,UINT setNumber)
 	// 行列初期化
 	D3DXMatrixIdentity(&worldMtx);
 	D3DXMatrixIdentity(&translateMtx);
+
+	myTransformData.idNumber = 0;
+	myTransformData.posData = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransformData.scaleData = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransformData.rotDegData = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransformData.isUsed = false;
+
+	ballPtr.reset(NEW BallObj());
 
 	score = 0;
 
@@ -264,7 +273,7 @@ void Player::initializeTitle()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::initializeGameMain(CHAR *setFilePass)
 {
-	Collision::registerList(myTransformData, "Player");
+	Collision::registerList(&myTransformData, "Player");
 
 	move	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot		= D3DXVECTOR3(0.0f, 180.0f, 0.0f);
@@ -372,7 +381,7 @@ void Player::initializeSceneEdit()
 	// 今のアニメーションをトラック1に移行し
 	// トラックの設定値も移行
 //	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(1, hierarchyMeshData.ppAnimSet[0]);
-	hierarchyMeshData.animCtrlPtr->SetTrackDesc(1, &TD);
+	hierarchyMeshData.animCtrlPtr->SetTrackDesc(2, &TD);
 
 	// 新しいアニメーションセットをトラック0に設定
 //	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[0]);
@@ -536,6 +545,13 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 {
 	updateAnimation();
 
+	updateTransformData();
+	myTransformData.velocityData = testVec;
+
+	const TransformData* player1TransformPtr = Collision::getTransformData("Player", 0);
+	const TransformData* player2TransformPtr = Collision::getTransformData("Player", 1);
+
+
 	FLOAT Xnum = 0.0f;
 	FLOAT Ynum = 0.0f;
 
@@ -587,12 +603,13 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	D3DXVECTOR3 UpVec = getUpVec();
 	D3DXVec3Normalize(&UpVec, &UpVec);
 
-	D3DXQuaternionRotationAxis(&quatanion, &UpVec, 0);			// クォータニオンでの任意軸回転
-	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);	// クォータニオンから回転行列掛け合わせ
+	D3DXQuaternionRotationAxis(&quatanion, &UpVec, 0);
+	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
 	D3DXVec3Normalize(&testVec, &testVec);
 
+
 	testVec.y = 0.0f;
-	pos += testVec * 0.3f;
+	pos += testVec * 0.1f;
 
 	D3DXVECTOR3 FowrdVec = getForwardVec();
 	D3DXVECTOR3	RightVec = getRightVec();
@@ -618,7 +635,6 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 
 		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
 		oldRadRot = radRot;
-
 	}
 
 	if (rotCnt >= 1.0f)
@@ -626,9 +642,11 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 		rotCnt = 1.0f;
 	}
 
+
 	worldMtx._41 = pos.x;
 	worldMtx._42 = pos.y;
 	worldMtx._43 = pos.z;
+
 
 #if 0
 
@@ -643,7 +661,9 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 //	changeState();
 
 	if (PlayerState == PlayerState::TYPE_JUMP_UP)
+	{
 		bIsGround = false;
+	}
 
 	C_SCENE_MANAGER *pScene = GetSceneManager();
 	GAME_STATE uCurrentState = pScene->GetInstanse()->GetGameState();
@@ -723,18 +743,22 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 
 	// 重力加算処理
 	if (!bIsGround)
+	{
 		AccelePawn.y = -0.025f;
-
+	}
 	// 移動反映
 	move += AccelePawn;
 
 	if (move.y <= -0.3f)
+	{
 		move.y = -0.3f;
-
+	}
 	pos += move;
 
 	if (pos.y < -6.0f && !bIsGround)
+	{
 		PlayerState = PlayerState::TYPE_DEAD;
+	}
 
 	worldMtx._41 = pos.x;
 	worldMtx._42 = pos.y;

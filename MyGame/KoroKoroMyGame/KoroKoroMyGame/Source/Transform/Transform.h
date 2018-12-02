@@ -14,16 +14,18 @@
 #include "../GameObjectBase/GameObjectBase.h"
 
 // ===== 構造体定義 =====
-class TransformData final
+typedef struct 
 {
-public :
-	D3DXVECTOR3				posData;	// 座標
+	D3DXVECTOR3				posData;
+	D3DXVECTOR3				velocityData;
 	D3DXVECTOR3				rotDegData;
-	D3DXVECTOR3				scaleData;	// 拡大
-	//GameObjType				objType;	// どのオブジェクトか
+	D3DXVECTOR3				scaleData;
+	D3DXVECTOR3				collisionBox;
+	GameObjType				objType;
 	UINT					idNumber;	// 識別番号
+	bool					isHit;		
 	bool					isUsed;		// 使用されているか
-};
+} TransformData;
 
 class Transform final
 {
@@ -32,10 +34,11 @@ public :
 	~Transform();
 
 	void create();
-	const TransformData* getData() const;
-	void setData(TransformData setData);
+	const TransformData* getData(INT index) const;
+	void setData(TransformData *setData);
+	void setHit(INT index,bool setFlg);
 private:
-	std::list< std::unique_ptr<TransformData> > transformList;
+	std::list< TransformData* > transformList;
 };
 
 #endif

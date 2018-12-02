@@ -11,6 +11,7 @@
 #include "../../Skydome/Skydome.h"
 #include "../../MainField/MainField.h"
 #include "../../Collision/Collision.h"
+#include "../../Ball/BallObj.h"
 
 /*
 #include "C_Board.h"
@@ -59,15 +60,12 @@ SceneMain::SceneMain()
 	collisionPtr.reset(NEW Collision());
 
 	playeresPtr.push_back( static_cast<std::unique_ptr<Player>>( NEW Player(D3DXVECTOR3(-2.0f, 0.0f, 0.0f) , playeresPtr.size() )));
-	playeresPtr.push_back( static_cast<std::unique_ptr<Player>>( NEW Player(D3DXVECTOR3(4.0f, 0.0f, 2.0f),	 playeresPtr.size()	)));
+	playeresPtr.push_back( static_cast<std::unique_ptr<Player>>( NEW Player(D3DXVECTOR3( 4.0f, 0.0f, 2.0f),	 playeresPtr.size()	)));
 
 	gameObjectesPtr.push_back( std::unique_ptr<Pawn>(NEW Skydome())   );
+	gameObjectesPtr.push_back(std::unique_ptr<Pawn>( NEW BallObj())	  );
 	gameObjectesPtr.push_back( std::unique_ptr<Pawn>(NEW MainField()) );
 
-
-
-//	gameObjectesPtr[0].reset(NEW Skydome());
-//	gameObjectesPtr[1].reset(NEW MainField());
 }
 
 //
@@ -123,10 +121,8 @@ void SceneMain::update()
 	for (const auto &player : playeresPtr)
 	{
 		player->update(cameraPtr->getFowerd());
-	}
-
+	}	
 	
-
 #if 0
 	if (currentGameState == SceneMain::GameState::Tutorial)
 	{
@@ -269,7 +265,14 @@ void SceneMain::draw()
 {
 	for (const auto &gameObject : gameObjectesPtr)
 	{
-		gameObject->draw();
+		if (gameObject->isUsedShader())
+		{
+			gameObject->draw(cameraPtr->getMtxView(), cameraPtr->getProjectionMtx());
+		}
+		else
+		{
+			gameObject->draw();
+		}
 	}
 
 	for (const auto &player : playeresPtr)

@@ -30,7 +30,6 @@ class Light;
 class Camera;
 class FadeUI;
 class Board;
-class Texture;
 
 // ===== クラス定義 =====
 class SceneTitle final : public SceneBase
@@ -58,7 +57,6 @@ private:
 	std::unique_ptr <MainField>		fieldPtr    = nullptr;
 	std::unique_ptr <TitleUI>		titleUiPtr  = nullptr;
 	std::unique_ptr <HeartObj>		heartObjPtr = nullptr;
-	std::unique_ptr <Texture>		texturePtr  = nullptr;
 
 //	Board					*pBoard[MaxUIType];					// UI関連
 

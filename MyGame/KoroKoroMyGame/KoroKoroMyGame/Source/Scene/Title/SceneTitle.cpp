@@ -12,9 +12,7 @@
 #include "../../MainField/MainField.h"
 #include "../../TitleUI/TitleUI.h"
 #include "../../HeartObj/HeartObj.h"
-#include "../../../Texture.h"
-#include "../../../shader.h"
-#include "../../../PostSpriteRenderer.h"
+
 /*
 #include ""
 #include "C_MainField.h"
@@ -71,10 +69,6 @@ void SceneTitle::initialize()
 	titleUiPtr->initialize();
 	heartObjPtr->initialize();
 
-	SpriteRenderer::create();
-
-	texturePtr.reset(NEW Texture());
-	texturePtr->create(D3DXVECTOR3(Application::ScreenWidth, Application::ScreenHeight, 0.0f), D3DFORMAT::D3DFMT_A8B8G8R8);
 	/*
 	// パーティクル初期化
 	for (INT i = 0; i < MAX_PARTICLE; i++)
@@ -175,6 +169,11 @@ void SceneTitle::update()
 	fieldPtr->update();
 	cameraPtr->updateTitle(playerPtr.get());
 
+	if (Keyboard::getPress(DIK_1))
+	{
+		SceneManager::setNextScene(SceneManager::SceneState::SceneMain);
+	}
+
 	/*
 	D3DXVECTOR3 CameraFowerd = pCamera->getCameraFowerd();
 
@@ -255,35 +254,10 @@ void SceneTitle::update()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneTitle::draw()
 {
-	
-//	DirectX3D::getDevice()->Clear(0, NULL, (D3DCLEAR_ZBUFFER | D3DCLEAR_TARGET), D3DCOLOR_XRGB(0, 0, 0), (DWORD)1.0f, (DWORD)0.0f);
-
-	IDirect3DSurface9 *pPraymariyRenderTirget;
-	DirectX3D::getDevice()->GetRenderTarget(0, &pPraymariyRenderTirget);
-
-	texturePtr->setRenderTarget(0);
-	DirectX3D::getDevice()->Clear(0, NULL, (D3DCLEAR_ZBUFFER | D3DCLEAR_TARGET), D3DCOLOR_XRGB(0, 0, 0), (DWORD)1.0f, (DWORD)0.0f);
-	
-//	playerPtr->draw();
-
-
-	DirectX3D::getDevice()->SetRenderTarget(0, pPraymariyRenderTirget);
-	
-	Shader::get()->SetTexture("Texture", texturePtr->get());
-	SpriteRenderer::draw();
-
-
-//	playerPtr->draw();
-//	heartObjPtr->draw();
-//	skydomePtr->draw();
-//	fieldPtr->draw();
-
-
-//	Shader::RenderEnd();
-
-	
-
-
+	playerPtr->draw();
+	heartObjPtr->draw();
+	skydomePtr->draw();
+	fieldPtr->draw();
 
 	// スカイドーム描画
 //	pSkydome->draw();

@@ -11,6 +11,8 @@
 #include "../SceneInterface/sceneBase.h"
 #include "d3dx9.h"
 #include <memory>
+#include <map>
+
 
 // ===== クラスの前方宣言 =====
 class FadeUI;
@@ -26,8 +28,8 @@ public:
 	enum class SceneState
 	{
 		SceneTitle = 0,
-		SceneStageEdit,
 		SceneMain,
+		SceneStageEdit,
 		SceneResult,
 	};
 
@@ -50,7 +52,7 @@ public:
 	static void setNextScene(SceneState setNextScene);
 	static void setCurrentScene(SceneState setSceneType);
 
-	static SceneBase*		getInstanse();
+	static SceneBase*			getInstanse();
 	static const SceneState		getCurrentSceneType();
 	static const SceneState		getNextScene();
 	const FadeUI*				getFade() const;
@@ -58,6 +60,10 @@ public:
 protected:
 
 private:
+
+	void loadSettingFile();
+	void makeStartScene();
+	void changeStringToUint();
 
 	static constexpr INT DebugMoveOnFream = 10;
 	static SceneState currentSceneType;
@@ -67,8 +73,18 @@ private:
 	static std::unique_ptr<SceneBase>	 currentScenePtr;
 	static std::unique_ptr <FadeUI>		 fadePtr;
 
+	std::map<std::string, SceneState> sceneTypeMap =
+	{
+		{ "SceneTitle" ,     SceneState::SceneTitle },
+		{ "SceneMain",		 SceneState::SceneMain },
+		{ "SceneStageEdit",	 SceneState::SceneStageEdit },
+		{ "SceneResult",	 SceneState::SceneResult },
+	};
+
+	TCHAR  startScene[256];
+
 	static bool	   debugMode;
-	static INT	   frameAdvanceCnt;				// デバック用コマ送り用カウンタ
+	static INT	   frameAdvanceCnt;
 };
 
 #endif

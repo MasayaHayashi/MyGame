@@ -38,7 +38,6 @@ Pawn::Pawn()
 	meshDataObj.meshPtr				= nullptr;
 	meshDataObj.materialBufferPtr	= nullptr;
 
-	// 位置・向きの初期設定
 	pos				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	accele			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	scale			= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
@@ -47,6 +46,12 @@ Pawn::Pawn()
 	rotDest			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	collisionSize	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	destLanding		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	myTransformData.idNumber = 0;
+	myTransformData.posData		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransformData.scaleData = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransformData.rotDegData	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransformData.isUsed = false;
 
 	quatanion	= D3DXQUATERNION(0, 0, 0, 0);
 	destQua		= D3DXQUATERNION(0, 0, 0, 0);
@@ -63,6 +68,7 @@ Pawn::Pawn()
 	endAnim			= false;
 	isHit			= false;
 	isGround		= false;
+	isShader		= false;
 
 	currentAnim	= 0;
 }
@@ -82,6 +88,12 @@ Pawn::Pawn(UINT SetuIndxNum)
 	rot			  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rotDest		  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	collisionSize = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	myTransformData.idNumber = 0;
+	myTransformData.posData = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransformData.scaleData = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransformData.rotDegData = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransformData.isUsed = false;
 
 	collisionRadus  = 0.0f;
 	colorAlpha		 = 1.0f;
@@ -148,7 +160,9 @@ void Pawn::draw()
 
 	// 例外処理
 	if (!isUsed)
+	{
 		return;
+	}
 
 	// 移動、回転、拡大縮小用行列
 	D3DXMATRIX		mtxRot, translateMtx, mtxScale;
@@ -180,7 +194,7 @@ void Pawn::draw()
 	// マテリアル情報に対するポインタを取得
 	pD3DXMat = (D3DXMATERIAL*)meshDataObj.materialBufferPtr->GetBufferPointer();
 
-	for (int nCntMat = 0; nCntMat < static_cast<INT>(meshDataObj.numMat); nCntMat++)
+	for (INT nCntMat = 0; nCntMat < static_cast<INT>(meshDataObj.numMat); nCntMat++)
 	{
 		// マテリアルの設定
 		devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
@@ -240,16 +254,16 @@ void Pawn::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
  	pD3DXMat = (D3DXMATERIAL*)meshDataObj.materialBufferPtr->GetBufferPointer();
 
 
-	//LPD3DXEFFECT pEffect = DirectX3D::getEffect();
+	LPD3DXEFFECT pEffect = DirectX3D::getEffect();
 
-	//// 
-	//pEffect->SetTechnique("tecMinimum");
+	// 
+	pEffect->SetTechnique("tecMinimum");
 
-	//D3DXMATRIX mtxAll = worldMtx * mtxView * mtxProj;
-	//pEffect->SetMatrix("mWVP", &mtxAll);
+	D3DXMATRIX mtxAll = worldMtx * mtxView * mtxProj;
+	pEffect->SetMatrix("mWVP", &mtxAll);
 
-	//pEffect->Begin(nullptr, 0);
-	//pEffect->BeginPass(0);
+	pEffect->Begin(nullptr, 0);
+	pEffect->BeginPass(0);
 
 	for (int nCntMat = 0; nCntMat < static_cast<INT>(meshDataObj.numMat); nCntMat++)
 	{
@@ -264,6 +278,8 @@ void Pawn::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 		meshDataObj.meshPtr->DrawSubset(nCntMat);
 	}
 
+	pEffect->EndPass();
+	pEffect->End();
 
 	// マテリアルをデフォルトに戻す
 	devicePtr->SetMaterial(&matDef);
@@ -386,12 +402,17 @@ void Pawn::drawFrame(LPD3DXFRAME pFrame)
 		// 次のメッシュコンテナ
 		pMeshContainer = pMeshContainer->pNextMeshContainer;
 	}
+
 	// 兄弟フレームがあれば兄弟フレームを描画
 	if (pFrame->pFrameSibling)
+	{
 		drawFrame(pFrame->pFrameSibling);
+	}
 	// 子フレームがあれば子フレームを描画
 	if (pFrame->pFrameFirstChild)
+	{
 		drawFrame(pFrame->pFrameFirstChild);
+	}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -417,7 +438,9 @@ void Pawn::RenderMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase, LPD3DXFRA
 			for (DWORD k = 0; k < pMeshContainer->dwWeight; ++k)
 			{
 				if (pBoneCombi[i].BoneId[k] != UINT_MAX)
+				{
 					dwBlendMatrix = k;
+				}
 			}
 			devicePtr->SetRenderState(D3DRS_VERTEXBLEND, dwBlendMatrix);
 			for (DWORD k = 0; k < pMeshContainer->dwWeight; k++)
@@ -467,14 +490,20 @@ void Pawn::updateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX pParentMatri
 {
 	MYFRAME* pFrame = (MYFRAME*)pFrameBase;
 	// 親のマトリックスを掛け合わせる
-	if (pParentMatrix) 
+	if (pParentMatrix)
+	{
 		pFrame->combinedTransformationMatrix = pFrame->TransformationMatrix * *pParentMatrix;
-	else 
+	}
+	else
+	{
 		pFrame->combinedTransformationMatrix = pFrame->TransformationMatrix;
+	}
 
 	// 兄弟フレームがあればマトリックスを更新
-	if (pFrame->pFrameSibling) 
+	if (pFrame->pFrameSibling)
+	{
 		updateFrameMatrices(pFrame->pFrameSibling, pParentMatrix);
+	}
 
 	// 子フレームがあればマトリックスを更新
 	if (pFrame->pFrameFirstChild)
@@ -509,7 +538,9 @@ HRESULT Pawn::AllocBoneMatrix(LPD3DXMESHCONTAINER pMeshContainerBase)
 	MYMESHCONTAINER* pMeshContainer = (MYMESHCONTAINER*)pMeshContainerBase;
 
 	if (pMeshContainer->pSkinInfo == nullptr)
+	{
 		return S_OK;	// スキン情報が無ければ何もしない
+	}
 
 	DWORD dwBoneNum = pMeshContainer->pSkinInfo->GetNumBones();
 	pMeshContainer->ppBoneMatrix = NEW LPD3DXMATRIX[dwBoneNum];
@@ -519,7 +550,9 @@ HRESULT Pawn::AllocBoneMatrix(LPD3DXMESHCONTAINER pMeshContainerBase)
 		MYFRAME* pFrame = (MYFRAME*)D3DXFrameFind(frameRoot,pMeshContainer->pSkinInfo->GetBoneName(i));
 
 		if (pFrame == nullptr)
+		{
 			return E_FAIL;
+		}
 		pMeshContainer->ppBoneMatrix[i] = &pFrame->combinedTransformationMatrix;
 	}
 	return S_OK;
@@ -972,12 +1005,26 @@ void Pawn::calcCollisionMeshContainer(LPD3DXMESHCONTAINER pMeshContainer, LPD3DX
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Pawn::updateTransformData()
 {
-	myTransformData.posData		= pos;
-	myTransformData.rotDegData	= rot;
-	myTransformData.scaleData	= scale;
-//	myTransformData.objType		= objType;
-	myTransformData.idNumber	= idNumber;
-	myTransformData.isUsed		= isUsed;
+	myTransformData.posData		 = pos;
+	myTransformData.velocityData = move;
+	myTransformData.rotDegData	 = rot;
+	myTransformData.scaleData	 = scale;
+	myTransformData.objType		 = objType;
+	myTransformData.idNumber	 = idNumber;
+	myTransformData.isUsed		 = isUsed;
+
+	switch (meshType)
+	{
+	case MeshObjType::NormalModel:
+		myTransformData.collisionBox = collitionBox;
+		break;
+	case MeshObjType::HierarchyModel:
+		myTransformData.collisionBox = hierarchyMeshData.collitionBox;
+		break;
+	default:
+		break;
+	}
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -988,7 +1035,6 @@ void Pawn::setTransformData(TransformData setData)
 	pos			= setData.posData;		// 位置
 	rot			= setData.rotDegData;	// 回転
 	scale		= setData.scaleData;	// 拡大率
-//	objType		= setData.objType;		// ブロックの種類
 	idNumber	= setData.idNumber;		// 識別番号
 	isUsed		= setData.isUsed;		// 使用フラグ
 }
@@ -1083,9 +1129,17 @@ void Pawn::updateAnimation()
 
 	if (hierarchyMeshData.animCtrlPtr)
 	{
-		DWORD dwNow = timeGetTime();
-		DOUBLE d = (dwNow - hierarchyMeshData.dwPrev) / 1000.0;
-		hierarchyMeshData.dwPrev = dwNow;
-		hierarchyMeshData.animCtrlPtr->AdvanceTime(d, nullptr);
+		DWORD nowTime = timeGetTime();
+		DOUBLE deltaTime = (nowTime - hierarchyMeshData.dwPrev) / 1000.0;
+		hierarchyMeshData.dwPrev = nowTime;
+		hierarchyMeshData.animCtrlPtr->AdvanceTime(deltaTime, nullptr);
 	}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// シェーダー使用
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+bool Pawn::isUsedShader()
+{
+	return isShader;
 }

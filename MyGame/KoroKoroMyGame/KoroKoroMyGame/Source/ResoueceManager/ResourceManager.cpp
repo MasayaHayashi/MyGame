@@ -680,6 +680,7 @@ HRESULT ResourceManager::makeModelHierarchy(HIERARCHY_MESH_DATA &setHierarchyMed
 	if (hierarchyMesh.back()->animCtrlPtr)
 	{
 		hierarchyMesh.back()->numAnimset = hierarchyMesh.back()->animCtrlPtr->GetNumAnimationSets();
+
 		if (hierarchyMesh.back()->numAnimset > 0)
 		{
 			hierarchyMesh.back()->pAnimSetPtr.reset(NEW LPD3DXANIMATIONSET[hierarchyMesh.back()->numAnimset]);
@@ -687,7 +688,6 @@ HRESULT ResourceManager::makeModelHierarchy(HIERARCHY_MESH_DATA &setHierarchyMed
 			for (DWORD u = 0; u < hierarchyMesh.back()->numAnimset; u++)
 			{
 				hierarchyMesh.back()->animCtrlPtr->GetAnimationSet(u, &hierarchyMesh.back()->pAnimSetPtr.get()[u]);
-
 			}
 		}
 	}

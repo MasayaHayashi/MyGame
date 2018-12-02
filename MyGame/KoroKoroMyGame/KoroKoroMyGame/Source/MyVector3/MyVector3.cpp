@@ -288,3 +288,15 @@ FLOAT MyVector3::CalcAngleDegree(D3DXVECTOR3 VectorA, D3DXVECTOR3 VectorB)
 
 	return fAngleRad;
 }
+
+//
+// ’·‚³æ“¾
+//
+const FLOAT MyVector3::getLength(const D3DXVECTOR3& setVector)
+{
+
+	FLOAT length = sqrt(setVector.x * setVector.x + setVector.x* setVector.y + setVector.z * setVector.z);
+
+	return length;
+
+}

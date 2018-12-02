@@ -41,9 +41,10 @@ SceneManager::SceneManager()
 	// SCENE_TITLE
 
 	// シーン設定初期化
-	currentScenePtr.reset(NEW SceneTitle());
-	currentSceneType	= SceneState::SceneTitle;
-	nextSceneType		= SceneState::SceneTitle;
+
+	loadSettingFile();
+
+	makeStartScene();
 
 	fadePtr.reset(NEW FadeUI);
 }
@@ -231,4 +232,56 @@ const SceneManager::SceneState SceneManager::getNextScene()
 const FadeUI* SceneManager::getFade() const
 {
 	return fadePtr.get();
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// iniファイルロード
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void SceneManager::loadSettingFile()
+{
+	DWORD  ret;
+	ret = GetPrivateProfileString("Scene", "StartScene", "しっぱい", startScene, sizeof(startScene),"Data/debugSetting.ini");
+
+	if (!ret)
+	{
+		MessageBox(nullptr, TEXT("モデル読み込みエラー"), TEXT("Error"), MB_ICONERROR);
+	}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 初期シーン設定
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void SceneManager::makeStartScene()
+{
+	switch (sceneTypeMap[startScene])
+	{
+	case SceneState::SceneTitle :
+		currentScenePtr.reset(NEW SceneTitle());
+
+		break;
+	case SceneState::SceneMain	:
+		currentScenePtr.reset(NEW SceneMain());
+
+		break;
+	case SceneState::SceneStageEdit: 
+
+		break;
+	case SceneState::SceneResult:
+
+
+		break;
+	default:
+		break;
+	}
+
+	currentSceneType = sceneTypeMap[startScene];
+	nextSceneType = sceneTypeMap[startScene];
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 文字列からUINTへの変換
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void SceneManager::changeStringToUint()
+{
+	
 }
