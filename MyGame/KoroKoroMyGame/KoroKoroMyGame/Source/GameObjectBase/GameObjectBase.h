@@ -14,7 +14,7 @@
 enum class GameObjType
 {
 	NormalBlockObj = 0,
-	MoveBlockObj,
+	velocityBlockObj,
 	StarObj,
 	GoalObj,
 };

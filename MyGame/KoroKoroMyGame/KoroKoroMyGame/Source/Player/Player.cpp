@@ -20,7 +20,7 @@ Player::Player()
 {
 	// à íuÅEå¸Ç´ÇÃèâä˙ê›íË
 	pos		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	move	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	
@@ -52,7 +52,7 @@ Player::Player(D3DXVECTOR3 startPos,UINT setNumber)
 {
 	// à íuÅEå¸Ç´ÇÃèâä˙ê›íË
 	pos = startPos;
-	move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
@@ -198,7 +198,7 @@ void Player::initializeTitle()
 
 	// à íuÅAà⁄ìÆó ÅAägëÂó¶èâä˙âª
 	pos		= D3DXVECTOR3(0.0f, -0.01f, -5.0f);
-	move	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	scale	= D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
@@ -275,11 +275,11 @@ void Player::initializeGameMain(CHAR *setFilePass)
 {
 	Collision::registerList(&myTransformData, "Player");
 
-	move	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot		= D3DXVECTOR3(0.0f, 180.0f, 0.0f);
 	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	scale	= D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
-	playerStateType = PlayerState::Move;
+	playerStateType = PlayerState::velocity;
 
 	setDefaultValue();
 
@@ -330,7 +330,7 @@ void Player::initializeSceneEdit()
 {
 	// à íuÅAà⁄ìÆó ÅAägëÂó¶èâä˙âª
 	pos		= D3DXVECTOR3(0.0f, -0.01f, -5.0f);
-	move	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	scale	= D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
@@ -393,7 +393,7 @@ void Player::initializeSceneEdit()
 void Player::initializeResult()
 {
 	pos		 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	move	 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	velocity	 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot		 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rotDest  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
@@ -551,48 +551,72 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	const TransformData* player1TransformPtr = Collision::getTransformData("Player", 0);
 	const TransformData* player2TransformPtr = Collision::getTransformData("Player", 1);
 
-
 	FLOAT Xnum = 0.0f;
 	FLOAT Ynum = 0.0f;
 
 	if (idNumber == 0)
 	{
+
+		D3DXVECTOR3 playerToPlayerVec = player1TransformPtr->posData - player2TransformPtr->posData;
+	
+		FLOAT length = MyVector3::getLength(playerToPlayerVec);
+		DirectX3D::printDebug("\nÇ»Ç™Ç≥%f",length);
+		
+		DirectX3D::printDebug("\n ÇﬁÅ[Ç‘%f", testVec.x);
+
+		if (length < 1.5f)
+		{
+			D3DXVECTOR3 nvpe;
+			D3DXVec3Normalize(&nvpe, &playerToPlayerVec);
+
+			D3DXVECTOR3 pv;
+			pv = testVec + nvpe * 0.05f;
+
+			velocity += playerToPlayerVec * 0.4f;
+
+			
+		}
+
+
 		if (Keyboard::getPress(DIK_D))
 		{
-			Xnum++;
+			Xnum += MoveSpeed;
 		}
 		if (Keyboard::getPress(DIK_A))
 		{
-			Xnum--;
+			Xnum -= MoveSpeed;
 		}
 		if (Keyboard::getPress(DIK_S))
 		{
-			Ynum--;
+			Ynum -= MoveSpeed;
 		}
 		if (Keyboard::getPress(DIK_W))
 		{
-			Ynum++;
+			Ynum += MoveSpeed;
 		}
 	}
 	else if (idNumber == 1)
 	{
 		if (Keyboard::getPress(DIK_L))
 		{
-			Xnum++;
+			Xnum += MoveSpeed;
 		}
 		if (Keyboard::getPress(DIK_J))
 		{
-			Xnum--;
+			Xnum -= MoveSpeed;
 		}
 		if (Keyboard::getPress(DIK_K))
 		{
-			Ynum--;
+			Ynum -= MoveSpeed;
 		}
 		if (Keyboard::getPress(DIK_I))
 		{
-			Ynum++;
+			Ynum += MoveSpeed;
 		}
 	}
+
+
+
 
 	D3DXVECTOR3 CameraRight = D3DXVECTOR3(CameraForward.z, 0.0f, -CameraForward.x);
 
@@ -608,8 +632,33 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	D3DXVec3Normalize(&testVec, &testVec);
 
 
+
 	testVec.y = 0.0f;
-	pos += testVec * 0.1f;
+
+	velocity += testVec * 0.1f;
+
+	if (velocity.x > 0.17f)
+	{
+		velocity.x = 0.17f;
+	}
+	if (velocity.x < -0.17f)
+	{
+		velocity.x = -0.17f;
+	}
+
+	if (velocity.z > 0.17f)
+	{
+		velocity.z = 0.17f;
+	}
+	if (velocity.z < -0.17f)
+	{
+		velocity.z = -0.17f;
+	}
+
+	pos += velocity;
+	velocity *= 0.95f;
+
+
 
 	D3DXVECTOR3 FowrdVec = getForwardVec();
 	D3DXVECTOR3	RightVec = getRightVec();
@@ -642,11 +691,9 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 		rotCnt = 1.0f;
 	}
 
-
 	worldMtx._41 = pos.x;
 	worldMtx._42 = pos.y;
 	worldMtx._43 = pos.z;
-
 
 #if 0
 
@@ -685,7 +732,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	if (Xnum == 0.0f && Ynum == 0.0f)
 		PlayerState = PlayerState::Stop;
 	else
-		PlayerState = PlayerState::TYPE_MOVE;
+		PlayerState = PlayerState::TYPE_velocity;
 
 	D3DXVECTOR3 CameraRight = D3DXVECTOR3(CameraForward.z, 0.0f, -CameraForward.x);
 
@@ -747,13 +794,13 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 		AccelePawn.y = -0.025f;
 	}
 	// à⁄ìÆîΩâf
-	move += AccelePawn;
+	velocity += AccelePawn;
 
-	if (move.y <= -0.3f)
+	if (velocity.y <= -0.3f)
 	{
-		move.y = -0.3f;
+		velocity.y = -0.3f;
 	}
-	pos += move;
+	pos += velocity;
 
 	if (pos.y < -6.0f && !bIsGround)
 	{
@@ -772,7 +819,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	PrintDebugProc("Ç’ÇÍÇ¢Ç‚Å`Å`Å`Y%f\n", worldMtx._42);
 	PrintDebugProc("Ç’ÇÍÇ¢Ç‚Å`Å`Å`Z%f\n", worldMtx._43);
 	PrintDebugProc("Ç’ÇÍÇ¢Ç‚Å`Ç∂ÇÂÇ§ÇΩÇ¢%d\n", PlayerState);
-	PrintDebugProc("moveY%f\n", move.y);
+	PrintDebugProc("velocityY%f\n", velocity.y);
 	PrintDebugProc("IsGround%d\n", bIsGround);
 #endif
 
@@ -894,14 +941,14 @@ void Player::changeStatus()
 	{
 	case PlayerState::Stop:
 		break;
-	case PlayerState::Move:
+	case PlayerState::velocity:
 		accele	= D3DXVECTOR3( 0.0f,0.0f,0.0f);
-		move	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		isGround	= true;
 		break;
 	case PlayerState::JumpUp:
 		
-		if (move.y < 0.0f)
+		if (velocity.y < 0.0f)
 			playerStateType = PlayerState::JumpDown;
 
 		isGround = false;
@@ -931,10 +978,18 @@ void Player::changeStatus()
 void Player::changeState()
 {
 	if (playerStateType == PlayerState::JumpUp &&
-		move.y < 0.0f)
+		velocity.y < 0.0f)
 	{
 		playerStateType = PlayerState::Fall;
 	}
+}
+
+//ÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅ
+// 
+//ÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅ
+void Player::move()
+{
+
 }
 
 void Player::input()

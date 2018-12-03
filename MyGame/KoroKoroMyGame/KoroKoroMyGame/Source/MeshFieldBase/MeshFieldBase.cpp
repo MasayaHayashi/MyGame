@@ -22,7 +22,7 @@ D3DMATERIAL9 test;
 C_MESH_FIELD_BASE::C_MESH_FIELD_BASE()
 {
 	PosField   = D3DXVECTOR3(0.0f,0.0f,0.0f);
-	MoveField  = D3DXVECTOR3(0.0f,0.0f,0.0f);
+	velocityField  = D3DXVECTOR3(0.0f,0.0f,0.0f);
 	RotField   = D3DXVECTOR3(0.0f,0.0f,0.0f);
 	ScaleField = D3DXVECTOR3(1.0f,1.0f,1.0f);
 

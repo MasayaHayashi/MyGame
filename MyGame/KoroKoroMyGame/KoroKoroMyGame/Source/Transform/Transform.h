@@ -12,6 +12,7 @@
 #include <memory>
 #include "d3dx9.h"
 #include "../GameObjectBase/GameObjectBase.h"
+#include "../Mesh/Mesh.h"
 
 // ===== ç\ë¢ëÃíËã` =====
 typedef struct 
@@ -21,6 +22,10 @@ typedef struct
 	D3DXVECTOR3				rotDegData;
 	D3DXVECTOR3				scaleData;
 	D3DXVECTOR3				collisionBox;
+	D3DXMATRIX				worldMatrix;
+	DWORD					numIndx;
+	MESH_VTX*				vertexPtr;
+	WORD*					indexPtr;
 	GameObjType				objType;
 	UINT					idNumber;	// éØï î‘çÜ
 	bool					isHit;		
@@ -34,9 +39,10 @@ public :
 	~Transform();
 
 	void create();
-	const TransformData* getData(INT index) const;
+	TransformData* getData(INT index) const;
 	void setData(TransformData *setData);
 	void setHit(INT index,bool setFlg);
+	void clear();
 private:
 	std::list< TransformData* > transformList;
 };

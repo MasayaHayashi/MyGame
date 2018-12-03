@@ -61,7 +61,7 @@ public:
 	D3DXVECTOR3			getRightVec();			// 横方向のベクトル取得
 	D3DXVECTOR3			getPosition();			// 位置取得
 	D3DXVECTOR3			getRotation();			// 回転取得
-	D3DXVECTOR3			getMove();				// 移動スピード取得
+	D3DXVECTOR3			getvelocity();				// 移動スピード取得
 	D3DXVECTOR3			getOffset();			// ワールド行列からオフセット値を取得
 	D3DXVECTOR3			getCenterPos();			// 中心座標取得
 	D3DXVECTOR3			getCollisionBox();		// あたり判定用サイズ取得
@@ -95,7 +95,7 @@ public:
 	void setMesh(LPD3DXMESH, LPD3DXBUFFER, DWORD);
 	void setMaterialcolorEmissive(float, float, float, float);	// マテリアルの自己発光値セット
 	void setUsedFlg(bool);										// 使用フラグセット
-	void setMoveSpeed(D3DXVECTOR3);								// 移動量セット
+	void setvelocitySpeed(D3DXVECTOR3);								// 移動量セット
 	void setOffset(D3DXVECTOR3 setOffset);						// 行列上の位置セット
 	void setNumber(UINT);										// 識別番号セット
 	void setPosition(D3DXVECTOR3);								// 位置セット
@@ -135,7 +135,7 @@ protected:
 	CHAR				texFileName[256];	// 読み込むファイル名
 
 	D3DXVECTOR3			pos;					// 現在の位置
-	D3DXVECTOR3			move;					// 移動量
+	D3DXVECTOR3			velocity;				// 移動量
 	D3DXVECTOR3			accele;					// 加速度
 	D3DXVECTOR3			rot;					// 現在の向き
 	D3DXVECTOR3			rotDest;				// 目的の向き
@@ -148,7 +148,7 @@ protected:
 	D3DXVECTOR3			collisionSize;			// あたり判定用の大きさ
 
 	D3DXVECTOR3			defPos;					// 初期値の位置
-	D3DXVECTOR3			defMove;				// 初期値の移動量
+	D3DXVECTOR3			defvelocity;				// 初期値の移動量
 	D3DXVECTOR3			defrot;					// 初期値の向き
 	D3DXVECTOR3			defScale;				// 初期値の拡大率
 

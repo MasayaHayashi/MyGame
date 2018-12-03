@@ -21,7 +21,7 @@
 #include "C_Light.h"
 #include "C_Camera.h"
 #include "C_Skydome.h"
-#include "C_MoveBlock.h"
+#include "C_velocityBlock.h"
 #include "C_GoalObj.h"
 #include "C_Pause.h"
 #include "C_ItemStar.h"
@@ -104,6 +104,8 @@ void SceneMain::finalize()
 	{
 		player->finalize();
 	}
+
+	collisionPtr->allUnregister();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -123,6 +125,13 @@ void SceneMain::update()
 		player->update(cameraPtr->getFowerd());
 	}	
 	
+
+
+	if (Keyboard::getPress(DIK_1))
+	{
+		SceneManager::setNextScene(SceneManager::SceneState::SceneTitle);
+	}
+
 #if 0
 	if (currentGameState == SceneMain::GameState::Tutorial)
 	{
@@ -403,8 +412,8 @@ void SceneMain::checkCollision()
 
 
 	// 移動方向に壁があるか
-	D3DXVECTOR3 MoveVec = pPlayer->getMoveVec();
-	D3DXVec3Normalize(&MoveVec, &MoveVec);
+	D3DXVECTOR3 velocityVec = pPlayer->getvelocityVec();
+	D3DXVec3Normalize(&velocityVec, &velocityVec);
 
 	// ブロックとの判定
 	uIsHitBlock = NONE;
@@ -427,7 +436,7 @@ void SceneMain::checkCollision()
 					continue;
 
 				// プレイヤーとブロックとの判定
-				uIsHitBlock = pCollision->CheckCollisionWall(pPlayer, nullptr, pGameObj[i][j], Cross, Normal, fLength, MoveVec);
+				uIsHitBlock = pCollision->CheckCollisionWall(pPlayer, nullptr, pGameObj[i][j], Cross, Normal, fLength, velocityVec);
 
 				nHitIndex = j;
 
@@ -442,8 +451,8 @@ void SceneMain::checkCollision()
 		{
 			if (fLength.x < 0.4f)
 			{
-				pPlayer->setStatus(PlayerState::TYPE_MOVE_HIT_WALL);
-				pPlayer->setPosition(pPlayer->getPosition() - pPlayer->getMoveVec());
+				pPlayer->setStatus(PlayerState::TYPE_velocity_HIT_WALL);
+				pPlayer->setPosition(pPlayer->getPosition() - pPlayer->getvelocityVec());
 				PrintDebugProc("てすとおおおおおおおおおおおおおおおおおおおおおお");
 			}
 		}
@@ -454,7 +463,7 @@ void SceneMain::checkCollision()
 
 
 	// 床との判定
-	if (pPlayer->getState() != (PlayerState::TYPE_MOVE_HIT_WALL))
+	if (pPlayer->getState() != (PlayerState::TYPE_velocity_HIT_WALL))
 	{
 		for (INT i = 0; i < MAX_BLOCK_TYPE; i++)
 		{
@@ -489,7 +498,7 @@ void SceneMain::checkCollision()
 				PrintDebugProc("ヒット！！！！！！！！！！１");
 				PrintDebugProc("hit%d", nHitIndex);
 				pPlayer->setPosition(Cross - D3DXVECTOR3(0.0f, 0.01f, 0.0f));
-				pPlayer->setStatus(PlayerState::TYPE_MOVE);
+				pPlayer->setStatus(PlayerState::TYPE_velocity);
 			}
 
 			if (fLength.x > 0.0f)

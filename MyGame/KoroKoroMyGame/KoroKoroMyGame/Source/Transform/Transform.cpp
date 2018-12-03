@@ -35,7 +35,7 @@ void Transform::create()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝
 // データ取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝
-const TransformData* Transform::getData(INT index) const
+TransformData* Transform::getData(INT index) const
 {
 	if (transformList.empty())
 	{
@@ -75,4 +75,12 @@ void Transform::setHit(INT index,bool setFlg)
 			transform->isHit = setFlg;
 		}
 	}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝
+// クリア
+//＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Transform::clear()
+{
+	transformList.clear();
 }

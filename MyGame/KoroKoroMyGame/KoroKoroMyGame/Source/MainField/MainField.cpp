@@ -6,6 +6,7 @@
 // ===== インクルード部 =====
 #include "MainField.h"
 #include <string>
+#include "../Collision/Collision.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -19,6 +20,8 @@ MainField::MainField()
 
 	meshPtr = nullptr;
 	isUsed  = true;
+
+	Collision::registerList(&myTransformData, "field");
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -56,7 +59,7 @@ void MainField::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void MainField::update()
 {
-
+	updateTransformData();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

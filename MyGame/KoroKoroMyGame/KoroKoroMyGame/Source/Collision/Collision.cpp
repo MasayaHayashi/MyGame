@@ -13,6 +13,7 @@
 #include "../Player/Player.h"
 #include "../Pawn/Pawn.h"
 #include "../DirectX3D/DirectX3D.h"
+#include "../SceneManager/SceneManager.h"
 
 // ===== 静的メンバ =====
 std::unordered_map<std::string, Transform> Collision::collisionMapes;
@@ -38,8 +39,8 @@ Collision::~Collision()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Collision::update()
 {
- 	FLOAT test = collisionMapes["Player"].getData(0)->posData.x;
-	DirectX3D::printDebug("posdata %f\n", test);
+ 	FLOAT posdataX = collisionMapes["Player"].getData(0)->posData.x;
+	DirectX3D::printDebug("posdata %f\n", posdataX);
 
 	if (isHitAABB(*collisionMapes["Player"].getData(0), *collisionMapes["Player"].getData(1)))
 	{
@@ -53,6 +54,9 @@ void Collision::update()
 		collisionMapes["Player"].setHit(1, false);
 		DirectX3D::printDebug("いません");
 	}
+
+	if(checkCollisionField(*collisionMapes["Player"].getData(0),*collisionMapes[]))
+	
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -64,14 +68,14 @@ void Collision::registerList(TransformData *setTransformData,std::string keyName
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// 地面とプレイヤーの衝突処理更新
+// 地面とプレイヤーの衝突処
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-UINT Collision::CheckCollisionField(Player *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength,D3DXVECTOR3 DestVec)
+UINT Collision::checkCollisionField(TransformData pPlayer, TransformData pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength,D3DXVECTOR3 DestVec)
 {
 	INT	nIndx;
 
 	// 線分と三角形の判定
-	nIndx = IsHitRayToMesh(pField, pPlayer, &pPlayer->getPosition(), &(pPlayer->getPosition() + DestVec), true, &Cross, &Normal,&fLength);
+	nIndx = isHitRayToMesh(pField, pPlayer, &pPlayer.posData,&(pPlayer.posData + DestVec), true, &Cross, &Normal,&fLength);
 
 	if (nIndx >= 0)
 	{
@@ -91,8 +95,9 @@ UINT Collision::CheckCollisionWall(Player *pPlayer, Pawn *pPawnB, Pawn *pField, 
 	INT	nIndx;
 
 	// 線分と三角形の判定
-	nIndx = IsHitRayToMesh(pField, pPlayer, &(pPlayer->getPosition() + D3DXVECTOR3(0.0f,2.0f,0.0f)), &(pPlayer->getPosition() + DestVec), true, &Cross, &Normal, &fLength);
+//	nIndx = isHitRayToMesh(pField, pPlayer, &(pPlayer->getPosition() + D3DXVECTOR3(0.0f,2.0f,0.0f)), &(pPlayer->getPosition() + DestVec), true, &Cross, &Normal, &fLength);
 
+	/*
 	if (nIndx >= 0)
 	{
 		return RAY_TRUE;
@@ -101,6 +106,8 @@ UINT Collision::CheckCollisionWall(Player *pPlayer, Pawn *pPawnB, Pawn *pField, 
 	{
 		return RAY_FALSE;
 	}
+	*/
+	return 0;
 }
 
 
@@ -252,14 +259,12 @@ bool CheckSegment2Triangle(const SEGMENT& _segment, const TRIANGLE& _triangle, D
 //		  当たっている		⇒ 当たっている三角形の添え字
 //		  当たっていない	⇒ -1
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-INT Collision::IsHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal,LPD3DXVECTOR3 Length)
+INT Collision::isHitRayToMesh(TransformData pawnA, TransformData  pawnB, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal,LPD3DXVECTOR3 Length)
 {
 		// ワールドマトリックスの逆マトリックスを生成
 		D3DXMATRIX mInvWorld;
 
-		D3DXMATRIX test = *pPawnA->getWorldMtx();
-
-		D3DXMatrixInverse(&mInvWorld, nullptr, pPawnA->getWorldMtx());
+		D3DXMatrixInverse(&mInvWorld, nullptr, &pawnA.worldMatrix);
 		// レイを逆ワールド変換
 		D3DXVECTOR3 vRayPos, vRayDir;
 		D3DXVec3TransformCoord(&vRayPos, pRayPos, &mInvWorld);
@@ -274,18 +279,18 @@ INT Collision::IsHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos,
 		}
 
 		// レイとメッシュの交差判定
-		INT nIndex = Intersect(pPawnA,&vRayPos, &vRayDir, bSegment, pCross, pNormal,Length);
+		INT nIndex = Intersect(pawnA,&vRayPos, &vRayDir, bSegment, pCross, pNormal,Length);
 
 		if (nIndex >= 0) // 交差している場合
 		{	
 			// 交点、法線をワールド変換
 			if (pCross)
 			{
-				D3DXVec3TransformCoord(pCross, pCross, pPawnA->getWorldMtx());
+				D3DXVec3TransformCoord(pCross, pCross, &pawnA.worldMatrix);
 			}
 			if (pNormal)
 			{
-				D3DXVec3TransformNormal(pNormal, pNormal, pPawnA->getWorldMtx());
+				D3DXVec3TransformNormal(pNormal, pNormal, &pawnA.worldMatrix);
 			}
 		}
 		return nIndex;
@@ -297,21 +302,27 @@ INT Collision::IsHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos,
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 線分の判定
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-INT Collision::Intersect(Pawn *pField,LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal ,LPD3DXVECTOR3 pFLength)
+INT Collision::Intersect(TransformData field, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal ,LPD3DXVECTOR3 pFLength)
 {
 	if (!pRayPos || !pRayDir)
+	{
 		return -1;
+	}
 
 	// レイ取得
 	D3DXVECTOR3& P0 = *pRayPos;
 	D3DXVECTOR3 W = *pRayDir;
 	
 	if (bSegment)
+	{
 		W -= P0;
+	}
 
-	DWORD dwNumIndx = pField->getIndxNum();			// 三角形の数取得	
-	MESH_VTX *pVtx  = pField->getVtxAcess();		// 頂点情報取得
-	WORD	 *pIndx = pField->getIndxAcess();		// インデックス情報取得
+	
+
+	DWORD dwNumIndx = field.numIndx;	
+	MESH_VTX *pVtx = field.vertexPtr;
+	WORD	 *pIndx = field.indexPtr;
 
 	// 全三角形を探索
 	for (DWORD i = 0; i < dwNumIndx; i += 3)
@@ -382,6 +393,11 @@ INT Collision::Intersect(Pawn *pField,LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayD
 	}
 	// 見つからなかったので負の値を返す
 	return -1;
+}
+
+void Collision::allUnregister()
+{
+	collisionMapes.clear();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

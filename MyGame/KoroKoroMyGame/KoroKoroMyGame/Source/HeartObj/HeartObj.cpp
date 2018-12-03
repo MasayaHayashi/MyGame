@@ -29,7 +29,7 @@ HeartObj::HeartObj()
 
 	// 位置・向きの初期設定
 	pos		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	move	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
@@ -151,7 +151,7 @@ void HeartObj::initializeTitleObj_Title()
 {
 	// 位置、移動量、拡大率初期化
 	pos		= D3DXVECTOR3(-8.5f, -2.0f, 0.0f);
-	move	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	scale	= D3DXVECTOR3(VALUE_SCALE_SIZE, VALUE_SCALE_SIZE, VALUE_SCALE_SIZE);
@@ -204,7 +204,7 @@ void HeartObj::initializeTitleObj_Title()
 void HeartObj::initializeTitleObj_GameMain()
 {
 	pos		= D3DXVECTOR3(0.0f, 100.0f, 0.0f);
-	move	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot		= D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
 	rotDest = D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
 	scale	= D3DXVECTOR3(VALUE_SCALE_SIZE, VALUE_SCALE_SIZE, VALUE_SCALE_SIZE);
@@ -232,7 +232,7 @@ void HeartObj::initializeTitleObj_GameMain()
 void HeartObj::initializeTitleObj_Result()
 {
 	pos		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	move	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 

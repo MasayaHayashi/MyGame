@@ -33,8 +33,8 @@ public:
 	enum class PlayerState
 	{
 		Stop = 0,
-		Move,
-		MoveHitWall,		// 移動できるが壁に当たっている
+		velocity,
+		velocityHitWall,		// 移動できるが壁に当たっている
 		JumpUp,				// ジャンプ上昇中
 		JumpDown,			// ジャンプ下降中
 		Fall,
@@ -64,9 +64,10 @@ public:
 	INT  getScore() const;
 
 private:
-	static constexpr FLOAT MoveForwardSpeed = 0.45f;
-	static constexpr FLOAT MoveSideSpeed	= 0.3f;
+	static constexpr FLOAT VelocityForwardSpeed = 0.45f;
+	static constexpr FLOAT VelocitySideSpeed	= 0.3f;
 	static constexpr FLOAT ScaleSize		= 1.0f;
+	static constexpr FLOAT MoveSpeed = 0.04f;
 
 	void initializeTitle();
 	void initializeSceneEdit();
@@ -75,6 +76,7 @@ private:
 	void updateTitle(D3DXVECTOR3);
 	void updateResult();
 	void input();
+	void move();
 
 	void changeStatus();	// ステータス変更処理
 	void changeState();		// 状態変更処理

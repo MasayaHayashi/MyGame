@@ -21,11 +21,11 @@
 #define	VIEW_ASPECT			((float)SCREEN_WIDTH / (float)SCREEN_HEIGHT)	// ビュー平面のアスペクト比	
 #define	VIEW_NEAR_Z			(1.0f)					// ビュー平面のNearZ値
 #define	VIEW_FAR_Z			(70000.0f)				// ビュー平面のFarZ値
-#define	VALUE_MOVE_camera	(2.0f)					// カメラの移動量
+#define	VALUE_velocity_camera	(2.0f)					// カメラの移動量
 #define	VALUE_ROTATE_camera	(D3DX_PI * 0.003809f)		// カメラの回転量
 
 #define	INTERVAL_camera_L			(12.5f)			// モデルの視線の先までの距離
-#define	INTERVAL_camera_L_MOVE		(20.5f)			// モデルの視線の先までの移動量
+#define	INTERVAL_camera_L_velocity		(20.5f)			// モデルの視線の先までの移動量
 
 #define	CHASE_HEIGHT_P		(100.0f)				// 追跡時の視点の高さ
 #define	CHASE_HEIGHT_L		(10.0f)					// 追跡時の注視点の高さ
@@ -90,11 +90,11 @@ private:
 #define	VIEW_ASPECT			((float)SCREEN_WIDTH / (float)SCREEN_HEIGHT)	// ビュー平面のアスペクト比	
 #define	VIEW_NEAR_Z			(1.0f)					// ビュー平面のNearZ値
 #define	VIEW_FAR_Z			(70000.0f)				// ビュー平面のFarZ値
-#define	VALUE_MOVE_camera	(2.0f)					// カメラの移動量
+#define	VALUE_velocity_camera	(2.0f)					// カメラの移動量
 #define	VALUE_ROTATE_camera	(D3DX_PI * 0.003809f)		// カメラの回転量
 
 #define	INTERVAL_camera_L			(12.5f)			// モデルの視線の先までの距離
-#define	INTERVAL_camera_L_MOVE		(20.5f)			// モデルの視線の先までの移動量
+#define	INTERVAL_camera_L_velocity		(20.5f)			// モデルの視線の先までの移動量
 
 #define	CHASE_HEIGHT_P		(100.0f)				// 追跡時の視点の高さ
 #define	CHASE_HEIGHT_L		(10.0f)					// 追跡時の注視点の高さ
@@ -132,9 +132,9 @@ private:
 	D3DXVECTOR3 fadePos[3];
 	D3DXVECTOR3 fadeLook[3];
 
-	void RotMove(D3DXVECTOR3* pVecCenter, FLOAT fRadius);
+	void Rotvelocity(D3DXVECTOR3* pVecCenter, FLOAT fRadius);
 
-	MoceType cameraMoveFade;
+	MoceType cameravelocityFade;
 
 	SceneManager::SceneState currentScene;  // シーン識別用
 	D3DXVECTOR3		cameraPos;				// カメラの視点
@@ -153,20 +153,20 @@ private:
 	D3DXMATRIX		mtxView;				// ビューマトリックス
 	D3DXMATRIX		mtxProjection;			// プロジェクションマトリックス
 	D3DXMATRIX		mtxRot;					// カメラ回転行列
-	D3DXMATRIX		mtxMove;				// カメラ移動行列
+	D3DXMATRIX		mtxvelocity;				// カメラ移動行列
 
 	FLOAT			radShake;				// 画面を揺らす際に用いるコサインカーブ用の角度
 	INT				cntShakeFrame;			// カメラを揺らしているフレームのカウンタ
-	D3DXVECTOR3		movecamera;				// カメラ座標の移動速度			
+	D3DXVECTOR3		velocitycamera;				// カメラ座標の移動速度			
 
 	FLOAT			rotRadian;				// 回転角度(ラジアン)
 	FLOAT			rotPitchRadian;		// 回転角度(ラジアン)
 
-	FLOAT			numMovePitch;			// ピッチの移動量
-	D3DXVECTOR3		rotMoveCamera;			// 角度からの移動方向ベクトル
-	D3DXVECTOR3		moveCameraDest;		// カメラの移動量
+	FLOAT			numvelocityPitch;			// ピッチの移動量
+	D3DXVECTOR3		rotvelocityCamera;			// 角度からの移動方向ベクトル
+	D3DXVECTOR3		velocityCameraDest;		// カメラの移動量
 
-	D3DXVECTOR3		movePitchTest;	
+	D3DXVECTOR3		velocityPitchTest;	
 
 	D3DXVECTOR3		rotWorkX;
 	D3DXVECTOR3		rotWorkY;

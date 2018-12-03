@@ -42,7 +42,7 @@ public:
 	void setAnimation();					// アニメーションセット
 	void setPosition(D3DXVECTOR3);			// 位置セット
 	void setUsedFlg(bool setflg);			// 使用フラグセット
-	void setMove(D3DXVECTOR3 MoveNum);		// 移動量セット
+	void setvelocity(D3DXVECTOR3 velocityNum);		// 移動量セット
 	void setCnt(FLOAT fset);				// カウンタセット
 	void setCnt(INT nset);					// カウンタセット
 	void setCurrentAnimPattern(INT nAnim);	// アニメーションセット
@@ -78,7 +78,7 @@ protected:
 	D3DXVECTOR3				rot;			// 回転
 	D3DXVECTOR3				scale;			// 拡大率
 	D3DXVECTOR3				posDestBoard;		// 目的位置
-	D3DXVECTOR3				moveBoard;			// 移動量
+	D3DXVECTOR3				velocityBoard;			// 移動量
 	D3DXVECTOR3				curvePos[MaxLerp];	// ベジェ曲線、エルミート曲線用ベクトル(三次元)
 	D3DXMATRIX				worldMtx;		// ワールド行列
 	D3DXCOLOR				color;				// 色
@@ -105,9 +105,9 @@ private:
 
 	D3DXMATRIX				mtxTempView;			// 逆行列を求めるためのビュー行列
 	D3DXQUATERNION			tempQuaternion;			// ローカル座標系で回転させるためのクォータニオン
-	bool					isMoveUV;				// UV座標を動かすかどうか
+	bool					isvelocityUV;				// UV座標を動かすかどうか
 	INT						nUVCnt;					// UV座標移動用カウンタ
-	D3DXVECTOR3				moveUV;					// UV座標移動用
+	D3DXVECTOR3				velocityUV;					// UV座標移動用
 
 };
 

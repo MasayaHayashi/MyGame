@@ -41,7 +41,7 @@ Pawn::Pawn()
 	pos				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	accele			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	scale			= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-	move			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	velocity			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rotDest			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	collisionSize	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -84,7 +84,7 @@ Pawn::Pawn(UINT SetuIndxNum)
 	// 位置・向きの初期設定
 	pos			  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	scale		  = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-	move		  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	velocity		  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot			  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rotDest		  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	collisionSize = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -146,9 +146,8 @@ void Pawn::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Pawn::update()
 {
-
+	updateTransformData();
 }
-
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 描画
@@ -772,9 +771,9 @@ void Pawn::setUsedFlg(bool setFlg)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 移動量セット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::setMoveSpeed(D3DXVECTOR3 Move)
+void Pawn::setvelocitySpeed(D3DXVECTOR3 velocity)
 {
-	move = Move;
+	velocity = velocity;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -804,9 +803,9 @@ void Pawn::setNumber(UINT uSetNumber)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 移動スピード取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-D3DXVECTOR3 Pawn::getMove()
+D3DXVECTOR3 Pawn::getvelocity()
 {
-	return move;
+	return velocity;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -895,7 +894,6 @@ DWORD Pawn::getVertexNum()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 DWORD Pawn::getIndxNum()
 {
-//	return dwNumIndx;
 	return meshDataObj.dwNumIndx;
 }
 
@@ -1006,9 +1004,12 @@ void Pawn::calcCollisionMeshContainer(LPD3DXMESHCONTAINER pMeshContainer, LPD3DX
 void Pawn::updateTransformData()
 {
 	myTransformData.posData		 = pos;
-	myTransformData.velocityData = move;
+	myTransformData.velocityData = velocity;
 	myTransformData.rotDegData	 = rot;
 	myTransformData.scaleData	 = scale;
+	myTransformData.worldMatrix  = worldMtx;
+	myTransformData.vertexPtr = getVtxAcess();
+	myTransformData.indexPtr  = getIndxAcess();
 	myTransformData.objType		 = objType;
 	myTransformData.idNumber	 = idNumber;
 	myTransformData.isUsed		 = isUsed;
@@ -1017,6 +1018,8 @@ void Pawn::updateTransformData()
 	{
 	case MeshObjType::NormalModel:
 		myTransformData.collisionBox = collitionBox;
+		myTransformData.numIndx		 = meshDataObj.dwNumIndx;
+		myTransformData.vertexPtr = meshDataObj.vertexPtr.get();
 		break;
 	case MeshObjType::HierarchyModel:
 		myTransformData.collisionBox = hierarchyMeshData.collitionBox;
@@ -1053,7 +1056,7 @@ const TransformData& Pawn::getTransformData()
 void Pawn::setDefaultValue()
 {
 	defPos			= pos;
-	defMove			= move;
+	defvelocity			= velocity;
 	defrot			= rot;
 	defScale		= scale;
 }
@@ -1064,7 +1067,7 @@ void Pawn::setDefaultValue()
 void Pawn::initializeStatus()
 {
 	pos		= defPos;
-	move	= defMove;
+	velocity	= defvelocity;
 	rot		= defrot;
 	scale	= defScale;
 

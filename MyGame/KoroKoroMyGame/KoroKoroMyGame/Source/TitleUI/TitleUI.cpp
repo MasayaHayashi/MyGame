@@ -11,7 +11,7 @@
 
 // ===== 定数・マクロ定義 =====
 #define TEX_FILENAME "data/TEXTURE/Title.png"
-#define TITLE_LOGO_MOVESPEED (2.3f)	// タイトルロゴ移動量
+#define TITLE_LOGO_velocitySPEED (2.3f)	// タイトルロゴ移動量
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -76,7 +76,7 @@ void TitleUI::update()
 	static FLOAT fCnt = 0;
 	
 	// ロゴ移動処理
-	vertexBoard.pos.y += TITLE_LOGO_MOVESPEED;
+	vertexBoard.pos.y += TITLE_LOGO_velocitySPEED;
 
 	// 終了判定
 	if (vertexBoard.pos.y > posDestBoard.y)

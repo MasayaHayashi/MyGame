@@ -29,7 +29,7 @@ BallObj::BallObj()
 
 	// 位置・向きの初期設定
 	pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
@@ -151,7 +151,7 @@ void BallObj::initializeTitleObj_Title()
 {
 	// 位置、移動量、拡大率初期化
 	pos = D3DXVECTOR3(-0.0, 2.0f, 0.0f);
-	move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
@@ -198,7 +198,7 @@ void BallObj::initializeTitleObj_Title()
 void BallObj::initializeTitleObj_GameMain()
 {
 	pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot = D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
 	rotDest = D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
 	scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
@@ -222,7 +222,7 @@ void BallObj::initializeTitleObj_GameMain()
 void BallObj::initializeTitleObj_Result()
 {
 	pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 

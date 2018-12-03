@@ -51,7 +51,7 @@ protected:
 	D3DXMATRIX			mtxWorldField;			// ワールドマトリックス
 
 	D3DXVECTOR3			PosField;				// 現在の位置
-	D3DXVECTOR3			MoveField;				// ポーン移動量
+	D3DXVECTOR3			velocityField;				// ポーン移動量
 	D3DXVECTOR3			RotField;				// 現在の向き
 	D3DXVECTOR3			ScaleField;				// 拡大率
 	D3DXVECTOR3			CenterPos;				// 中心座標

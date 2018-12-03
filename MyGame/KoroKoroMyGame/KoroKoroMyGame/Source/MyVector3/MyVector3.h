@@ -11,12 +11,12 @@
 #include "d3dx9.h"
 
 // ===== クラス定義 =====
-class MyVector3 : D3DXVECTOR3
+class MyVector3 final : D3DXVECTOR3
 {
 public:
 
-	MyVector3();		// コンストラクタ
-	~MyVector3();		// デストラクタ
+	MyVector3();
+	~MyVector3();
 	
 	static bool CalcHermiteCurve(D3DXVECTOR3 *pOut, const D3DXVECTOR3& Pos1, const D3DXVECTOR3& Pos2, const D3DXVECTOR3& Vec1, const D3DXVECTOR3& Vec2, const FLOAT& fMax, const FLOAT& fCurrent);	// エルミート曲線
 	static void CalcBezierCurve(D3DXVECTOR3* pOut, const D3DXVECTOR3& Pos1, const D3DXVECTOR3& Pos2, const D3DXVECTOR3& Pos3, const D3DXVECTOR3& Pos4, const FLOAT& fMax, const FLOAT& fCurrent);
@@ -28,7 +28,6 @@ public:
 	static D3DXMATRIX* Mtx2DRotation(D3DXMATRIX* pOut, FLOAT Angle);
 
 	static const FLOAT getLength(const D3DXVECTOR3& setVector);
-
 
 	static void Lerp(D3DXVECTOR3* pOut, const D3DXVECTOR3& fStart, const D3DXVECTOR3& fEnd, const FLOAT& fMin, const FLOAT& fMax, const FLOAT& fCurrent);																// 線形補間
 	static void Slerp(D3DXQUATERNION *out, const D3DXQUATERNION &start, const D3DXQUATERNION &end, const FLOAT& fMax, const FLOAT& fCurrent);	// 球面線形補間(クオータニオン)

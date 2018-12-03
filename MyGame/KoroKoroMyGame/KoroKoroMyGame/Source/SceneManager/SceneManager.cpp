@@ -21,7 +21,7 @@ SceneManager::SceneState	  SceneManager::nextSceneType	 = SceneManager::SceneSta
 SceneManager::SceneState	  SceneManager::currentSceneType = SceneManager::SceneState::SceneTitle;
 
 bool	SceneManager::debugMode		  = false;
-INT		SceneManager::frameAdvanceCnt = DebugMoveOnFream;
+INT		SceneManager::frameAdvanceCnt = DebugvelocityOnFream;
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -29,7 +29,7 @@ INT		SceneManager::frameAdvanceCnt = DebugMoveOnFream;
 SceneManager::SceneManager()
 {
 	debugMode		= false;
-	frameAdvanceCnt = DebugMoveOnFream;
+	frameAdvanceCnt = DebugvelocityOnFream;
 
 	// C_SCENE_STAGE_EDIT
 	// SCENE_STAGE_EDIT
@@ -114,7 +114,7 @@ void SceneManager::update()
 
 		if (frameAdvanceCnt <= 0)
 		{
-			frameAdvanceCnt = DebugMoveOnFream;
+			frameAdvanceCnt = DebugvelocityOnFream;
 			currentScenePtr->update();
 		}
 	}

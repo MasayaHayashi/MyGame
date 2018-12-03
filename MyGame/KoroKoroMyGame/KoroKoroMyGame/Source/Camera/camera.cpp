@@ -30,9 +30,9 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 Camera::Camera()
 {
-	rotMoveCamera  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	moveCameraDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	numMovePitch	= 0.0f;
+	rotvelocityCamera  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	velocityCameraDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	numvelocityPitch	= 0.0f;
 	rotPitchRadian = 0.0f;
 	cameraUpDest	= D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	currentState	= cameraState::Type1Person;
@@ -41,7 +41,7 @@ Camera::Camera()
 	changeCamera	= true;
 	lerpCnt		= 0.0f;
 
-	cameraMoveFade = MoceType::Start;
+	cameravelocityFade = MoceType::Start;
 
 	rot = 0;
 	rotCnt = 0;
@@ -281,7 +281,7 @@ void Camera::updateTitle(Pawn *pPlayer)
 
 	
 	// 移動量の補正
-	rotMoveCamera += moveCameraDest;
+	rotvelocityCamera += velocityCameraDest;
 	
 
 	float vecX, vecZ;
@@ -296,18 +296,18 @@ void Camera::updateTitle(Pawn *pPlayer)
 	{
 		if (getKeyboardPress(DIK_W))
 		{// 左前移動
-			cameraPos.x -= cosf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_MOVE_camera;
-			cameraPos.z += sinf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_MOVE_camera;
+			cameraPos.x -= cosf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			cameraPos.z += sinf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
 		}
 		else if (getKeyboardPress(DIK_S))
 		{// 左後移動
-			cameraPos.x -= cosf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_MOVE_camera;
-			cameraPos.z += sinf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_MOVE_camera;
+			cameraPos.x -= cosf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			cameraPos.z += sinf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
 		}
 		else
 		{// 左移動
-			cameraPos.x -= cosf(cameraRot.y) * VALUE_MOVE_camera;
-			cameraPos.z += sinf(cameraRot.y) * VALUE_MOVE_camera;
+			cameraPos.x -= cosf(cameraRot.y) * VALUE_velocity_camera;
+			cameraPos.z += sinf(cameraRot.y) * VALUE_velocity_camera;
 		}
 
 		cameraLook.x = cameraPos.x + sinf(cameraRot.y) * lengthIntervalcamera;
@@ -317,18 +317,18 @@ void Camera::updateTitle(Pawn *pPlayer)
 	{
 		if (getKeyboardPress(DIK_W))
 		{// 右前移動
-			cameraPos.x += cosf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_MOVE_camera;
-			cameraPos.z -= sinf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_MOVE_camera;
+			cameraPos.x += cosf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			cameraPos.z -= sinf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
 		}
 		else if (getKeyboardPress(DIK_S))
 		{// 右後移動
-			cameraPos.x += cosf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_MOVE_camera;
-			cameraPos.z -= sinf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_MOVE_camera;
+			cameraPos.x += cosf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			cameraPos.z -= sinf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
 		}
 		else
 		{// 右移動
-			cameraPos.x += cosf(cameraRot.y) * VALUE_MOVE_camera;
-			cameraPos.z -= sinf(cameraRot.y) * VALUE_MOVE_camera;
+			cameraPos.x += cosf(cameraRot.y) * VALUE_velocity_camera;
+			cameraPos.z -= sinf(cameraRot.y) * VALUE_velocity_camera;
 		}
 
 		cameraLook.x = cameraPos.x + sinf(cameraRot.y) * lengthIntervalcamera;
@@ -336,16 +336,16 @@ void Camera::updateTitle(Pawn *pPlayer)
 	}
 	else if (getKeyboardPress(DIK_W))
 	{// 前移動
-		cameraPos.x += sinf(cameraRot.y) * VALUE_MOVE_camera;
-		cameraPos.z += cosf(cameraRot.y) * VALUE_MOVE_camera;
+		cameraPos.x += sinf(cameraRot.y) * VALUE_velocity_camera;
+		cameraPos.z += cosf(cameraRot.y) * VALUE_velocity_camera;
 
 		cameraLook.x = cameraPos.x + sinf(cameraRot.y) * lengthIntervalcamera;
 		cameraLook.z = cameraPos.z + cosf(cameraRot.y) * lengthIntervalcamera;
 	}
 	else if (getKeyboardPress(DIK_S))
 	{// 後移動
-		cameraPos.x -= sinf(cameraRot.y) * VALUE_MOVE_camera;
-		cameraPos.z -= cosf(cameraRot.y) * VALUE_MOVE_camera;
+		cameraPos.x -= sinf(cameraRot.y) * VALUE_velocity_camera;
+		cameraPos.z -= cosf(cameraRot.y) * VALUE_velocity_camera;
 
 		cameraLook.x = cameraPos.x + sinf(cameraRot.y) * lengthIntervalcamera;
 		cameraLook.z = cameraPos.z + cosf(cameraRot.y) * lengthIntervalcamera;
@@ -375,11 +375,11 @@ void Camera::updateTitle(Pawn *pPlayer)
 	}
 	if (getKeyboardPress(DIK_Y))
 	{// 視点移動「上」
-		cameraPos.y += VALUE_MOVE_camera;
+		cameraPos.y += VALUE_velocity_camera;
 	}
 	if (getKeyboardPress(DIK_N))
 	{// 視点移動「下」
-		cameraPos.y -= VALUE_MOVE_camera;
+		cameraPos.y -= VALUE_velocity_camera;
 	}
 
 	if (getKeyboardPress(DIK_Q))
@@ -406,11 +406,11 @@ void Camera::updateTitle(Pawn *pPlayer)
 	}
 	if (getKeyboardPress(DIK_T))
 	{// 注視移動「上」
-		cameraLook.y += VALUE_MOVE_camera;
+		cameraLook.y += VALUE_velocity_camera;
 	}
 	if (getKeyboardPress(DIK_B))
 	{// 注視移動「下」
-		cameraLook.y -= VALUE_MOVE_camera;
+		cameraLook.y -= VALUE_velocity_camera;
 	}
 #endif
 
@@ -487,18 +487,18 @@ void Camera::updateStageEdit(const D3DXVECTOR3 &Pos)
 	{
 		if (getKeyboardPress(DIK_W))
 		{// 左前移動
-			cameraPos.x -= cosf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_MOVE_camera;
-			cameraPos.z += sinf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_MOVE_camera;
+			cameraPos.x -= cosf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			cameraPos.z += sinf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
 		}
 		else if (getKeyboardPress(DIK_S))
 		{// 左後移動
-			cameraPos.x -= cosf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_MOVE_camera;
-			cameraPos.z += sinf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_MOVE_camera;
+			cameraPos.x -= cosf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			cameraPos.z += sinf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
 		}
 		else
 		{// 左移動
-			cameraPos.x -= cosf(cameraRot.y) * VALUE_MOVE_camera;
-			cameraPos.z += sinf(cameraRot.y) * VALUE_MOVE_camera;
+			cameraPos.x -= cosf(cameraRot.y) * VALUE_velocity_camera;
+			cameraPos.z += sinf(cameraRot.y) * VALUE_velocity_camera;
 		}
 
 		cameraLook.x = cameraPos.x + sinf(cameraRot.y) * lengthIntervalcamera;
@@ -508,18 +508,18 @@ void Camera::updateStageEdit(const D3DXVECTOR3 &Pos)
 	{
 		if (getKeyboardPress(DIK_W))
 		{// 右前移動
-			cameraPos.x += cosf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_MOVE_camera;
-			cameraPos.z -= sinf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_MOVE_camera;
+			cameraPos.x += cosf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			cameraPos.z -= sinf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
 		}
 		else if (getKeyboardPress(DIK_S))
 		{// 右後移動
-			cameraPos.x += cosf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_MOVE_camera;
-			cameraPos.z -= sinf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_MOVE_camera;
+			cameraPos.x += cosf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			cameraPos.z -= sinf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
 		}
 		else
 		{// 右移動
-			cameraPos.x += cosf(cameraRot.y) * VALUE_MOVE_camera;
-			cameraPos.z -= sinf(cameraRot.y) * VALUE_MOVE_camera;
+			cameraPos.x += cosf(cameraRot.y) * VALUE_velocity_camera;
+			cameraPos.z -= sinf(cameraRot.y) * VALUE_velocity_camera;
 		}
 
 		cameraLook.x = cameraPos.x + sinf(cameraRot.y) * lengthIntervalcamera;
@@ -527,16 +527,16 @@ void Camera::updateStageEdit(const D3DXVECTOR3 &Pos)
 	}
 	else if (getKeyboardPress(DIK_W))
 	{// 前移動
-		cameraPos.x += sinf(cameraRot.y) * VALUE_MOVE_camera;
-		cameraPos.z += cosf(cameraRot.y) * VALUE_MOVE_camera;
+		cameraPos.x += sinf(cameraRot.y) * VALUE_velocity_camera;
+		cameraPos.z += cosf(cameraRot.y) * VALUE_velocity_camera;
 
 		cameraLook.x = cameraPos.x + sinf(cameraRot.y) * lengthIntervalcamera;
 		cameraLook.z = cameraPos.z + cosf(cameraRot.y) * lengthIntervalcamera;
 	}
 	else if (getKeyboardPress(DIK_S))
 	{// 後移動
-		cameraPos.x -= sinf(cameraRot.y) * VALUE_MOVE_camera;
-		cameraPos.z -= cosf(cameraRot.y) * VALUE_MOVE_camera;
+		cameraPos.x -= sinf(cameraRot.y) * VALUE_velocity_camera;
+		cameraPos.z -= cosf(cameraRot.y) * VALUE_velocity_camera;
 
 		cameraLook.x = cameraPos.x + sinf(cameraRot.y) * lengthIntervalcamera;
 		cameraLook.z = cameraPos.z + cosf(cameraRot.y) * lengthIntervalcamera;
@@ -566,11 +566,11 @@ void Camera::updateStageEdit(const D3DXVECTOR3 &Pos)
 	}
 	if (getKeyboardPress(DIK_Y))
 	{// 視点移動「上」
-		cameraPos.y += VALUE_MOVE_camera;
+		cameraPos.y += VALUE_velocity_camera;
 	}
 	if (getKeyboardPress(DIK_N))
 	{// 視点移動「下」
-		cameraPos.y -= VALUE_MOVE_camera;
+		cameraPos.y -= VALUE_velocity_camera;
 	}
 
 	if (getKeyboardPress(DIK_Q))
@@ -597,11 +597,11 @@ void Camera::updateStageEdit(const D3DXVECTOR3 &Pos)
 	}
 	if (getKeyboardPress(DIK_T))
 	{// 注視移動「上」
-		cameraLook.y += VALUE_MOVE_camera;
+		cameraLook.y += VALUE_velocity_camera;
 	}
 	if (getKeyboardPress(DIK_B))
 	{// 注視移動「下」
-		cameraLook.y -= VALUE_MOVE_camera;
+		cameraLook.y -= VALUE_velocity_camera;
 	}
 #endif
 
@@ -664,7 +664,7 @@ void Camera::updateGameMain(Player *pPlayer,Board *pReadyUI)
 	D3DXVec3Normalize(&ForwardVec, &ForwardVec);
 
 
-	switch (cameraMoveFade)
+	switch (cameravelocityFade)
 	{
 	case MoceType::Tutorial:
 			{
@@ -685,7 +685,7 @@ void Camera::updateGameMain(Player *pPlayer,Board *pReadyUI)
 
 				if (Indx == 0)
 				{
-					cameraMoveFade = MoceType::Normal;
+					cameravelocityFade = MoceType::Normal;
 					cameraPos = D3DXVECTOR3(0.0f, 10.0f, -19.0f);		// カメラの視点
 					cameraLook = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// カメラの注視点
 				}
@@ -718,7 +718,7 @@ void Camera::updateGameMain(Player *pPlayer,Board *pReadyUI)
 			FLOAT Length = sqrtf(PlayerPos.x * PlayerPos.x + PlayerPos.z * PlayerPos.z);
 
 			rotCnt += RotSpeed;
-			RotMove(&PlayerPos, 10.0f);
+			Rotvelocity(&PlayerPos, 10.0f);
 
 			cameraPos.y = 10.0f;
 			cameraLook = PlayerPos;
@@ -743,7 +743,7 @@ void Camera::updateGameMain(Player *pPlayer,Board *pReadyUI)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::RotMove(D3DXVECTOR3* pVecCenter, FLOAT fRadius)
+void Camera::Rotvelocity(D3DXVECTOR3* pVecCenter, FLOAT fRadius)
 {
 	D3DXMATRIX matRotation;	// 掛け合わせ用回転行列
 	rot = rotCnt / 1000.0f;
@@ -822,7 +822,7 @@ void Camera::rotationCamera(D3DXVECTOR3 Center)
 	*/
 //	D3DXVECTOR3 cameraForwrd = GetCameraFowerd();
 
-	RotMove(&Center, 5.0f);
+	Rotvelocity(&Center, 5.0f);
 
 	// 回転処理
 //	rotCnt += camera_ROT_SPEED * RightStickX;
@@ -920,5 +920,5 @@ D3DXVECTOR3 Camera::getFowerd()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Camera::setState(MoceType setState)
 {
-	cameraMoveFade = setState;
+	cameravelocityFade = setState;
 }

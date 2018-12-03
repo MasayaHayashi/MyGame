@@ -65,7 +65,7 @@ private:
 	void makeStartScene();
 	void changeStringToUint();
 
-	static constexpr INT DebugMoveOnFream = 10;
+	static constexpr INT DebugvelocityOnFream = 10;
 	static SceneState currentSceneType;
 	static SceneState nextSceneType;
 
