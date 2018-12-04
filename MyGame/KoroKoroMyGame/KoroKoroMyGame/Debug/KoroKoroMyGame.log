@@ -1,17 +1,3 @@
-﻿  Transform.cpp
-  Collision.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(58): error C2059: 構文エラー: ']'
-  コードを生成中...
-  スキップ中... (関連する変更は検出されませんでした)
-  Skydome.cpp
-  SceneTitle.cpp
-  SceneMain.cpp
-  SceneManager.cpp
-  ResourceManager.cpp
-  Player.cpp
-  Pawn.cpp
-  MeshFieldBase.cpp
-  MainField.cpp
-  HeartObj.cpp
-  Camera.cpp
-  BallObj.cpp
+﻿  MainField.cpp
+  KoroKoroMyGame.vcxproj -> D:\git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.exe
+  KoroKoroMyGame.vcxproj -> D:\git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.pdb (Partial PDB)

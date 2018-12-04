@@ -222,10 +222,11 @@ const T CalcOuterProduct(const TNhVector2& b) const
 }
 */
 
-// ????
+//
+// “ñŸŒ³‚ÌŠOÏ
+//
 FLOAT MyVector3::Product2Vec(D3DXVECTOR3 VecA,D3DXVECTOR3 VecB)
 {
-//	return VecA.x * VecB.y - VecA.y * VecB.x;
 	return VecA.x * VecB.z - VecA.z * VecB.x;
 }
 
@@ -273,13 +274,6 @@ FLOAT MyVector3::CalcAngleDegree(D3DXVECTOR3 VectorA, D3DXVECTOR3 VectorB)
 
 	FLOAT fAngleRad = CalcAngle(VectorA,VectorB);
 
-
-	/*
-	if (!CalcAngle(vectorA, vectorB, dAngle_rad))
-	{
-		return false;
-	}
-	*/
 	FLOAT Profuct = Product2Vec(VectorA, VectorB);
 	if (Profuct < 0.0f)
 	{
@@ -294,9 +288,7 @@ FLOAT MyVector3::CalcAngleDegree(D3DXVECTOR3 VectorA, D3DXVECTOR3 VectorB)
 //
 const FLOAT MyVector3::getLength(const D3DXVECTOR3& setVector)
 {
-
 	FLOAT length = sqrt(setVector.x * setVector.x + setVector.x* setVector.y + setVector.z * setVector.z);
 
 	return length;
-
 }

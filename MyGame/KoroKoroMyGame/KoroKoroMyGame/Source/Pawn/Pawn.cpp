@@ -56,6 +56,9 @@ Pawn::Pawn()
 	quatanion	= D3DXQUATERNION(0, 0, 0, 0);
 	destQua		= D3DXQUATERNION(0, 0, 0, 0);
 
+	cross = D3DXVECTOR3(0.0f,0.0f,0.0f);
+	normal = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
 	speed = 0.0f;
 
 	hitIndex = -1;
@@ -615,6 +618,15 @@ void Pawn::setRotation(D3DXVECTOR3 SetRot)
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// あたり判定用データセット
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Pawn::setHitData(D3DXVECTOR3 setCross, D3DXVECTOR3 setNormal, D3DXVECTOR3 setLength, D3DXVECTOR3 setDestVec)
+{
+	cross = setCross;
+	normal = setNormal;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // マテリアルの色セット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Pawn::setMaterialcolorEmissive(float fRed,float Green,float Blue,float Alpha)
@@ -623,7 +635,7 @@ void Pawn::setMaterialcolorEmissive(float fRed,float Green,float Blue,float Alph
 
 	pD3DXMat = (D3DXMATERIAL*)materialBufferPtr->GetBufferPointer();
 
-	for (int nCntMat = 0; nCntMat < static_cast<INT>(numMat); nCntMat++, pD3DXMat++)
+	for (INT nCntMat = 0; nCntMat < static_cast<INT>(numMat); nCntMat++, pD3DXMat++)
 	{
 		pD3DXMat->MatD3D.Emissive.r = fRed;
 		pD3DXMat->MatD3D.Emissive.g = Green;

@@ -112,6 +112,7 @@ public:
 
 	void updateTransformData();
 	void setTransformData(TransformData);
+	void setHitData(D3DXVECTOR3 cross, D3DXVECTOR3 normal, D3DXVECTOR3 length, D3DXVECTOR3 destVec);
 	const TransformData& getTransformData();
 protected:
 	std::unique_ptr <Collider> colliderPtr = nullptr;
@@ -155,6 +156,8 @@ protected:
 	D3DXQUATERNION		quatanion;				// 任意軸の回転用クォータニオン
 	D3DXQUATERNION		destQua;				// 目的クオータニオン
 
+
+
 	CHAR				fileName[256];			// モデルのファイル名
 	FLOAT				speed;					// 速度
 	FLOAT				radRot;					// 回転角度
@@ -170,7 +173,8 @@ protected:
 
 	D3DXVECTOR3			cross;					// Rayと三角形の判定用ヒット位置
 	D3DXVECTOR3			normal;					// Rayと三角形の判定用法線ベクトル
-	
+
+
 	D3DXVECTOR3			startPos;				// 開始位置 (補間用)
 	D3DXVECTOR3			endPos;					// 終了位置 (補間用)
 	INT					hitIndex;				// 衝突判定用

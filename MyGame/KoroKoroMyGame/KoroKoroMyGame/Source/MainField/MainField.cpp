@@ -22,6 +22,8 @@ MainField::MainField()
 	isUsed  = true;
 
 	Collision::registerList(&myTransformData, "field");
+
+	idNumber = 0;
 }
 
 //

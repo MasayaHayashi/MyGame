@@ -64,6 +64,19 @@ void Transform::setData(TransformData *setData)
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝
+// あたり判定
+//＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Transform::setRayHit(INT index, D3DXVECTOR3 setCross, D3DXVECTOR3 setNormal, D3DXVECTOR3 setLength, D3DXVECTOR3 setDestvec)
+{
+	TransformData *hitDataPtr = getData(index);
+
+	hitDataPtr->cross	= setCross;
+	hitDataPtr->normal  = setNormal;
+	hitDataPtr->length  = setLength;
+	hitDataPtr->destvec = setDestvec;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝
 // フラグセット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Transform::setHit(INT index,bool setFlg)

@@ -23,6 +23,12 @@ typedef struct
 	D3DXVECTOR3				scaleData;
 	D3DXVECTOR3				collisionBox;
 	D3DXMATRIX				worldMatrix;
+
+	D3DXVECTOR3				cross;
+	D3DXVECTOR3				normal;
+	D3DXVECTOR3				length;
+	D3DXVECTOR3				destvec;
+
 	DWORD					numIndx;
 	MESH_VTX*				vertexPtr;
 	WORD*					indexPtr;
@@ -42,6 +48,7 @@ public :
 	TransformData* getData(INT index) const;
 	void setData(TransformData *setData);
 	void setHit(INT index,bool setFlg);
+	void setRayHit(INT index,D3DXVECTOR3 cross, D3DXVECTOR3 normal, D3DXVECTOR3 length, D3DXVECTOR3 destvec);
 	void clear();
 private:
 	std::list< TransformData* > transformList;

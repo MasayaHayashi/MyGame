@@ -55,7 +55,11 @@ void Collision::update()
 		DirectX3D::printDebug("いません");
 	}
 
-	if(checkCollisionField(*collisionMapes["Player"].getData(0),*collisionMapes[]))
+	D3DXVECTOR3 cross, normal, length, destvec;
+	if (checkCollisionField(*collisionMapes["Player"].getData(0), *collisionMapes["field"].getData(0), cross, normal, length, D3DXVECTOR3(0.0f,2.0f,0.0f)))
+	{
+		//collisionMapes["Player"].setRayHit(0,cross, normal, length, destvec);
+	}
 	
 }
 
@@ -318,8 +322,6 @@ INT Collision::Intersect(TransformData field, LPD3DXVECTOR3 pRayPos, LPD3DXVECTO
 		W -= P0;
 	}
 
-	
-
 	DWORD dwNumIndx = field.numIndx;	
 	MESH_VTX *pVtx = field.vertexPtr;
 	WORD	 *pIndx = field.indexPtr;
@@ -331,7 +333,6 @@ INT Collision::Intersect(TransformData field, LPD3DXVECTOR3 pRayPos, LPD3DXVECTO
 		D3DXVECTOR3 P2(pVtx[pIndx[i + 1]].VtxPos);
 		D3DXVECTOR3 P3(pVtx[pIndx[i + 2]].VtxPos);
 		
-
 		// 辺を示すベクトルを取得
 		D3DXVECTOR3 V1(P2 - P1);
 		D3DXVECTOR3 V2(P3 - P2);
@@ -339,7 +340,9 @@ INT Collision::Intersect(TransformData field, LPD3DXVECTOR3 pRayPos, LPD3DXVECTO
 		// 例外処理
 		if (V1.y >= pRayDir->y &&
 			V2.y >= pRayDir->y)
+		{
 			continue;
+		}
 
 		// 法線ベクトルを取得
 		D3DXVECTOR3 N;
@@ -375,18 +378,23 @@ INT Collision::Intersect(TransformData field, LPD3DXVECTOR3 pRayPos, LPD3DXVECTO
 		}
 
 		// 媒介変数算出
-		float T = D3DXVec3Dot(&N, &(P1 - P0)) / deno;
+		FLOAT T = D3DXVec3Dot(&N, &(P1 - P0)) / deno;
 	
 		pFLength->x = T;
 
 		// 交点を算出
 		D3DXVECTOR3 X = P0 + T * W;
 		if (pCross)
+		{
 			*pCross = X;
+		}
 
 		// 法線を返す
 		if (pNormal)
+		{
 			*pNormal = N;
+		}
+
 		// 見つかったので三角形の番号を返す
 
 		return i / 3;
