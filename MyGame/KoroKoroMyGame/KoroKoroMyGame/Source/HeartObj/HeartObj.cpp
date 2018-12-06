@@ -28,13 +28,13 @@ HeartObj::HeartObj()
 	pCollider = nullptr;
 
 	// 位置・向きの初期設定
-	pos		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.pos		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDeg		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// 拡大率設定
-	scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	myTransform.scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
 	// ファイルパス設定
 	strcpy_s(fileName, ModelFilePass.c_str());
@@ -150,11 +150,11 @@ void HeartObj::UpdateTitleObj_Result()
 void HeartObj::initializeTitleObj_Title()
 {
 	// 位置、移動量、拡大率初期化
-	pos		= D3DXVECTOR3(-8.5f, -2.0f, 0.0f);
-	velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	scale	= D3DXVECTOR3(VALUE_SCALE_SIZE, VALUE_SCALE_SIZE, VALUE_SCALE_SIZE);
+	myTransform.pos		= D3DXVECTOR3(-8.5f, -2.0f, 0.0f);
+	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDeg		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.scale	= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
 	// デバイス取得
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
@@ -182,12 +182,12 @@ void HeartObj::initializeTitleObj_Title()
 
 	// 拡大
 	D3DXMATRIX mScale;
-	D3DXMatrixScaling(&mScale, scale.x, scale.y, scale.z);
+	D3DXMatrixScaling(&mScale, myTransform.scale.x, myTransform.scale.y, myTransform.scale.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mScale);
 
 	// 移動
 	D3DXMATRIX mtxTranslate;
-	D3DXMatrixTranslation(&mtxTranslate, pos.x, pos.y, pos.z);
+	D3DXMatrixTranslation(&mtxTranslate, myTransform.pos.x, myTransform.pos.y, myTransform.pos.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mtxTranslate);
 
 	isUsed = true;
@@ -203,11 +203,11 @@ void HeartObj::initializeTitleObj_Title()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void HeartObj::initializeTitleObj_GameMain()
 {
-	pos		= D3DXVECTOR3(0.0f, 100.0f, 0.0f);
-	velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rot		= D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
-	rotDest = D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
-	scale	= D3DXVECTOR3(VALUE_SCALE_SIZE, VALUE_SCALE_SIZE, VALUE_SCALE_SIZE);
+	myTransform.pos		= D3DXVECTOR3(0.0f, 100.0f, 0.0f);
+	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDeg		= D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
+	myTransform.rotDegDest = D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
+	myTransform.scale	= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
 	// デバイス取得
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
@@ -231,13 +231,13 @@ void HeartObj::initializeTitleObj_GameMain()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void HeartObj::initializeTitleObj_Result()
 {
-	pos		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.pos		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDeg		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// 拡大率設定
-	scale	= D3DXVECTOR3(VALUE_SCALE_SIZE, VALUE_SCALE_SIZE, VALUE_SCALE_SIZE);
+	myTransform.scale	= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
 	// デバイス取得
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();

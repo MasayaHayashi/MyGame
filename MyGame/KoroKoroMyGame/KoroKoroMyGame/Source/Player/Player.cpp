@@ -12,21 +12,13 @@
 #include "../ResoueceManager/ResourceManager.h"
 #include "../Collision/Collision.h"
 #include "../Ball/BallObj.h"
+#include "../Transform/Transform.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 Player::Player()
 {
-	// 位置・向きの初期設定
-	pos		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	
-	// 拡大率設定
-	scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-
 	setDefaultValue();
 
 	// ファイルパス設定
@@ -51,13 +43,8 @@ Player::Player()
 Player::Player(D3DXVECTOR3 startPos,UINT setNumber)
 {
 	// 位置・向きの初期設定
-	pos = startPos;
-	velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
-	// 拡大率設定
-	scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	myTransform.pos = (startPos);
+	myTransform.velocity = (D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	setDefaultValue();
 
@@ -73,12 +60,6 @@ Player::Player(D3DXVECTOR3 startPos,UINT setNumber)
 	// 行列初期化
 	D3DXMatrixIdentity(&worldMtx);
 	D3DXMatrixIdentity(&translateMtx);
-
-	myTransformData.idNumber = 0;
-	myTransformData.posData = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransformData.scaleData = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransformData.rotDegData = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransformData.isUsed = false;
 
 	ballPtr.reset(NEW BallObj());
 
@@ -194,19 +175,13 @@ void Player::updateResult()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::initializeTitle()
 {
-
-
 	// 位置、移動量、拡大率初期化
-	pos		= D3DXVECTOR3(0.0f, -0.01f, -5.0f);
-	velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	scale	= D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
+	myTransform.pos = (D3DXVECTOR3(0.0f, -0.01f, -5.0f));
 
 	setDefaultValue();
 
 	// デバイス取得
-	IDirect3DDevice9 * devicePtr = DirectX3D::getDevice();
+	IDirect3DDevice9 *devicePtr = DirectX3D::getDevice();
 
 	// 各種変数初期化
 	pD3DTexture			 = nullptr;
@@ -217,26 +192,27 @@ void Player::initializeTitle()
 	// Xファイルの読み込み
 	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName, "Player" , meshType);
 
-	pos.y -= hierarchyMeshData.collitionBox.y * 2;
+
+
+	myTransform.pos.y -= hierarchyMeshData.collitionBox.y * 2;
 
 	// 回転
 	D3DXMATRIX mRotX, mRotY, mRotZ;
 
-	D3DXMatrixRotationY(&mRotY, rot.y);
+	D3DXMatrixRotationY(&mRotY, myTransform.rotDeg.y);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx,&mRotY);
 
 	// 拡大
 	D3DXMATRIX mScale;
-	D3DXMatrixScaling(&mScale, scale.x, scale.y, scale.z);
+	D3DXMatrixScaling(&mScale, myTransform.scale.x, myTransform.scale.y, myTransform.scale.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mScale);
 
 	// 移動
 	D3DXMATRIX translate;
-	D3DXMatrixTranslation(&translate, pos.x, pos.y, pos.z);
+	D3DXMatrixTranslation(&translate, myTransform.pos.x, myTransform.pos.y, myTransform.pos.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &translate);
 
-
-	testVec = pos;
+	testVec = myTransform.pos;
 
 	testVec.z -= 100.0f;
 	testVec.x -= 100.0f;
@@ -273,12 +249,12 @@ void Player::initializeTitle()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::initializeGameMain(CHAR *setFilePass)
 {
-	Collision::registerList(&myTransformData, "Player");
 
-	velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rot		= D3DXVECTOR3(0.0f, 180.0f, 0.0f);
-	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	scale	= D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
+
+	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDeg		= D3DXVECTOR3(0.0f, 180.0f, 0.0f);
+	myTransform.rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.scale	= D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
 	playerStateType = PlayerState::velocity;
 
 	setDefaultValue();
@@ -294,18 +270,18 @@ void Player::initializeGameMain(CHAR *setFilePass)
 	ResourceManager::makeModelHierarchy(hierarchyMeshData, setFilePass,"Player",meshType);
 
 	// モデル位置調整
-	pos.y -= hierarchyMeshData.collitionBox.y * 2;
+	myTransform.pos.y -= hierarchyMeshData.collitionBox.y * 2;
 
 	// 拡大
 	D3DXMATRIX mScale;
-	D3DXMatrixScaling(&mScale, scale.x, scale.y, scale.z);
+	D3DXMatrixScaling(&mScale, myTransform.scale.x, myTransform.scale.y, myTransform.scale.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mScale);
 
-	D3DXMatrixRotationY(&worldMtx, D3DXToRadian(rot.y));
+	D3DXMatrixRotationY(&worldMtx, D3DXToRadian(myTransform.rotDeg.y));
 
 	// 移動
 	D3DXMATRIX translate;
-	D3DXMatrixTranslation(&translate, pos.x, pos.y, pos.z);
+	D3DXMatrixTranslation(&translate, myTransform.pos.x, myTransform.pos.y, myTransform.pos.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &translate);
 
 	// 現在のアニメーションセットの設定値を取得
@@ -329,11 +305,11 @@ void Player::initializeGameMain(CHAR *setFilePass)
 void Player::initializeSceneEdit()
 {
 	// 位置、移動量、拡大率初期化
-	pos		= D3DXVECTOR3(0.0f, -0.01f, -5.0f);
-	velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	scale	= D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
+	myTransform.pos		= D3DXVECTOR3(0.0f, -0.01f, -5.0f);
+	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDeg		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.scale	= D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
 
 	// デバイス取得
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
@@ -348,7 +324,7 @@ void Player::initializeSceneEdit()
 	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName,"Player",meshType);
 	
 	// モデル回転
-	pos.y -= hierarchyMeshData.collitionBox.y * 2;
+	myTransform.pos.y -= hierarchyMeshData.collitionBox.y * 2;
 	
 	// 回転
 	D3DXMATRIX mRotX, mRotY, mRotZ;
@@ -358,12 +334,12 @@ void Player::initializeSceneEdit()
 
 	// 拡大
 	D3DXMATRIX mScale;
-	D3DXMatrixScaling(&mScale, scale.x, scale.y, scale.z);
+	D3DXMatrixScaling(&mScale, myTransform.scale.x, myTransform.scale.y, myTransform.scale.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mScale);
 
 	// 移動
 	D3DXMATRIX translate;
-	D3DXMatrixTranslation(&translate, pos.x, pos.y, pos.z);
+	D3DXMatrixTranslation(&translate, myTransform.pos.x, myTransform.pos.y, myTransform.pos.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &translate);
 
 	// コライダー初期化
@@ -392,13 +368,13 @@ void Player::initializeSceneEdit()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::initializeResult()
 {
-	pos		 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	velocity	 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rot		 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rotDest  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.pos		 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.velocity	 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDeg		 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDegDest  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// 拡大率設定
-	scale = D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
+	myTransform.scale = D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
 
 	// デバイス取得
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
@@ -428,7 +404,7 @@ void Player::initializeStatus()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updateTitle(D3DXVECTOR3 CameraForward)
 {
-	updateTransformData();
+
 
 	if (Keyboard::getTrigger(DIK_2))
 	{
@@ -511,9 +487,9 @@ void Player::updateTitle(D3DXVECTOR3 CameraForward)
 	*/
 
 	// 位置更新
-	worldMtx._41 = pos.x;
-	worldMtx._42 = pos.y;
-	worldMtx._43 = pos.z;
+	worldMtx._41 = myTransform.pos.x;
+	worldMtx._42 = myTransform.pos.y;
+	worldMtx._43 = myTransform.pos.z;
 
 	updateAnimation();
 
@@ -545,19 +521,17 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 {
 	updateAnimation();
 
-	updateTransformData();
-	myTransformData.velocityData = testVec;
-
-	const TransformData* player1TransformPtr = Collision::getTransformData("Player", 0);
-	const TransformData* player2TransformPtr = Collision::getTransformData("Player", 1);
+	const Transform* player1TransformPtr = Collision::getTransform("Player", 0);
+	const Transform* player2TransformPtr = Collision::getTransform("Player", 1);
 
 	FLOAT Xnum = 0.0f;
 	FLOAT Ynum = 0.0f;
 
 	if (idNumber == 0)
 	{
-
-		D3DXVECTOR3 playerToPlayerVec = player1TransformPtr->posData - player2TransformPtr->posData;
+/*
+		D3DXVECTOR3 playerToPlayerVec = player1TransformPtr->getPosition() -player2TransformPtr->getvelocity()
+			player1TransformPtr->posData - player2TransformPtr->posData;
 	
 		FLOAT length = MyVector3::getLength(playerToPlayerVec);
 		DirectX3D::printDebug("\nながさ%f",length);
@@ -573,10 +547,9 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 			pv = testVec + nvpe * 0.05f;
 
 			velocity += playerToPlayerVec * 0.4f;
-
-			
 		}
 
+*/
 
 		if (Keyboard::getPress(DIK_D))
 		{
@@ -635,28 +608,28 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 
 	testVec.y = 0.0f;
 
-	velocity += testVec * 0.1f;
+	myTransform.velocity += testVec * 0.1f;
 
-	if (velocity.x > 0.17f)
+	if (myTransform.velocity.x > 0.17f)
 	{
-		velocity.x = 0.17f;
+		myTransform.velocity.x = 0.17f;
 	}
-	if (velocity.x < -0.17f)
+	if (myTransform.velocity.x < -0.17f)
 	{
-		velocity.x = -0.17f;
-	}
-
-	if (velocity.z > 0.17f)
-	{
-		velocity.z = 0.17f;
-	}
-	if (velocity.z < -0.17f)
-	{
-		velocity.z = -0.17f;
+		myTransform.velocity.x = -0.17f;
 	}
 
-	pos += velocity;
-	velocity *= 0.95f;
+	if (myTransform.velocity.z > 0.17f)
+	{
+		myTransform.velocity.z = 0.17f;
+	}
+	if (myTransform.velocity.z < -0.17f)
+	{
+		myTransform.velocity.z = -0.17f;
+	}
+
+	myTransform.pos += myTransform.velocity;
+	myTransform.velocity *= 0.95f;
 
 
 
@@ -691,9 +664,9 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 		rotCnt = 1.0f;
 	}
 
-	worldMtx._41 = pos.x;
-	worldMtx._42 = pos.y;
-	worldMtx._43 = pos.z;
+	worldMtx._41 = myTransform.pos.x;
+	worldMtx._42 = myTransform.pos.y;
+	worldMtx._43 = myTransform.pos.z;
 
 #if 0
 
@@ -942,13 +915,13 @@ void Player::changeStatus()
 	case PlayerState::Stop:
 		break;
 	case PlayerState::velocity:
-		accele	= D3DXVECTOR3( 0.0f,0.0f,0.0f);
-		velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		myTransform.accele	= D3DXVECTOR3( 0.0f,0.0f,0.0f);
+		myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		isGround	= true;
 		break;
 	case PlayerState::JumpUp:
 		
-		if (velocity.y < 0.0f)
+		if (myTransform.velocity.y < 0.0f)
 			playerStateType = PlayerState::JumpDown;
 
 		isGround = false;
@@ -978,7 +951,7 @@ void Player::changeStatus()
 void Player::changeState()
 {
 	if (playerStateType == PlayerState::JumpUp &&
-		velocity.y < 0.0f)
+		myTransform.velocity.y < 0.0f)
 	{
 		playerStateType = PlayerState::Fall;
 	}

@@ -16,8 +16,8 @@ Skydome::Skydome()
 {
 	strcpy_s(fileName, ModelFilePass.c_str());
 	strcpy_s(texFileName, TextureFilePass.c_str());
-	scale		 = D3DXVECTOR3(Scale, Scale, Scale);
-	pos			 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	myTransform.scale = (D3DXVECTOR3(Scale,Scale,Scale));
 	textureSize  = D3DXVECTOR3(10.0f, 10.0f, 10.0f);
 
 	isUsed = true;

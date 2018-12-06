@@ -115,11 +115,11 @@
     <Filter Include="ソース ファイル\LoadIcon">
       <UniqueIdentifier>{57fb7207-16cb-41e4-bc9d-5b80f06ca3c7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Transform">
-      <UniqueIdentifier>{dfe2081c-a2a4-4d5f-ad8e-0c8d259c95bb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Ball">
       <UniqueIdentifier>{7beb89ec-0581-456e-9b11-9a97521ddd23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Transform">
+      <UniqueIdentifier>{3fdb3a7e-5f5f-40c2-a174-ea5fcc83a772}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -210,11 +210,11 @@
     <ClCompile Include="Source\LoadIcon\MyLoadIcon.cpp">
       <Filter>ソース ファイル\LoadIcon</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Transform\Transform.cpp">
-      <Filter>ソース ファイル\Transform</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Ball\BallObj.cpp">
       <Filter>ソース ファイル\Ball</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Transform\Transform.cpp">
+      <Filter>ソース ファイル\Transform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -314,11 +314,11 @@
     <ClInclude Include="Source\LoadIcon\MyLoadIcon.h">
       <Filter>ソース ファイル\LoadIcon</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Transform\Transform.h">
-      <Filter>ソース ファイル\Transform</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Ball\BallObj.h">
       <Filter>ソース ファイル\Ball</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Transform\Transform.h">
+      <Filter>ソース ファイル\Transform</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

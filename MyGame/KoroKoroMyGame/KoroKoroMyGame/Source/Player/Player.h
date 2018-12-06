@@ -14,14 +14,6 @@
 // ===== クラスの前方宣言 =====
 class Collider;
 
-// ===== 構造体定義 =====
-enum HIT_COLLISION_TYPE
-{
-	RAY_TRUE = 0,
-	RAY_FALSE,
-	NONE,
-};
-
 // ===== クラス定義 =====
 class Player final : public Pawn
 {

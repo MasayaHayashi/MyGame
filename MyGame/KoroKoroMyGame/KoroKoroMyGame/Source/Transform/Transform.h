@@ -1,57 +1,38 @@
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// Transform.h
-// Author : Masaya Hayashi
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-
-// ===== 多重インクルード防止 =====
-#ifndef TRANSFORM_H
-#define TRANSFORM_H
-
-// ===== インクルード部 =====
-#include <list>
-#include <memory>
-#include "d3dx9.h"
-#include "../GameObjectBase/GameObjectBase.h"
-#include "../Mesh/Mesh.h"
-
-// ===== 構造体定義 =====
-typedef struct 
-{
-	D3DXVECTOR3				posData;
-	D3DXVECTOR3				velocityData;
-	D3DXVECTOR3				rotDegData;
-	D3DXVECTOR3				scaleData;
-	D3DXVECTOR3				collisionBox;
-	D3DXMATRIX				worldMatrix;
-
-	D3DXVECTOR3				cross;
-	D3DXVECTOR3				normal;
-	D3DXVECTOR3				length;
-	D3DXVECTOR3				destvec;
-
-	DWORD					numIndx;
-	MESH_VTX*				vertexPtr;
-	WORD*					indexPtr;
-	GameObjType				objType;
-	UINT					idNumber;	// 識別番号
-	bool					isHit;		
-	bool					isUsed;		// 使用されているか
-} TransformData;
-
-class Transform final
-{
-public :
-	Transform();
-	~Transform();
-
-	void create();
-	TransformData* getData(INT index) const;
-	void setData(TransformData *setData);
-	void setHit(INT index,bool setFlg);
-	void setRayHit(INT index,D3DXVECTOR3 cross, D3DXVECTOR3 normal, D3DXVECTOR3 length, D3DXVECTOR3 destvec);
-	void clear();
-private:
-	std::list< TransformData* > transformList;
-};
-
-#endif
+////＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+//// Transform.h
+////＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+//
+//// ===== 多重インクルード防止 =====
+//#ifndef TRANSFORM_H
+//#define TRANSFORM_H
+//
+//// ===== インクルード部 =====
+//#include "../DirectX3D/DirectX3D.h"
+//
+//class Transform
+//{
+//public:
+//	Transform();
+//	~Transform();
+//
+//	void setPos(D3DXVECTOR3 setPos);
+//	void setVelocity(D3DXVECTOR3 setVelocity);
+//	void setAccele(D3DXVECTOR3 setAccle);
+//	void setRotDeg(D3DXVECTOR3 setRotDeg);
+//	void setRotDegDest(D3DXVECTOR3 setRotDegDest);
+//	void setScale(D3DXVECTOR3 setScale );
+//	void setCross(D3DXVECTOR3 setCross);
+//	void setNormal(D3DXVECTOR3 setNormal);
+//
+//private:
+//	D3DXVECTOR3			pos			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+//	D3DXVECTOR3			velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+//	D3DXVECTOR3			accele		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+//	D3DXVECTOR3			rotDeg		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+//	D3DXVECTOR3			rotDegDest  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+//	D3DXVECTOR3			scale		= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+//	D3DXVECTOR3			cross		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+//	D3DXVECTOR3			normal		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+//};
+//
+//#endif

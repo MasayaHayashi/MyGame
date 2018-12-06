@@ -28,13 +28,13 @@ BallObj::BallObj()
 	pCollider = nullptr;
 
 	// 位置・向きの初期設定
-	pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDeg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// 拡大率設定
-	scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	myTransform.scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
 	isShader = true;
 
@@ -150,11 +150,11 @@ void BallObj::UpdateTitleObj_Result()
 void BallObj::initializeTitleObj_Title()
 {
 	// 位置、移動量、拡大率初期化
-	pos = D3DXVECTOR3(-0.0, 2.0f, 0.0f);
-	velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	myTransform.pos = D3DXVECTOR3(-0.0, 2.0f, 0.0f);
+	myTransform.velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDeg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
 	// デバイス取得
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
@@ -176,12 +176,12 @@ void BallObj::initializeTitleObj_Title()
 
 	// 拡大
 	D3DXMATRIX mScale;
-	D3DXMatrixScaling(&mScale, scale.x, scale.y, scale.z);
+	D3DXMatrixScaling(&mScale, myTransform.scale.x, myTransform.scale.y, myTransform.scale.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mScale);
 
 	// 移動
 	D3DXMATRIX mtxTranslate;
-	D3DXMatrixTranslation(&mtxTranslate, pos.x, pos.y, pos.z);
+	D3DXMatrixTranslation(&mtxTranslate, myTransform.pos.x, myTransform.pos.y, myTransform.pos.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mtxTranslate);
 
 	isUsed = true;
@@ -197,11 +197,11 @@ void BallObj::initializeTitleObj_Title()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void BallObj::initializeTitleObj_GameMain()
 {
-	pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rot = D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
-	rotDest = D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
-	scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	myTransform.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDeg = D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
+	myTransform.rotDegDest = D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
+	myTransform.scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
 	// デバイス取得
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
@@ -221,13 +221,13 @@ void BallObj::initializeTitleObj_GameMain()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void BallObj::initializeTitleObj_Result()
 {
-	pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDeg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// 拡大率設定
-	scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	myTransform.scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
 	// デバイス取得
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();

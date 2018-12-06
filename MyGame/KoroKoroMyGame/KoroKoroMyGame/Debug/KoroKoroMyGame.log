@@ -1,3 +1,11 @@
-﻿  MainField.cpp
-  KoroKoroMyGame.vcxproj -> D:\git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.exe
-  KoroKoroMyGame.vcxproj -> D:\git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.pdb (Partial PDB)
+﻿  Collision.cpp
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(79): warning C4101: 'nIndx': ローカル変数は 1 度も使われていません。
+  コードを生成中...
+  コンパイル中...
+  SceneTitle.cpp
+  SceneMain.cpp
+  Player.cpp
+  Camera.cpp
+  コードを生成中...
+  KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.exe
+  KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.pdb (Partial PDB)

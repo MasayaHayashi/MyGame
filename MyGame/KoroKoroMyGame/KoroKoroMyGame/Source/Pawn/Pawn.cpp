@@ -21,9 +21,7 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 Pawn::Pawn()
 {
-	// 描画関連初期化
-	cross = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
+	myTransform.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	oldRadRot = 0.0f;
 
 	// 行列初期化
@@ -38,26 +36,11 @@ Pawn::Pawn()
 	meshDataObj.meshPtr				= nullptr;
 	meshDataObj.materialBufferPtr	= nullptr;
 
-	pos				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	accele			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	scale			= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-	velocity			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rot				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rotDest			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	collisionSize	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	destLanding		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
-	myTransformData.idNumber = 0;
-	myTransformData.posData		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransformData.scaleData = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransformData.rotDegData	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransformData.isUsed = false;
-
 	quatanion	= D3DXQUATERNION(0, 0, 0, 0);
 	destQua		= D3DXQUATERNION(0, 0, 0, 0);
-
-	cross = D3DXVECTOR3(0.0f,0.0f,0.0f);
-	normal = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	speed = 0.0f;
 
@@ -85,18 +68,8 @@ Pawn::Pawn(UINT SetuIndxNum)
 //	meshPtr = nullptr;
 
 	// 位置・向きの初期設定
-	pos			  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	scale		  = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-	velocity		  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rot			  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rotDest		  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	collisionSize = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
-	myTransformData.idNumber = 0;
-	myTransformData.posData = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransformData.scaleData = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransformData.rotDegData = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransformData.isUsed = false;
+	collisionSize = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	collisionRadus  = 0.0f;
 	colorAlpha		 = 1.0f;
@@ -149,7 +122,7 @@ void Pawn::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Pawn::update()
 {
-	updateTransformData();
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -176,15 +149,15 @@ void Pawn::draw()
 	D3DXMatrixIdentity(&mtxScale);
 
 	// 拡大縮小
-	D3DXMatrixScaling(&mtxScale, scale.x, scale.y, scale.z);
+	D3DXMatrixScaling(&mtxScale, myTransform.scale.x, myTransform.scale.y, myTransform.scale.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mtxScale);
 
 	// 回転を反映
-	D3DXMatrixRotationYawPitchRoll(&rotMtx, rot.y, rot.x, rot.z);
+	D3DXMatrixRotationYawPitchRoll(&rotMtx, myTransform.rotDeg.y, myTransform.rotDeg.x, myTransform.rotDeg.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &rotMtx);
 
 	// 移動を反映
-	D3DXMatrixTranslation(&translateMtx, pos.x, pos.y, pos.z);
+	D3DXMatrixTranslation(&translateMtx, myTransform.pos.x, myTransform.pos.y, myTransform.pos.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &translateMtx);
 
 	// ワールドマトリックスの設定
@@ -235,15 +208,15 @@ void Pawn::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 	D3DXMatrixIdentity(&mtxScale);
 
 	// 拡大縮小
-	D3DXMatrixScaling(&mtxScale, scale.x, scale.y, scale.z);
+	D3DXMatrixScaling(&mtxScale, myTransform.scale.x, myTransform.scale.y, myTransform.scale.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mtxScale);
 
 	// 回転を反映
-	D3DXMatrixRotationYawPitchRoll(&rotMtx, rot.y, rot.x, rot.z);
+	D3DXMatrixRotationYawPitchRoll(&rotMtx, myTransform.rotDeg.y, myTransform.rotDeg.x, myTransform.rotDeg.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &rotMtx);
 
 	// 移動を反映
-	D3DXMatrixTranslation(&translateMtx, pos.x, pos.y, pos.z);
+	D3DXMatrixTranslation(&translateMtx, myTransform.pos.x, myTransform.pos.y, myTransform.pos.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &translateMtx);
 	
 	// ワールドマトリックスの設定
@@ -310,15 +283,15 @@ void Pawn::draw(LPD3DXMESH pMesh, LPDIRECT3DTEXTURE9 pTex, LPD3DXBUFFER pBuff,DW
 	devicePtr->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 
 	// 拡大縮小
-	D3DXMatrixScaling(&mtxScale, scale.x, scale.y, scale.z);
+	D3DXMatrixScaling(&mtxScale, myTransform.scale.x, myTransform.scale.y, myTransform.scale.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mtxScale);
 
 	// 回転を反映
-	D3DXMatrixRotationYawPitchRoll(&rotMtx, rot.y, rot.x, rot.z);
+	D3DXMatrixRotationYawPitchRoll(&rotMtx, myTransform.rotDeg.y, myTransform.rotDeg.x, myTransform.rotDeg.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &rotMtx);
 
 	// 移動を反映
-	D3DXMatrixTranslation(&translateMtx, pos.x, pos.y, pos.z);
+	D3DXMatrixTranslation(&translateMtx, myTransform.pos.x, myTransform.pos.y, myTransform.pos.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &translateMtx);
 
 	// ワールドマトリックスの設定
@@ -594,7 +567,7 @@ HRESULT Pawn::AllocAllBoneMatrix(LPD3DXFRAME pFrameBase)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Pawn::setPosition(D3DXVECTOR3 SetPos)
 {
-	pos = SetPos;
+	myTransform.pos = SetPos;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -614,16 +587,7 @@ void Pawn::setOffset(D3DXVECTOR3 SetOffSet)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Pawn::setRotation(D3DXVECTOR3 SetRot)
 {
-	rot = SetRot;
-}
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// あたり判定用データセット
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::setHitData(D3DXVECTOR3 setCross, D3DXVECTOR3 setNormal, D3DXVECTOR3 setLength, D3DXVECTOR3 setDestVec)
-{
-	cross = setCross;
-	normal = setNormal;
+	myTransform.rotDeg = SetRot;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -689,7 +653,7 @@ D3DXVECTOR3 Pawn::getOffset()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 D3DXVECTOR3 Pawn::getPosition()
 {
-	return pos;
+	return myTransform.pos;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -697,7 +661,7 @@ D3DXVECTOR3 Pawn::getPosition()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 D3DXVECTOR3 Pawn::getRotation()
 {
-	return rot;
+	return myTransform.rotDeg;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -817,7 +781,7 @@ void Pawn::setNumber(UINT uSetNumber)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 D3DXVECTOR3 Pawn::getvelocity()
 {
-	return velocity;
+	return myTransform.velocity;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -918,15 +882,6 @@ DWORD Pawn::getTriangleNum()
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// Rayと三角形のあたり判定用の値セット
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::setRayToTriangleInfo(D3DXVECTOR3 SetCross, D3DXVECTOR3 SetNormal)
-{
-	cross  = SetCross;
-	normal = SetNormal;
-}
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 //  階層構造用 境界球/境界ボックス取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Pawn::calcCollision(LPD3DXFRAME pFrame)
@@ -1010,56 +965,16 @@ void Pawn::calcCollisionMeshContainer(LPD3DXMESHCONTAINER pMeshContainer, LPD3DX
 	pMesh->UnlockVertexBuffer();
 }
 
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// 書き出し用データ更新
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::updateTransformData()
-{
-	myTransformData.posData		 = pos;
-	myTransformData.velocityData = velocity;
-	myTransformData.rotDegData	 = rot;
-	myTransformData.scaleData	 = scale;
-	myTransformData.worldMatrix  = worldMtx;
-	myTransformData.vertexPtr = getVtxAcess();
-	myTransformData.indexPtr  = getIndxAcess();
-	myTransformData.objType		 = objType;
-	myTransformData.idNumber	 = idNumber;
-	myTransformData.isUsed		 = isUsed;
-
-	switch (meshType)
-	{
-	case MeshObjType::NormalModel:
-		myTransformData.collisionBox = collitionBox;
-		myTransformData.numIndx		 = meshDataObj.dwNumIndx;
-		myTransformData.vertexPtr = meshDataObj.vertexPtr.get();
-		break;
-	case MeshObjType::HierarchyModel:
-		myTransformData.collisionBox = hierarchyMeshData.collitionBox;
-		break;
-	default:
-		break;
-	}
-
-}
-
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 書き出し用データセット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::setTransformData(TransformData setData)
+void Pawn::setPawn(Pawn setData)
 {
-	pos			= setData.posData;		// 位置
-	rot			= setData.rotDegData;	// 回転
-	scale		= setData.scaleData;	// 拡大率
-	idNumber	= setData.idNumber;		// 識別番号
-	isUsed		= setData.isUsed;		// 使用フラグ
-}
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// 書き出し用データ取得
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-const TransformData& Pawn::getTransformData()
-{
-	return myTransformData;
+	//pos			= setData.posData;		// 位置
+	//rot			= setData.rotDegData;	// 回転
+	//scale		= setData.scaleData;	// 拡大率
+	//idNumber	= setData.idNumber;		// 識別番号
+	//isUsed		= setData.isUsed;		// 使用フラグ
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -1067,10 +982,10 @@ const TransformData& Pawn::getTransformData()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Pawn::setDefaultValue()
 {
-	defPos			= pos;
-	defvelocity			= velocity;
-	defrot			= rot;
-	defScale		= scale;
+	defPos			= myTransform.pos;
+	defvelocity			= myTransform.velocity;
+	defrot			= myTransform.rotDeg;
+	defScale		= myTransform.scale;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -1078,24 +993,24 @@ void Pawn::setDefaultValue()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Pawn::initializeStatus()
 {
-	pos		= defPos;
-	velocity	= defvelocity;
-	rot		= defrot;
-	scale	= defScale;
+	myTransform.pos		= defPos;
+	myTransform.velocity	= defvelocity;
+	myTransform.rotDeg		= defrot;
+	myTransform.scale	= defScale;
 
-	accele = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.accele = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// 拡大
 	D3DXMATRIX mScale;
-	D3DXMatrixScaling(&mScale, scale.x, scale.y, scale.z);
+	D3DXMatrixScaling(&mScale, myTransform.scale.x, myTransform.scale.y, myTransform.scale.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mScale);
 
 	// 回転
-	D3DXMatrixRotationY(&worldMtx, D3DXToRadian(rot.y));
+	D3DXMatrixRotationY(&worldMtx, D3DXToRadian(myTransform.rotDeg.y));
 
 	// 移動
 	D3DXMATRIX translateMtx;
-	D3DXMatrixTranslation(&translateMtx, pos.x, pos.y, pos.z);
+	D3DXMatrixTranslation(&translateMtx, myTransform.pos.x, myTransform.pos.y, myTransform.pos.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &translateMtx);
 }
 

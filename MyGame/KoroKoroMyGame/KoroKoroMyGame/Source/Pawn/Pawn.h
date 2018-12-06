@@ -26,6 +26,19 @@ enum class MeshObjType
 // ===== クラスの前方宣言 =====
 class Collider;
 
+// ===== 構造体定義 =====
+typedef struct
+{
+	D3DXVECTOR3			pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3			velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3			accele = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3			rotDeg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3			rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3			scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	D3DXVECTOR3			cross = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3			normal = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+} Transform;
+
 // ===== クラス定義 =====
 class Pawn : public GameObjectBase
 {
@@ -103,17 +116,15 @@ public:
 	void setRotation(D3DXVECTOR3);								// 回転セット
 	void setHitFlg(bool );										// 衝突判定セット
 	void setIsGround(bool );									// 地面上判定セット
-	void setRayToTriangleInfo(D3DXVECTOR3 , D3DXVECTOR3 );		// レイと三角形のあたり判定用値セット
 	void setDefaultValue();										// 初期値セット
 	void setDestLanding(D3DXVECTOR3 setLanding);				// 着地位置セット
 	void setHitIndex(INT);										// 当たったオブジェクトのインデックスをセット
 
 	void setAnimChange(UINT, UINT);				// アニメーション切り替え
 
-	void updateTransformData();
-	void setTransformData(TransformData);
+	void setPawn(Pawn);
 	void setHitData(D3DXVECTOR3 cross, D3DXVECTOR3 normal, D3DXVECTOR3 length, D3DXVECTOR3 destVec);
-	const TransformData& getTransformData();
+	const Pawn& getPawn();
 protected:
 	std::unique_ptr <Collider> colliderPtr = nullptr;
 
@@ -135,12 +146,15 @@ protected:
 
 	CHAR				texFileName[256];	// 読み込むファイル名
 
-	D3DXVECTOR3			pos;					// 現在の位置
-	D3DXVECTOR3			velocity;				// 移動量
-	D3DXVECTOR3			accele;					// 加速度
-	D3DXVECTOR3			rot;					// 現在の向き
-	D3DXVECTOR3			rotDest;				// 目的の向き
-	D3DXVECTOR3			scale;					// 拡大率
+	friend Transform;
+	Transform			myTransform;
+
+	//D3DXVECTOR3			pos;					// 現在の位置
+	//D3DXVECTOR3			velocity;				// 移動量
+	//D3DXVECTOR3			accele;					// 加速度
+	//D3DXVECTOR3			rot;					// 現在の向き
+	//D3DXVECTOR3			rotDest;				// 目的の向き
+	//D3DXVECTOR3			scale;					// 拡大率
 	D3DXVECTOR3			destLanding;			// 目的着地位置
 	D3DXVECTOR3			maxVtx;					// 最大頂点位置
 	D3DXVECTOR3			minVtx;					// 最小頂点位置
@@ -156,8 +170,6 @@ protected:
 	D3DXQUATERNION		quatanion;				// 任意軸の回転用クォータニオン
 	D3DXQUATERNION		destQua;				// 目的クオータニオン
 
-
-
 	CHAR				fileName[256];			// モデルのファイル名
 	FLOAT				speed;					// 速度
 	FLOAT				radRot;					// 回転角度
@@ -171,8 +183,7 @@ protected:
 	TagType				tagName;				// 識別用タグ
 	UINT				idNumber;				// 複数体識別用添え字番号
 
-	D3DXVECTOR3			cross;					// Rayと三角形の判定用ヒット位置
-	D3DXVECTOR3			normal;					// Rayと三角形の判定用法線ベクトル
+
 
 
 	D3DXVECTOR3			startPos;				// 開始位置 (補間用)
@@ -192,7 +203,7 @@ protected:
 	MyHierarchy					Hierarchy;		// 階層メモリ確保/解放クラス
 	DWORD						dwPrev;			// 直前の時刻
 	
-	TransformData				myTransformData;		// 書き出す際の保存用データ
+
 	GameObjType					objType;
 	MeshObjType					meshType;				// メッシュの種類
 	UINT						currentAnim;			// アニメーション

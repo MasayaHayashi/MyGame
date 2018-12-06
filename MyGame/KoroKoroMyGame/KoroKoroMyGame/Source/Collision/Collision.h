@@ -14,7 +14,6 @@
 
 // ===== インクルード部 =====
 #include "../Pawn/Pawn.h"
-#include "../Transform/Transform.h"
 #include <list>
 
 // ===== 列挙体定義 =====
@@ -48,29 +47,28 @@ public:
 
 	void update();
 
-	static void registerList(TransformData *setTransformData,std::string keyName);
-	void allUnregister();
+	static void registerList(Transform *setPawn,std::string keyName);
 
-	UINT checkCollisionField(const TransformData player, const TransformData field, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec);
+	bool checkCollisionField(Pawn *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec);
 	UINT CheckCollisionWall( Player *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec);
 
 	void CheckCollisionBlock(Pawn *pSelectBlock, Pawn *pGameObj);
 
 	bool IsHitSphereToSphere(Pawn *, Pawn*);					// 球と球のあたり判定
-	bool isHitAABB(const TransformData pawnA, const TransformData pawnB) const;
+	bool isHitAABB(const Pawn pawnA, const Pawn pawnB) const;
 	bool IsHitAABBItem(Player *pPlayer, Pawn *pPawn);				// AABBのアイテム用判定
-	INT isHitRayToMesh(TransformData , TransformData , LPD3DXVECTOR3 , LPD3DXVECTOR3 , bool , LPD3DXVECTOR3 , LPD3DXVECTOR3 ,LPD3DXVECTOR3);			// レイと三角形のあたり判定
+	INT isHitRayToMesh(Pawn*, Pawn*, LPD3DXVECTOR3 , LPD3DXVECTOR3 , bool , LPD3DXVECTOR3 , LPD3DXVECTOR3 ,LPD3DXVECTOR3);			// レイと三角形のあたり判定
 	
-	static const TransformData* getTransformData(std::string keyName, INT index);
+	static const Transform* getTransform(std::string keyName, INT index);
 
 private:
 	bool IntersectA(Pawn* pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXMATRIX pWorld);
-	INT  Intersect(TransformData,LPD3DXVECTOR3 , LPD3DXVECTOR3 , bool , LPD3DXVECTOR3 , LPD3DXVECTOR3 , LPD3DXVECTOR3 );
+	INT  Intersect(Pawn*,LPD3DXVECTOR3 , LPD3DXVECTOR3 , bool , LPD3DXVECTOR3 , LPD3DXVECTOR3 , LPD3DXVECTOR3 );
 	void SwitchHitType(Pawn *, Pawn *);
 
 	void checkPlayerCollision();
 
-	static std::unordered_map<std::string, Transform> collisionMapes;
+	static std::unordered_map<std::string, Transform*> collisionMapes;
 };
 
 #endif

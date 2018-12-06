@@ -105,7 +105,6 @@ void SceneMain::finalize()
 		player->finalize();
 	}
 
-	collisionPtr->allUnregister();
 }
 
 //
