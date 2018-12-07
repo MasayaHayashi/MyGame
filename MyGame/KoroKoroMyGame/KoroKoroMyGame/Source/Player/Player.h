@@ -26,9 +26,9 @@ public:
 	{
 		Stop = 0,
 		velocity,
-		velocityHitWall,		// 移動できるが壁に当たっている
-		JumpUp,				// ジャンプ上昇中
-		JumpDown,			// ジャンプ下降中
+		velocityHitWall,
+		JumpUp,
+		JumpDown,
 		Fall,
 		Dead
 	};

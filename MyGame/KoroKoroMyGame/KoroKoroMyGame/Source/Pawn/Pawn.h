@@ -29,15 +29,23 @@ class Collider;
 // ===== 構造体定義 =====
 typedef struct
 {
-	D3DXVECTOR3			pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3			velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3			accele = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3			rotDeg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3			rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3			scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-	D3DXVECTOR3			cross = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3			normal = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3			pos			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3			velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3			accele		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3			rotDeg		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3			rotDegDest	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3			scale		= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	D3DXVECTOR3			cross		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3			normal		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 } Transform;
+
+typedef struct
+{
+	D3DXVECTOR3 hitRay	 = D3DXVECTOR3(0.0f,0.0f,0.0f);
+	D3DXVECTOR3 hitCross = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	bool isHitAABB		 = false;
+	bool isHitRay		 = false;
+} HitData;
 
 // ===== クラス定義 =====
 class Pawn : public GameObjectBase
@@ -80,7 +88,7 @@ public:
 	D3DXVECTOR3			getCollisionBox();		// あたり判定用サイズ取得
 	D3DXVECTOR3			getColliderPos();		// あたり判定用位置取得		
 	FLOAT				getCollisionRadius();	// あたり判定用半径取得
-	TagType				getTag();				// タグ取得
+	std::string			getTag();				// タグ取得
 	DWORD				getVertexNum();			// 頂点の数取得
 	DWORD				getIndxNum();			// インデックスバッファの数取得
 	DWORD				getTriangleNum();		// 三角形の数取得
@@ -125,6 +133,8 @@ public:
 	void setPawn(Pawn);
 	void setHitData(D3DXVECTOR3 cross, D3DXVECTOR3 normal, D3DXVECTOR3 length, D3DXVECTOR3 destVec);
 	const Pawn& getPawn();
+
+	void updateTransform();
 protected:
 	std::unique_ptr <Collider> colliderPtr = nullptr;
 
@@ -146,15 +156,10 @@ protected:
 
 	CHAR				texFileName[256];	// 読み込むファイル名
 
-	friend Transform;
 	Transform			myTransform;
+	HitData				myHitData;
 
-	//D3DXVECTOR3			pos;					// 現在の位置
-	//D3DXVECTOR3			velocity;				// 移動量
-	//D3DXVECTOR3			accele;					// 加速度
-	//D3DXVECTOR3			rot;					// 現在の向き
-	//D3DXVECTOR3			rotDest;				// 目的の向き
-	//D3DXVECTOR3			scale;					// 拡大率
+
 	D3DXVECTOR3			destLanding;			// 目的着地位置
 	D3DXVECTOR3			maxVtx;					// 最大頂点位置
 	D3DXVECTOR3			minVtx;					// 最小頂点位置
@@ -180,11 +185,8 @@ protected:
 	bool				isGround;				// 地面の上か
 	bool				isUsed;					// 使用中か
 
-	TagType				tagName;				// 識別用タグ
+	std::string			tagName;				// 識別用タグ
 	UINT				idNumber;				// 複数体識別用添え字番号
-
-
-
 
 	D3DXVECTOR3			startPos;				// 開始位置 (補間用)
 	D3DXVECTOR3			endPos;					// 終了位置 (補間用)

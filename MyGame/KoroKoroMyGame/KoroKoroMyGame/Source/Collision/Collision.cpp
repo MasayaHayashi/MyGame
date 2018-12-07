@@ -18,13 +18,24 @@
 
 // ===== 静的メンバ =====
 std::unordered_map<std::string, Transform*> Collision::collisionMapes;
+std::unordered_map<std::string, HitData*>	Collision::hitMapes;
+
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 Collision::Collision()
 {
-	
+
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// コンストラクタ
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+Collision::Collision(Pawn *setPlayer,Pawn *setField)
+{
+	playerPtr = setPlayer;
+	fieldPtr = setField;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -40,14 +51,25 @@ Collision::~Collision()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Collision::update()
 {
+	D3DXVECTOR3 cross, normal, length;
+	if (checkCollisionField(playerPtr, fieldPtr, fieldPtr, cross, normal, length, D3DXVECTOR3(1.0f, 0.0f, 0.0f)))
+	{
+		hitMapes["Player"]->isHitRay = true;
+	}
+	else
+	{
+		hitMapes["Player"]->isHitAABB = false;
+	}
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 登録
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Collision::registerList(Transform *setPawn,std::string keyName)
+void Collision::registerList(Transform *setPawn,HitData *hitData, std::string keyName)
 {
-	collisionMapes["keyName"] = setPawn;
+	collisionMapes[keyName] = setPawn;
+	hitMapes[keyName]		= hitData;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -256,9 +278,13 @@ INT Collision::isHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos,
 	D3DXVec3TransformCoord(&vRayPos, pRayPos, &mInvWorld);
 
 	if (bSegment)
+	{
 		D3DXVec3TransformCoord(&vRayDir, pRayDir, &mInvWorld);
+	}
 	else
+	{
 		D3DXVec3TransformNormal(&vRayDir, pRayDir, &mInvWorld);
+	}
 
 	// レイとメッシュの交差判定
 	INT nIndex = Intersect(pPawnA, &vRayPos, &vRayDir, bSegment, pCross, pNormal, Length);
@@ -267,14 +293,16 @@ INT Collision::isHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos,
 	{
 		// 交点、法線をワールド変換
 		if (pCross)
+		{
 			D3DXVec3TransformCoord(pCross, pCross, pPawnA->getWorldMtx());
+		}
 		if (pNormal)
+		{
 			D3DXVec3TransformNormal(pNormal, pNormal, pPawnA->getWorldMtx());
+		}
 	}
+
 	return nIndex;
-
-
-	return false;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -283,15 +311,18 @@ INT Collision::isHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos,
 INT Collision::Intersect(Pawn *pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXVECTOR3 pFLength)
 {
 	if (!pRayPos || !pRayDir)
+	{
 		return -1;
+	}
 
 	// レイ取得
 	D3DXVECTOR3& P0 = *pRayPos;
 	D3DXVECTOR3 W = *pRayDir;
 
 	if (bSegment)
+	{
 		W -= P0;
-
+	}
 	DWORD dwNumIndx = pField->getIndxNum();			// 三角形の数取得	
 	MESH_VTX *pVtx = pField->getVtxAcess();		// 頂点情報取得
 	WORD	 *pIndx = pField->getIndxAcess();		// インデックス情報取得
@@ -311,7 +342,9 @@ INT Collision::Intersect(Pawn *pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRay
 		// 例外処理
 		if (V1.y >= pRayDir->y &&
 			V2.y >= pRayDir->y)
+		{
 			continue;
+		}
 
 		// 法線ベクトルを取得
 		D3DXVECTOR3 N;
@@ -319,24 +352,32 @@ INT Collision::Intersect(Pawn *pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRay
 		// 分母を算出
 		FLOAT deno = D3DXVec3Dot(&N, &W);
 		if (deno >= 0.0f)
+		{
 			continue;	// 平行(==0)か裏から表(>0)
+		}
 
 						// 内外判定
 		D3DXVECTOR3 N1;
 		D3DXVec3Cross(&N1, &V1, &W);
 		if (D3DXVec3Dot(&N1, &(P0 - P1)) < 0.0f)
+		{
 			continue;
+		}
 
 		D3DXVec3Cross(&N1, &V2, &W);
 
 		if (D3DXVec3Dot(&N1, &(P0 - P2)) < 0.0f)
+		{
 			continue;
+		}
 
 		D3DXVECTOR3 V3(P1 - P3);
 		D3DXVec3Cross(&N1, &V3, &W);
 
 		if (D3DXVec3Dot(&N1, &(P0 - P3)) < 0.0f)
+		{
 			continue;
+		}
 
 		// 媒介変数算出
 		float T = D3DXVec3Dot(&N, &(P1 - P0)) / deno;
@@ -346,11 +387,15 @@ INT Collision::Intersect(Pawn *pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRay
 		// 交点を算出
 		D3DXVECTOR3 X = P0 + T * W;
 		if (pCross)
+		{
 			*pCross = X;
+		}
 
 		// 法線を返す
 		if (pNormal)
+		{
 			*pNormal = N;
+		}
 		// 見つかったので三角形の番号を返す
 
 		return i / 3;
@@ -358,6 +403,9 @@ INT Collision::Intersect(Pawn *pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRay
 	// 見つからなかったので負の値を返す
 	return -1;
 }
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 線分の判定
@@ -423,7 +471,7 @@ bool Collision::IntersectA(Pawn* pField,LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRa
 		D3DXVec3Normalize(&N, &N);
 
 		// 媒介変数tの分母を求める
-		float base = D3DXVec3Dot(&N, &H);
+		FLOAT base = D3DXVec3Dot(&N, &H);
 		if (base == 0.0f)
 		{
 			continue;		// 平面と平行

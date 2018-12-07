@@ -42,12 +42,13 @@ class Player;
 class Collision
 {
 public:
-	Collision();	
+	Collision();
+	Collision(Pawn*, Pawn*);
 	~Collision();	
 
 	void update();
 
-	static void registerList(Transform *setPawn,std::string keyName);
+	static void registerList(Transform *setPawn,HitData *setHit,std::string keyName);
 
 	bool checkCollisionField(Pawn *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec);
 	UINT CheckCollisionWall( Player *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec);
@@ -68,7 +69,11 @@ private:
 
 	void checkPlayerCollision();
 
+	Pawn* playerPtr;
+	Pawn* fieldPtr;
+
 	static std::unordered_map<std::string, Transform*> collisionMapes;
+	static std::unordered_map<std::string, HitData*>   hitMapes;
 };
 
 #endif

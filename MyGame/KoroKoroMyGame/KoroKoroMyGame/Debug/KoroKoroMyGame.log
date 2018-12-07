@@ -1,11 +1,78 @@
-﻿  Collision.cpp
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(79): warning C4101: 'nIndx': ローカル変数は 1 度も使われていません。
+﻿  SceneMain.cpp
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\main\scenemain.cpp(148): error C2065: 'player': 定義されていない識別子です。
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\main\scenemain.cpp(148): error C2059: 構文エラー: ')'
+  Player.cpp
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\player\player.cpp(28): error C2679: 二項演算子 '=': 型 'Pawn::TagType' の右オペランドを扱う演算子が見つかりません (または変換できません)。
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(1043): note: 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(_Elem)' の可能性があります
+          with
+          [
+              _Elem=char
+          ]
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(1038): note: または 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(const _Elem *)'
+          with
+          [
+              _Elem=char
+          ]
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(1022): note: または 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &)'
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(983): note: または 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(std::initializer_list<_Elem>)'
+          with
+          [
+              _Elem=char
+          ]
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(925): note: または 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(std::basic_string<char,std::char_traits<char>,std::allocator<char>> &&) noexcept(<expr>)'
+  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\player\player.cpp(28): note: 引数リスト '(std::string, Pawn::TagType)' を一致させようとしているとき
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\player\player.cpp(58): error C2679: 二項演算子 '=': 型 'Pawn::TagType' の右オペランドを扱う演算子が見つかりません (または変換できません)。
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(1043): note: 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(_Elem)' の可能性があります
+          with
+          [
+              _Elem=char
+          ]
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(1038): note: または 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(const _Elem *)'
+          with
+          [
+              _Elem=char
+          ]
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(1022): note: または 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &)'
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(983): note: または 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(std::initializer_list<_Elem>)'
+          with
+          [
+              _Elem=char
+          ]
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xstring(925): note: または 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(std::basic_string<char,std::char_traits<char>,std::allocator<char>> &&) noexcept(<expr>)'
+  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\player\player.cpp(58): note: 引数リスト '(std::string, Pawn::TagType)' を一致させようとしているとき
+  Pawn.cpp
+  MainField.cpp
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\mainfield\mainfield.cpp(24): error C2065: 'tag': 定義されていない識別子です。
   コードを生成中...
   コンパイル中...
+  Skydome.cpp
   SceneTitle.cpp
-  SceneMain.cpp
-  Player.cpp
+  SceneManager.cpp
+  ResourceManager.cpp
+  MeshFieldBase.cpp
+  HeartObj.cpp
+  Collision.cpp
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(91): warning C4101: 'nIndx': ローカル変数は 1 度も使われていません。
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(583): error C2678: 二項演算子 '==': 型 'std::string' の左オペランドを扱う演算子が見つかりません (または変換できません) (新しい動作; ヘルプを参照)。
+  c:\program files (x86)\windows kits\8.1\include\shared\guiddef.h(192): note: 'bool operator ==(const GUID &,const GUID &)' の可能性があります
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\exception(329): note: または 'bool std::operator ==(const std::exception_ptr &,const std::exception_ptr &) throw()' [引数依存の照合を使用して検出] の可能性があります
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\exception(334): note: または 'bool std::operator ==(std::nullptr_t,const std::exception_ptr &) throw()' [引数依存の照合を使用して検出] の可能性があります
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\exception(339): note: または 'bool std::operator ==(const std::exception_ptr &,std::nullptr_t) throw()' [引数依存の照合を使用して検出] の可能性があります
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\system_error(365): note: または 'bool std::operator ==(const std::error_code &,const std::error_code &) noexcept' [引数依存の照合を使用して検出] の可能性があります
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\system_error(373): note: または 'bool std::operator ==(const std::error_code &,const std::error_condition &) noexcept' [引数依存の照合を使用して検出] の可能性があります
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\system_error(381): note: または 'bool std::operator ==(const std::error_condition &,const std::error_code &) noexcept' [引数依存の照合を使用して検出] の可能性があります
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\system_error(389): note: または 'bool std::operator ==(const std::error_condition &,const std::error_condition &) noexcept' [引数依存の照合を使用して検出] の可能性があります
+  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(583): note: 引数リスト '(std::string, Pawn::TagType)' を一致させようとしているとき
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(585): error C2678: 二項演算子 '==': 型 'std::string' の左オペランドを扱う演算子が見つかりません (または変換できません) (新しい動作; ヘルプを参照)。
+  c:\program files (x86)\windows kits\8.1\include\shared\guiddef.h(192): note: 'bool operator ==(const GUID &,const GUID &)' の可能性があります
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\exception(329): note: または 'bool std::operator ==(const std::exception_ptr &,const std::exception_ptr &) throw()' [引数依存の照合を使用して検出] の可能性があります
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\exception(334): note: または 'bool std::operator ==(std::nullptr_t,const std::exception_ptr &) throw()' [引数依存の照合を使用して検出] の可能性があります
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\exception(339): note: または 'bool std::operator ==(const std::exception_ptr &,std::nullptr_t) throw()' [引数依存の照合を使用して検出] の可能性があります
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\system_error(365): note: または 'bool std::operator ==(const std::error_code &,const std::error_code &) noexcept' [引数依存の照合を使用して検出] の可能性があります
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\system_error(373): note: または 'bool std::operator ==(const std::error_code &,const std::error_condition &) noexcept' [引数依存の照合を使用して検出] の可能性があります
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\system_error(381): note: または 'bool std::operator ==(const std::error_condition &,const std::error_code &) noexcept' [引数依存の照合を使用して検出] の可能性があります
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\system_error(389): note: または 'bool std::operator ==(const std::error_condition &,const std::error_condition &) noexcept' [引数依存の照合を使用して検出] の可能性があります
+  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\collision\collision.cpp(585): note: 引数リスト '(std::string, Pawn::TagType)' を一致させようとしているとき
   Camera.cpp
+  BallObj.cpp
   コードを生成中...
-  KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.exe
-  KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.pdb (Partial PDB)

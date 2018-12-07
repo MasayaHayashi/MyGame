@@ -34,6 +34,8 @@ Player::Player()
 	D3DXMatrixIdentity(&worldMtx);
 	D3DXMatrixIdentity(&translateMtx);
 
+	Collision::registerList(&myTransform, &myHitData,"Player");
+
 	score = 0;
 }
 
@@ -47,6 +49,7 @@ Player::Player(D3DXVECTOR3 startPos,UINT setNumber)
 	myTransform.velocity = (D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	setDefaultValue();
+
 
 	// ファイルパス設定
 	strcpy_s(fileName, ModelPenchanPass);
@@ -63,8 +66,9 @@ Player::Player(D3DXVECTOR3 startPos,UINT setNumber)
 
 	ballPtr.reset(NEW BallObj());
 
-	score = 0;
+	Collision::registerList(&myTransform, &myHitData, "Player");
 
+	score = 0;
 	idNumber = setNumber;
 }
 
@@ -192,8 +196,6 @@ void Player::initializeTitle()
 	// Xファイルの読み込み
 	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName, "Player" , meshType);
 
-
-
 	myTransform.pos.y -= hierarchyMeshData.collitionBox.y * 2;
 
 	// 回転
@@ -249,13 +251,11 @@ void Player::initializeTitle()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::initializeGameMain(CHAR *setFilePass)
 {
-
-
 	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.rotDeg		= D3DXVECTOR3(0.0f, 180.0f, 0.0f);
-	myTransform.rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.scale	= D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
-	playerStateType = PlayerState::velocity;
+	myTransform.rotDegDest	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.scale		= D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
+	playerStateType			= PlayerState::velocity;
 
 	setDefaultValue();
 
@@ -291,7 +291,7 @@ void Player::initializeGameMain(CHAR *setFilePass)
 
 	playerStateType = PlayerState::Stop;
 	isGround	= true;
-	isUsed = true;
+	isUsed		= true;
 
 	D3DXQuaternionRotationAxis(&startQuaternion, &getUpVec(), 0);		// クォータニオンでの任意軸回転
 	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);	// クォータニオンから回転行列掛け合わせ
@@ -529,10 +529,9 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 
 	if (idNumber == 0)
 	{
-/*
-		D3DXVECTOR3 playerToPlayerVec = player1TransformPtr->getPosition() -player2TransformPtr->getvelocity()
-			player1TransformPtr->posData - player2TransformPtr->posData;
-	
+
+		D3DXVECTOR3 playerToPlayerVec = player1TransformPtr->pos - player2TransformPtr->pos;
+		
 		FLOAT length = MyVector3::getLength(playerToPlayerVec);
 		DirectX3D::printDebug("\nながさ%f",length);
 		
@@ -546,10 +545,9 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 			D3DXVECTOR3 pv;
 			pv = testVec + nvpe * 0.05f;
 
-			velocity += playerToPlayerVec * 0.4f;
+			myTransform.velocity += playerToPlayerVec * 0.4f;
 		}
 
-*/
 
 		if (Keyboard::getPress(DIK_D))
 		{
