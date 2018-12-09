@@ -61,7 +61,6 @@ void Collision::update()
 		}
 		rayHitMapes["Player"].front()->isHit = true;
 
-
 	}
 	else
 	{
