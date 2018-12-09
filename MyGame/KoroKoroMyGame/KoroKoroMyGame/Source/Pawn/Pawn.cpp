@@ -828,7 +828,7 @@ D3DXVECTOR3 Pawn::getCollisionBox()
 //
 // ƒ^ƒOæ“¾
 //
-Pawn::TagType Pawn::getTag()
+std::string Pawn::getTag()
 {
 	return tagName;
 }
