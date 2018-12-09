@@ -36,6 +36,7 @@ public:
 	CHAR* ModelPenchanPass   = "Data/Model/Character/PenChan/PenguinC.x";
 	CHAR* ModelPenNoHahaPass = "Data/Model/Character/PenNoHaha/PenguinA.x";
 
+
 	void initialize();
 	void finalize();
 	void update(D3DXVECTOR3);
@@ -56,6 +57,7 @@ public:
 	INT  getScore() const;
 
 private:
+	static constexpr FLOAT FallSpeed = 0.01f;
 	static constexpr FLOAT VelocityForwardSpeed = 0.45f;
 	static constexpr FLOAT VelocitySideSpeed	= 0.3f;
 	static constexpr FLOAT ScaleSize		= 1.0f;

@@ -15,9 +15,11 @@
 #include "../DirectX3D/DirectX3D.h"
 #include "../SceneManager/SceneManager.h"
 #include "../Transform/Transform.h"
+#include "../MyVector3/MyVector3.h"
 
 // ===== 静的メンバ =====
-std::unordered_map<std::string, Transform*> Collision::collisionMapes;
+std::unordered_map<std::string, std::list<Transform*>> Collision::collisionMapes;
+std::unordered_map<std::string, std::list<RayHit*>> Collision::rayHitMapes;
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -25,6 +27,15 @@ std::unordered_map<std::string, Transform*> Collision::collisionMapes;
 Collision::Collision()
 {
 	
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// コンストラクタ
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+Collision::Collision(Pawn* setPlayerPtr,Pawn* setFieldPtr)
+{
+	playerPtr = setPlayerPtr;
+	fieldPtr  = setFieldPtr;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -40,6 +51,23 @@ Collision::~Collision()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Collision::update()
 {
+	D3DXVECTOR3 cross, normal, length;
+	if (checkCollisionField(playerPtr, playerPtr, fieldPtr, cross, normal, length, D3DXVECTOR3(0.0f, -0.1f, 0.0f)))
+	{
+		if (MyVector3::getLength(length) < 1.02f)
+		{
+			DirectX3D::printDebug("あたっています");
+
+		}
+		rayHitMapes["Player"].front()->isHit = true;
+
+
+	}
+	else
+	{
+		DirectX3D::printDebug("あたっていません");
+		rayHitMapes["Player"].front()->isHit = false;
+	}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -47,14 +75,14 @@ void Collision::update()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Collision::registerList(Transform *setPawn,std::string keyName)
 {
-	collisionMapes["keyName"] = setPawn;
+	collisionMapes[keyName].push_back(setPawn);
+	rayHitMapes[keyName].push_back(NEW RayHit());
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// 地面とプレイヤーの衝突処
+// 地面とプレイヤーの衝突処理更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-bool Collision::checkCollisionField(Pawn *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec)
+UINT Collision::checkCollisionField(Pawn *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec)
 {
 	INT	nIndx;
 
@@ -62,51 +90,9 @@ bool Collision::checkCollisionField(Pawn *pPlayer, Pawn *pPawnB, Pawn *pField, D
 	nIndx = isHitRayToMesh(pField, pPlayer, &pPlayer->getPosition(), &(pPlayer->getPosition() + DestVec), true, &Cross, &Normal, &fLength);
 
 	if (nIndx >= 0)
-	{
 		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
+	return false;
 
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// 壁とプレイヤーの衝突処理更新
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-UINT Collision::CheckCollisionWall(Player *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec)
-{
-	INT	nIndx;
-
-	// 線分と三角形の判定
-//	nIndx = isHitRayToMesh(pField, pPlayer, &(pPlayer->getPosition() + D3DXVECTOR3(0.0f,2.0f,0.0f)), &(pPlayer->getPosition() + DestVec), true, &Cross, &Normal, &fLength);
-
-	/*
-	if (nIndx >= 0)
-	{
-		return RAY_TRUE;
-	}
-	else
-	{
-		return RAY_FALSE;
-	}
-	*/
-	return 0;
-}
-
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// 衝突処理(削除用) (オブジェクトとオブジェクト)
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Collision::CheckCollisionBlock(Pawn *pSelectBlock, Pawn *pGameObj)
-{
-	/*
-	if (IsHitAABB(pSelectBlock, pGameObj))
-	{
-		pGameObj->setPosition( D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-		pGameObj->setUsedFlg(false);
-	}
-	*/
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -554,10 +540,25 @@ void Collision::SwitchHitType(Pawn *pPawnA, Pawn *pPawnB)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 const Transform* Collision::getTransform(std::string keyName,INT index)
 {
-	return collisionMapes[keyName];
+	if (index < 0)
+	{
+		return nullptr;
+	}
+
+	return *std::next(collisionMapes[keyName].begin(), index);
 }
 
 void Collision::checkPlayerCollision()
 {
 
+}
+
+const RayHit* Collision::getRayHitData(std::string keyName,UINT index)
+{
+	if (index < 0)
+	{
+		return nullptr;
+	}
+
+	return *std::next(rayHitMapes[keyName].begin(), index);
 }

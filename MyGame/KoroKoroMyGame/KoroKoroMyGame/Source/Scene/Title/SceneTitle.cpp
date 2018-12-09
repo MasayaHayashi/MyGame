@@ -14,7 +14,6 @@
 #include "../../HeartObj/HeartObj.h"
 
 /*
-#include ""
 #include "C_MainField.h"
 #include "C_Camera.h"
 #include "C_Light.h"

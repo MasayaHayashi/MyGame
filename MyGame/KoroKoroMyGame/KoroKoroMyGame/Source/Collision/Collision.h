@@ -33,6 +33,14 @@ typedef struct
 
 } TRIANGLE;
 
+typedef struct
+{
+	D3DXVECTOR3 cross;
+	D3DXVECTOR3 normal;
+	D3DXVECTOR3 length;
+	bool isHit = false;
+} RayHit;
+
 // ===== クラスの前方宣言 =====
 class Pawn;
 class Collider;
@@ -44,31 +52,35 @@ class Collision
 public:
 	Collision();	
 	~Collision();	
+	Collision(Pawn* setPlayerPtr, Pawn* setFieldPtr);
 
 	void update();
 
 	static void registerList(Transform *setPawn,std::string keyName);
+	INT isHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXVECTOR3 Length);
+	INT Intersect(Pawn *pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXVECTOR3 pFLength);
 
-	bool checkCollisionField(Pawn *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec);
-	UINT CheckCollisionWall( Player *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec);
-
-	void CheckCollisionBlock(Pawn *pSelectBlock, Pawn *pGameObj);
+	UINT checkCollisionField(Pawn *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec);
 
 	bool IsHitSphereToSphere(Pawn *, Pawn*);					// 球と球のあたり判定
 	bool isHitAABB(const Pawn pawnA, const Pawn pawnB) const;
 	bool IsHitAABBItem(Player *pPlayer, Pawn *pPawn);				// AABBのアイテム用判定
-	INT isHitRayToMesh(Pawn*, Pawn*, LPD3DXVECTOR3 , LPD3DXVECTOR3 , bool , LPD3DXVECTOR3 , LPD3DXVECTOR3 ,LPD3DXVECTOR3);			// レイと三角形のあたり判定
-	
+
 	static const Transform* getTransform(std::string keyName, INT index);
+	static const RayHit* Collision::getRayHitData(std::string keyName, UINT index);
 
 private:
 	bool IntersectA(Pawn* pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXMATRIX pWorld);
-	INT  Intersect(Pawn*,LPD3DXVECTOR3 , LPD3DXVECTOR3 , bool , LPD3DXVECTOR3 , LPD3DXVECTOR3 , LPD3DXVECTOR3 );
+
 	void SwitchHitType(Pawn *, Pawn *);
 
 	void checkPlayerCollision();
 
-	static std::unordered_map<std::string, Transform*> collisionMapes;
+	Pawn* playerPtr;
+	Pawn* fieldPtr;
+
+	static std::unordered_map<std::string, std::list<Transform*>> collisionMapes;
+	static std::unordered_map<std::string, std::list<RayHit*>> rayHitMapes;
 };
 
 #endif

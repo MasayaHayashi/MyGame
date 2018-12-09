@@ -97,7 +97,6 @@ private:
 	static UINT				prevScore;
 
 	/*
-
 	Light					*pLight;											  // ライト
 	C_CAMERA				*pCamera;											  // カメラ
 	C_SKYDOME				*pSkydome;											  // スカイドーム

@@ -121,6 +121,9 @@
     <Filter Include="ソース ファイル\Transform">
       <UniqueIdentifier>{3fdb3a7e-5f5f-40c2-a174-ea5fcc83a772}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Factory">
+      <UniqueIdentifier>{9c66d529-4767-4938-a3b9-ce633682694f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Audio\MyAudiere.cpp">
