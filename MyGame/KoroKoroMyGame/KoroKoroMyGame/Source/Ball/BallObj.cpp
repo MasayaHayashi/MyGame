@@ -8,6 +8,8 @@
 #include "../KeyBoard/Keyboard.h"
 #include "../Collider/Collider.h"
 #include "../DirectX3D/DirectX3D.h"
+#include "../Collision/Collision.h"
+
 /*
 #include "C_MyVector3.h"
 #include "collision.h"
@@ -107,7 +109,7 @@ void BallObj::update(D3DXVECTOR3 pos, D3DXVECTOR3 rotVec)
 		UpdateTitleObj_Title();
 		break;
 	case SceneManager::SceneState::SceneMain:
-		//updateGameMain(pos,rotVec);
+		updateGameMain(pos,rotVec);
 		break;
 	case SceneManager::SceneState::SceneResult:
 		UpdateTitleObj_Result();
@@ -265,5 +267,5 @@ void BallObj::UpdateTitleObj_Title()
 //
 void BallObj::updateGameMain(D3DXVECTOR3 pos,D3DXVECTOR3 rotVec)
 {
-
+	myTransform.pos = Collision::getTransform("Player", 0)->pos;
 }

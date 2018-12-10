@@ -935,7 +935,7 @@ bool ResourceManager::checkExisting(CHAR *pszChakNeme,MeshData &meshDataPtr)
 			meshDataPtr.meshPtr = meshes[i]->meshPtr.Get();
 			meshDataPtr.minVtx = meshes[i]->minVtx;
 			meshDataPtr.numMat = meshes[i]->numMat;
-//			meshDataPtr.vertexPtr.reset(meshes[i]->vertexPtr.get());
+			meshDataPtr.vertexPtr.reset(meshes[i]->vertexPtr.get());
 
 
 			return true;

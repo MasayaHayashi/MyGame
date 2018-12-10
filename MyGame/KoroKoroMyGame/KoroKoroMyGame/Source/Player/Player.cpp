@@ -61,8 +61,6 @@ Player::Player(D3DXVECTOR3 startPos,UINT setNumber)
 	D3DXMatrixIdentity(&worldMtx);
 	D3DXMatrixIdentity(&translateMtx);
 
-	ballPtr.reset(NEW BallObj());
-
 	score = 0;
 
 	idNumber = setNumber;
@@ -157,8 +155,6 @@ void Player::draw()
 	
 	// •`‰æ
 	Pawn::drawFrame(hierarchyMeshData.frameRoot);
-
-	ballPtr->draw();
 
 	// ƒRƒ‰ƒCƒ_[•`‰æ
 //	pCollider->DrawCollider();
@@ -305,7 +301,6 @@ void Player::initializeGameMain(CHAR *setFilePass)
 	D3DXQuaternionRotationAxis(&startQuaternion, &getUpVec(), 0);
 	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
 
-	ballPtr->initialize();
 }
 
 
@@ -531,8 +526,6 @@ void Player::updateTitle(D3DXVECTOR3 CameraForward)
 //
 void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 {
-	ballPtr->update();
-
 	updateAnimation();
 
 	const Transform* player1TransformPtr = Collision::getTransform("Player", 0);

@@ -88,12 +88,14 @@ private:
 	std::unique_ptr<Camera>		cameraPtr;
 	std::unique_ptr<Collision>	collisionPtr;
 
+	std::unique_ptr<BallObj> ballPtr;
 	std::list<std::unique_ptr<Player>>	 playeresPtr;
 	std::list<std::unique_ptr<Pawn>>	 gameObjectesPtr;
 
 	GameState				currentGameState;
 	static UINT				currentStage;
 	static UINT				prevScore;
+
 
 	/*
 	Light					*pLight;											  // ƒ‰ƒCƒg
