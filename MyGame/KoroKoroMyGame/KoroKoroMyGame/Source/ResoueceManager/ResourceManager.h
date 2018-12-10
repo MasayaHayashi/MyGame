@@ -24,7 +24,6 @@ enum class MeshObjType;
 typedef struct
 {
 	CHAR				meshFileName[256];	// ファイル名
-	
 	Microsoft::WRL::ComPtr<ID3DXMesh>	meshPtr;
 	Microsoft::WRL::ComPtr<ID3DXBuffer> materialBufferPtr;
 	DWORD				numMat;					// マテリアル情報の数
@@ -39,9 +38,9 @@ typedef struct
 	DWORD				dwNumIndx;				// インデックスバッファの数
 	DWORD				dwAttrNum;				// 属性値
 
-	std::unique_ptr<D3DXATTRIBUTERANGE> attrPtr;
-	std::unique_ptr<MESH_VTX>			vertexPtr;
-	std::unique_ptr<WORD>				indexPtr;
+	std::shared_ptr<D3DXATTRIBUTERANGE> attrPtr;
+	std::shared_ptr<MESH_VTX>			vertexPtr;
+	std::shared_ptr<WORD>				indexPtr;
 } MeshData;
 
 typedef struct
@@ -125,7 +124,7 @@ private:
 	static std::vector<VERTEX_BOARD_DATA*>		vtxBoard;
 	static std::vector<VERTEX_BOARD_DATA*>		vtxFadeBoard;
 
-	static bool checkExisting(CHAR *pszChakNeme, MeshData *meshData);
+	static bool checkExisting(CHAR *pszChakNeme, MeshData &meshData);
 	static bool checkExisting(CHAR *pszChakNeme, TEXTURE_DATA &textureData);
 	static bool checkExisting(CHAR *pszChakNeme, VERTEX_BOARD_DATA &textureData);
 

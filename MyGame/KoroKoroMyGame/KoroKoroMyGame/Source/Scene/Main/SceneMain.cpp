@@ -62,7 +62,6 @@ SceneMain::SceneMain()
 	playeresPtr.push_back( static_cast<std::unique_ptr<Player>>( NEW Player(D3DXVECTOR3( 4.0f, 0.0f, 2.0f) , playeresPtr.size()	)));
 
 	gameObjectesPtr.push_back( std::unique_ptr<Pawn>( NEW Skydome())   );
-	gameObjectesPtr.push_back( std::unique_ptr<Pawn>( NEW BallObj())   );
 	gameObjectesPtr.push_back( std::unique_ptr<Pawn>( NEW MainField()) );
 
 	collisionPtr.reset(NEW Collision(playeresPtr.front().get(),gameObjectesPtr.back().get()));

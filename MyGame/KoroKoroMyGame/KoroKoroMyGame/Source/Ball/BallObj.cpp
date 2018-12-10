@@ -96,7 +96,7 @@ void BallObj::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // プレイヤー更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void BallObj::update()
+void BallObj::update(D3DXVECTOR3 pos, D3DXVECTOR3 rotVec)
 {
 	// 現在のシーン取得
 	currentScene = SceneManager::getCurrentSceneType();
@@ -107,7 +107,7 @@ void BallObj::update()
 		UpdateTitleObj_Title();
 		break;
 	case SceneManager::SceneState::SceneMain:
-		UpdateTitleObj_GameMain();
+		//updateGameMain(pos,rotVec);
 		break;
 	case SceneManager::SceneState::SceneResult:
 		UpdateTitleObj_Result();
@@ -261,9 +261,9 @@ void BallObj::UpdateTitleObj_Title()
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// シーンメイン用プレイヤー更新
+// シーンメイン用更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void BallObj::UpdateTitleObj_GameMain()
+void BallObj::updateGameMain(D3DXVECTOR3 pos,D3DXVECTOR3 rotVec)
 {
 
 }

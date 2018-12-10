@@ -25,7 +25,7 @@ Player::Player()
 	strcpy_s(fileName, ModelPenchanPass);
 
 	// 識別用タグ設定
-	tagName		= TagType::Player;
+	tagName		= "Player";
 
 	// 状態初期化
 	playerStateType = PlayerState::Stop;
@@ -52,7 +52,7 @@ Player::Player(D3DXVECTOR3 startPos,UINT setNumber)
 	strcpy_s(fileName, ModelPenchanPass);
 
 	// 識別用タグ設定
-	tagName = TagType::Player;
+	tagName = "Player";
 
 	// 状態初期化
 	playerStateType = PlayerState::Stop;
@@ -157,6 +157,8 @@ void Player::draw()
 	
 	// 描画
 	Pawn::drawFrame(hierarchyMeshData.frameRoot);
+
+	ballPtr->draw();
 
 	// コライダー描画
 //	pCollider->DrawCollider();
@@ -300,8 +302,10 @@ void Player::initializeGameMain(CHAR *setFilePass)
 	isGround	= true;
 	isUsed = true;
 
-	D3DXQuaternionRotationAxis(&startQuaternion, &getUpVec(), 0);		// クォータニオンでの任意軸回転
-	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);	// クォータニオンから回転行列掛け合わせ
+	D3DXQuaternionRotationAxis(&startQuaternion, &getUpVec(), 0);
+	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
+
+	ballPtr->initialize();
 }
 
 
@@ -367,6 +371,8 @@ void Player::initializeSceneEdit()
 
 	// 新しいアニメーションセットをトラック0に設定
 //	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[0]);
+
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -525,6 +531,8 @@ void Player::updateTitle(D3DXVECTOR3 CameraForward)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 {
+	ballPtr->update();
+
 	updateAnimation();
 
 	const Transform* player1TransformPtr = Collision::getTransform("Player", 0);

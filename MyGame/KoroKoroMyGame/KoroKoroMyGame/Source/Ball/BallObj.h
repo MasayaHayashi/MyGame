@@ -29,7 +29,7 @@ public:
 
 	void initialize();
 	void finalize();
-	void update();
+	void update(D3DXVECTOR3 pos, D3DXVECTOR3 rotVec);
 	void draw();
 
 private:
@@ -45,7 +45,7 @@ private:
 	void initializeTitleObj_GameMain();
 	void initializeTitleObj_Result();
 	void UpdateTitleObj_Title();
-	void UpdateTitleObj_GameMain();
+	void updateGameMain(D3DXVECTOR3 pos, D3DXVECTOR3 rotVec);
 	void UpdateTitleObj_Result();
 
 	SceneManager::SceneState currentScene;

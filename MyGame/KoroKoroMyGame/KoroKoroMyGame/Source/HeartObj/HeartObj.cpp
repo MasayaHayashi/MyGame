@@ -242,12 +242,10 @@ void HeartObj::initializeTitleObj_Result()
 	// デバイス取得
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
-	pD3DTexture	 = nullptr;
-	meshPtr	 = nullptr;
-	materialBufferPtr = nullptr;
+	pD3DTexture			= nullptr;
+	meshPtr				= nullptr;
+	materialBufferPtr	= nullptr;
 	numMat		 = 0;
-
-	// Xファイルの読み込み
 
 	ResourceManager::makeModel(meshDataObj, fileName,meshType);
 	ResourceManager::createTexture(textureData, texFileName);

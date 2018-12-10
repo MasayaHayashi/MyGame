@@ -43,7 +43,7 @@ Collision::Collision(Pawn* setPlayerPtr,Pawn* setFieldPtr)
 //
 Collision::~Collision()
 {
-
+	
 }
 
 //
@@ -526,11 +526,15 @@ bool Collision::IsHitAABBItem(Player *pPlayer,Pawn *pPawn)
 //
 void Collision::SwitchHitType(Pawn *pPawnA, Pawn *pPawnB)
 {
+	std::string st = pPawnA->getTag();
+
 	// ƒvƒŒƒCƒ„[‚Ìˆ—
-	if (pPawnA->getTag() == Pawn::TagType::Player)
+	if (pPawnA->getTag() == "Player")
 	{
-		if (pPawnB->getTag() == Pawn::TagType::Enemy)
+		if (pPawnB->getTag() == "Enemy")
+		{
 			pPawnA->setHitFlg(true);
+		}
 	}
 }
 

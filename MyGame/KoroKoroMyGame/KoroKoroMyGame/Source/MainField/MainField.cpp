@@ -21,9 +21,9 @@ MainField::MainField()
 	meshPtr = nullptr;
 	isUsed  = true;
 
-	tag = "field";
+	tagName = "field";
 
-	Collision::registerList(&myTransform,&myHitData,"field");
+	Collision::registerList(&myTransform,"field");
 
 	idNumber = 0;
 }

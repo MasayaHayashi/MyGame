@@ -16,6 +16,7 @@
 #include "../Transform/Transform.h"
 #include <vector>
 #include <memory>
+#include <string>
 
 enum class MeshObjType
 {
@@ -134,7 +135,6 @@ public:
 	void setHitData(D3DXVECTOR3 cross, D3DXVECTOR3 normal, D3DXVECTOR3 length, D3DXVECTOR3 destVec);
 	const Pawn& getPawn();
 
-	void updateTransform();
 protected:
 	std::unique_ptr <Collider> colliderPtr = nullptr;
 

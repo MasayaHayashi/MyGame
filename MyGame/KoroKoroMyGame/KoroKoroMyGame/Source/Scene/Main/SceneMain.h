@@ -76,7 +76,6 @@ private:
 	void checkUnProject(INT);
 	void checkCollision();
 	void setScore();
-	GameState getGameState();
 
 	static constexpr INT RestartTime = 120;
 

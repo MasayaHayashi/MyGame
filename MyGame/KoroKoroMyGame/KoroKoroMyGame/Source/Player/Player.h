@@ -13,6 +13,7 @@
 
 // ===== クラスの前方宣言 =====
 class Collider;
+class BallObj;
 
 // ===== クラス定義 =====
 class Player final : public Pawn

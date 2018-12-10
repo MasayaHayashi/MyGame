@@ -58,7 +58,7 @@ HRESULT ResourceManager::makeModel(MeshData &meshData, CHAR *pszFilename, MeshOb
 	LPDIRECT3DDEVICE9 devicePtr =  DirectX3D::getDevice();
 
 	// 既に生成されているか
-	if (checkExisting(pszFilename, &meshData))
+	if (checkExisting(pszFilename, meshData))
 	{
 		return S_OK;
 	}
@@ -913,16 +913,31 @@ void ResourceManager::calcCollisionMeshContainer(LPD3DXMESHCONTAINER meshContain
 // メッシュ情報がすでにあるか検索
 // 生成済みなら元のデータを使用
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-bool ResourceManager::checkExisting(CHAR *pszChakNeme,MeshData *meshDataPtr)
+bool ResourceManager::checkExisting(CHAR *pszChakNeme,MeshData &meshDataPtr)
 {
-
-
 	// 全メッシュを検索
 	for (UINT i = 0; i < meshes.size(); i++)
 	{
 		if (strcmp(meshes[i]->meshFileName, pszChakNeme) == 0)
 		{
-			meshDataPtr = meshes[i];	// 生成済みなら元のデータを使用
+			meshDataPtr.attrPtr.reset(meshes[i]->attrPtr.get());
+			meshDataPtr.centerPos = meshes[i]->centerPos;
+			meshDataPtr.collisionRadus = meshes[i]->collisionRadus;
+			meshDataPtr.collitionBox = meshes[i]->collitionBox;
+			meshDataPtr.dwAttrNum = meshes[i]->dwAttrNum;
+			meshDataPtr.dwNumIndx = meshes[i]->dwNumIndx;
+			meshDataPtr.dwNumTriangles = meshes[i]->dwNumTriangles;
+			meshDataPtr.dwNumVtx = meshes[i]->dwNumVtx;
+			meshDataPtr.indexPtr.reset(meshes[i]->indexPtr.get());
+			meshDataPtr.materialBufferPtr = meshes[i]->materialBufferPtr;
+			meshDataPtr.maxVtx = meshes[i]->maxVtx;
+			strcpy_s(meshDataPtr.meshFileName, meshes[i]->meshFileName);
+			meshDataPtr.meshPtr = meshes[i]->meshPtr.Get();
+			meshDataPtr.minVtx = meshes[i]->minVtx;
+			meshDataPtr.numMat = meshes[i]->numMat;
+//			meshDataPtr.vertexPtr.reset(meshes[i]->vertexPtr.get());
+
+
 			return true;
 		}
 	}
