@@ -25,6 +25,7 @@ class BallObj final : public Pawn
 {
 public:
 	BallObj();
+	BallObj(UINT setIndex);
 	~BallObj();
 
 	void initialize();
@@ -36,7 +37,6 @@ private:
 
 	const std::string ModelFilePass	  = "Data/Model/Ball/Beachball.x";
 	const std::string TextureFilePass = "Data/Model/Ball/Beachball_Albedo.png";
-
 	static constexpr FLOAT TitleRotSpeed = 0.06f;
 
 	FLOAT rotCnt = 0;
@@ -47,6 +47,7 @@ private:
 	void UpdateTitleObj_Title();
 	void updateGameMain(D3DXVECTOR3 pos, D3DXVECTOR3 rotVec);
 	void UpdateTitleObj_Result();
+	void move(const UINT idNumber);
 
 	SceneManager::SceneState currentScene;
 	C_COLLIDER *pCollider;

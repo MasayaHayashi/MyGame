@@ -49,11 +49,43 @@ BallObj::BallObj()
 	D3DXMatrixIdentity(&translateMtx);
 }
 
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// コンストラクタ
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+BallObj::BallObj(UINT setIndex)
+{
+	// 各種クラス初期化
+	pCollider = nullptr;
+
+	// 位置・向きの初期設定
+	myTransform.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDeg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	// 拡大率設定
+	myTransform.scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+
+	isShader = true;
+
+	// ファイルパス設定
+	strcpy_s(fileName, ModelFilePass.c_str());
+	strcpy_s(texFileName, TextureFilePass.c_str());
+
+	// 行列初期化
+	D3DXMatrixIdentity(&worldMtx);
+	D3DXMatrixIdentity(&translateMtx);
+
+	idNumber = setIndex;
+}
+
+
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // デストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 BallObj::~BallObj()
 {
+
 	// 各種クラス解放
 	//	SAFE_DELETE(pCollider);
 }
@@ -92,7 +124,7 @@ void BallObj::initialize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void BallObj::finalize()
 {
-
+	ResourceManager::destroyAllMesh();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -199,7 +231,7 @@ void BallObj::initializeTitleObj_Title()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void BallObj::initializeTitleObj_GameMain()
 {
-	myTransform.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.pos = D3DXVECTOR3(0.0f, 1.45f, 0.0f);
 	myTransform.velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.rotDeg = D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
 	myTransform.rotDegDest = D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
@@ -267,5 +299,15 @@ void BallObj::UpdateTitleObj_Title()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void BallObj::updateGameMain(D3DXVECTOR3 pos,D3DXVECTOR3 rotVec)
 {
-	myTransform.pos = Collision::getTransform("Player", 0)->pos;
+	move(idNumber);
+}
+
+void BallObj::move(const UINT idNumber)
+{
+
+	myTransform.pos = Collision::getTransform("Player", idNumber)->pos;
+
+	myTransform.pos.y = 2.45f;
+
+	setWorldMtxPos(myTransform.pos);
 }

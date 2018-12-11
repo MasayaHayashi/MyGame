@@ -116,7 +116,7 @@ void Player::initialize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::finalize()
 {
-	ResourceManager::destroyHierarchymesh(fileName, "Player");
+	ResourceManager::destroyAllHierarchymesh();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -154,7 +154,7 @@ void Player::draw()
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 	
 	// 描画
-	Pawn::drawFrame(hierarchyMeshData.frameRoot);
+	Pawn::drawFrame(hierarchyMeshData.pFrameRoot);
 
 	// コライダー描画
 //	pCollider->DrawCollider();
@@ -190,7 +190,7 @@ void Player::initializeTitle()
 	// Xファイルの読み込み
 	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName, "Player" , meshType);
 
-	myTransform.pos.y -= hierarchyMeshData.collitionBox.y * 2;
+	myTransform.pos.y -= hierarchyMeshData.CollitionBox.y * 2;
 
 	// 回転
 	D3DXMATRIX mRotX, mRotY, mRotZ;
@@ -224,15 +224,15 @@ void Player::initializeTitle()
 
 	// 現在のアニメーションセットの設定値を取得
 	D3DXTRACK_DESC TD;   // トラックの能力
-	hierarchyMeshData.animCtrlPtr->GetTrackDesc(0, &TD);
+	hierarchyMeshData.pAnimCtrl->GetTrackDesc(0, &TD);
 
 	// 今のアニメーションをトラック1に移行し
 	// トラックの設定値も移行
-	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(1, hierarchyMeshData.pAnimSetPtr.get()[0]);
-	hierarchyMeshData.animCtrlPtr->SetTrackDesc(1, &TD);
+	hierarchyMeshData.pAnimCtrl->SetTrackAnimationSet(1, hierarchyMeshData.ppAnimSet[0]);
+	hierarchyMeshData.pAnimCtrl->SetTrackDesc(1, &TD);
 
 	// 新しいアニメーションセットをトラック0に設定
-	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(0, hierarchyMeshData.pAnimSetPtr.get()[2]);
+	hierarchyMeshData.pAnimCtrl->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[2]);
 
 	isUsed = true;
 
@@ -253,11 +253,11 @@ void Player::initializeGameMain(CHAR *setFilePass)
 
 	if (idNumber == 0)
 	{
-		myTransform.pos = D3DXVECTOR3(0.0f, 0.01f, -5.0f);
+		myTransform.pos = D3DXVECTOR3(0.0f, 5.0f, -5.0f);
 	}
 	else
 	{
-		myTransform.pos = D3DXVECTOR3(5.0f, 0.01f, 0.0f);
+		myTransform.pos = D3DXVECTOR3(5.0f, 5.0f, 0.0f);
 	}
 
 	Collision::registerList(&myTransform, "Player");
@@ -275,7 +275,7 @@ void Player::initializeGameMain(CHAR *setFilePass)
 	ResourceManager::makeModelHierarchy(hierarchyMeshData, setFilePass,"Player",meshType);
 
 	// モデル位置調整
-	myTransform.pos.y -= hierarchyMeshData.collitionBox.y * 2;
+	myTransform.pos.y -= hierarchyMeshData.CollitionBox.y * 2;
 
 	// 拡大
 	D3DXMATRIX mScale;
@@ -291,8 +291,8 @@ void Player::initializeGameMain(CHAR *setFilePass)
 
 	// 現在のアニメーションセットの設定値を取得
 	D3DXTRACK_DESC TD;   // トラックの能力
-	hierarchyMeshData.animCtrlPtr->GetTrackDesc(0, &TD);
-	hierarchyMeshData.animCtrlPtr->SetTrackDesc(1, &TD);
+	hierarchyMeshData.pAnimCtrl->GetTrackDesc(0, &TD);
+	hierarchyMeshData.pAnimCtrl->SetTrackDesc(1, &TD);
 
 	playerStateType = PlayerState::Stop;
 	isGround	= true;
@@ -329,7 +329,7 @@ void Player::initializeSceneEdit()
 	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName,"Player",meshType);
 	
 	// モデル回転
-	myTransform.pos.y -= hierarchyMeshData.collitionBox.y * 2;
+	myTransform.pos.y -= hierarchyMeshData.CollitionBox.y * 2;
 	
 	// 回転
 	D3DXMATRIX mRotX, mRotY, mRotZ;
@@ -357,12 +357,12 @@ void Player::initializeSceneEdit()
 
 	// 現在のアニメーションセットの設定値を取得
 	D3DXTRACK_DESC TD;   // トラックの能力
-	hierarchyMeshData.animCtrlPtr->GetTrackDesc(0, &TD);
+	hierarchyMeshData.pAnimCtrl->GetTrackDesc(0, &TD);
 
 	// 今のアニメーションをトラック1に移行し
 	// トラックの設定値も移行
 //	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(1, hierarchyMeshData.ppAnimSet[0]);
-	hierarchyMeshData.animCtrlPtr->SetTrackDesc(2, &TD);
+	hierarchyMeshData.pAnimCtrl->SetTrackDesc(2, &TD);
 
 	// 新しいアニメーションセットをトラック0に設定
 //	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[0]);
@@ -411,8 +411,6 @@ void Player::initializeStatus()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updateTitle(D3DXVECTOR3 CameraForward)
 {
-
-
 	if (Keyboard::getTrigger(DIK_2))
 	{
 		SceneManager::setNextScene(SceneManager::SceneState::SceneMain);
@@ -599,8 +597,10 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 
 	if (!Collision::getRayHitData("Player", 0)->isHit)
 	{
-		if(idNumber==0)
-		myTransform.velocity.y-= FallSpeed;
+		if (idNumber == 0)
+		{
+			myTransform.velocity.y -= FallSpeed;
+		}
 	}
 	else
 	{

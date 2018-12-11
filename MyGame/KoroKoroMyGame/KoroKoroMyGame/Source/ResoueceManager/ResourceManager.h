@@ -38,31 +38,28 @@ typedef struct
 	DWORD				dwNumIndx;				// インデックスバッファの数
 	DWORD				dwAttrNum;				// 属性値
 
-	std::shared_ptr<D3DXATTRIBUTERANGE> attrPtr;
-	std::shared_ptr<MESH_VTX>			vertexPtr;
-	std::shared_ptr<WORD>				indexPtr;
+	D3DXATTRIBUTERANGE  *attrPtr;
+	MESH_VTX			*vertexPtr;
+	WORD				*indexPtr;
 } MeshData;
 
 typedef struct
 {
-	CHAR						meshFileName[256];		// ファイル名
-	LPD3DXMESH					meshPtr;				// メッシュ情報
-	LPD3DXBUFFER				materialBufferPtr;			// マテリアル情報へのポインタ
-	DWORD						numMat;					// マテリアル情報の数
-	D3DXVECTOR3					maxVtx;					// 最大頂点位置
-	D3DXVECTOR3					minVtx;					// 最小頂点位置
-	D3DXVECTOR3					centerPos;				// モデルの中心座標
-	D3DXVECTOR3					collitionBox;			// あたり判定用サイズ
-	FLOAT						collisionRadus;			// あたり判定用サイズ
+	CHAR						szMeshFileName[256];	// ファイル名
+	LPD3DXMESH					pD3DXMesh;				// メッシュ情報
+	LPD3DXBUFFER				pD3DXBuffMat;			// マテリアル情報へのポインタ
+	DWORD						uNumMat;				// マテリアル情報の数
+	D3DXVECTOR3					MaxVtx;					// 最大頂点位置
+	D3DXVECTOR3					MinVtx;					// 最小頂点位置
+	D3DXVECTOR3					CenterPos;				// モデルの中心座標
+	D3DXVECTOR3					CollitionBox;			// あたり判定用サイズ
+	FLOAT						fCollisionRadus;		// あたり判定用サイズ
 
-	LPD3DXFRAME					frameRoot;				// ルート フレーム オブジェクト
-	LPD3DXANIMATIONCONTROLLER	animCtrlPtr;			// アニメーション コントローラ オブジェクト
-	UINT						numAnimset;				// アニメーション セット数
-
-	std::unique_ptr<LPD3DXANIMATIONSET> pAnimSetPtr;
-
+	LPD3DXFRAME					pFrameRoot;				// ルート フレーム オブジェクト
+	LPD3DXANIMATIONCONTROLLER	pAnimCtrl;				// アニメーション コントローラ オブジェクト
+	UINT						uNumAnimSet;			// アニメーション セット数
 	LPD3DXANIMATIONSET*			ppAnimSet;				// アニメーション セット
-	MyHierarchy					hierarchy;				// 階層メモリ確保/解放クラス
+	MyHierarchy					Hierarchy;				// 階層メモリ確保/解放クラス
 	DWORD						dwPrev;					// 直前の時刻
 } HIERARCHY_MESH_DATA;	// 階層構造用メッシュ情報
 
@@ -86,7 +83,7 @@ typedef struct
 } VERTEX_BOARD_DATA;
 
 // ===== クラス定義 =====
-class ResourceManager
+class ResourceManager final
 {
 public:
 	ResourceManager();
@@ -128,13 +125,13 @@ private:
 	static bool checkExisting(CHAR *pszChakNeme, TEXTURE_DATA &textureData);
 	static bool checkExisting(CHAR *pszChakNeme, VERTEX_BOARD_DATA &textureData);
 
-	static void setTime(DOUBLE dTime, CHAR *pszFilename,std::string keyName);
+	static void setTime(DOUBLE dTime, CHAR *pszFilename);
 	
-	static 	HRESULT allocBoneMatrix(LPD3DXMESHCONTAINER meshContainerPtrBase, CHAR *pszFilename,std::string keyName);
-	static 	HRESULT allocAllBoneMatrix(LPD3DXFRAME pFrameBase, CHAR *pszFilename,std::string keyName);
-	static	void calcCollision(LPD3DXFRAME pFrame, CHAR *pszFilename,std::string keyName);
-	static	void calcCollisionFrame(LPD3DXFRAME pFrame, CHAR *pszFilename,std::string keyName);
-	static	void calcCollisionMeshContainer(LPD3DXMESHCONTAINER meshContainerPtr, LPD3DXFRAME pFrame, CHAR *pszFilename,std::string keyName);
+	static 	HRESULT allocBoneMatrix(LPD3DXMESHCONTAINER meshContainerPtrBase, CHAR *pszFilename);
+	static 	HRESULT allocAllBoneMatrix(LPD3DXFRAME pFrameBase, CHAR *pszFilename);
+	static	void calcCollision(LPD3DXFRAME pFrame, CHAR *pszFilename);
+	static	void calcCollisionFrame(LPD3DXFRAME pFrame, CHAR *pszFilename);
+	static	void calcCollisionMeshContainer(LPD3DXMESHCONTAINER meshContainerPtr, LPD3DXFRAME pFrame, CHAR *pszFilename);
 	static	void updateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX pParentMatrix);
 	
 	static 	bool makeVtx(VERTEX_BOARD_DATA&);		// 通常

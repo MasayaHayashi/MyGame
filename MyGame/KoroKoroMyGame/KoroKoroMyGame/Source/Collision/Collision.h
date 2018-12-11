@@ -68,6 +68,7 @@ public:
 
 	static const Transform* getTransform(std::string keyName, INT index);
 	static const RayHit* Collision::getRayHitData(std::string keyName, UINT index);
+	void finalize(std::string keyName);
 
 private:
 	bool IntersectA(Pawn* pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXMATRIX pWorld);

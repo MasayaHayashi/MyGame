@@ -61,7 +61,10 @@ SceneMain::SceneMain()
 	playeresPtr.push_back( static_cast<std::unique_ptr<Player>>( NEW Player(D3DXVECTOR3(-2.0f, 0.0f, 0.0f) , playeresPtr.size() )));
 	playeresPtr.push_back( static_cast<std::unique_ptr<Player>>( NEW Player(D3DXVECTOR3( 4.0f, 0.0f, 2.0f) , playeresPtr.size()	)));
 
-	ballPtr.reset( NEW BallObj()	   );
+	for (UINT ballCnt = 0; ballCnt < playeresPtr.size(); ballCnt++)
+	{
+		ballsPtr.push_back( NEW BallObj(ballCnt));
+	}
 
 	gameObjectesPtr.push_back( std::unique_ptr<Pawn>( NEW Skydome())   );
 	gameObjectesPtr.push_back( std::unique_ptr<Pawn>( NEW MainField()) );
@@ -74,7 +77,11 @@ SceneMain::SceneMain()
 //
 SceneMain::~SceneMain()
 {
-	
+	for (const auto& ballPtr : ballsPtr)
+	{
+		ballPtr->finalize();
+		delete ballPtr;
+	}
 }
 
 //
@@ -95,7 +102,10 @@ void SceneMain::initialize()
 		gameObject->initialize();
 	}
 
-	ballPtr->initialize();
+	for (const auto& ballPtr : ballsPtr)
+	{
+		ballPtr->initialize();
+	}
 }
 
 //
@@ -108,6 +118,7 @@ void SceneMain::finalize()
 		player->finalize();
 	}
 
+	collisionPtr->finalize("Player");
 }
 
 //
@@ -125,12 +136,17 @@ void SceneMain::update()
 		player->update(cameraPtr->getFowerd());
 	}	
 	
+	for (const auto& ballPtr : ballsPtr)
+	{
+		ballPtr->update(playeresPtr.back()->getPosition(), playeresPtr.back()->getPosition());
+	}
+	
 	if (Keyboard::getPress(DIK_1))
 	{
 		SceneManager::setNextScene(SceneManager::SceneState::SceneTitle);
 	}
 
-	ballPtr->update(playeresPtr.back()->getPosition(), playeresPtr.back()->getPosition());
+
 	collisionPtr->update();
 
 
@@ -291,7 +307,11 @@ void SceneMain::draw()
 		player->draw();
 	}
 
-	ballPtr->draw();
+	for (const auto& ballPtr : ballsPtr)
+	{
+		ballPtr->draw();
+	}
+
 	cameraPtr->setCamera();
 
 #if 0

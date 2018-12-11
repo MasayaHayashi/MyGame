@@ -84,6 +84,37 @@ void Camera::finalize(Player *pPlayer)
 	}
 }
 
+#if _DEBUG
+
+//
+//
+//
+void Camera::debugMove()
+{
+	if (Keyboard::getPress(DIK_W))
+	{
+		cameraPos.y += 0.05f;
+	}
+	if (Keyboard::getPress(DIK_A))
+	{
+		cameraPos.x -= 0.05f;
+	}
+	if (Keyboard::getPress(DIK_S))
+	{
+		cameraPos.y -= 0.05f;
+	}
+	if (Keyboard::getPress(DIK_D))
+	{
+		cameraPos.x += 0.05f;
+	}
+
+	DirectX3D::printDebug("cameraPos.x%f\n", cameraPos.x);
+	DirectX3D::printDebug("cameraPos.y%f\n", cameraPos.y);
+	DirectX3D::printDebug("cameraPos.z%f\n", cameraPos.z);
+}
+
+#endif
+
 //
 // ƒJƒƒ‰‰Šú‰»
 //
@@ -735,6 +766,10 @@ void Camera::updateGameMain(Player *pPlayer,Board *pReadyUI)
 	cameraLook.y += 3.0f;
 
 	cameraFowerd = cameraLook - cameraPos;
+
+#if _DEBUG
+	debugMove();
+#endif
 
 //	rotationcamera(pPlayer->getOffset());
 

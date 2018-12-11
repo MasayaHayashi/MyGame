@@ -43,7 +43,7 @@ Collision::Collision(Pawn* setPlayerPtr,Pawn* setFieldPtr)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 Collision::~Collision()
 {
-	
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -79,6 +79,25 @@ void Collision::registerList(Transform *setPawn,std::string keyName)
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 後処理
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Collision::finalize(std::string keyName)
+{
+	for (UINT playerCnt = 0; playerCnt < rayHitMapes["Player"].size(); playerCnt++)
+	{
+		delete rayHitMapes["Player"].back();
+		rayHitMapes["Player"].pop_back();
+	}
+
+	for (UINT fieldCnt = 0; fieldCnt < rayHitMapes["field"].size(); fieldCnt++)
+	{
+		delete rayHitMapes["field"].back();
+		rayHitMapes["field"].pop_back();
+	}
+	
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 地面とプレイヤーの衝突処理更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 UINT Collision::checkCollisionField(Pawn *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec)
@@ -89,7 +108,10 @@ UINT Collision::checkCollisionField(Pawn *pPlayer, Pawn *pPawnB, Pawn *pField, D
 	nIndx = isHitRayToMesh(pField, pPlayer, &pPlayer->getPosition(), &(pPlayer->getPosition() + DestVec), true, &Cross, &Normal, &fLength);
 
 	if (nIndx >= 0)
+	{
 		return true;
+	}
+
 	return false;
 
 }
@@ -252,9 +274,13 @@ INT Collision::isHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos,
 	{
 		// 交点、法線をワールド変換
 		if (pCross)
+		{
 			D3DXVec3TransformCoord(pCross, pCross, pPawnA->getWorldMtx());
+		}
 		if (pNormal)
+		{
 			D3DXVec3TransformNormal(pNormal, pNormal, pPawnA->getWorldMtx());
+		}
 	}
 	return nIndex;
 
@@ -268,14 +294,18 @@ INT Collision::isHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos,
 INT Collision::Intersect(Pawn *pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXVECTOR3 pFLength)
 {
 	if (!pRayPos || !pRayDir)
+	{
 		return -1;
+	}
 
 	// レイ取得
 	D3DXVECTOR3& P0 = *pRayPos;
 	D3DXVECTOR3 W = *pRayDir;
 
 	if (bSegment)
+	{
 		W -= P0;
+	}
 
 	DWORD dwNumIndx = pField->getIndxNum();			// 三角形の数取得	
 	MESH_VTX *pVtx = pField->getVtxAcess();		// 頂点情報取得
@@ -296,7 +326,9 @@ INT Collision::Intersect(Pawn *pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRay
 		// 例外処理
 		if (V1.y >= pRayDir->y &&
 			V2.y >= pRayDir->y)
+		{
 			continue;
+		}
 
 		// 法線ベクトルを取得
 		D3DXVECTOR3 N;
@@ -304,13 +336,16 @@ INT Collision::Intersect(Pawn *pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRay
 		// 分母を算出
 		FLOAT deno = D3DXVec3Dot(&N, &W);
 		if (deno >= 0.0f)
+		{
 			continue;	// 平行(==0)か裏から表(>0)
-
+		}
 						// 内外判定
 		D3DXVECTOR3 N1;
 		D3DXVec3Cross(&N1, &V1, &W);
 		if (D3DXVec3Dot(&N1, &(P0 - P1)) < 0.0f)
+		{
 			continue;
+		}
 
 		D3DXVec3Cross(&N1, &V2, &W);
 

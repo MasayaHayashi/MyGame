@@ -15,7 +15,7 @@ MainField::MainField()
 {
 	strcpy_s(fileName, ModelFilePass.c_str());
 	strcpy_s(texFileName, ModelFilePass.c_str());
-	myTransform.pos		= D3DXVECTOR3(0.0f, -3.0f, 1.0f);
+	myTransform.pos		= D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 	myTransform.scale	= D3DXVECTOR3(0.7f, 0.1f, 0.5f);
 
 	meshPtr = nullptr;

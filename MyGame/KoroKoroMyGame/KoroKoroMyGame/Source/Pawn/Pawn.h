@@ -132,9 +132,14 @@ public:
 	void setAnimChange(UINT, UINT);				// アニメーション切り替え
 
 	void setPawn(Pawn);
-	void setHitData(D3DXVECTOR3 cross, D3DXVECTOR3 normal, D3DXVECTOR3 length, D3DXVECTOR3 destVec);
-	const Pawn& getPawn();
 
+	void setWorldMtxPos(const D3DXVECTOR3 setPos);
+
+#if _DEBUG
+	void debugMove();
+
+	static constexpr FLOAT DebugMoveSpeed = 0.05f;
+#endif
 protected:
 	std::unique_ptr <Collider> colliderPtr = nullptr;
 
@@ -158,7 +163,6 @@ protected:
 
 	Transform			myTransform;
 	HitData				myHitData;
-
 
 	D3DXVECTOR3			destLanding;			// 目的着地位置
 	D3DXVECTOR3			maxVtx;					// 最大頂点位置

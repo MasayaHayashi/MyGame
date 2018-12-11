@@ -674,7 +674,7 @@ FLOAT Pawn::getCollisionRadius()
 	case MeshObjType::NormalModel:
 		return meshDataObj.collisionRadus;
 	case MeshObjType::HierarchyModel:
-		return hierarchyMeshData.collisionRadus;
+		return hierarchyMeshData.fCollisionRadus;
 	default:
 		break;
 	}
@@ -687,7 +687,7 @@ FLOAT Pawn::getCollisionRadius()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 D3DXVECTOR3 Pawn::getCenterPos()
 {
-	return hierarchyMeshData.centerPos;
+	return hierarchyMeshData.CenterPos;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -818,7 +818,7 @@ D3DXVECTOR3 Pawn::getCollisionBox()
 	case MeshObjType::NormalModel:
 		return meshDataObj.collitionBox;
 	case MeshObjType::HierarchyModel:
-		return hierarchyMeshData.collitionBox;
+		return hierarchyMeshData.CollitionBox;
 	default:
 		break;
 	}
@@ -845,7 +845,7 @@ void Pawn::setHitFlg(bool bSet)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 WORD* Pawn::getIndxAcess()
 {
-	return meshDataObj.indexPtr.get();
+	return meshDataObj.indexPtr;
 }
 
 
@@ -854,7 +854,7 @@ WORD* Pawn::getIndxAcess()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 MESH_VTX* Pawn::getVtxAcess()
 {
-	return meshDataObj.vertexPtr.get();
+	return meshDataObj.vertexPtr;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -1037,12 +1037,12 @@ void Pawn::setAnimChange(UINT uSetNum,UINT uWorkNum)
 {
 	// 現在のアニメーションセットの設定値を取得
 	D3DXTRACK_DESC TD;   // トラックの能力
-	hierarchyMeshData.animCtrlPtr->GetTrackDesc(currentAnim, &TD);
+	hierarchyMeshData.pAnimCtrl->GetTrackDesc(currentAnim, &TD);
 
 	// 今のアニメーションをトラック1に移行し
 	// トラックの設定値も移行
 //	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(uWorkNum, hierarchyMeshData.ppAnimSet[currentAnim]);
-	hierarchyMeshData.animCtrlPtr->SetTrackDesc(uWorkNum, &TD);
+	hierarchyMeshData.pAnimCtrl->SetTrackDesc(uWorkNum, &TD);
 
 	// 新しいアニメーションセットをトラック0に設定
 //	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[uSetNum]);
@@ -1055,15 +1055,25 @@ void Pawn::setAnimChange(UINT uSetNum,UINT uWorkNum)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Pawn::updateAnimation()
 {
-	updateFrameMatrices(hierarchyMeshData.frameRoot, &worldMtx);
+	updateFrameMatrices(hierarchyMeshData.pFrameRoot, &worldMtx);
 
-	if (hierarchyMeshData.animCtrlPtr)
+	if (hierarchyMeshData.pAnimCtrl)
 	{
 		DWORD nowTime = timeGetTime();
 		DOUBLE deltaTime = (nowTime - hierarchyMeshData.dwPrev) / 1000.0;
 		hierarchyMeshData.dwPrev = nowTime;
-		hierarchyMeshData.animCtrlPtr->AdvanceTime(deltaTime, nullptr);
+		hierarchyMeshData.pAnimCtrl->AdvanceTime(deltaTime, nullptr);
 	}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// ワールド行列に位置セット
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Pawn::setWorldMtxPos(const D3DXVECTOR3 setPos)
+{
+	worldMtx._41 = setPos.x;
+	worldMtx._42 = setPos.y;
+	worldMtx._43 = setPos.z;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -1073,3 +1083,27 @@ bool Pawn::isUsedShader()
 {
 	return isShader;
 }
+
+#if _DEBUG
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// デバッグ用移動
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Pawn::debugMove()
+{
+	if (Keyboard::getPress(DIK_UPARROW))
+	{
+		myTransform.pos.y += 0.05f;
+	}
+
+	if (Keyboard::getPress(DIK_DOWNARROW))
+	{
+		myTransform.pos.y -= 0.05f;
+	}
+
+	DirectX3D::printDebug("posX:%f\n", myTransform.pos.x);
+	DirectX3D::printDebug("posY:%f\n", myTransform.pos.y);
+	DirectX3D::printDebug("posZ:%f\n", myTransform.pos.z);
+}
+
+#endif

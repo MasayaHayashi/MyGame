@@ -84,6 +84,10 @@ public:
 
 	D3DXVECTOR3 getFowerd();
 
+#if _DEBUG
+	void debugMove();
+#endif
+
 private:
 	/*
 #define	VIEW_ANGLE			(D3DXToRadian(55.0f))	// Ž‹–ìŠp
