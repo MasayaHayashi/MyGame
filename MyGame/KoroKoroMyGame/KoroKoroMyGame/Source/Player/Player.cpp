@@ -93,7 +93,7 @@ void Player::initialize()
 		}
 		else if(idNumber == 1)
 		{
-			initializeGameMain(ModelPenNoHahaPass);
+			initializeGameMain(ModelChick);
 		}
 		break;
 	case SceneManager::SceneState::SceneResult:
@@ -245,7 +245,7 @@ void Player::initializeTitle()
 //ÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅ
 void Player::initializeGameMain(CHAR *setFilePass)
 {
-	myTransform.velocity	= D3DXVECTOR3(3.0f, 0.0f, 0.0f);
+	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.rotDeg		= D3DXVECTOR3(0.0f, 180.0f, 0.0f);
 	myTransform.rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.scale	= D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
@@ -253,7 +253,7 @@ void Player::initializeGameMain(CHAR *setFilePass)
 
 	if (idNumber == 0)
 	{
-		myTransform.pos = D3DXVECTOR3(0.0f, 5.0f, -5.0f);
+		myTransform.pos = D3DXVECTOR3(-5.0f, 5.0f, -5.0f);
 	}
 	else
 	{
@@ -539,9 +539,13 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	if (idNumber == 0)
 	{
 		D3DXVECTOR3 playerToPlayer = player1TransformPtr->pos - player2TransformPtr->pos;
-	
-		FLOAT length = MyVector3::getLength(playerToPlayer);
-		DirectX3D::printDebug("\nÇ»Ç™Ç≥%f",length);
+		
+		const Transform* ball1Transform = Collision::getTransform("Ball", 0);
+		const Transform* ball2Transform = Collision::getTransform("Ball", 1);
+		
+		D3DXVECTOR3 ballToBallVector = ball1Transform->pos - ball2Transform->pos;
+
+		FLOAT length = MyVector3::getLength(ballToBallVector);
 		
 		DirectX3D::printDebug("\n ÇﬁÅ[Ç‘%f", testVec.x);
 
@@ -645,6 +649,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	{
 		myTransform.velocity.z = -0.17f;
 	}
+	DirectX3D::printDebug("\nmytrans%f\n ", myTransform.velocity.x);
 
 	myTransform.pos += myTransform.velocity;
 	myTransform.velocity *= 0.95f;

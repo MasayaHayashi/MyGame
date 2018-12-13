@@ -36,6 +36,7 @@ public:
 
 	CHAR* ModelPenchanPass   = "Data/Model/Character/PenChan/PenguinC.x";
 	CHAR* ModelPenNoHahaPass = "Data/Model/Character/PenNoHaha/PenguinA.x";
+	CHAR* ModelChick		 = "Data/Model/Character/Chick/Chick.x";
 
 
 	void initialize();

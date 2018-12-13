@@ -247,6 +247,12 @@ void BallObj::initializeTitleObj_GameMain()
 
 	ResourceManager::makeModel(meshDataObj, fileName, meshType);
 	ResourceManager::createTexture(textureData, texFileName);
+
+	tagName = "Ball";
+	Collision::registerList(&myTransform, tagName);
+	
+	move(idNumber);
+
 }
 
 
@@ -304,10 +310,12 @@ void BallObj::updateGameMain(D3DXVECTOR3 pos,D3DXVECTOR3 rotVec)
 
 void BallObj::move(const UINT idNumber)
 {
+	D3DXVECTOR3 playerPos = Collision::getTransform("Player", idNumber)->pos;
 
-	myTransform.pos = Collision::getTransform("Player", idNumber)->pos;
+	myTransform.pos = playerPos;
 
-	myTransform.pos.y = 2.45f;
+	myTransform.pos.y = playerPos.y - 0.95f;
+
 
 	setWorldMtxPos(myTransform.pos);
 }
