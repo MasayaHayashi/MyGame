@@ -957,3 +957,4 @@ void Camera::setState(MoceType setState)
 {
 	cameravelocityFade = setState;
 }
+

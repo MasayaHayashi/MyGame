@@ -600,3 +600,20 @@ const RayHit* Collision::getRayHitData(std::string keyName,UINT index)
 
 	return *std::next(rayHitMapes[keyName].begin(), index);
 }
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 加速度セット
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Collision::setVelocity(std::string keyName, UINT index,D3DXVECTOR3 velocity)
+{
+	UINT indexCnt = 0;
+	for (auto collisionMap : collisionMapes[keyName])
+	{
+		if (indexCnt == index)
+		{
+			collisionMap->velocity = velocity;
+		}
+		indexCnt++;
+
+	}
+}

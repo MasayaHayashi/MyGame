@@ -544,7 +544,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 		const Transform* ball2Transform = Collision::getTransform("Ball", 1);
 		
 		D3DXVECTOR3 ballToBallVector = ball1Transform->pos - ball2Transform->pos;
-
+		ballToBallVector.y = 0.0f;
 		FLOAT length = MyVector3::getLength(ballToBallVector);
 		
 		DirectX3D::printDebug("\n ÇﬁÅ[Ç‘%f", testVec.x);
@@ -558,7 +558,13 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 			pv = testVec + nvpe * 0.05f;
 
 			myTransform.velocity += playerToPlayer * 0.4f;
+			
+
+
+			Collision::setVelocity("Player", 1, -ballToBallVector);
 			myTransform.velocity.y = 0.0f;
+
+			
 		}
 
 		if (Keyboard::getPress(DIK_D))
