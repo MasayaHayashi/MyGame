@@ -63,7 +63,8 @@ private:
 	static constexpr FLOAT VelocityForwardSpeed = 0.45f;
 	static constexpr FLOAT VelocitySideSpeed	= 0.3f;
 	static constexpr FLOAT ScaleSize		= 1.0f;
-	static constexpr FLOAT MoveSpeed = 0.04f;
+	static constexpr FLOAT MoveSpeed = 0.004f;
+	static constexpr FLOAT MaxSpeed  = 0.07f;
 
 	void initializeTitle();
 	void initializeSceneEdit();
@@ -84,6 +85,8 @@ private:
 	PlayerState	playerStateType;
 
 	INT score;
+	FLOAT Xnum = 0.0f;
+	FLOAT Ynum = 0.0f;
 
 	D3DXVECTOR3		oldPos;
 	D3DXQUATERNION	startQuaternion;

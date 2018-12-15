@@ -231,18 +231,18 @@ void BallObj::initializeTitleObj_Title()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void BallObj::initializeTitleObj_GameMain()
 {
-	myTransform.pos = D3DXVECTOR3(0.0f, 1.45f, 0.0f);
-	myTransform.velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.rotDeg = D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
-	myTransform.rotDegDest = D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
-	myTransform.scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	myTransform.pos			 = D3DXVECTOR3(0.0f, 1.85f, 0.0f);
+	myTransform.velocity	 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDeg		 = D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
+	myTransform.rotDegDest	 = D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
+	myTransform.scale		 = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
 	// デバイス取得
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
-	pD3DTexture = nullptr;
-	meshPtr = nullptr;
-	materialBufferPtr = nullptr;
+	pD3DTexture			= nullptr;
+	meshPtr				= nullptr;
+	materialBufferPtr	= nullptr;
 	numMat = 0;
 
 	ResourceManager::makeModel(meshDataObj, fileName, meshType);
@@ -251,19 +251,18 @@ void BallObj::initializeTitleObj_GameMain()
 	tagName = "Ball";
 	Collision::registerList(&myTransform, tagName);
 	
-	move(idNumber);
+//	move(idNumber);
 
 }
-
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // リザルト用プレイヤー初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void BallObj::initializeTitleObj_Result()
 {
-	myTransform.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.rotDeg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.pos		   = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.velocity   = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDeg	   = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// 拡大率設定
@@ -305,11 +304,17 @@ void BallObj::UpdateTitleObj_Title()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void BallObj::updateGameMain(D3DXVECTOR3 pos,D3DXVECTOR3 rotVec)
 {
+	setWorldMtxPos(myTransform.pos);
+
 	move(idNumber);
 }
 
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 移動
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void BallObj::move(const UINT idNumber)
 {
+	
 	D3DXVECTOR3 playerPos = Collision::getTransform("Player", idNumber)->pos;
 
 	myTransform.pos = playerPos;
@@ -318,4 +323,5 @@ void BallObj::move(const UINT idNumber)
 
 
 	setWorldMtxPos(myTransform.pos);
+	
 }

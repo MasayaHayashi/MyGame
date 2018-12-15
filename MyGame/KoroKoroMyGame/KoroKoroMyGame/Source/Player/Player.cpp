@@ -275,7 +275,7 @@ void Player::initializeGameMain(CHAR *setFilePass)
 	ResourceManager::makeModelHierarchy(hierarchyMeshData, setFilePass,"Player",meshType);
 
 	// モデル位置調整
-	myTransform.pos.y -= hierarchyMeshData.CollitionBox.y * 2;
+//	myTransform.pos.y -= hierarchyMeshData.CollitionBox.y * 2;
 
 	// 拡大
 	D3DXMATRIX mScale;
@@ -529,11 +529,21 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	const Transform* player1TransformPtr = Collision::getTransform("Player", 0);
 	const Transform* player2TransformPtr = Collision::getTransform("Player", 1);
 
-	FLOAT Xnum = 0.0f;
-	FLOAT Ynum = 0.0f;
 
-	DirectX3D::printDebug("\nぷれいやー1いち%f", player1TransformPtr->pos.x);
-	DirectX3D::printDebug("\nぷれいやー2いち%f", player2TransformPtr->pos.x);
+	Xnum -= 2.0f;
+	Ynum -= 2.0f;
+
+	if (Xnum <= 0.0f)
+	{
+		Xnum = 0.0f;
+	}
+	if (Ynum <= 0.0f)
+	{
+		Ynum = 0.0f;
+	}
+
+	DirectX3D::printDebug("\nぷれいやー1いち%f", player1TransformPtr->pos.y);
+	DirectX3D::printDebug("\nぷれいやー2いち%f", player2TransformPtr->pos.y);
 
 
 	if (idNumber == 0)
@@ -638,22 +648,22 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 
 	myTransform.velocity += testVec * 0.1f;
 
-	if (myTransform.velocity.x > 0.17f)
+	if (myTransform.velocity.x > MaxSpeed)
 	{
-		myTransform.velocity.x = 0.17f;
+		myTransform.velocity.x = MaxSpeed;
 	}
-	if (myTransform.velocity.x < -0.17f)
+	if (myTransform.velocity.x < -MaxSpeed)
 	{
-		myTransform.velocity.x = -0.17f;
+		myTransform.velocity.x = -MaxSpeed;
 	}
 
-	if (myTransform.velocity.z > 0.17f)
+	if (myTransform.velocity.z > MaxSpeed)
 	{
-		myTransform.velocity.z = 0.17f;
+		myTransform.velocity.z = MaxSpeed;
 	}
-	if (myTransform.velocity.z < -0.17f)
+	if (myTransform.velocity.z < -MaxSpeed)
 	{
-		myTransform.velocity.z = -0.17f;
+		myTransform.velocity.z = -MaxSpeed;
 	}
 	DirectX3D::printDebug("\nmytrans%f\n ", myTransform.velocity.x);
 
