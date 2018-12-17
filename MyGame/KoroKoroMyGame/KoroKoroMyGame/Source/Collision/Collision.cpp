@@ -591,6 +591,9 @@ void Collision::checkPlayerCollision()
 
 }
 
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// レイの判定取得
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 const RayHit* Collision::getRayHitData(std::string keyName,UINT index)
 {
 	if (index < 0)
@@ -604,16 +607,17 @@ const RayHit* Collision::getRayHitData(std::string keyName,UINT index)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 加速度セット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Collision::setVelocity(std::string keyName, UINT index,D3DXVECTOR3 velocity)
+void Collision::setVelocity(std::string keyName, UINT index, D3DXVECTOR3 setVelocity)
 {
 	UINT indexCnt = 0;
+
 	for (auto collisionMap : collisionMapes[keyName])
 	{
 		if (indexCnt == index)
 		{
-			collisionMap->velocity = velocity;
+			collisionMap->velocity = setVelocity;
 		}
-		indexCnt++;
 
+		indexCnt++;
 	}
 }

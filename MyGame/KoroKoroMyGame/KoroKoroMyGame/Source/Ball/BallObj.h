@@ -47,7 +47,8 @@ private:
 	void UpdateTitleObj_Title();
 	void updateGameMain(D3DXVECTOR3 pos, D3DXVECTOR3 rotVec);
 	void UpdateTitleObj_Result();
-	void move(const UINT idNumber);
+	void move(const D3DXVECTOR3 moveVector);
+
 
 	SceneManager::SceneState currentScene;
 	C_COLLIDER *pCollider;

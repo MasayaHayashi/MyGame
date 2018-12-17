@@ -68,7 +68,7 @@ public:
 
 	static const Transform* getTransform(std::string keyName, INT index);
 	static const RayHit*    getRayHitData(std::string keyName, UINT index);
-	static void setVelocity(std::string keyName, UINT index, D3DXVECTOR3 velocity);
+	static void setVelocity(std::string keyName, UINT index,D3DXVECTOR3 velocity);
 	void finalize(std::string keyName);
 
 private:
@@ -81,8 +81,8 @@ private:
 	Pawn* playerPtr;
 	Pawn* fieldPtr;
 
-	static std::unordered_map<std::string, std::list<Transform*>> collisionMapes;
-	static std::unordered_map<std::string, std::list<RayHit*>> rayHitMapes;
+	static std::unordered_map<std::string, std::list<Transform*>>	collisionMapes;
+	static std::unordered_map<std::string, std::list<RayHit*>>		rayHitMapes;
 };
 
 #endif

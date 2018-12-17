@@ -117,7 +117,7 @@ public:
 	void setMesh(LPD3DXMESH, LPD3DXBUFFER, DWORD);
 	void setMaterialcolorEmissive(float, float, float, float);	// マテリアルの自己発光値セット
 	void setUsedFlg(bool);										// 使用フラグセット
-	void setvelocitySpeed(D3DXVECTOR3);								// 移動量セット
+	void setvelocitySpeed(D3DXVECTOR3);							// 移動量セット
 	void setOffset(D3DXVECTOR3 setOffset);						// 行列上の位置セット
 	void setNumber(UINT);										// 識別番号セット
 	void setPosition(D3DXVECTOR3);								// 位置セット
@@ -129,7 +129,7 @@ public:
 	void setDestLanding(D3DXVECTOR3 setLanding);				// 着地位置セット
 	void setHitIndex(INT);										// 当たったオブジェクトのインデックスをセット
 
-	void setAnimChange(UINT, UINT);				// アニメーション切り替え
+	void setAnimChange(UINT, UINT);
 
 	void setPawn(Pawn);
 

@@ -231,11 +231,18 @@ void BallObj::initializeTitleObj_Title()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void BallObj::initializeTitleObj_GameMain()
 {
-	myTransform.pos			 = D3DXVECTOR3(0.0f, 1.85f, 0.0f);
-	myTransform.velocity	 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.pos			 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.velocity	 = D3DXVECTOR3(0.0f, 5.0f, 0.0f);
 	myTransform.rotDeg		 = D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
 	myTransform.rotDegDest	 = D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
 	myTransform.scale		 = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+
+	if (idNumber == 1)
+	{
+		myTransform.pos.x = 5.0f;
+		myTransform.pos.y = 0.0f;
+		myTransform.pos.z = 0.0f;
+	}
 
 	// デバイス取得
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
@@ -247,6 +254,8 @@ void BallObj::initializeTitleObj_GameMain()
 
 	ResourceManager::makeModel(meshDataObj, fileName, meshType);
 	ResourceManager::createTexture(textureData, texFileName);
+
+	myTransform.pos.y = meshDataObj.collitionBox.y * 2;
 
 	tagName = "Ball";
 	Collision::registerList(&myTransform, tagName);
@@ -306,22 +315,18 @@ void BallObj::updateGameMain(D3DXVECTOR3 pos,D3DXVECTOR3 rotVec)
 {
 	setWorldMtxPos(myTransform.pos);
 
-	move(idNumber);
+	myTransform.pos += myTransform.velocity;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 移動
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void BallObj::move(const UINT idNumber)
+void BallObj::move(const D3DXVECTOR3 moveVector)
 {
-	
 	D3DXVECTOR3 playerPos = Collision::getTransform("Player", idNumber)->pos;
 
-	myTransform.pos = playerPos;
-
-	myTransform.pos.y = playerPos.y - 0.95f;
-
+	myTransform.pos		= playerPos;
+	myTransform.pos.y	= playerPos.y - 0.95f;
 
 	setWorldMtxPos(myTransform.pos);
-	
 }

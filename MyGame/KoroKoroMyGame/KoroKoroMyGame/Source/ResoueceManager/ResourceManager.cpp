@@ -111,6 +111,7 @@ HRESULT ResourceManager::makeModel(MeshData &meshData, CHAR *pszFilename, MeshOb
 		LPD3DXMESH pmeshTmp = meshes.back()->meshPtr.Get();
 		pmeshTmp->CloneMeshFVF(pmeshTmp->GetOptions(), FVF_TVERTEX, devicePtr, &meshes.back()->meshPtr);
 		delete pmeshTmp;
+		pmeshTmp = nullptr;
 	//	SAFE_RELEASE(pmeshTmp);
 		// –@ü‚ª–³‚¢ê‡‚Í‹­§“I‚É’Ç‰Á
 		if ((dwFVF & D3DFVF_NORMAL) == 0)

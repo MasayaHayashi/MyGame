@@ -208,12 +208,12 @@ void Player::initializeTitle()
 	D3DXMatrixTranslation(&translate, myTransform.pos.x, myTransform.pos.y, myTransform.pos.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &translate);
 
-	testVec = myTransform.pos;
+	moveVector = myTransform.pos;
 
-	testVec.z -= 100.0f;
-	testVec.x -= 100.0f;
-	testVec.y += 0.0f;
-	D3DXVec3Normalize(&testVec, &testVec);
+	moveVector.z -= 100.0f;
+	moveVector.x -= 100.0f;
+	moveVector.y += 0.0f;
+	D3DXVec3Normalize(&moveVector, &moveVector);
 
 	// コライダー初期化
 	//pCollider = NEW Collider(pos, hierarchyMeshData.collitionBox);
@@ -375,10 +375,10 @@ void Player::initializeSceneEdit()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::initializeResult()
 {
-	myTransform.pos		 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.pos			 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.velocity	 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.rotDeg		 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.rotDegDest  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDegDest	 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// 拡大率設定
 	myTransform.scale = D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
@@ -524,14 +524,8 @@ void Player::updateTitle(D3DXVECTOR3 CameraForward)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 {
-	updateAnimation();
-
-	const Transform* player1TransformPtr = Collision::getTransform("Player", 0);
-	const Transform* player2TransformPtr = Collision::getTransform("Player", 1);
-
-
-	Xnum -= 2.0f;
-	Ynum -= 2.0f;
+	Xnum -= 0.0004f;
+	Ynum -= 0.0004f;
 
 	if (Xnum <= 0.0f)
 	{
@@ -542,41 +536,17 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 		Ynum = 0.0f;
 	}
 
-	DirectX3D::printDebug("\nぷれいやー1いち%f", player1TransformPtr->pos.y);
-	DirectX3D::printDebug("\nぷれいやー2いち%f", player2TransformPtr->pos.y);
+	updateAnimation();
 
-
-	if (idNumber == 0)
+	if (isHit())
 	{
-		D3DXVECTOR3 playerToPlayer = player1TransformPtr->pos - player2TransformPtr->pos;
-		
-		const Transform* ball1Transform = Collision::getTransform("Ball", 0);
-		const Transform* ball2Transform = Collision::getTransform("Ball", 1);
-		
-		D3DXVECTOR3 ballToBallVector = ball1Transform->pos - ball2Transform->pos;
-		ballToBallVector.y = 0.0f;
-		FLOAT length = MyVector3::getLength(ballToBallVector);
-		
-		DirectX3D::printDebug("\n むーぶ%f", testVec.x);
+		rebound(idNumber);
+	}
 
-		if (length < 1.5f)
-		{
-			D3DXVECTOR3 nvpe;
-			D3DXVec3Normalize(&nvpe, &playerToPlayer);
+	rideBall(idNumber);
 
-			D3DXVECTOR3 pv;
-			pv = testVec + nvpe * 0.05f;
-
-			myTransform.velocity += playerToPlayer * 0.4f;
-			
-
-
-			Collision::setVelocity("Player", 1, -ballToBallVector);
-			myTransform.velocity.y = 0.0f;
-
-			
-		}
-
+	if (idNumber == 0 && !isHit())
+	{
 		if (Keyboard::getPress(DIK_D))
 		{
 			Xnum += MoveSpeed;
@@ -594,7 +564,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 			Ynum += MoveSpeed;
 		}
 	}
-	else if (idNumber == 1)
+	else if (idNumber == 1 && !isHit())
 	{
 		if (Keyboard::getPress(DIK_L))
 		{
@@ -625,28 +595,31 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	else
 	{
 		if (idNumber == 0)
-		myTransform.velocity.y = 0.0f;
+		{
+			myTransform.velocity.y = 0.0f;
+		}
 	}
+
+
 
 
 	D3DXVECTOR3 CameraRight = D3DXVECTOR3(CameraForward.z, 0.0f, -CameraForward.x);
 
-	D3DXVec3Normalize(&testVec, &testVec);
-
-	testVec = CameraRight * Xnum + CameraForward * Ynum;
+	moveVector = CameraRight * Xnum + CameraForward * Ynum;
 
 	D3DXVECTOR3 UpVec = getUpVec();
 	D3DXVec3Normalize(&UpVec, &UpVec);
 
 	D3DXQuaternionRotationAxis(&quatanion, &UpVec, 0);
 	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
-	D3DXVec3Normalize(&testVec, &testVec);
+	D3DXVec3Normalize(&moveVector, &moveVector);
 
+	moveVector.y = 0.0f;
 
+	myTransform.velocity += (moveVector * 0.1f);
+	DirectX3D::printDebug("velocityXXXXXXXXXXXXXX%f", myTransform.velocity.x);
 
-	testVec.y = 0.0f;
-
-	myTransform.velocity += testVec * 0.1f;
+	Collision::setVelocity("Ball", idNumber, myTransform.velocity);
 
 	if (myTransform.velocity.x > MaxSpeed)
 	{
@@ -665,16 +638,17 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	{
 		myTransform.velocity.z = -MaxSpeed;
 	}
-	DirectX3D::printDebug("\nmytrans%f\n ", myTransform.velocity.x);
+
+	DirectX3D::printDebug("\f mytrans%f\n ", myTransform.velocity.x);
 
 	myTransform.pos += myTransform.velocity;
-	myTransform.velocity *= 0.95f;
+	myTransform.velocity *= 0.994f;
 
 	D3DXVECTOR3 FowrdVec = getForwardVec();
 	D3DXVECTOR3	RightVec = getRightVec();
 	D3DXVECTOR3 Upvec = getUpVec();
 
-	radRot = MyVector3::CalcAngleDegree(testVec, -FowrdVec);
+	radRot = MyVector3::CalcAngleDegree(moveVector, -FowrdVec);
 	D3DXQUATERNION quatanion;
 
 	if (radRot == 0.0f)
@@ -1000,6 +974,75 @@ void Player::changeState()
 void Player::move()
 {
 
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 跳ね返り処理
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Player::rebound(size_t index)
+{
+	const Transform* player1TransformPtr = Collision::getTransform("Player", 0);
+	const Transform* player2TransformPtr = Collision::getTransform("Player", 1);
+	const Transform* ball1Transform = Collision::getTransform("Ball", 0);
+	const Transform* ball2Transform = Collision::getTransform("Ball", 1);
+
+	D3DXVECTOR3 playerToPlayer		= player1TransformPtr->pos - player2TransformPtr->pos;
+
+	playerToPlayer.y = 0.0f;
+	playerToPlayer *= 0.5f;
+
+	D3DXVECTOR3 nvpe;
+	D3DXVec3Normalize(&nvpe, &playerToPlayer);
+
+	D3DXVECTOR3 pv;
+	pv = moveVector + nvpe;
+
+	myTransform.velocity += playerToPlayer;
+
+	Collision::setVelocity("Player", 1, -playerToPlayer);
+	myTransform.velocity.y = 0.0f;
+
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 衝突判定
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+bool Player::isHit()
+{
+	const Transform* ball1Transform = Collision::getTransform("Ball", 0);
+	const Transform* ball2Transform = Collision::getTransform("Ball", 1);
+
+	D3DXVECTOR3 ballToBallVector = ball1Transform->pos - ball2Transform->pos;
+	ballToBallVector.y = 0.0f;
+
+	FLOAT length = MyVector3::getLength(ballToBallVector);
+
+	if (length < HitLength)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// ボール乗っかり
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Player::rideBall(size_t setIndex)
+{
+	switch (meshType)
+	{
+	case MeshObjType::NormalModel:
+		myTransform.pos = Collision::getTransform("Ball", setIndex)->pos;
+		myTransform.pos.y += meshDataObj.collitionBox.y;
+		break;
+	case MeshObjType::HierarchyModel:
+		myTransform.pos = Collision::getTransform("Ball", setIndex)->pos;
+		myTransform.pos.y += hierarchyMeshData.CollitionBox.y;
+		break;
+	}
 }
 
 void Player::input()

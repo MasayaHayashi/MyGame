@@ -38,7 +38,6 @@ public:
 	CHAR* ModelPenNoHahaPass = "Data/Model/Character/PenNoHaha/PenguinA.x";
 	CHAR* ModelChick		 = "Data/Model/Character/Chick/Chick.x";
 
-
 	void initialize();
 	void finalize();
 	void update(D3DXVECTOR3);
@@ -63,8 +62,9 @@ private:
 	static constexpr FLOAT VelocityForwardSpeed = 0.45f;
 	static constexpr FLOAT VelocitySideSpeed	= 0.3f;
 	static constexpr FLOAT ScaleSize		= 1.0f;
-	static constexpr FLOAT MoveSpeed = 0.004f;
+	static constexpr FLOAT MoveSpeed = 0.0004f;
 	static constexpr FLOAT MaxSpeed  = 0.07f;
+	static constexpr FLOAT HitLength = 1.5f;
 
 	void initializeTitle();
 	void initializeSceneEdit();
@@ -74,13 +74,17 @@ private:
 	void updateResult();
 	void input();
 	void move();
+	void rideBall(size_t setIndex);
+
+	void rebound(size_t index);
+	bool isHit();
 
 	void changeStatus();	// ステータス変更処理
 	void changeState();		// 状態変更処理
 
 	FLOAT rotCnt = 0.0f;
 
-	D3DXVECTOR3	testVec;
+	D3DXVECTOR3	moveVector;
 
 	PlayerState	playerStateType;
 
