@@ -131,6 +131,7 @@
     <ClCompile Include="Source\LoadIcon\MyLoadIcon.cpp" />
     <ClCompile Include="Source\MainField\MainField.cpp" />
     <ClCompile Include="Source\MeshFieldBase\MeshFieldBase.cpp" />
+    <ClCompile Include="Source\MyDelete\MyDelete.cpp" />
     <ClCompile Include="Source\MyHierarchy\MyHierarchy.cpp" />
     <ClCompile Include="Source\MyVector3\MyVector3.cpp" />
     <ClCompile Include="Source\Pawn\Pawn.cpp" />
@@ -142,6 +143,7 @@
     <ClCompile Include="Source\Scene\Main\SceneMain.cpp" />
     <ClCompile Include="Source\Scene\Title\SceneTitle.cpp" />
     <ClCompile Include="Source\Skydome\Skydome.cpp" />
+    <ClCompile Include="Source\Star\Star.cpp" />
     <ClCompile Include="Source\TitleUI\TitleUI.cpp" />
     <ClCompile Include="Source\Transform\Transform.cpp" />
   </ItemGroup>
@@ -167,6 +169,7 @@
     <ClInclude Include="Source\MainField\MainField.h" />
     <ClInclude Include="Source\MeshFieldBase\MeshFieldBase.h" />
     <ClInclude Include="Source\Mesh\Mesh.h" />
+    <ClInclude Include="Source\MyDelete\MyDelete.h" />
     <ClInclude Include="Source\MyHierarchy\MyHierarchy.h" />
     <ClInclude Include="Source\MyVector3\MyVector3.h" />
     <ClInclude Include="Source\Pawn\Pawn.h" />
@@ -178,6 +181,7 @@
     <ClInclude Include="Source\Scene\Main\SceneMain.h" />
     <ClInclude Include="Source\Scene\Title\SceneTitle.h" />
     <ClInclude Include="Source\Skydome\Skydome.h" />
+    <ClInclude Include="Source\Star\Star.h" />
     <ClInclude Include="Source\TitleUI\TitleUI.h" />
     <ClInclude Include="Source\Transform\Transform.h" />
   </ItemGroup>

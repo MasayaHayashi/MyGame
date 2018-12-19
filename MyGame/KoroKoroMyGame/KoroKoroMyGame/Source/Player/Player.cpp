@@ -320,10 +320,10 @@ void Player::initializeSceneEdit()
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	// 各種変数初期化
-	pD3DTexture		= nullptr;
-	meshPtr		= nullptr;
+	pD3DTexture			= nullptr;
+	meshPtr				= nullptr;
 	materialBufferPtr	= nullptr;
-	numMat			= 0;
+	numMat				= 0;
 
 	// Xファイルの読み込み
 	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName,"Player",meshType);
@@ -353,7 +353,6 @@ void Player::initializeSceneEdit()
 
 	// 表示フラグ初期化
 //	pCollider->setUsedFlg(false);
-
 
 	// 現在のアニメーションセットの設定値を取得
 	D3DXTRACK_DESC TD;   // トラックの能力
@@ -584,27 +583,9 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 		}
 	}
 
-
-	if (!Collision::getRayHitData("Player", 0)->isHit)
-	{
-		if (idNumber == 0)
-		{
-			myTransform.velocity.y -= FallSpeed;
-		}
-	}
-	else
-	{
-		if (idNumber == 0)
-		{
-			myTransform.velocity.y = 0.0f;
-		}
-	}
-
-
-
+	fall(idNumber);
 
 	D3DXVECTOR3 CameraRight = D3DXVECTOR3(CameraForward.z, 0.0f, -CameraForward.x);
-
 	moveVector = CameraRight * Xnum + CameraForward * Ynum;
 
 	D3DXVECTOR3 UpVec = getUpVec();
@@ -639,10 +620,8 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 		myTransform.velocity.z = -MaxSpeed;
 	}
 
-	DirectX3D::printDebug("\f mytrans%f\n ", myTransform.velocity.x);
-
 	myTransform.pos += myTransform.velocity;
-	myTransform.velocity *= 0.994f;
+	myTransform.velocity *= 0.964f;
 
 	D3DXVECTOR3 FowrdVec = getForwardVec();
 	D3DXVECTOR3	RightVec = getRightVec();
@@ -989,7 +968,7 @@ void Player::rebound(size_t index)
 	D3DXVECTOR3 playerToPlayer		= player1TransformPtr->pos - player2TransformPtr->pos;
 
 	playerToPlayer.y = 0.0f;
-	playerToPlayer *= 0.5f;
+	playerToPlayer *= 0.08f;
 
 	D3DXVECTOR3 nvpe;
 	D3DXVec3Normalize(&nvpe, &playerToPlayer);
@@ -1042,6 +1021,27 @@ void Player::rideBall(size_t setIndex)
 		myTransform.pos = Collision::getTransform("Ball", setIndex)->pos;
 		myTransform.pos.y += hierarchyMeshData.CollitionBox.y;
 		break;
+	}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 落下
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Player::fall(size_t checkIndex)
+{
+	if (!Collision::getRayHitData("Player", checkIndex)->isHit)
+	{
+		if (idNumber == checkIndex)
+		{
+			myTransform.velocity.y -= FallSpeed;
+		}
+	}
+	else
+	{
+		if (idNumber == checkIndex)
+		{
+			myTransform.velocity.y = 0.0f;
+		}
 	}
 }
 

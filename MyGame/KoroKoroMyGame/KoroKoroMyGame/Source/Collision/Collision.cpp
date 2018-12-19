@@ -16,10 +16,11 @@
 #include "../SceneManager/SceneManager.h"
 #include "../Transform/Transform.h"
 #include "../MyVector3/MyVector3.h"
+#include "../MyDelete/MyDelete.h"
 
 // ===== 静的メンバ =====
 std::unordered_map<std::string, std::list<Transform*>> Collision::collisionMapes;
-std::unordered_map<std::string, std::list<RayHit*>> Collision::rayHitMapes;
+std::unordered_map<std::string, std::vector<RayHit*>>  Collision::rayHitMapes;
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -34,7 +35,7 @@ Collision::Collision()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 Collision::Collision(Pawn* setPlayerPtr,Pawn* setFieldPtr)
 {
-	playerPtr = setPlayerPtr;
+	playersPtr.push_back(setPlayerPtr);
 	fieldPtr  = setFieldPtr;
 }
 
@@ -52,20 +53,29 @@ Collision::~Collision()
 void Collision::update()
 {
 	D3DXVECTOR3 cross, normal, length;
-	if (checkCollisionField(playerPtr, playerPtr, fieldPtr, cross, normal, length, D3DXVECTOR3(0.0f, -0.1f, 0.0f)))
+
+	UINT playerIndex = 0;
+
+	
+
+	for (auto player : playersPtr)
 	{
-		if (MyVector3::getLength(length) < 1.02f)
+		if (checkCollisionField(player, player, fieldPtr, cross, normal, length, D3DXVECTOR3(0.0f, -0.1f, 0.0f)))
 		{
-			DirectX3D::printDebug("あたっています");
+			if (MyVector3::getLength(length) < 1.02f)
+			{
+				DirectX3D::printDebug("あたっています");
+			}
+
+			rayHitMapes["Player"][playerIndex]->isHit = true;
 
 		}
-		rayHitMapes["Player"].front()->isHit = true;
+		else
+		{
+			rayHitMapes["Player"][playerIndex]->isHit = false;
+		}
 
-	}
-	else
-	{
-		DirectX3D::printDebug("あたっていません");
-		rayHitMapes["Player"].front()->isHit = false;
+		playerIndex ++;
 	}
 }
 
@@ -85,7 +95,7 @@ void Collision::finalize(std::string keyName)
 {
 	for (UINT playerCnt = 0; playerCnt < rayHitMapes["Player"].size(); playerCnt++)
 	{
-		delete rayHitMapes["Player"].back();
+		Mydelete::safeDelete(rayHitMapes["Player"].back());
 		rayHitMapes["Player"].pop_back();
 	}
 
@@ -137,6 +147,14 @@ bool Collision::IsHitSphereToSphere(Pawn *pPawnA,Pawn *pPawnB)
 	{
 		return false;
 	}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// プレイヤーセット
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Collision::setPlayer(Pawn* playerPtr)
+{
+	playersPtr.push_back(playerPtr);
 }
 
 /*

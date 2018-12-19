@@ -12,6 +12,8 @@
 #include "../../MainField/MainField.h"
 #include "../../Collision/Collision.h"
 #include "../../Ball/BallObj.h"
+#include "../../MyDelete/MyDelete.h"
+#include "../../Board/Board.h"
 
 /*
 #include "C_Board.h"
@@ -66,10 +68,14 @@ SceneMain::SceneMain()
 		ballsPtr.push_back( NEW BallObj(ballCnt));
 	}
 
-	gameObjectesPtr.push_back( std::unique_ptr<Pawn>( NEW Skydome())   );
-	gameObjectesPtr.push_back( std::unique_ptr<Pawn>( NEW MainField()) );
+	gameObjectesPtr.push_back(  std::unique_ptr<Pawn>( NEW Skydome())   );
+	gameObjectesPtr.push_back(  std::unique_ptr<Pawn>( NEW MainField()) );
+
+	boardObjectesPtr.push_back( std::unique_ptr<Board>(NEW Board() ));
 
 	collisionPtr.reset(NEW Collision(playeresPtr.front().get(),gameObjectesPtr.back().get()));
+	collisionPtr.get()->setPlayer(playeresPtr.back().get());
+
 }
 
 //
@@ -77,10 +83,10 @@ SceneMain::SceneMain()
 //
 SceneMain::~SceneMain()
 {
-	for (const auto& ballPtr : ballsPtr)
+	for (auto& ballPtr : ballsPtr)
 	{
 		ballPtr->finalize();
-		delete ballPtr;
+		Mydelete::safeDelete(ballPtr);
 	}
 }
 
@@ -100,6 +106,11 @@ void SceneMain::initialize()
 	for (const auto &gameObject : gameObjectesPtr)
 	{
 		gameObject->initialize();
+	}
+
+	for (const auto &boardObject : boardObjectesPtr)
+	{
+		boardObject->initialize();
 	}
 
 	for (const auto& ballPtr : ballsPtr)
@@ -139,6 +150,11 @@ void SceneMain::update()
 	for (const auto& ballPtr : ballsPtr)
 	{
 		ballPtr->update(playeresPtr.back()->getPosition(), playeresPtr.back()->getPosition());
+	}
+
+	for (const auto &boardObject : boardObjectesPtr)
+	{
+		boardObject->update();
 	}
 	
 	if (Keyboard::getPress(DIK_1))
@@ -300,6 +316,11 @@ void SceneMain::draw()
 		{
 			gameObject->draw();
 		}
+	}
+
+	for (const auto &boardObject : boardObjectesPtr)
+	{
+		boardObject->draw();
 	}
 
 	for (const auto &player : playeresPtr)

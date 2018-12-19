@@ -17,6 +17,8 @@ public:
 
 	MyVector3();
 	~MyVector3();
+
+	MyVector3 operator+(const MyVector3 &Vector);
 	
 	static bool CalcHermiteCurve(D3DXVECTOR3 *pOut, const D3DXVECTOR3& Pos1, const D3DXVECTOR3& Pos2, const D3DXVECTOR3& Vec1, const D3DXVECTOR3& Vec2, const FLOAT& fMax, const FLOAT& fCurrent);	// エルミート曲線
 	static void CalcBezierCurve(D3DXVECTOR3* pOut, const D3DXVECTOR3& Pos1, const D3DXVECTOR3& Pos2, const D3DXVECTOR3& Pos3, const D3DXVECTOR3& Pos4, const FLOAT& fMax, const FLOAT& fCurrent);
@@ -41,6 +43,10 @@ public:
 	static FLOAT CalcAngleDegree(D3DXVECTOR3 vectorA, D3DXVECTOR3 vectorB);
 	static FLOAT Product2Vec(D3DXVECTOR3 VecA, D3DXVECTOR3 VecB);
 
+private :
+	FLOAT x;
+	FLOAT y;
+	FLOAT z;
 
 };
 

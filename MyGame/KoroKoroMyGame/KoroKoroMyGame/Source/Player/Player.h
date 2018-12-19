@@ -63,7 +63,7 @@ private:
 	static constexpr FLOAT VelocitySideSpeed	= 0.3f;
 	static constexpr FLOAT ScaleSize		= 1.0f;
 	static constexpr FLOAT MoveSpeed = 0.0004f;
-	static constexpr FLOAT MaxSpeed  = 0.07f;
+	static constexpr FLOAT MaxSpeed  = 0.02f;
 	static constexpr FLOAT HitLength = 1.5f;
 
 	void initializeTitle();
@@ -75,6 +75,7 @@ private:
 	void input();
 	void move();
 	void rideBall(size_t setIndex);
+	void fall(size_t checkIndex);
 
 	void rebound(size_t index);
 	bool isHit();

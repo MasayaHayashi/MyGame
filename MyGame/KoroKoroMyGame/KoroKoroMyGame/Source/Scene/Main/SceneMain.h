@@ -44,6 +44,7 @@ class Player;
 class Pawn;
 class Collision;
 class BallObj;
+class Board;
 
 // ===== ƒNƒ‰ƒX’è‹` =====
 class SceneMain : public SceneBase
@@ -91,6 +92,7 @@ private:
 	std::list<BallObj*>  ballsPtr;
 	std::list<std::unique_ptr<Player>>	 playeresPtr;
 	std::list<std::unique_ptr<Pawn>>	 gameObjectesPtr;
+	std::list<std::unique_ptr<Board>>	 boardObjectesPtr;
 
 	GameState				currentGameState;
 	static UINT				currentStage;

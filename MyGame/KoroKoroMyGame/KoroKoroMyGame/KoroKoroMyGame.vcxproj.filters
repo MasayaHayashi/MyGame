@@ -124,6 +124,12 @@
     <Filter Include="ソース ファイル\Factory">
       <UniqueIdentifier>{9c66d529-4767-4938-a3b9-ce633682694f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Delete">
+      <UniqueIdentifier>{b4ef6d1d-9274-48d9-b4bf-73b692f68b10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Star">
+      <UniqueIdentifier>{1768d4f1-67c5-4ebd-9fe0-2c0d9428eb46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Audio\MyAudiere.cpp">
@@ -218,6 +224,12 @@
     </ClCompile>
     <ClCompile Include="Source\Transform\Transform.cpp">
       <Filter>ソース ファイル\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MyDelete\MyDelete.cpp">
+      <Filter>ソース ファイル\Delete</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Star\Star.cpp">
+      <Filter>ソース ファイル\Star</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -322,6 +334,12 @@
     </ClInclude>
     <ClInclude Include="Source\Transform\Transform.h">
       <Filter>ソース ファイル\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MyDelete\MyDelete.h">
+      <Filter>ソース ファイル\Delete</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Star\Star.h">
+      <Filter>ソース ファイル\Star</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

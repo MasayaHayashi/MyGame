@@ -206,21 +206,19 @@ D3DXVECTOR3 MyVector3::Vec3Cross(D3DXVECTOR3 VecA,D3DXVECTOR3 VecB)
 	return Cross;
 }
 
-/*
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// 内積
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-const T CalcInnerProduct(const TNhVector2& b) const
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 演算子+のオーバーロード
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+MyVector3 MyVector3::operator+(const MyVector3 &setVector)
 {
-	return x * b.x + y * b.y;
-}
+	MyVector3 vector;
 
-// 外積
-const T CalcOuterProduct(const TNhVector2& b) const
-{
-	return x * b.y - y * b.x;
+	vector.x = x + setVector.x;
+	vector.y = y + setVector.y;
+	vector.z = z + setVector.z;
+
+	return vector;
 }
-*/
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 二次元の外積

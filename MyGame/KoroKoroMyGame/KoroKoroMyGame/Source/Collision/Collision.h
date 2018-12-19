@@ -71,6 +71,8 @@ public:
 	static void setVelocity(std::string keyName, UINT index,D3DXVECTOR3 velocity);
 	void finalize(std::string keyName);
 
+	void setPlayer(Pawn* playerPtr);
+
 private:
 	bool IntersectA(Pawn* pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXMATRIX pWorld);
 
@@ -78,11 +80,11 @@ private:
 
 	void checkPlayerCollision();
 
-	Pawn* playerPtr;
+	std::list<Pawn*> playersPtr;
 	Pawn* fieldPtr;
 
-	static std::unordered_map<std::string, std::list<Transform*>>	collisionMapes;
-	static std::unordered_map<std::string, std::list<RayHit*>>		rayHitMapes;
+	static std::unordered_map < std::string, std::list<Transform*>> collisionMapes;
+	static std::unordered_map < std::string, std::vector<RayHit* >> rayHitMapes;
 };
 
 #endif
