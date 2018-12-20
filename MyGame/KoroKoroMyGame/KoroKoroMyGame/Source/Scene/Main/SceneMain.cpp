@@ -13,7 +13,7 @@
 #include "../../Collision/Collision.h"
 #include "../../Ball/BallObj.h"
 #include "../../MyDelete/MyDelete.h"
-#include "../../Board/Board.h"
+#include "../../Star/Star.h"
 
 /*
 #include "C_Board.h"
@@ -71,7 +71,7 @@ SceneMain::SceneMain()
 	gameObjectesPtr.push_back(  std::unique_ptr<Pawn>( NEW Skydome())   );
 	gameObjectesPtr.push_back(  std::unique_ptr<Pawn>( NEW MainField()) );
 
-	boardObjectesPtr.push_back( std::unique_ptr<Board>(NEW Board() ));
+	boardObjectesPtr.push_back( std::unique_ptr<Board>(NEW Star() ));
 
 	collisionPtr.reset(NEW Collision(playeresPtr.front().get(),gameObjectesPtr.back().get()));
 	collisionPtr.get()->setPlayer(playeresPtr.back().get());

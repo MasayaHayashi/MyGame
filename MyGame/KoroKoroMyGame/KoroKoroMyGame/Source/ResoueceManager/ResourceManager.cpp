@@ -292,12 +292,12 @@ bool ResourceManager::makeVtx(VERTEX_BOARD_DATA &vtxBoardData)
 	case boardType::Billboard:
 	{
 		// オブジェクトの頂点バッファを生成
-		if (FAILED(devicePtr->CreateVertexBuffer(sizeof(VERTEX_3D) * DirectX3D::VertexSize,	// 頂点データ用に確保するバッファサイズ(バイト単位)
+		if (FAILED(DirectX3D::getDevice()->CreateVertexBuffer(sizeof(VERTEX_3D) * 4,	// 頂点データ用に確保するバッファサイズ(バイト単位)
 			D3DUSAGE_WRITEONLY,							// 頂点バッファの使用法　
 			FVF_VERTEX_3D,								// 使用する頂点フォーマット
 			D3DPOOL_MANAGED,							// リソースのバッファを保持するメモリクラスを指定
-			&vtxBoard.back()->pD3DVtxBuff,			// 頂点バッファインターフェースへのポインタ
-			nullptr)))										// nullptrに設定
+			&vtxBoard.back()->pD3DVtxBuff,				// 頂点バッファインターフェースへのポインタ
+			NULL)))										// NULLに設定
 		{
 			return false;
 		}
@@ -308,11 +308,39 @@ bool ResourceManager::makeVtx(VERTEX_BOARD_DATA &vtxBoardData)
 		// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
 		vtxBoard.back()->pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
+		/*
+		if (SizeBoard.z == 0.0f)
+		{
+		// 頂点座標の設定
+		pVtx[0].vtx = D3DXVECTOR3(-SizeBoard.x / 2.0f, -SizeBoard.y / 2.0f, 0.0f);
+		pVtx[1].vtx = D3DXVECTOR3(-SizeBoard.x / 2.0f, SizeBoard.y / 2.0f, 0.0f);
+		pVtx[2].vtx = D3DXVECTOR3(SizeBoard.x / 2.0f, -SizeBoard.y / 2.0f, 0.0f);
+		pVtx[3].vtx = D3DXVECTOR3(SizeBoard.x / 2.0f, SizeBoard.y / 2.0f, 0.0f);
+		}
+		else
+		{
+		// 頂点座標の設定
+		pVtx[0].vtx = D3DXVECTOR3(-SizeBoard.x / 2.0f, 0.0f, -SizeBoard.z);
+		pVtx[1].vtx = D3DXVECTOR3(-SizeBoard.x / 2.0f, 0.0f, SizeBoard.z);
+		pVtx[2].vtx = D3DXVECTOR3(SizeBoard.x / 2.0f, 0.0f, -SizeBoard.z);
+		pVtx[3].vtx = D3DXVECTOR3(SizeBoard.x / 2.0f, 0.0f, SizeBoard.z);
+		}
+		*/
+
+
 		pVtx[0].vtx = D3DXVECTOR3(-vtxBoardData.size.x, vtxBoardData.size.y, 0.0f);
 		pVtx[1].vtx = D3DXVECTOR3(vtxBoardData.size.x, vtxBoardData.size.y, 0.0f);
 		pVtx[2].vtx = D3DXVECTOR3(-vtxBoardData.size.x, -vtxBoardData.size.y, 0.0f);
 		pVtx[3].vtx = D3DXVECTOR3(vtxBoardData.size.x, -vtxBoardData.size.y, 0.0f);
-
+		/*
+		{
+		// 頂点座標の設定
+		pVtx[0].vtx = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		pVtx[1].vtx = D3DXVECTOR3(SizeBoard.x, 0.0f, 0.0f);
+		pVtx[2].vtx = D3DXVECTOR3(0.0f,SizeBoard.y, 0.0f);
+		pVtx[3].vtx = D3DXVECTOR3(SizeBoard.x,SizeBoard.y, 0.0f);
+		}
+		*/
 		// 法線の設定
 		if (vtxBoardData.size.z == 0.0f)
 		{
@@ -343,10 +371,18 @@ bool ResourceManager::makeVtx(VERTEX_BOARD_DATA &vtxBoardData)
 		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
 		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 
+
+		/*
+		pVtx[0].tex = D3DXVECTOR2(0.0f, 1.0f);
+		pVtx[1].tex = D3DXVECTOR2(0.0f, 0.0f);
+		pVtx[2].tex = D3DXVECTOR2(1.0f, 1.0f);
+		pVtx[3].tex = D3DXVECTOR2(1.0f, 0.0f);
+
+		*/
 		// 頂点データをアンロックする
 		vtxBoard.back()->pD3DVtxBuff->Unlock();
-	}
 		return true;
+	}
 	case boardType::Polygon3d:
 		// オブジェクトの頂点バッファを生成
 		if (FAILED(devicePtr->CreateVertexBuffer(sizeof(VERTEX_3D) * DirectX3D::VertexSize,	// 頂点データ用に確保するバッファサイズ(バイト単位)

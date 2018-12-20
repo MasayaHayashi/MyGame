@@ -20,7 +20,7 @@ TitleUI::TitleUI()
 {
 	strcpy_s(fileName, TEX_FILENAME);
 	vertexBoard.pos					 = D3DXVECTOR3(Application::ScreenCenterX * 0.5f, 0.0f, 0.0f);
-	vertexBoard.rot					 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	vertexBoard.rotDeg					 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	vertexBoard.scale					 = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 	vertexBoard.size					 = D3DXVECTOR3(921.0f, 177.0f, 0.0f);
 	vertexBoard.radAngle = 0.0f;

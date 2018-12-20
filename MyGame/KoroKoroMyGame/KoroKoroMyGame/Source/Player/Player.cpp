@@ -12,7 +12,6 @@
 #include "../ResoueceManager/ResourceManager.h"
 #include "../Collision/Collision.h"
 #include "../Ball/BallObj.h"
-#include "../Transform/Transform.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -537,14 +536,14 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 
 	updateAnimation();
 
-	if (isHit())
+	if (isHit("Ball"))
 	{
 		rebound(idNumber);
 	}
 
 	rideBall(idNumber);
 
-	if (idNumber == 0 && !isHit())
+	if (idNumber == 0 && !isHit("Ball"))
 	{
 		if (Keyboard::getPress(DIK_D))
 		{
@@ -563,7 +562,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 			Ynum += MoveSpeed;
 		}
 	}
-	else if (idNumber == 1 && !isHit())
+	else if (idNumber == 1 && !isHit("Ball"))
 	{
 		if (Keyboard::getPress(DIK_L))
 		{
@@ -982,29 +981,29 @@ void Player::rebound(size_t index)
 	myTransform.velocity.y = 0.0f;
 
 }
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// 衝突判定
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-bool Player::isHit()
-{
-	const Transform* ball1Transform = Collision::getTransform("Ball", 0);
-	const Transform* ball2Transform = Collision::getTransform("Ball", 1);
-
-	D3DXVECTOR3 ballToBallVector = ball1Transform->pos - ball2Transform->pos;
-	ballToBallVector.y = 0.0f;
-
-	FLOAT length = MyVector3::getLength(ballToBallVector);
-
-	if (length < HitLength)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
+//
+////＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+//// 衝突判定
+////＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+//bool Player::isHit()
+//{
+//	const Transform* ball1Transform = Collision::getTransform("Ball", 0);
+//	const Transform* ball2Transform = Collision::getTransform("Ball", 1);
+//
+//	D3DXVECTOR3 ballToBallVector = ball1Transform->pos - ball2Transform->pos;
+//	ballToBallVector.y = 0.0f;
+//
+//	FLOAT length = MyVector3::getLength(ballToBallVector);
+//
+//	if (length < HitLength)
+//	{
+//		return true;
+//	}
+//	else
+//	{
+//		return false;
+//	}
+//}
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ボール乗っかり

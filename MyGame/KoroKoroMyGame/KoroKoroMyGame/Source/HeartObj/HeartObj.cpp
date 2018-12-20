@@ -28,10 +28,10 @@ HeartObj::HeartObj()
 	pCollider = nullptr;
 
 	// ˆÊ’uEŒü‚«‚Ì‰Šúİ’è
-	myTransform.pos		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.pos			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.rotDeg		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDegDest	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// Šg‘å—¦İ’è
 	myTransform.scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
@@ -231,10 +231,10 @@ void HeartObj::initializeTitleObj_GameMain()
 //
 void HeartObj::initializeTitleObj_Result()
 {
-	myTransform.pos		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.pos			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.rotDeg		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDegDest	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// Šg‘å—¦İ’è
 	myTransform.scale	= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
@@ -245,7 +245,7 @@ void HeartObj::initializeTitleObj_Result()
 	pD3DTexture			= nullptr;
 	meshPtr				= nullptr;
 	materialBufferPtr	= nullptr;
-	numMat		 = 0;
+	numMat				= 0;
 
 	ResourceManager::makeModel(meshDataObj, fileName,meshType);
 	ResourceManager::createTexture(textureData, texFileName);

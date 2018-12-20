@@ -50,6 +50,8 @@ class Player;
 class Collision
 {
 public:
+	static constexpr FLOAT HitLength = 1.5f;
+
 	Collision();	
 	~Collision();	
 	Collision(Pawn* setPlayerPtr, Pawn* setFieldPtr);
@@ -62,23 +64,19 @@ public:
 
 	UINT checkCollisionField(Pawn *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec);
 
-	bool IsHitSphereToSphere(Pawn *, Pawn*);					// 球と球のあたり判定
-	bool isHitAABB(const Pawn pawnA, const Pawn pawnB) const;
-	bool IsHitAABBItem(Player *pPlayer, Pawn *pPawn);				// AABBのアイテム用判定
+	bool IsHitSphereToSphere(Pawn *, Pawn*);
 
 	static const Transform* getTransform(std::string keyName, INT index);
 	static const RayHit*    getRayHitData(std::string keyName, UINT index);
+	static const std::list<Transform*> getTransform(std::string keyName);
 	static void setVelocity(std::string keyName, UINT index,D3DXVECTOR3 velocity);
 	void finalize(std::string keyName);
 
 	void setPlayer(Pawn* playerPtr);
 
+
 private:
 	bool IntersectA(Pawn* pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXMATRIX pWorld);
-
-	void SwitchHitType(Pawn *, Pawn *);
-
-	void checkPlayerCollision();
 
 	std::list<Pawn*> playersPtr;
 	Pawn* fieldPtr;

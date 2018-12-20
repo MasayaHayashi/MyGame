@@ -77,7 +77,7 @@ typedef struct
 	D3DXVECTOR3				pos;					// 位置
 	D3DXVECTOR3				size;					// 大きさ
 	D3DXVECTOR3				scale;				// 拡大率
-	D3DXVECTOR3				rot;				// 回転角度
+	D3DXVECTOR3				rotDeg;				// 回転角度
 	FLOAT					radAngle;			// 2D用回転角度
 	bool					fade;					// フェード用
 } VERTEX_BOARD_DATA;

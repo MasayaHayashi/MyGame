@@ -43,21 +43,18 @@ public:
 	void setPosition(D3DXVECTOR3);			// 位置セット
 	void setUsedFlg(bool setflg);			// 使用フラグセット
 	void setvelocity(D3DXVECTOR3 velocityNum);		// 移動量セット
-	void setCnt(FLOAT fset);				// カウンタセット
-	void setCnt(INT nset);					// カウンタセット
 	void setCurrentAnimPattern(INT nAnim);	// アニメーションセット
 	void setStartCurvePos(D3DXVECTOR3 );	// ベジェ曲線、エルミート曲線用スタート位置セット
 	void setNarrowFlg(bool bset);
 	void destroyBoard();					// 板ポリゴン解放
 
-
+	bool isHit(std::string keyName);
 	// ゲッター
 	LPDIRECT3DTEXTURE9		getTexture();		// テクスチャ情報生成
 	LPDIRECT3DVERTEXBUFFER9 getVtxBuff();		// 頂点情報生成
 	BOOL					getUsedFlg();		// 使用フラグ取得 
 	D3DXVECTOR3				getPosition();		// 座標取得
 	D3DXVECTOR3				getSize();			// 大きさ取得
-	FLOAT					getCurveCnt();		// 線形補間用カウンタ取得
 	UINT					getCurrentAnim();	// アニメパターン取得
 
 protected:

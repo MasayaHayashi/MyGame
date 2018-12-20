@@ -10,6 +10,8 @@
 #include "../SceneManager/SceneManager.h"
 #include "../DirectX3D/DirectX3D.h"
 #include "../Camera/camera.h"
+#include "../Collision/Collision.h"
+#include "../MyVector3/MyVector3.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -20,10 +22,10 @@ Board::Board()
 	pD3DTexture	= nullptr;
 	vertexBoard.fade	= false;
 	pos					= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	scale				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	scale				= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 	size				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot					= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	velocityBoard			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	velocityBoard		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	posDestBoard		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	tempQuaternion		= D3DXQUATERNION(0, 0, 0, 1);
 	radAngle		= 0.0f;
@@ -772,7 +774,7 @@ void Board::setcolor()
 void Board::initializeStatus()
 {
 	vertexBoard.pos = D3DXVECTOR3(Application::ScreenCenterX, Application::ScreenCenterY, 0.0f);
-	vertexBoard.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	vertexBoard.rotDeg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	vertexBoard.scale = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	setVtx();
@@ -911,4 +913,28 @@ void Board::setStartCurvePos(D3DXVECTOR3 SetStart)
 UINT Board::getCurrentAnim()
 {
 	return currentAnimPattern;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 当たっているか
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+bool Board::isHit(std::string keyName)
+{
+	const Transform* ball1Transform = Collision::getTransform(keyName, 0);
+	const Transform* ball2Transform = Collision::getTransform(keyName, 1);
+
+	D3DXVECTOR3 ballToBallVector = ball1Transform->pos - ball2Transform->pos;
+	ballToBallVector.y = 0.0f;
+
+	FLOAT length = MyVector3::getLength(ballToBallVector);
+
+	if (length < Collision::HitLength)
+	{
+		return true;
+
+	}
+	else
+	{
+		return false;
+	}
 }

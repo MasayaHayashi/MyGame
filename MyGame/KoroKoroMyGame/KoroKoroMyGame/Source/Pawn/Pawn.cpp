@@ -10,6 +10,8 @@
 #include "../Figure/Figure.h"
 #include <tchar.h>
 #include "../KeyBoard/Keyboard.h"
+#include "../Collision/Collision.h"
+#include "../MyVector3/MyVector3.h"
 
 // ===== グローバル変数宣言 =====
 #define SAFE_DELETE(p)       { if(p!=nullptr) { delete (p);     (p) = nullptr; } }
@@ -52,7 +54,6 @@ Pawn::Pawn()
 
 	curSelectAnim	= 0;
 	endAnim			= false;
-	isHit			= false;
 	isGround		= false;
 	isShader		= false;
 
@@ -833,13 +834,6 @@ std::string Pawn::getTag()
 	return tagName.c_str();
 }
 
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// あたり判定フラグセット
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::setHitFlg(bool bSet)
-{
-	isHit = bSet;
-}
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // インデックスバッファアクセス用ポインタ取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -1082,6 +1076,31 @@ void Pawn::setWorldMtxPos(const D3DXVECTOR3 setPos)
 bool Pawn::isUsedShader()
 {
 	return isShader;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 当たっているか
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+bool Pawn::isHit(std::string keyName)
+{
+	
+	const Transform* ball1Transform = Collision::getTransform(keyName, 0);
+	const Transform* ball2Transform = Collision::getTransform(keyName, 1);
+
+	D3DXVECTOR3 ballToBallVector = ball1Transform->pos - ball2Transform->pos;
+	ballToBallVector.y = 0.0f;
+
+	FLOAT length = MyVector3::getLength(ballToBallVector);
+
+	if (length < Collision::HitLength)
+	{
+		return true;
+
+	}
+	else
+	{
+		return false;
+	}
 }
 
 #if _DEBUG

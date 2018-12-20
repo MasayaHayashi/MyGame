@@ -118,9 +118,6 @@
     <Filter Include="ソース ファイル\Ball">
       <UniqueIdentifier>{7beb89ec-0581-456e-9b11-9a97521ddd23}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Transform">
-      <UniqueIdentifier>{3fdb3a7e-5f5f-40c2-a174-ea5fcc83a772}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Factory">
       <UniqueIdentifier>{9c66d529-4767-4938-a3b9-ce633682694f}</UniqueIdentifier>
     </Filter>
@@ -221,9 +218,6 @@
     </ClCompile>
     <ClCompile Include="Source\Ball\BallObj.cpp">
       <Filter>ソース ファイル\Ball</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Transform\Transform.cpp">
-      <Filter>ソース ファイル\Transform</Filter>
     </ClCompile>
     <ClCompile Include="Source\MyDelete\MyDelete.cpp">
       <Filter>ソース ファイル\Delete</Filter>
@@ -331,9 +325,6 @@
     </ClInclude>
     <ClInclude Include="Source\Ball\BallObj.h">
       <Filter>ソース ファイル\Ball</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Transform\Transform.h">
-      <Filter>ソース ファイル\Transform</Filter>
     </ClInclude>
     <ClInclude Include="Source\MyDelete\MyDelete.h">
       <Filter>ソース ファイル\Delete</Filter>

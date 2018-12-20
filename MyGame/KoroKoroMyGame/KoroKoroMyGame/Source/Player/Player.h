@@ -64,7 +64,6 @@ private:
 	static constexpr FLOAT ScaleSize		= 1.0f;
 	static constexpr FLOAT MoveSpeed = 0.0004f;
 	static constexpr FLOAT MaxSpeed  = 0.02f;
-	static constexpr FLOAT HitLength = 1.5f;
 
 	void initializeTitle();
 	void initializeSceneEdit();
@@ -78,7 +77,6 @@ private:
 	void fall(size_t checkIndex);
 
 	void rebound(size_t index);
-	bool isHit();
 
 	void changeStatus();	// ステータス変更処理
 	void changeState();		// 状態変更処理

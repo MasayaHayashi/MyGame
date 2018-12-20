@@ -13,7 +13,6 @@
 #include "../Mesh/Mesh.h"
 #include "../MyHierarchy/MyHierarchy.h"
 #include "../ResoueceManager/ResourceManager.h"
-#include "../Transform/Transform.h"
 #include <vector>
 #include <memory>
 #include <string>
@@ -123,7 +122,6 @@ public:
 	void setPosition(D3DXVECTOR3);								// 位置セット
 	void setTranslate(D3DXVECTOR3);								// 位置セット
 	void setRotation(D3DXVECTOR3);								// 回転セット
-	void setHitFlg(bool );										// 衝突判定セット
 	void setIsGround(bool );									// 地面上判定セット
 	void setDefaultValue();										// 初期値セット
 	void setDestLanding(D3DXVECTOR3 setLanding);				// 着地位置セット
@@ -134,6 +132,8 @@ public:
 	void setPawn(Pawn);
 
 	void setWorldMtxPos(const D3DXVECTOR3 setPos);
+
+	bool isHit(std::string keyName);
 
 #if _DEBUG
 	void debugMove();
@@ -185,7 +185,6 @@ protected:
 	FLOAT				oldRadRot;				// 前の回転角度
 	FLOAT				collisionRadus;			// あたり判定用サイズ
 	bool				isShader;				// シェーダー使用
-	bool				isHit;					// 当たっているかどうか
 	bool				isGround;				// 地面の上か
 	bool				isUsed;					// 使用中か
 
@@ -214,6 +213,7 @@ protected:
 	MeshObjType					meshType;				// メッシュの種類
 	UINT						currentAnim;			// アニメーション
 private:
+
 
 #define FVF_TVERTEX	(D3DFVF_XYZ|D3DFVF_NORMAL|D3DFVF_TEX1)
 
