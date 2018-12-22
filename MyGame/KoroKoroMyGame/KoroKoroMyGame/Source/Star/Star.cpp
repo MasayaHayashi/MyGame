@@ -7,6 +7,7 @@
 #include "../Star/Star.h"
 #include "../Application/Application.h"
 #include "../Collision/Collision.h"
+#include "../DirectX3D/DirectX3D.h"
 
 // ===== 定数・マクロ定義 =====
 
@@ -71,8 +72,13 @@ void Star::update()
 	if (isHit("Ball"))
 	{
 		vertexBoard.pos = Collision::getTransform("Ball",0)->pos;
-		vertexBoard.pos.z -= 2.0f;
+		
+		D3DXVECTOR3 cameraToBallVec = cameraPos - vertexBoard.pos;
+		D3DXVec3Normalize(&cameraToBallVec,&cameraToBallVec);
+		vertexBoard.pos += cameraToBallVec * 5;
 	}
+	DirectX3D::printDebug("aaaaaaaaaa:%f\n", vertexBoard.pos.x);
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

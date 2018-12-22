@@ -115,8 +115,6 @@ void Board::draw()
 			// 頂点フォーマットの設定
 			devicePtr->SetFVF(FVF_VERTEX_2D);
 
-			// テクスチャの設定
-			//if(Texture.pD3DTexture)
 			devicePtr->SetTexture(0, texture.pD3DTexture);
 
 			// アルファブレンド設定
@@ -124,9 +122,6 @@ void Board::draw()
 			{
 				devicePtr->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 			}
-
-			// テクスチャの設定（フレーム部分）
-			//	devicePtr->SetTexture(0,pD3DTexture);
 
 			// ポリゴンの描画（フレーム部分）
 			devicePtr->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, Polygon);
@@ -199,22 +194,8 @@ void Board::draw()
 			// αテストを無効に
 			devicePtr->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 
-			// アルファブレンド設定を戻す
-	//		devicePtr->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-
 		break;
 	case boardType::Polygon3d:
-
-	//	D3DXMATRIX mtxRot, mtxTranslate;
-		/*
-		// 減算合成
-		devicePtr->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_REVSUBTRACT);	// 結果 = 転送先(DEST) - 転送元(SRC)
-		devicePtr->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-		devicePtr->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
-
-		// Z比較なし
-		//	devicePtr->SetRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);
-		*/
 
 		// ワールドマトリックスの初期化
 		D3DXMatrixIdentity(&worldMtx);
@@ -266,15 +247,6 @@ void Board::draw()
 		// ポリゴンの描画
 		devicePtr->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, Polygon);
 
-		/*
-		// 通常ブレンド
-		devicePtr->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);			// 結果 = 転送元(SRC) + 転送先(DEST)
-		devicePtr->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-		devicePtr->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-
-		// Z比較あり
-		devicePtr->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
-		*/
 		break;
 	default:
 		break;
@@ -380,7 +352,9 @@ bool Board::createTexture(TEXTURE_DATA &Texture)
 
 	// テクスチャの読み込み
 	if (D3DXCreateTextureFromFile(devicePtr, fileName, &Texture.pD3DTexture))
+	{
 		return true;
+	}
 
 	return false;
 }

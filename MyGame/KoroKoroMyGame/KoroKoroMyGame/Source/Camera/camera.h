@@ -13,6 +13,7 @@
 #include "../Application/Application.h"
 #include "../SceneManager/SceneManager.h"
 #include "../camera/camera.h"
+#include "../Pawn/Pawn.h"
 #include <vector>
 
 // ===== 定数・マクロ定義 =====
@@ -128,10 +129,10 @@ private:
 	};
 
 	void initializeStageEdit();					
-//	void initializeGameMain(Player *pPlayer);
 
 	void rotationCamera(D3DXVECTOR3 Center);
 
+	Transform myTransform;
 
 	D3DXVECTOR3 fadePos[3];
 	D3DXVECTOR3 fadeLook[3];

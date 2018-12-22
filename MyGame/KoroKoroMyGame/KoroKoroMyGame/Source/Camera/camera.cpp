@@ -13,6 +13,7 @@
 #include "../Player/Player.h"
 #include "../Board/Board.h"
 #include "../Application/Application.h"
+#include "../Collision/Collision.h"
 
 /*
 #include "C_Block.h"
@@ -45,6 +46,8 @@ Camera::Camera()
 
 	rot = 0;
 	rotCnt = 0;
+
+	Collision::registerList(&myTransform, "Camera");
 }
 
 //

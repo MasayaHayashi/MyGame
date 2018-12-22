@@ -162,7 +162,6 @@ void SceneMain::update()
 		SceneManager::setNextScene(SceneManager::SceneState::SceneTitle);
 	}
 
-
 	collisionPtr->update();
 
 
