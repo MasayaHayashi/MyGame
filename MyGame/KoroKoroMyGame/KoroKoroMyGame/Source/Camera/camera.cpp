@@ -6,7 +6,6 @@
 
 // ===== インクルード部 =====
 #include "Camera.h"
-#include "d3dx9.h"
 #include "../SceneManager/SceneManager.h"
 #include "../DirectX3D/DirectX3D.h"
 #include "../KeyBoard/Keyboard.h"
@@ -14,17 +13,6 @@
 #include "../Board/Board.h"
 #include "../Application/Application.h"
 #include "../Collision/Collision.h"
-
-/*
-#include "C_Block.h"
-#include "C_Player.h"
-#include "C_Ready.h"
-#include "C_Xinput.h"
-
-#if _DEBUG
-#include "debugproc.h"
-#endif
-*/
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -38,7 +26,7 @@ Camera::Camera()
 	cameraUpDest	= D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	currentState	= cameraState::Type1Person;
 
-	cameraFowerd	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	cameraFowerd	= D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 	changeCamera	= true;
 	lerpCnt		= 0.0f;
 
@@ -96,24 +84,24 @@ void Camera::debugMove()
 {
 	if (Keyboard::getPress(DIK_W))
 	{
-		cameraPos.y += 0.05f;
+		myTransform.pos.y += 0.05f;
 	}
 	if (Keyboard::getPress(DIK_A))
 	{
-		cameraPos.x -= 0.05f;
+		myTransform.pos.x -= 0.05f;
 	}
 	if (Keyboard::getPress(DIK_S))
 	{
-		cameraPos.y -= 0.05f;
+		myTransform.pos.y -= 0.05f;
 	}
 	if (Keyboard::getPress(DIK_D))
 	{
-		cameraPos.x += 0.05f;
+		myTransform.pos.x += 0.05f;
 	}
 
-	DirectX3D::printDebug("cameraPos.x%f\n", cameraPos.x);
-	DirectX3D::printDebug("cameraPos.y%f\n", cameraPos.y);
-	DirectX3D::printDebug("cameraPos.z%f\n", cameraPos.z);
+	DirectX3D::printDebug("myTransform.pos.x%f\n", myTransform.pos.x);
+	DirectX3D::printDebug("myTransform.pos.y%f\n", myTransform.pos.y);
+	DirectX3D::printDebug("myTransform.pos.z%f\n", myTransform.pos.z);
 }
 
 #endif
@@ -124,24 +112,17 @@ void Camera::debugMove()
 void Camera::initialize()
 {
 
-	cameraPos	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);							// カメラの視点
-	cameraLook  = D3DXVECTOR3(0.0f,0.0f,0.0f);	// カメラの注視点
+	myTransform.pos	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);							// カメラの視点
+	myTransform.look  = D3DXVECTOR3(0.0f,0.0f,0.0f);	// カメラの注視点
 	cameraUp	= D3DXVECTOR3(0.0f, 1.0f, 0.0f);									// カメラの上方向
 	
-	cameraPosDest = D3DXVECTOR3(0.0f, 0.0f, -9000.0f);								// カメラの視点の目的位置
-//	cameraLookDest = D3DXVECTOR3(PlayerPos.x, PlayerPos.y + 1.7f, PlayerPos.z);		// カメラの注視点の目的位置
-
-																					//	D3DXVECTOR3 ForwardVec = pPlayer->getForwardVec();
-																					//	D3DXVec3Normalize(&ForwardVec, &ForwardVec);
-
-																					//	ForwardVec *= 5.0f;
-																					//	cameraPosDest -= ForwardVec;
+	myTransform.posDest = D3DXVECTOR3(0.0f, 0.0f, -9000.0f);
 
 	cameraRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// カメラの回転量
 
 	float fVecX, fVecZ;			// カメラから注視点までの距離
-	fVecX = cameraPosDest.x - cameraLook.x;
-	fVecZ = cameraPosDest.z - cameraLook.z;
+	fVecX = myTransform.posDest.x - myTransform.look.x;
+	fVecZ = myTransform.posDest.z - myTransform.look.z;
 
 	lengthIntervalcamera = sqrt(fVecX * fVecX + fVecZ * fVecZ);		// カメラの視点と注視点の距離
 
@@ -158,25 +139,22 @@ void Camera::initialize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ初期化（タイトル）
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::initializeTitle(Player *pPlayer)
+void Camera::initializeTitle()
 {
-	// プレイヤー情報取得
-	D3DXVECTOR3 PlayerPos = pPlayer->getOffset();
+	myTransform.pos  = D3DXVECTOR3(0.0f, 3.0f, -19.0f);
+	myTransform.look = D3DXVECTOR3(0.0f,0.0f,0.0f);
+	myTransform.up   = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 
-	cameraPos  = D3DXVECTOR3(0.0f, 3.0f, -19.0f);							// カメラの視点
-	cameraLook = D3DXVECTOR3(PlayerPos.x, PlayerPos.y -0.7f, PlayerPos.z);	// カメラの注視点
-	cameraUp   = pPlayer->getUpVec();										// カメラの上方向
+	myTransform.posDest  = D3DXVECTOR3(0.0f, 0.0f, -9.0f);
+	myTransform.lookDest = D3DXVECTOR3(0.0f,0.0f,0.0f);
 
-	cameraPosDest  = D3DXVECTOR3(0.0f, 0.0f, -9.0f);								// カメラの視点の目的位置
-	cameraLookDest = D3DXVECTOR3(PlayerPos.x, PlayerPos.y - 25.0f, PlayerPos.z);		// カメラの注視点の目的位置
+	cameraRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
-	cameraRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// カメラの回転量
+	FLOAT fVecX, fVecZ;
+	fVecX = myTransform.posDest.x - myTransform.look.x;
+	fVecZ = myTransform.posDest.z - myTransform.look.z;
 
-	float fVecX, fVecZ;			// カメラから注視点までの距離
-	fVecX = cameraPosDest.x - cameraLook.x;
-	fVecZ = cameraPosDest.z - cameraLook.z;
-
-	lengthIntervalcamera = sqrt(fVecX * fVecX + fVecZ * fVecZ);		// カメラの視点と注視点の距離
+	lengthIntervalcamera = sqrt(fVecX * fVecX + fVecZ * fVecZ);
 
 	D3DXMatrixIdentity(&mtxView);
 
@@ -191,18 +169,18 @@ void Camera::initializeStageEdit()
 {
 	// プレイヤー情報取得
 
-	cameraPos = D3DXVECTOR3(0.0f, 10.0f, -19.0f);							// カメラの視点
-	cameraLook = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// カメラの注視点
+	myTransform.pos = D3DXVECTOR3(0.0f, 10.0f, -19.0f);							// カメラの視点
+	myTransform.look = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// カメラの注視点
 	cameraUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);								// カメラの上方向
 
-	cameraPosDest = D3DXVECTOR3(0.0f, -0.0f, -9.0f);								// カメラの視点の目的位置
-	cameraLookDest = D3DXVECTOR3(0.0f,0.0f,0.0f);		// カメラの注視点の目的位置
+	myTransform.posDest = D3DXVECTOR3(0.0f, -0.0f, -9.0f);								// カメラの視点の目的位置
+	myTransform.lookDest = D3DXVECTOR3(0.0f,0.0f,0.0f);		// カメラの注視点の目的位置
 
 	cameraRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// カメラの回転量
 
 	float fVecX, fVecZ;			// カメラから注視点までの距離
-	fVecX = cameraPosDest.x - cameraLook.x;
-	fVecZ = cameraPosDest.z - cameraLook.z;
+	fVecX = myTransform.posDest.x - myTransform.look.x;
+	fVecZ = myTransform.posDest.z - myTransform.look.z;
 
 	lengthIntervalcamera = sqrt(fVecX * fVecX + fVecZ * fVecZ);		// カメラの視点と注視点の距離
 
@@ -225,26 +203,22 @@ void Camera::initializeMain(Player *pPlayer)
 	fadePos[1]  = PlayerPos + D3DXVECTOR3(-4.0f, PlayerPos.y  + 4.3f, 5.0f);
 	fadePos[0]  = D3DXVECTOR3(0.0f, 10.0f, -19.0f);
 
-	cameraPos	= D3DXVECTOR3(0.0f, 10.0f, -25.0f);			// カメラの視点
-	cameraLook	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// カメラの注視点
-	cameraUp	= D3DXVECTOR3(0.0f, 1.0f, 0.0f);			// カメラの上方向
+	myTransform.pos		= D3DXVECTOR3(0.0f, 10.0f, -25.0f);			// カメラの視点
+	myTransform.look	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// カメラの注視点
+	cameraUp			= D3DXVECTOR3(0.0f, 1.0f, 0.0f);			// カメラの上方向
 
-	cameraPosDest	= D3DXVECTOR3(0.0f, -1.0f, -5.0f);		// カメラの視点の目的位置
-	cameraLookDest	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// カメラの注視点の目的位置
+	myTransform.posDest		= D3DXVECTOR3(0.0f, -1.0f, -5.0f);		// カメラの視点の目的位置
+	myTransform.lookDest	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// カメラの注視点の目的位置
 
 
 	cameraRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// カメラの回転量
 
-	float fVecX, fVecZ;			// カメラから注視点までの距離
-	fVecX = cameraPosDest.x - cameraLook.x;
-	fVecZ = cameraPosDest.z - cameraLook.z;
+	FLOAT fVecX, fVecZ;			// カメラから注視点までの距離
+	fVecX = myTransform.posDest.x - myTransform.look.x;
+	fVecZ = myTransform.posDest.z - myTransform.look.z;
 
 	lengthIntervalcamera = sqrt(fVecX * fVecX + fVecZ * fVecZ);		// カメラの視点と注視点の距離
 
-//	heightcameraP = CHASE_HEIGHT_P;	// 追跡時の視点の高さ
-//	heightcameraL = CHASE_HEIGHT_L;	// 追跡時の注視点の高さ
-
-										// 行列初期化
 	D3DXMatrixIdentity(&mtxView);
 }
 
@@ -271,7 +245,7 @@ void Camera::update(Player *pPlayer,Board *pReadyUI)
 		updateTitle(pPlayer);
 		break;
 	case SceneManager::SceneState::SceneMain:
-		updateGameMain(pPlayer, pReadyUI);
+	//	updateGameMain(pPlayer, pReadyUI);
 		break;
 	case SceneManager::SceneState::SceneResult:
 		break;
@@ -295,13 +269,13 @@ void Camera::updateTitle(Pawn *pPlayer)
 	D3DXVec3Normalize(&UpVec, &UpVec);
 	D3DXVec3Normalize(&ForwardVec, &ForwardVec);
 
-	cameraLook = PlayerPos;
-	cameraLook.y += 2.2f;
-	cameraFowerd = cameraLook - cameraPos;
+	myTransform.look = PlayerPos;
+	myTransform.look.y += 2.2f;
+	myTransform.fowerd = myTransform.look - myTransform.pos;
 	
 #if 1 // 線形補間処理
 	// 共通処理
-	D3DXVec3Lerp(&cameraPos, &cameraPos, &cameraPosDest, lerpCnt);
+	D3DXVec3Lerp(&myTransform.pos, &myTransform.pos, &myTransform.posDest, lerpCnt);
 	D3DXVec3Normalize(&cameraUp, &cameraUp);
 
 	// 線形補間用
@@ -318,9 +292,9 @@ void Camera::updateTitle(Pawn *pPlayer)
 	rotvelocityCamera += velocityCameraDest;
 	
 
-	float vecX, vecZ;
-	vecX = cameraPos.x - cameraLook.x;
-	vecZ = cameraPos.z - cameraLook.z;
+	FLOAT vecX, vecZ;
+	vecX = myTransform.pos.x - myTransform.look.x;
+	vecZ = myTransform.pos.z - myTransform.look.z;
 	lengthIntervalcamera = sqrtf(vecX * vecX + vecZ * vecZ);
 
 #if _DEBUG
@@ -330,59 +304,59 @@ void Camera::updateTitle(Pawn *pPlayer)
 	{
 		if (getKeyboardPress(DIK_W))
 		{// 左前移動
-			cameraPos.x -= cosf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
-			cameraPos.z += sinf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			myTransform.pos.x -= cosf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			myTransform.pos.z += sinf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
 		}
 		else if (getKeyboardPress(DIK_S))
 		{// 左後移動
-			cameraPos.x -= cosf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
-			cameraPos.z += sinf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			myTransform.pos.x -= cosf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			myTransform.pos.z += sinf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
 		}
 		else
 		{// 左移動
-			cameraPos.x -= cosf(cameraRot.y) * VALUE_velocity_camera;
-			cameraPos.z += sinf(cameraRot.y) * VALUE_velocity_camera;
+			myTransform.pos.x -= cosf(cameraRot.y) * VALUE_velocity_camera;
+			myTransform.pos.z += sinf(cameraRot.y) * VALUE_velocity_camera;
 		}
 
-		cameraLook.x = cameraPos.x + sinf(cameraRot.y) * lengthIntervalcamera;
-		cameraLook.z = cameraPos.z + cosf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.x = myTransform.pos.x + sinf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.z = myTransform.pos.z + cosf(cameraRot.y) * lengthIntervalcamera;
 	}
 	else if (getKeyboardPress(DIK_D))
 	{
 		if (getKeyboardPress(DIK_W))
 		{// 右前移動
-			cameraPos.x += cosf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
-			cameraPos.z -= sinf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			myTransform.pos.x += cosf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			myTransform.pos.z -= sinf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
 		}
 		else if (getKeyboardPress(DIK_S))
 		{// 右後移動
-			cameraPos.x += cosf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
-			cameraPos.z -= sinf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			myTransform.pos.x += cosf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			myTransform.pos.z -= sinf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
 		}
 		else
 		{// 右移動
-			cameraPos.x += cosf(cameraRot.y) * VALUE_velocity_camera;
-			cameraPos.z -= sinf(cameraRot.y) * VALUE_velocity_camera;
+			myTransform.pos.x += cosf(cameraRot.y) * VALUE_velocity_camera;
+			myTransform.pos.z -= sinf(cameraRot.y) * VALUE_velocity_camera;
 		}
 
-		cameraLook.x = cameraPos.x + sinf(cameraRot.y) * lengthIntervalcamera;
-		cameraLook.z = cameraPos.z + cosf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.x = myTransform.pos.x + sinf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.z = myTransform.pos.z + cosf(cameraRot.y) * lengthIntervalcamera;
 	}
 	else if (getKeyboardPress(DIK_W))
 	{// 前移動
-		cameraPos.x += sinf(cameraRot.y) * VALUE_velocity_camera;
-		cameraPos.z += cosf(cameraRot.y) * VALUE_velocity_camera;
+		myTransform.pos.x += sinf(cameraRot.y) * VALUE_velocity_camera;
+		myTransform.pos.z += cosf(cameraRot.y) * VALUE_velocity_camera;
 
-		cameraLook.x = cameraPos.x + sinf(cameraRot.y) * lengthIntervalcamera;
-		cameraLook.z = cameraPos.z + cosf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.x = myTransform.pos.x + sinf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.z = myTransform.pos.z + cosf(cameraRot.y) * lengthIntervalcamera;
 	}
 	else if (getKeyboardPress(DIK_S))
 	{// 後移動
-		cameraPos.x -= sinf(cameraRot.y) * VALUE_velocity_camera;
-		cameraPos.z -= cosf(cameraRot.y) * VALUE_velocity_camera;
+		myTransform.pos.x -= sinf(cameraRot.y) * VALUE_velocity_camera;
+		myTransform.pos.z -= cosf(cameraRot.y) * VALUE_velocity_camera;
 
-		cameraLook.x = cameraPos.x + sinf(cameraRot.y) * lengthIntervalcamera;
-		cameraLook.z = cameraPos.z + cosf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.x = myTransform.pos.x + sinf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.z = myTransform.pos.z + cosf(cameraRot.y) * lengthIntervalcamera;
 	}
 
 	if (getKeyboardPress(DIK_Z))
@@ -393,8 +367,8 @@ void Camera::updateTitle(Pawn *pPlayer)
 			cameraRot.y -= D3DX_PI * 2.0f;
 		}
 
-		cameraPos.x = cameraLook.x - sinf(cameraRot.y) * lengthIntervalcamera;
-		cameraPos.z = cameraLook.z - cosf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.pos.x = myTransform.look.x - sinf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.pos.z = myTransform.look.z - cosf(cameraRot.y) * lengthIntervalcamera;
 	}
 	if (getKeyboardPress(DIK_C))
 	{// 視点旋回「右」
@@ -404,16 +378,16 @@ void Camera::updateTitle(Pawn *pPlayer)
 			cameraRot.y += D3DX_PI * 2.0f;
 		}
 
-		cameraPos.x = cameraLook.x - sinf(cameraRot.y) * lengthIntervalcamera;
-		cameraPos.z = cameraLook.z - cosf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.pos.x = myTransform.look.x - sinf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.pos.z = myTransform.look.z - cosf(cameraRot.y) * lengthIntervalcamera;
 	}
 	if (getKeyboardPress(DIK_Y))
 	{// 視点移動「上」
-		cameraPos.y += VALUE_velocity_camera;
+		myTransform.pos.y += VALUE_velocity_camera;
 	}
 	if (getKeyboardPress(DIK_N))
 	{// 視点移動「下」
-		cameraPos.y -= VALUE_velocity_camera;
+		myTransform.pos.y -= VALUE_velocity_camera;
 	}
 
 	if (getKeyboardPress(DIK_Q))
@@ -424,8 +398,8 @@ void Camera::updateTitle(Pawn *pPlayer)
 			cameraRot.y += D3DX_PI*2.0f;
 		}
 
-		cameraLook.x = cameraPos.x + sinf(cameraRot.y) * lengthIntervalcamera;
-		cameraLook.z = cameraPos.z + cosf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.x = myTransform.pos.x + sinf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.z = myTransform.pos.z + cosf(cameraRot.y) * lengthIntervalcamera;
 	}
 	if (getKeyboardPress(DIK_E))
 	{// 注視点旋回「右」
@@ -435,64 +409,18 @@ void Camera::updateTitle(Pawn *pPlayer)
 			cameraRot.y -= D3DX_PI*2.0f;
 		}
 
-		cameraLook.x = cameraPos.x + sinf(cameraRot.y) * lengthIntervalcamera;
-		cameraLook.z = cameraPos.z + cosf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.x = myTransform.pos.x + sinf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.z = myTransform.pos.z + cosf(cameraRot.y) * lengthIntervalcamera;
 	}
 	if (getKeyboardPress(DIK_T))
 	{// 注視移動「上」
-		cameraLook.y += VALUE_velocity_camera;
+		myTransform.look.y += VALUE_velocity_camera;
 	}
 	if (getKeyboardPress(DIK_B))
 	{// 注視移動「下」
-		cameraLook.y -= VALUE_velocity_camera;
+		myTransform.look.y -= VALUE_velocity_camera;
 	}
 #endif
-
-	/*
-	D3DXVECTOR3 Look;
-	D3DXVec3Normalize(&Look, &pPlayer->getForwardVec());
-	cameraPos  = pPlayer->getOffset() - Look * 10.0f;
-	cameraPos.y += 6.0f;
-	cameraLook = pPlayer->getOffset() + Look * 50.0f;
-	*/
-
-	/*
-	// 注視点の補正
-	cameraLook.x += (cameraLookDest.x - cameraLook.x) * RATE_CHASE_camera_L;
-	cameraLook.y += (cameraLookDest.y - cameraLook.y) * 0.1f;
-	cameraLook.z += (cameraLookDest.z - cameraLook.z) * RATE_CHASE_camera_L;
-
-	// 視点の補正
-	cameraPos.x += (cameraPosDest.x - cameraPos.x) * RATE_CHASE_camera_P;
-	cameraPos.y += (cameraPosDest.y - cameraPos.y) * RATE_CHASE_camera_P;
-	cameraPos.z += (cameraPosDest.z - cameraPos.z) * RATE_CHASE_camera_P;
-	*/
-
-	/*
-	PrintDebugProc("デバッグ表示ON/OFF ： F1     カメラ、モデルリセット ： SPACE\n");
-	PrintDebugProc("[カメラの視点  ：(%f : %f : %f)]\n", cameraPos.x, cameraPos.y, cameraPos.z);
-	PrintDebugProc("[カメラの注視点：(%f : %f : %f)]\n", cameraLook.x, cameraLook.y, cameraLook.z);
-	PrintDebugProc("[カメラの向き  ：(%f)]\n", cameraRot.y);
-	PrintDebugProc("\n");
-
-	PrintDebugProc("*** 視点操作 ***\n");
-	PrintDebugProc("前移動 : W\n");
-	PrintDebugProc("後移動 : S\n");
-	PrintDebugProc("左移動 : A\n");
-	PrintDebugProc("右移動 : D\n");
-	PrintDebugProc("上移動 : Y\n");
-	PrintDebugProc("下移動 : N\n");
-	PrintDebugProc("左旋回 : Z\n");
-	PrintDebugProc("右旋回 : C\n");
-	PrintDebugProc("\n");
-
-	PrintDebugProc("*** 注視点操作 ***\n");
-	PrintDebugProc("上移動 : T\n");
-	PrintDebugProc("下移動 : B\n");
-	PrintDebugProc("左旋回 : Q\n");
-	PrintDebugProc("右旋回 : E\n");
-	PrintDebugProc("\n");
-	*/
 #endif
 
 }
@@ -504,14 +432,14 @@ void Camera::updateStageEdit(const D3DXVECTOR3 &Pos)
 {
 	D3DXVECTOR3 BlockPos = Pos;
 
-	cameraPosDest = D3DXVECTOR3(BlockPos.x, BlockPos.y + 20.0f, BlockPos.z - 20.0f);
+	myTransform.posDest = D3DXVECTOR3(BlockPos.x, BlockPos.y + 20.0f, BlockPos.z - 20.0f);
 
-	cameraLookDest = BlockPos;
+	myTransform.lookDest = BlockPos;
 
 	static float fcnt = 0.0f;
 	fcnt += 0.0001f;
-	D3DXVec3Lerp(&cameraPos,  &cameraPos,		  &cameraPosDest,  fcnt);
-	D3DXVec3Lerp(&cameraLook, &cameraLook,		  &cameraLookDest, fcnt);
+	D3DXVec3Lerp(&myTransform.pos,  &myTransform.pos,		  &myTransform.posDest,  fcnt);
+	D3DXVec3Lerp(&myTransform.look, &myTransform.look,		  &myTransform.lookDest, fcnt);
 	if (fcnt > 0.2f)
 		fcnt = 0.0f;
 #if _DEBUG
@@ -521,59 +449,59 @@ void Camera::updateStageEdit(const D3DXVECTOR3 &Pos)
 	{
 		if (getKeyboardPress(DIK_W))
 		{// 左前移動
-			cameraPos.x -= cosf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
-			cameraPos.z += sinf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			myTransform.pos.x -= cosf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			myTransform.pos.z += sinf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
 		}
 		else if (getKeyboardPress(DIK_S))
 		{// 左後移動
-			cameraPos.x -= cosf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
-			cameraPos.z += sinf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			myTransform.pos.x -= cosf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			myTransform.pos.z += sinf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
 		}
 		else
 		{// 左移動
-			cameraPos.x -= cosf(cameraRot.y) * VALUE_velocity_camera;
-			cameraPos.z += sinf(cameraRot.y) * VALUE_velocity_camera;
+			myTransform.pos.x -= cosf(cameraRot.y) * VALUE_velocity_camera;
+			myTransform.pos.z += sinf(cameraRot.y) * VALUE_velocity_camera;
 		}
 
-		cameraLook.x = cameraPos.x + sinf(cameraRot.y) * lengthIntervalcamera;
-		cameraLook.z = cameraPos.z + cosf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.x = myTransform.pos.x + sinf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.z = myTransform.pos.z + cosf(cameraRot.y) * lengthIntervalcamera;
 	}
 	else if (getKeyboardPress(DIK_D))
 	{
 		if (getKeyboardPress(DIK_W))
 		{// 右前移動
-			cameraPos.x += cosf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
-			cameraPos.z -= sinf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			myTransform.pos.x += cosf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			myTransform.pos.z -= sinf(cameraRot.y - D3DX_PI * 0.25f) * VALUE_velocity_camera;
 		}
 		else if (getKeyboardPress(DIK_S))
 		{// 右後移動
-			cameraPos.x += cosf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
-			cameraPos.z -= sinf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			myTransform.pos.x += cosf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
+			myTransform.pos.z -= sinf(cameraRot.y + D3DX_PI * 0.25f) * VALUE_velocity_camera;
 		}
 		else
 		{// 右移動
-			cameraPos.x += cosf(cameraRot.y) * VALUE_velocity_camera;
-			cameraPos.z -= sinf(cameraRot.y) * VALUE_velocity_camera;
+			myTransform.pos.x += cosf(cameraRot.y) * VALUE_velocity_camera;
+			myTransform.pos.z -= sinf(cameraRot.y) * VALUE_velocity_camera;
 		}
 
-		cameraLook.x = cameraPos.x + sinf(cameraRot.y) * lengthIntervalcamera;
-		cameraLook.z = cameraPos.z + cosf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.x = myTransform.pos.x + sinf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.z = myTransform.pos.z + cosf(cameraRot.y) * lengthIntervalcamera;
 	}
 	else if (getKeyboardPress(DIK_W))
 	{// 前移動
-		cameraPos.x += sinf(cameraRot.y) * VALUE_velocity_camera;
-		cameraPos.z += cosf(cameraRot.y) * VALUE_velocity_camera;
+		myTransform.pos.x += sinf(cameraRot.y) * VALUE_velocity_camera;
+		myTransform.pos.z += cosf(cameraRot.y) * VALUE_velocity_camera;
 
-		cameraLook.x = cameraPos.x + sinf(cameraRot.y) * lengthIntervalcamera;
-		cameraLook.z = cameraPos.z + cosf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.x = myTransform.pos.x + sinf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.z = myTransform.pos.z + cosf(cameraRot.y) * lengthIntervalcamera;
 	}
 	else if (getKeyboardPress(DIK_S))
 	{// 後移動
-		cameraPos.x -= sinf(cameraRot.y) * VALUE_velocity_camera;
-		cameraPos.z -= cosf(cameraRot.y) * VALUE_velocity_camera;
+		myTransform.pos.x -= sinf(cameraRot.y) * VALUE_velocity_camera;
+		myTransform.pos.z -= cosf(cameraRot.y) * VALUE_velocity_camera;
 
-		cameraLook.x = cameraPos.x + sinf(cameraRot.y) * lengthIntervalcamera;
-		cameraLook.z = cameraPos.z + cosf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.x = myTransform.pos.x + sinf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.z = myTransform.pos.z + cosf(cameraRot.y) * lengthIntervalcamera;
 	}
 
 	if (getKeyboardPress(DIK_Z))
@@ -584,8 +512,8 @@ void Camera::updateStageEdit(const D3DXVECTOR3 &Pos)
 			cameraRot.y -= D3DX_PI * 2.0f;
 		}
 
-		cameraPos.x = cameraLook.x - sinf(cameraRot.y) * lengthIntervalcamera;
-		cameraPos.z = cameraLook.z - cosf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.pos.x = myTransform.look.x - sinf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.pos.z = myTransform.look.z - cosf(cameraRot.y) * lengthIntervalcamera;
 	}
 	if (getKeyboardPress(DIK_C))
 	{// 視点旋回「右」
@@ -595,16 +523,16 @@ void Camera::updateStageEdit(const D3DXVECTOR3 &Pos)
 			cameraRot.y += D3DX_PI * 2.0f;
 		}
 
-		cameraPos.x = cameraLook.x - sinf(cameraRot.y) * lengthIntervalcamera;
-		cameraPos.z = cameraLook.z - cosf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.pos.x = myTransform.look.x - sinf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.pos.z = myTransform.look.z - cosf(cameraRot.y) * lengthIntervalcamera;
 	}
 	if (getKeyboardPress(DIK_Y))
 	{// 視点移動「上」
-		cameraPos.y += VALUE_velocity_camera;
+		myTransform.pos.y += VALUE_velocity_camera;
 	}
 	if (getKeyboardPress(DIK_N))
 	{// 視点移動「下」
-		cameraPos.y -= VALUE_velocity_camera;
+		myTransform.pos.y -= VALUE_velocity_camera;
 	}
 
 	if (getKeyboardPress(DIK_Q))
@@ -615,8 +543,8 @@ void Camera::updateStageEdit(const D3DXVECTOR3 &Pos)
 			cameraRot.y += D3DX_PI*2.0f;
 		}
 
-		cameraLook.x = cameraPos.x + sinf(cameraRot.y) * lengthIntervalcamera;
-		cameraLook.z = cameraPos.z + cosf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.x = myTransform.pos.x + sinf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.z = myTransform.pos.z + cosf(cameraRot.y) * lengthIntervalcamera;
 	}
 	if (getKeyboardPress(DIK_E))
 	{// 注視点旋回「右」
@@ -626,42 +554,42 @@ void Camera::updateStageEdit(const D3DXVECTOR3 &Pos)
 			cameraRot.y -= D3DX_PI*2.0f;
 		}
 
-		cameraLook.x = cameraPos.x + sinf(cameraRot.y) * lengthIntervalcamera;
-		cameraLook.z = cameraPos.z + cosf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.x = myTransform.pos.x + sinf(cameraRot.y) * lengthIntervalcamera;
+		myTransform.look.z = myTransform.pos.z + cosf(cameraRot.y) * lengthIntervalcamera;
 	}
 	if (getKeyboardPress(DIK_T))
 	{// 注視移動「上」
-		cameraLook.y += VALUE_velocity_camera;
+		myTransform.look.y += VALUE_velocity_camera;
 	}
 	if (getKeyboardPress(DIK_B))
 	{// 注視移動「下」
-		cameraLook.y -= VALUE_velocity_camera;
+		myTransform.look.y -= VALUE_velocity_camera;
 	}
 #endif
 
 	/*
 	D3DXVECTOR3 Look;
 	D3DXVec3Normalize(&Look, &pPlayer->getForwardVec());
-	cameraPos  = pPlayer->getOffset() - Look * 10.0f;
-	cameraPos.y += 6.0f;
-	cameraLook = pPlayer->getOffset() + Look * 50.0f;
+	myTransform.pos  = pPlayer->getOffset() - Look * 10.0f;
+	myTransform.pos.y += 6.0f;
+	myTransform.look = pPlayer->getOffset() + Look * 50.0f;
 	*/
 
 	/*
 	// 注視点の補正
-	cameraLook.x += (cameraLookDest.x - cameraLook.x) * RATE_CHASE_camera_L;
-	cameraLook.y += (cameraLookDest.y - cameraLook.y) * 0.1f;
-	cameraLook.z += (cameraLookDest.z - cameraLook.z) * RATE_CHASE_camera_L;
+	myTransform.look.x += (myTransform.lookDest.x - myTransform.look.x) * RATE_CHASE_camera_L;
+	myTransform.look.y += (myTransform.lookDest.y - myTransform.look.y) * 0.1f;
+	myTransform.look.z += (myTransform.lookDest.z - myTransform.look.z) * RATE_CHASE_camera_L;
 
 	// 視点の補正
-	cameraPos.x += (cameraPosDest.x - cameraPos.x) * RATE_CHASE_camera_P;
-	cameraPos.y += (cameraPosDest.y - cameraPos.y) * RATE_CHASE_camera_P;
-	cameraPos.z += (cameraPosDest.z - cameraPos.z) * RATE_CHASE_camera_P;
+	myTransform.pos.x += (myTransform.posDest.x - myTransform.pos.x) * RATE_CHASE_camera_P;
+	myTransform.pos.y += (myTransform.posDest.y - myTransform.pos.y) * RATE_CHASE_camera_P;
+	myTransform.pos.z += (myTransform.posDest.z - myTransform.pos.z) * RATE_CHASE_camera_P;
 	*/
 	/*
 	PrintDebugProc("デバッグ表示ON/OFF ： F1     カメラ、モデルリセット ： SPACE\n");
-	PrintDebugProc("[カメラの視点  ：(%f : %f : %f)]\n", cameraPos.x, cameraPos.y, cameraPos.z);
-	PrintDebugProc("[カメラの注視点：(%f : %f : %f)]\n", cameraLook.x, cameraLook.y, cameraLook.z);
+	PrintDebugProc("[カメラの視点  ：(%f : %f : %f)]\n", myTransform.pos.x, myTransform.pos.y, myTransform.pos.z);
+	PrintDebugProc("[カメラの注視点：(%f : %f : %f)]\n", myTransform.look.x, myTransform.look.y, myTransform.look.z);
 	PrintDebugProc("[カメラの向き  ：(%f)]\n", cameraRot.y);
 	PrintDebugProc("\n");
 
@@ -703,8 +631,8 @@ void Camera::updateGameMain(Player *pPlayer,Board *pReadyUI)
 	case MoceType::Tutorial:
 			{
 
-			cameraPos = D3DXVECTOR3(0.0f, 10.0f, -19.0f);		// カメラの視点
-			cameraLook = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// カメラの注視点
+			myTransform.pos = D3DXVECTOR3(0.0f, 10.0f, -19.0f);		// カメラの視点
+			myTransform.look = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// カメラの注視点
 
 
 			}
@@ -714,14 +642,14 @@ void Camera::updateGameMain(Player *pPlayer,Board *pReadyUI)
 			{
 				UINT Indx = pReadyUI->getCurrentAnim();
 
-				cameraPos = fadePos[Indx - 1];
-				cameraLook = pPlayer->getOffset();
+				myTransform.pos = fadePos[Indx - 1];
+				myTransform.look = pPlayer->getOffset();
 
 				if (Indx == 0)
 				{
 					cameravelocityFade = MoceType::Normal;
-					cameraPos = D3DXVECTOR3(0.0f, 10.0f, -19.0f);		// カメラの視点
-					cameraLook = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// カメラの注視点
+					myTransform.pos = D3DXVECTOR3(0.0f, 10.0f, -19.0f);		// カメラの視点
+					myTransform.look = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// カメラの注視点
 				}
 			}
 		break;
@@ -729,13 +657,13 @@ void Camera::updateGameMain(Player *pPlayer,Board *pReadyUI)
 			{
 				D3DXVECTOR3 PlayerPos = pPlayer->getOffset();
 
-				cameraPosDest = D3DXVECTOR3(PlayerPos.x, PlayerPos.y + 4.3f, PlayerPos.z - 9.0f);
-				cameraLookDest = PlayerPos + D3DXVECTOR3(0.0f, 0.0f, 30.0f);
+				myTransform.posDest = D3DXVECTOR3(PlayerPos.x, PlayerPos.y + 4.3f, PlayerPos.z - 9.0f);
+				myTransform.lookDest = PlayerPos + D3DXVECTOR3(0.0f, 0.0f, 30.0f);
 
 				static float fcnt = 0.0f;
 				fcnt += 0.001f;
-				D3DXVec3Lerp(&cameraPos, &cameraPos, &cameraPosDest, fcnt);
-				D3DXVec3Lerp(&cameraLook, &cameraLook, &cameraLookDest, fcnt);
+				D3DXVec3Lerp(&myTransform.pos, &myTransform.pos, &myTransform.posDest, fcnt);
+				D3DXVec3Lerp(&myTransform.look, &myTransform.look, &myTransform.lookDest, fcnt);
 
 				if (fcnt > 1.0f)
 					fcnt = 1.0f;
@@ -748,15 +676,15 @@ void Camera::updateGameMain(Player *pPlayer,Board *pReadyUI)
 
 			D3DXVECTOR3 PlayerPos = pPlayer->getOffset();
 
-			D3DXVECTOR3 VecLength = cameraPos - PlayerPos;
+			D3DXVECTOR3 VecLength = myTransform.pos - PlayerPos;
 			FLOAT Length = sqrtf(PlayerPos.x * PlayerPos.x + PlayerPos.z * PlayerPos.z);
 
 			rotCnt += RotSpeed;
 			Rotvelocity(&PlayerPos, 10.0f);
 
-			cameraPos.y = 10.0f;
-			cameraLook = PlayerPos;
-			cameraLook.y = 0.0f;
+			myTransform.pos.y = 10.0f;
+			myTransform.look = PlayerPos;
+			myTransform.look.y = 0.0f;
 
 		}
 		break;
@@ -765,10 +693,10 @@ void Camera::updateGameMain(Player *pPlayer,Board *pReadyUI)
 	}
 
 
-	cameraLook = PlayerPos;
-	cameraLook.y += 3.0f;
+	myTransform.look = PlayerPos;
+	myTransform.look.y += 3.0f;
 
-	cameraFowerd = cameraLook - cameraPos;
+	cameraFowerd = myTransform.look - myTransform.pos;
 
 #if _DEBUG
 	debugMove();
@@ -795,8 +723,8 @@ void Camera::Rotvelocity(D3DXVECTOR3* pVecCenter, FLOAT fRadius)
 
 	//最後に本来の座標（回転対象の座標）を足し合わせ
 	D3DXVec3Add(&vecTarget, &vecTarget, pVecCenter);
-	cameraPos.x = vecTarget.x;
-	cameraPos.z = vecTarget.z;
+	myTransform.pos.x = vecTarget.x;
+	myTransform.pos.z = vecTarget.z;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -811,9 +739,9 @@ void Camera::setCamera()
 	
 	// ビューマトリックスの作成
 	D3DXMatrixLookAtLH(&mtxView,
-		&cameraPos	,		// カメラの視点
-		&cameraLook,		// カメラの注視点
-		&cameraUp);			// カメラの上方向
+		&myTransform.pos	,		// カメラの視点
+		&myTransform.look,		// カメラの注視点
+		&myTransform.up);			// カメラの上方向
 
 	// ビューマトリックスの設定
 	devicePtr->SetTransform(D3DTS_VIEW, &mtxView);
@@ -869,15 +797,15 @@ void Camera::rotationCamera(D3DXVECTOR3 Center)
 //	D3DXVec3Normalize(&cameraForwrd, &cameraForwrd);
 
 
-//	cameraPos.y += RightStickY;
+//	myTransform.pos.y += RightStickY;
 	/*
 	if (RightStickY > 0.0f)
 	{
-		cameraPos.y -= 0.1f;
+		myTransform.pos.y -= 0.1f;
 	}
 	else if (RightStickY < 0.0f)
 	{
-		cameraPos.y += 0.1f;
+		myTransform.pos.y += 0.1f;
 	}
 	*/
 }
@@ -923,7 +851,7 @@ D3DVIEWPORT9* Camera::getViwPort()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 D3DXVECTOR3 Camera::getPos()
 {
-	return cameraPos;
+	return myTransform.pos;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -931,7 +859,7 @@ D3DXVECTOR3 Camera::getPos()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 D3DXVECTOR3 Camera::getLook()
 {
-	return cameraLook;
+	return myTransform.look;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -947,7 +875,7 @@ D3DXVECTOR3* Camera::getUp()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 D3DXVECTOR3 Camera::getFowerd()
 {
-	D3DXVECTOR3 cameraFowerd = cameraLook - cameraPos;
+	D3DXVECTOR3 cameraFowerd = myTransform.look - myTransform.pos;
 	D3DXVec3Normalize(&cameraFowerd, &cameraFowerd);
 	
 	return cameraFowerd;

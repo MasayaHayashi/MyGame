@@ -88,9 +88,13 @@ void Board::update()
 void Board::draw()
 {
 	if (!isUsed)
+	{
 		return;
+	}
 	if (!vertexBoard.pD3DVtxBuff)
+	{
 		return;
+	}
 
 	// オブジェクト取得
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
@@ -123,7 +127,7 @@ void Board::draw()
 				devicePtr->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 			}
 
-			// ポリゴンの描画（フレーム部分）
+			// ポリゴンの描画
 			devicePtr->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, Polygon);
 
 			// アルファブレンド設定を戻す

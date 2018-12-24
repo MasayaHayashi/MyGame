@@ -328,7 +328,9 @@ void Pawn::drawObjectLocal()
 {
 	// 例外処理
 	if (!isUsed)
+	{
 		return;
+	}
 
 	// デバイス取得
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
@@ -411,7 +413,7 @@ void Pawn::RenderMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase, LPD3DXFRA
 		for (DWORD i = 0; i < pMeshContainer->dwBone; i++)
 		{
 			dwBlendMatrix = 0;
-			for (DWORD k = 0; k < pMeshContainer->dwWeight; ++k)
+			for (DWORD k = 0; k < pMeshContainer->dwWeight; k++)
 			{
 				if (pBoneCombi[i].BoneId[k] != UINT_MAX)
 				{
@@ -437,6 +439,7 @@ void Pawn::RenderMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase, LPD3DXFRA
 	}
 	// スキン無しモデル
 	devicePtr->SetTransform(D3DTS_WORLD, &pFrame->combinedTransformationMatrix);
+
 	for (DWORD iAttrib = 0; iAttrib < pMeshContainer->NumMaterials; iAttrib++)
 	{
 		DWORD dwAttrib = pMeshContainer->pAttributeTable[iAttrib].AttribId;
@@ -1101,6 +1104,16 @@ bool Pawn::isHit(std::string keyName)
 	{
 		return false;
 	}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 位置反映
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Pawn::changePosition()
+{
+	worldMtx._41 = myTransform.pos.x;
+	worldMtx._42 = myTransform.pos.y;
+	worldMtx._43 = myTransform.pos.z;
 }
 
 #if _DEBUG

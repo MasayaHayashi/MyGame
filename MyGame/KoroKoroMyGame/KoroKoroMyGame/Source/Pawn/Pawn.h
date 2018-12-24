@@ -109,6 +109,7 @@ public:
 	HRESULT AllocAllBoneMatrix(LPD3DXFRAME);
 
 	void setTime(DOUBLE);
+	void changePosition();
 	void drawFrame(LPD3DXFRAME);
 	void RenderMeshContainer(LPD3DXMESHCONTAINER, LPD3DXFRAME );
 
@@ -191,7 +192,7 @@ protected:
 	std::string			tagName;				// 識別用タグ
 	UINT				idNumber;				// 複数体識別用添え字番号
 
-	D3DXVECTOR3			startPos;				// 開始位置 (補間用)
+	D3DXVECTOR3			StartPos;				// 開始位置 (補間用)
 	D3DXVECTOR3			endPos;					// 終了位置 (補間用)
 	INT					hitIndex;				// 衝突判定用
 

@@ -110,6 +110,9 @@ void BallObj::initialize()
 	case SceneManager::SceneState::SceneResult:
 		initializeTitleObj_Result();
 		break;
+	case SceneManager::SceneState::SceneSelect:
+		initializeTitleObj_Title();
+		break;
 	case SceneManager::SceneState::SceneStageEdit:
 		initializeTitleObj_Title();
 		break;

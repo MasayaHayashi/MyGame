@@ -21,7 +21,7 @@
 // ===== 構造体定義 =====
 typedef struct
 {
-	D3DXVECTOR3 start;
+	D3DXVECTOR3 Start;
 	D3DXVECTOR3 end;
 } SEGMENT;
 
@@ -41,6 +41,19 @@ typedef struct
 	bool isHit = false;
 } RayHit;
 
+typedef struct
+{
+	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 look = D3DXVECTOR3(0.0f, 0.0f, 10.0f);
+	D3DXVECTOR3 up = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	
+	D3DXVECTOR3 posDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 lookDest = D3DXVECTOR3(0.0f,0.0f,10.0f);
+
+	D3DXVECTOR3 rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 fowerd = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
+} CameraTransform;
+
 // ===== クラスの前方宣言 =====
 class Pawn;
 class Collider;
@@ -59,6 +72,8 @@ public:
 	void update();
 
 	static void registerList(Transform *setPawn,std::string keyName);
+	static void registerList(CameraTransform *setCamera, std::string keyName);
+
 	INT isHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXVECTOR3 Length);
 	INT Intersect(Pawn *pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXVECTOR3 pFLength);
 
@@ -66,7 +81,8 @@ public:
 
 	bool IsHitSphereToSphere(Pawn *, Pawn*);
 
-	static const Transform* getTransform(std::string keyName, INT index);
+	static const Transform*		  getTransform(std::string keyName, INT index);
+	static const CameraTransform* getCameraTransform(std::string keyName, INT index);
 	static const RayHit*    getRayHitData(std::string keyName, UINT index);
 	static const std::list<Transform*> getTransform(std::string keyName);
 	static void setVelocity(std::string keyName, UINT index,D3DXVECTOR3 velocity);
@@ -83,6 +99,8 @@ private:
 
 	static std::unordered_map < std::string, std::list<Transform*>> collisionMapes;
 	static std::unordered_map < std::string, std::vector<RayHit* >> rayHitMapes;
+	static std::unordered_map < std::string, std::list<CameraTransform*>> cameraTransforms;
+
 };
 
 #endif

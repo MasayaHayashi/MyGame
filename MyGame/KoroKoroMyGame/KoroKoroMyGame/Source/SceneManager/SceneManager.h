@@ -30,6 +30,7 @@ public:
 		SceneTitle = 0,
 		SceneMain,
 		SceneStageEdit,
+		SceneSelect,
 		SceneResult,
 	};
 
@@ -78,10 +79,11 @@ private:
 		{ "SceneTitle" ,     SceneState::SceneTitle },
 		{ "SceneMain",		 SceneState::SceneMain },
 		{ "SceneStageEdit",	 SceneState::SceneStageEdit },
+		{ "SceneSelect",	 SceneState::SceneSelect },
 		{ "SceneResult",	 SceneState::SceneResult },
 	};
 
-	TCHAR  startScene[256];
+	TCHAR  StartScene[256];
 
 	static bool	   debugMode;
 	static INT	   frameAdvanceCnt;

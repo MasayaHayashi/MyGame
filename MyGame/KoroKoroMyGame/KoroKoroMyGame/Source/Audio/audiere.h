@@ -368,7 +368,7 @@ namespace audiere {
 
     /**
      * sets whether the sample source should repeat or not.  Note that not
-     * all sample sources repeat by starting again at the beginning of the
+     * all sample sources repeat by Starting again at the beginning of the
      * sound.  For example MOD files can contain embedded loop points.
      *
      * @param repeat  true if the source should repeat, false otherwise
@@ -844,8 +844,8 @@ namespace audiere {
     /**
      * Trigger playback of the sound.  If the SoundEffect is of type
      * SINGLE, this plays the sound if it isn't playing yet, and
-     * starts it again if it is.  If the SoundEffect is of type
-     * MULTIPLE, play() simply starts playing the sound again.
+     * Starts it again if it is.  If the SoundEffect is of type
+     * MULTIPLE, play() simply Starts playing the sound again.
      */
     ADR_METHOD(void) play() = 0;
 

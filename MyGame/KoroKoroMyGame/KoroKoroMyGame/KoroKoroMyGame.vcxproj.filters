@@ -127,6 +127,24 @@
     <Filter Include="ソース ファイル\Star">
       <UniqueIdentifier>{1768d4f1-67c5-4ebd-9fe0-2c0d9428eb46}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Particle">
+      <UniqueIdentifier>{bee652ec-4eba-4f5f-aaa6-86429bed0f40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Enemy">
+      <UniqueIdentifier>{d48e8ca2-384b-483c-9b26-d6466e9c820a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Random">
+      <UniqueIdentifier>{ba5ae1a7-3a37-4469-94cd-6584ea367674}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene\Select">
+      <UniqueIdentifier>{8ed0a99d-a21c-45da-bd5a-8150454b6331}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Fream">
+      <UniqueIdentifier>{a5e4d4ce-23d5-4de1-9867-18d20bc62ac4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\BackGround">
+      <UniqueIdentifier>{ce19ade0-8b7d-416d-be31-2e4a63b9122f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Audio\MyAudiere.cpp">
@@ -224,6 +242,21 @@
     </ClCompile>
     <ClCompile Include="Source\Star\Star.cpp">
       <Filter>ソース ファイル\Star</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Particle\Particle.cpp">
+      <Filter>ソース ファイル\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Random\MyRandom.cpp">
+      <Filter>ソース ファイル\Random</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\Select\SceneSelect.cpp">
+      <Filter>ソース ファイル\Scene\Select</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Fream\Fream.cpp">
+      <Filter>ソース ファイル\Fream</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BackGround\BackGround.cpp">
+      <Filter>ソース ファイル\BackGround</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -331,6 +364,21 @@
     </ClInclude>
     <ClInclude Include="Source\Star\Star.h">
       <Filter>ソース ファイル\Star</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Particle\Particle.h">
+      <Filter>ソース ファイル\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Random\MyRandom.h">
+      <Filter>ソース ファイル\Random</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\Select\SceneSelect.h">
+      <Filter>ソース ファイル\Scene\Select</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Fream\Fream.h">
+      <Filter>ソース ファイル\Fream</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BackGround\BackGround.h">
+      <Filter>ソース ファイル\BackGround</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

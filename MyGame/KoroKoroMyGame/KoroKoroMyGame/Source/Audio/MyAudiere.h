@@ -29,7 +29,7 @@ enum class BGM_TYPE
 };
 enum class SE_TYPE
 {
-	SE_STAR = 0,			// スターアイテム
+	SE_Star = 0,			// スターアイテム
 	SE_JUMP,  				// ジャンプ
 	SE_STAGE_CLEAR,			// ステージクリア
 	SE_LANDING,				// 着地

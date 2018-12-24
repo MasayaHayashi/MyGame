@@ -1,12 +1,3 @@
-﻿  Star.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\star\star.cpp(76): error C2065: 'cameraPos': 定義されていない識別子です。
-  SceneMain.cpp
-  SceneLoad.cpp
-  Light.cpp
-  Camera.cpp
-  Board.cpp
-  コードを生成中...
-  コンパイル中...
-  Skydome.cpp
-  SceneTitle.cpp
-  コードを生成中...
+﻿  Player.cpp
+  KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.exe
+  KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.pdb (Partial PDB)

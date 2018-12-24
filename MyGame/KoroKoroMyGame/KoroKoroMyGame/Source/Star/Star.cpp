@@ -8,6 +8,7 @@
 #include "../Application/Application.h"
 #include "../Collision/Collision.h"
 #include "../DirectX3D/DirectX3D.h"
+#include "../Random/MyRandom.h"
 
 // ===== 定数・マクロ定義 =====
 
@@ -18,14 +19,15 @@ Star::Star()
 {
 	strcpy_s(fileName, TextureFilePass.c_str());
 
-	color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f);
-	vertexBoard.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	vertexBoard.rotDeg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	vertexBoard.scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-	vertexBoard.size = D3DXVECTOR3(99.0f * 0.004f, 94.0f * 0.004f, 0.0f);
-	isAlphaBlend = true;
-	vertexBoard.boardType = boardType::Billboard;
-	vertexBoard.radAngle = D3DXToRadian(0);
+	color					= D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f);
+	vertexBoard.pos			= D3DXVECTOR3(-10.0f, 0.0f, 0.0f);
+	vertexBoard.rotDeg		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	vertexBoard.scale		= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	vertexBoard.size		= D3DXVECTOR3(99.0f * 0.004f, 94.0f * 0.004f, 0.0f);
+	isAlphaBlend			= true;
+	vertexBoard.boardType	= boardType::Billboard;
+	vertexBoard.radAngle	= D3DXToRadian(0);
+	moveVec = D3DXVECTOR3(MyRandom::get(-1.0f,1.0f), MyRandom::get(0.3f,0.5f), 0.0f);
 
 	texPatternDivideX		= 1;
 	texPatternDivideY		= 1;
@@ -34,7 +36,7 @@ Star::Star()
 	animPattern				= texPatternDivideX * texPatternDivideY;
 	intervalChangePattern	= 1;
 
-	isUsed = true;
+	isUsed					= false;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -52,8 +54,6 @@ void Star::initialize()
 {
 	ResourceManager::makevertexBoard(vertexBoard, fileName);
 	ResourceManager::createTexture(texture, fileName);
-	
-
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -71,14 +71,19 @@ void Star::update()
 {
 	if (isHit("Ball"))
 	{
-		vertexBoard.pos = Collision::getTransform("Ball",0)->pos;
-		
-		D3DXVECTOR3 cameraToBallVec = cameraPos - vertexBoard.pos;
-		D3DXVec3Normalize(&cameraToBallVec,&cameraToBallVec);
-		vertexBoard.pos += cameraToBallVec * 5;
-	}
-	DirectX3D::printDebug("aaaaaaaaaa:%f\n", vertexBoard.pos.x);
+		D3DXVECTOR3 ballPos = Collision::getTransform("Ball",0)->pos;
+		vertexBoard.pos = ballPos;
+		moveVec = D3DXVECTOR3(MyRandom::get(-1.0f, 1.0f), MyRandom::get(0.3f, 0.5f), 0.0f);
 
+		isUsed = true;
+	}
+
+	if (vertexBoard.pos.y < -5.0f)
+	{
+		destroy();
+	}
+
+	move();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

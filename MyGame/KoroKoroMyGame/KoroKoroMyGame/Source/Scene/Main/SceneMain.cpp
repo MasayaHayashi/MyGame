@@ -29,7 +29,7 @@
 #include "C_ItemStar.h"
 #include "input.h"
 #include "C_Ready.h"
-#include "C_StarParticle.h"
+#include "C_StarStar.h"
 #include "C_MissUI.h"
 #include "C_GoalUI.h"
 #include "C_StageLoader.h"
@@ -163,141 +163,6 @@ void SceneMain::update()
 	}
 
 	collisionPtr->update();
-
-
-#if 0
-	if (currentGameState == SceneMain::GameState::Tutorial)
-	{
-		cameraPtr->setState(Camera::MoceType::Tutorial);
-	}
-
-
-	// ゴールから移行処理
-	if (uGameState == GAME_GOAL)
-	{
-		bool bAllUse = true;
-		for (INT i = 0; i < MAX_PARTICLE; i++)
-		{
-			if (pParticleObj[OBJ_2D_STAR_PARTICLE][i]->getUsedFlg())
-			{
-				bAllUse = false;
-				break;
-			}
-		}
-		if (bAllUse)
-			getSceneManager()->setSceneChange(C_SCENE_MANAGER::SCENE_MAIN);
-	}
-
-	// ハート更新
-	pHeart->updateObject(pPlayer->getOffset());
-	
-	// ポーズ解除処理
-	if (getKeyboardTrigger(DIK_P))
-	{
-		if (uGameState == GAME_NORMAL)
-			uGameState = GAME_PAUSE;
-		if (uGameState == GAME_PAUSE)
-			uGameState = GAME_NORMAL;
-	}
-
-	// 再スタート
-	if (uGameState == GAME_MISS)
-	{
-		nRestartCnt--;
-		if (nRestartCnt < 0)
-			initializeStatus();
-	}
-
-	// UI更新
-	for (INT UiTypeCnt = 0; UiTypeCnt < MAX_UI_OBJ_TYPE; UiTypeCnt++)
-		pUIObj[UiTypeCnt]->updateObject();
-
-	// スコア更新
-	for (INT i = 0; i < MAX_SCORE_DIGIT; i++)
-		pUIScore[i]->updateObject();
-	
-	// UI更新
-	if (uGameState == GAME_MISS)
-	{
-		pUIObj[OBJ_MISS]->setUsedFlg(true);
-		pUIObj[OBJ_BG]->setUsedFlg(true);
-	}
-
-	// プレイヤー更新
-	pPlayer->updatePlayer_GameMain(pCamera->getCameraFowerd());
-
-	// ゲーム状態更新
-	if (!pUIObj[OBJ_READY]->getUsedFlg() && uGameState != GAME_MISS && uGameState != GAME_GOAL && uGameState != GAME_TUTORIAL)
-		uGameState = GAME_NORMAL;
-
-	// ポーズ更新
-	if (uGameState == GAME_PAUSE)
-	{
-		pPause->updateObject();
-		return;
-	}
-	if (uGameState == GAME_MISS)
-		return;
-
-	// 死亡判定
-	if (pPlayer->getState() == PlayerState::TYPE_DEAD)
-		uGameState = GAME_MISS;
-
-	// スカイドーム更新
-	pSkydome->updateObject();
-
-	// パーティクル更新処理
-	for (INT TypeCnt = 0; TypeCnt < MAX_PARTICLE_OBJ_TYPE; TypeCnt++)
-		for (INT ObjCnt = 0; ObjCnt < MAX_PARTICLE; ObjCnt++)
-			pParticleObj[TypeCnt][ObjCnt]->updateObject();
-
-	// ゲームオブジェクト更新
-	for (INT i = 0; i < MAX_GAME_OBJ_TYPE; i++)
-		for (INT j = 0; j < MAX_GAME_OBJ; j++)
-			pGameObj[i][j]->updateObject();
-	
-	// あたり判定チェック
-	if (uGameState == GAME_NORMAL || uGameState == GAME_GOAL)
-	{
-		checkCollision();
-	}
-
-#if _DEBUG
-	PrintDebugProc("ゲームステート◆%d\n", uGameState);
-#endif
-
-	// スコア加算
-	for (INT i = 0; i < MAX_PARTICLE; i++)
-	{
-		if (!pParticleObj[OBJ_2D_STAR_PARTICLE][i]->getUsedFlg())
-			continue;
-
-		if (pParticleObj[OBJ_2D_STAR_PARTICLE][i]->getCurveCnt() >= 1.0f)
-		{
-			pPlayer->addScore();
-			pParticleObj[OBJ_2D_STAR_PARTICLE][i]->setCnt(0.0f);
-			pParticleObj[OBJ_2D_STAR_PARTICLE][i]->setUsedFlg(false);
-		}
-	}
-
-	INT nScore = pPlayer->getScore();
-	INT nDigit;
-
-	// スコアセット
-	for (INT i = 0; i < MAX_SCORE_DIGIT; i++)
-	{
-		nDigit = nScore % 10;
-		pUIScore[i]->setCurrentAnimPattern(nDigit);
-		nScore /= 10;
-	}
-
-	// ゴール更新
-	pGoal->updateObject();
-
-	// カメラ更新
-	pCamera->updateCamera_GameMain(pPlayer,pUIObj[OBJ_READY]);
-
-#endif
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -355,9 +220,9 @@ void SceneMain::draw()
 	pSkydome->drawObject();
 
 	// パーティクル描画
-	for (INT TypeCnt = 0; TypeCnt < MAX_PARTICLE_OBJ_TYPE; TypeCnt++)
-		for (INT ObjCnt = 0; ObjCnt < MAX_PARTICLE; ObjCnt++)
-			pParticleObj[TypeCnt][ObjCnt]->drawObject();
+	for (INT TypeCnt = 0; TypeCnt < MAX_Star_OBJ_TYPE; TypeCnt++)
+		for (INT ObjCnt = 0; ObjCnt < MAX_Star; ObjCnt++)
+			pStarObj[TypeCnt][ObjCnt]->drawObject();
 
 	// カメラセット
 	pCamera->setCamera();
@@ -396,13 +261,13 @@ void SceneMain::initializeStatus()
 	pUIObj[OBJ_MISS]->setUsedFlg(false);
 	pUIObj[OBJ_BG]->setUsedFlg(false);
 
-	for (INT i = 0; i < MAX_PARTICLE; i++)
-		pParticleObj[0][i]->setUsedFlg(false);
+	for (INT i = 0; i < MAX_Star; i++)
+		pStarObj[0][i]->setUsedFlg(false);
 
 	// 星の配置を再取得
 	pStageLoader->LoadStage(pGameObj, getCurrentStageNum());
 
-	nRestartCnt = RESTART_CNT;
+	nReStartCnt = REStarT_CNT;
 
 	// スコアリセット
 	pPlayer->setScore(0);
@@ -416,8 +281,8 @@ void SceneMain::initializeStatus()
 	pUIObj[OBJ_READY]->setCurrentAnimPattern(4);
 
 	// パーティクル初期化
-	for (INT i = 0; i < MAX_PARTICLE; i++)
-		pParticleObj[OBJ_2D_STAR_PARTICLE][i]->initializeStatus();
+	for (INT i = 0; i < MAX_Star; i++)
+		pStarObj[OBJ_2D_Star_Star][i]->initializeStatus();
 
 	// ステータス初期化
 	pUIObj[OBJ_MISS]->initializeStatus();
@@ -577,29 +442,29 @@ void SceneMain::checkCollision()
 	for (INT i = 0; i < MAX_GAME_OBJ; i++)
 	{
 		// 例外処理
-		if (!pGameObj[STAR_OBJ][i]->getUsedFlg())
+		if (!pGameObj[Star_OBJ][i]->getUsedFlg())
 			continue;
 
 		// AABB衝突判定
-		if (pCollision->IsHitAABBItem(pPlayer, pGameObj[STAR_OBJ][i]))
+		if (pCollision->IsHitAABBItem(pPlayer, pGameObj[Star_OBJ][i]))
 		{
-			pGameObj[STAR_OBJ][i]->setUsedFlg(false);
-			INT particleCnt = 0;
+			pGameObj[Star_OBJ][i]->setUsedFlg(false);
+			INT StarCnt = 0;
 
-//			PlaySound(SOUND_SE_STAR);	// 音再生
+//			PlaySound(SOUND_SE_Star);	// 音再生
 
 			/*
 			// パーティクル生成
-			for (INT ParticleCnt = 0; ParticleCnt < MAX_PARTICLE; ParticleCnt++)
+			for (INT StarCnt = 0; StarCnt < MAX_Star; StarCnt++)
 			{
-				if (pParticleObj[OBJ_BILLBOARD_STAR_PARTICLE][ParticleCnt]->getUsedFlg())
+				if (pStarObj[OBJ_BILLBOARD_Star_Star][StarCnt]->getUsedFlg())
 					continue;
 
-				particleCnt++;
-				pParticleObj[OBJ_BILLBOARD_STAR_PARTICLE][ParticleCnt]->setUsedFlg(true);
-				pParticleObj[OBJ_BILLBOARD_STAR_PARTICLE][ParticleCnt]->setPosition(pGameObj[STAR_OBJ][i]->getPosition());
+				StarCnt++;
+				pStarObj[OBJ_BILLBOARD_Star_Star][StarCnt]->setUsedFlg(true);
+				pStarObj[OBJ_BILLBOARD_Star_Star][StarCnt]->setPosition(pGameObj[Star_OBJ][i]->getPosition());
 
-				if (ONE_USE_PARTICLLE < particleCnt)
+				if (ONE_USE_PARTICLLE < StarCnt)
 					break;
 			}
 			*/
@@ -642,7 +507,7 @@ void SceneMain::checkUnProject(INT Indx)
 {
 #if 0
 
-	D3DXVECTOR3 StarObj = pGameObj[STAR_OBJ][Indx]->getPosition();
+	D3DXVECTOR3 StarObj = pGameObj[Star_OBJ][Indx]->getPosition();
 	D3DXMATRIX  ViewMtx = pCamera->getMtxView();
 	D3DXMATRIX  ProjectionMtx = pCamera->getProjectionMtx();
 
@@ -663,21 +528,21 @@ void SceneMain::checkUnProject(INT Indx)
 	OutVec2.x *= SCREEN_WIDTH;
 	OutVec2.y *= SCREEN_HEIGHT;
 
-	INT UseParticleCnt = 0;
+	INT UseStarCnt = 0;
 
-	for (INT ParticleCnt = 0; ParticleCnt < MAX_PARTICLE; ParticleCnt++)
+	for (INT StarCnt = 0; StarCnt < MAX_Star; StarCnt++)
 	{
 		// 例外処理
-		if (pParticleObj[OBJ_2D_STAR_PARTICLE][ParticleCnt]->getUsedFlg())
+		if (pStarObj[OBJ_2D_Star_Star][StarCnt]->getUsedFlg())
 			continue;
 
-		UseParticleCnt ++;
+		UseStarCnt ++;
 
-		pParticleObj[OBJ_2D_STAR_PARTICLE][ParticleCnt]->setUsedFlg(true);
-		pParticleObj[OBJ_2D_STAR_PARTICLE][ParticleCnt]->setPosition(D3DXVECTOR3(OutVec2.x, OutVec2.y, 0.0f));
-		pParticleObj[OBJ_2D_STAR_PARTICLE][ParticleCnt]->setStartCurvePos(D3DXVECTOR3(OutVec2.x, OutVec2.y, 0.0f));
+		pStarObj[OBJ_2D_Star_Star][StarCnt]->setUsedFlg(true);
+		pStarObj[OBJ_2D_Star_Star][StarCnt]->setPosition(D3DXVECTOR3(OutVec2.x, OutVec2.y, 0.0f));
+		pStarObj[OBJ_2D_Star_Star][StarCnt]->setStartCurvePos(D3DXVECTOR3(OutVec2.x, OutVec2.y, 0.0f));
 
-		if (UseParticleCnt > ONE_USE_PARTICLLE)
+		if (UseStarCnt > ONE_USE_PARTICLLE)
 			break;
 	}
 

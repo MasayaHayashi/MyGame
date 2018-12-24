@@ -51,7 +51,7 @@ void MyVector3::Lerp(D3DXVECTOR3* pOut, const D3DXVECTOR3& fStart, const D3DXVEC
 //		最大時間
 //		現在時間
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void MyVector3::Slerp(D3DXQUATERNION *out, const D3DXQUATERNION &start, const D3DXQUATERNION &end, const FLOAT& fMax, const FLOAT& fCurrent)
+void MyVector3::Slerp(D3DXQUATERNION *out, const D3DXQUATERNION &Start, const D3DXQUATERNION &end, const FLOAT& fMax, const FLOAT& fCurrent)
 {
 	FLOAT dot_val;
 	FLOAT sin_val;
@@ -60,20 +60,20 @@ void MyVector3::Slerp(D3DXQUATERNION *out, const D3DXQUATERNION &start, const D3
 	FLOAT t = fCurrent / fMax;
 
 	// 内積を計算
-	dot_val = start.x * end.x +
-		start.y * end.y +
-		start.z * end.z +
-		start.w * end.w; // 開始点と終了点の内積
+	dot_val = Start.x * end.x +
+		Start.y * end.y +
+		Start.z * end.z +
+		Start.w * end.w; // 開始点と終了点の内積
 
 	// 補間値を計算
-	theta = acos(start.x * end.x + start.y * end.y + start.z * end.z + start.w * end.w);
+	theta = acos(Start.x * end.x + Start.y * end.y + Start.z * end.z + Start.w * end.w);
 	sin_val = sinf(theta);
 	scale0 = sinf(theta * (1 - t)) / sinf(theta);
 	scale1 = sinf(theta * t) / sinf(theta);	
-	out->x = start.x * scale0 + end.x * scale1;
-	out->y = start.y * scale0 + end.y * scale1;
-	out->z = start.z * scale0 + end.z * scale1;
-	out->w = start.w * scale0 + end.w * scale1;
+	out->x = Start.x * scale0 + end.x * scale1;
+	out->y = Start.y * scale0 + end.y * scale1;
+	out->z = Start.z * scale0 + end.z * scale1;
+	out->w = Start.w * scale0 + end.w * scale1;
 }
 
 

@@ -12,18 +12,18 @@
 
 /*
 #include "C_Block.h"
-#include "C_StarParticle.h"
+#include "C_StarStar.h"
 #include "C_StageEditor.h"
 #include "C_ScoreUi.h"
 */
 
 // ===== 列挙体定義 =====
-enum PARTICLE_OBJ_TYPE
+enum Star_OBJ_TYPE
 {
-	OBJ_BILLBOARD_STAR_PARTICLE = 0,
-	OBJ_2D_STAR_PARTICLE,
+	OBJ_BILLBOARD_Star_Star = 0,
+	OBJ_2D_Star_Star,
 
-	MAX_PARTICLE_OBJ_TYPE,
+	MAX_Star_OBJ_TYPE,
 };
 
 enum UI_OBJ_TYPE
@@ -31,7 +31,7 @@ enum UI_OBJ_TYPE
 	OBJ_READY = 0,
 	OBJ_MISS,
 	OBJ_BG,
-	OBJ_STAR,
+	OBJ_Star,
 	OBJ_TUTORIAL,
 	OBJ_NEXT,
 	MAX_UI_OBJ_TYPE,
@@ -78,7 +78,7 @@ private:
 	void checkCollision();
 	void setScore();
 
-	static constexpr INT RestartTime = 120;
+	static constexpr INT ReStartTime = 120;
 
 	const std::string StageTutorialPass = "StageTutorial.bin";
 	const std::string Stage1Pass		= "Stage1.bin";
@@ -107,14 +107,14 @@ private:
 	Collision				*pCollision;										  // 衝突用
 	C_PAUSE					*pPause;											  // ポーズ用
 	Pawn				*pGameObj[MAX_GAME_OBJ_TYPE][MAX_GAME_OBJ];			  // ゲームオブジェクト
-	C_PARTICLE_BASE 		*pParticleObj[MAX_PARTICLE_OBJ_TYPE][MAX_PARTICLE];   // パーティクル関連
+	C_Star_BASE 		*pStarObj[MAX_Star_OBJ_TYPE][MAX_Star];   // パーティクル関連
 	Board					*pUIObj[MAX_UI_OBJ_TYPE];							  // UI関連
 	C_SCORE_UI				*pUIScore[MAX_SCORE_DIGIT];							  // スコア
 	C_STAGE_LOADER			*pStageLoader;										  // ステージロード
 	C_GOAL					*pGoal;												  // ゴール用
 	C_HEART_BOARD			*pHeart;											  // ハート
 	
-	INT						nRestartCnt;								// 再スタートカウント
+	INT						nReStartCnt;								// 再スタートカウント
 
 	UINT					uIsHitBlock;								// ブロックに当たっているか
 

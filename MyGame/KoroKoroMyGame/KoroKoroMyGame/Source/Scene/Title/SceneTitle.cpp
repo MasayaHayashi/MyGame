@@ -18,7 +18,7 @@
 #include "C_Camera.h"
 #include "C_Light.h"
 #include "input.h"
-#include "C_ParticleBase.h"
+#include "C_StarBase.h"
 #include "C_Player.h"
 #include "C_TitleObj.h"
 #include "FadeUI.h"
@@ -62,7 +62,7 @@ void SceneTitle::initialize()
 {
 	playerPtr->initialize();
 	lightPtr->initialize();
-	cameraPtr->initializeTitle(playerPtr.get());
+	cameraPtr->initializeTitle();
 	skydomePtr->initialize();
 	fieldPtr->initialize();
 	titleUiPtr->initialize();
@@ -70,10 +70,10 @@ void SceneTitle::initialize()
 
 	/*
 	// パーティクル初期化
-	for (INT i = 0; i < MAX_PARTICLE; i++)
+	for (INT i = 0; i < MAX_Star; i++)
 	{
-		pParticle[i] = NEW C_PARTICLE_BASE(i);
-		pParticle[i]->initialize();
+		pStar[i] = NEW C_Star_BASE(i);
+		pStar[i]->initialize();
 	}
 	*/
 	/*
@@ -141,10 +141,10 @@ void SceneTitle::finalize()
 	SAFE_DELETE(pTitleObj);
 
 	// パーティクル後処理
-	for (int i = 0; i < MAX_PARTICLE; i++)
+	for (int i = 0; i < MAX_Star; i++)
 	{
-		pParticle[i]->finalizeObject();
-		SAFE_DELETE(pParticle[i]);
+		pStar[i]->finalizeObject();
+		SAFE_DELETE(pStar[i]);
 	}
 
 	// UI後処理
@@ -180,8 +180,8 @@ void SceneTitle::update()
 	pTitleUI->updateObject();
 
 	// パーティクル更新
-	for (INT i = 0; i < MAX_PARTICLE; i++)
-		pParticle[i]->updateObject();
+	for (INT i = 0; i < MAX_Star; i++)
+		pStar[i]->updateObject();
 
 	// プレイヤー更新
 	pPlayer->updateObject(CameraFowerd);
@@ -278,8 +278,8 @@ void SceneTitle::draw()
 
 	/*
 	// パーティクル描画
-	for (int i = 0; i < MAX_PARTICLE; i+)+
-		pParticle[i]->drawObject();
+	for (int i = 0; i < MAX_Star; i+)+
+		pStar[i]->drawObject();
 
 	// UI描画
 	for (INT BoardCnt = 0; BoardCnt < MAX_UI_TYPE; BoardCnt++)

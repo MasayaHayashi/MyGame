@@ -20,7 +20,7 @@ class Player final : public Pawn
 {
 public:
 	Player();
-	Player(D3DXVECTOR3 startPos,UINT setNumber);
+	Player(D3DXVECTOR3 StartPos,UINT setNumber);
 	~Player();
 
 	enum class PlayerState
@@ -48,6 +48,7 @@ public:
 	// シーン別更新
 	void updateSceneEdit();
 	void updateGameMain(D3DXVECTOR3);
+	void updateSelect();
 
 	void setStatus(Player::PlayerState setStatus);
 	void setScore(INT);
@@ -92,7 +93,7 @@ private:
 	FLOAT Ynum = 0.0f;
 
 	D3DXVECTOR3		oldPos;
-	D3DXQUATERNION	startQuaternion;
+	D3DXQUATERNION	StartQuaternion;
 
 };
 

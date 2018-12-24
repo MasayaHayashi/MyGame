@@ -1,5 +1,5 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// C_GameSceneManager.cpp
+// SceneManager.cpp
 // Author : Masaya Hayashi
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
@@ -9,6 +9,7 @@
 #include "../KeyBoard/Keyboard.h"
 #include "../Scene/Title/SceneTitle.h"
 #include "../Scene/Main/SceneMain.h"
+#include "../Scene/Select/SceneSelect.h"
 #include "../Scene/Result/C_SceneResult.h"
 #include "../Fade/FadeUI.h"
 
@@ -31,19 +32,7 @@ SceneManager::SceneManager()
 	debugMode		= false;
 	frameAdvanceCnt = DebugvelocityOnFream;
 
-	// C_SCENE_STAGE_EDIT
-	// SCENE_STAGE_EDIT
-
-	// SceneMain
-	// SCENE_MAIN
-
-	// C_SCENE_TITLE
-	// SCENE_TITLE
-
-	// シーン設定初期化
-
 	loadSettingFile();
-
 	makeStartScene();
 
 	fadePtr.reset(NEW FadeUI);
@@ -168,6 +157,9 @@ void SceneManager::changeScene(SceneState Scene)
 	case SceneState::SceneMain:
 		currentScenePtr.reset(NEW SceneMain());
 		break;
+	case SceneState::SceneSelect:
+		currentScenePtr.reset(NEW SceneSelect());
+		break;
 	/*
 	case SceneState::SceneResult:
 		delete currentScenePtr.get();
@@ -240,11 +232,11 @@ const FadeUI* SceneManager::getFade() const
 void SceneManager::loadSettingFile()
 {
 	DWORD  ret;
-	ret = GetPrivateProfileString("Scene", "StartScene", "しっぱい", startScene, sizeof(startScene),"Data/debugSetting.ini");
+	ret = GetPrivateProfileString("Scene", "StartScene", "しっぱい", StartScene, sizeof(StartScene),"Data/debugSetting.ini");
 
 	if (!ret)
 	{
-		MessageBox(nullptr, TEXT("モデル読み込みエラー"), TEXT("Error"), MB_ICONERROR);
+		MessageBox(nullptr, TEXT("シーン読み込みエラー"), TEXT("Error"), MB_ICONERROR);
 	}
 }
 
@@ -253,18 +245,18 @@ void SceneManager::loadSettingFile()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneManager::makeStartScene()
 {
-	switch (sceneTypeMap[startScene])
+	switch (sceneTypeMap[StartScene])
 	{
 	case SceneState::SceneTitle :
 		currentScenePtr.reset(NEW SceneTitle());
-
 		break;
 	case SceneState::SceneMain	:
 		currentScenePtr.reset(NEW SceneMain());
-
 		break;
 	case SceneState::SceneStageEdit: 
-
+		break;
+	case SceneState::SceneSelect:
+		currentScenePtr.reset(NEW SceneSelect());
 		break;
 	case SceneState::SceneResult:
 
@@ -274,8 +266,8 @@ void SceneManager::makeStartScene()
 		break;
 	}
 
-	currentSceneType = sceneTypeMap[startScene];
-	nextSceneType = sceneTypeMap[startScene];
+	currentSceneType = sceneTypeMap[StartScene];
+	nextSceneType = sceneTypeMap[StartScene];
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

@@ -12,8 +12,8 @@
 #include "d3dx9.h"
 #include "../Application/Application.h"
 #include "../SceneManager/SceneManager.h"
-#include "../camera/camera.h"
-#include "../Pawn/Pawn.h"
+#include "../Camera/Camera.h"
+#include "../Collision/Collision.h"
 #include <vector>
 
 // ===== 定数・マクロ定義 =====
@@ -60,7 +60,7 @@ public:
 	};
 
 	void initialize();
-	void initializeTitle(Player * pPlayer);
+	void initializeTitle();
 	void initializeMain(Player *pPlayer);
 
 	void finalize(Player* pPlayer);
@@ -90,29 +90,6 @@ public:
 #endif
 
 private:
-	/*
-#define	VIEW_ANGLE			(D3DXToRadian(55.0f))	// 視野角
-#define	VIEW_ASPECT			((float)SCREEN_WIDTH / (float)SCREEN_HEIGHT)	// ビュー平面のアスペクト比	
-#define	VIEW_NEAR_Z			(1.0f)					// ビュー平面のNearZ値
-#define	VIEW_FAR_Z			(70000.0f)				// ビュー平面のFarZ値
-#define	VALUE_velocity_camera	(2.0f)					// カメラの移動量
-#define	VALUE_ROTATE_camera	(D3DX_PI * 0.003809f)		// カメラの回転量
-
-#define	INTERVAL_camera_L			(12.5f)			// モデルの視線の先までの距離
-#define	INTERVAL_camera_L_velocity		(20.5f)			// モデルの視線の先までの移動量
-
-#define	CHASE_HEIGHT_P		(100.0f)				// 追跡時の視点の高さ
-#define	CHASE_HEIGHT_L		(10.0f)					// 追跡時の注視点の高さ
-
-#define RATE_CHASE_camera_P	(0.3f)					// カメラ視点への補正係数
-#define RATE_CHASE_camera_L	(0.2f)					// カメラ注視点への補正係数
-
-
-// ===== 定数・マクロ定義 =====
-#define MAX_PITCH_SPEED		(25.0f)	// ピッチの最大値
-#define ACCELE_PITCH_SPEED	(0.5f)	// 1フレームに加速するピッチの値
-#define DECELE_PITCH_SPEED	(0.25f)	// 1フレームに減速するピッチの値
-*/
 
 	static constexpr FLOAT ViewAngle	 = D3DXToRadian(55.0f);
 	static constexpr FLOAT ViewAspect	 = Application::ScreenWidth / Application::ScreenHeight;
@@ -120,6 +97,8 @@ private:
 	static constexpr FLOAT ViewFarZ		 = 20000.0f;
 	
 	static constexpr INT RotSpeed = 10;
+
+	CameraTransform myTransform;
 
 	enum class cameraState
 	{
@@ -131,8 +110,6 @@ private:
 	void initializeStageEdit();					
 
 	void rotationCamera(D3DXVECTOR3 Center);
-
-	Transform myTransform;
 
 	D3DXVECTOR3 fadePos[3];
 	D3DXVECTOR3 fadeLook[3];

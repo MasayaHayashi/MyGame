@@ -12,6 +12,7 @@
 #include "../ResoueceManager/ResourceManager.h"
 #include "../Collision/Collision.h"
 #include "../Ball/BallObj.h"
+#include "../Random/MyRandom.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -39,10 +40,10 @@ Player::Player()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-Player::Player(D3DXVECTOR3 startPos,UINT setNumber)
+Player::Player(D3DXVECTOR3 StartPos,UINT setNumber)
 {
 	// 位置・向きの初期設定
-	myTransform.pos = (startPos);
+	myTransform.pos = (StartPos);
 	myTransform.velocity = (D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	setDefaultValue();
@@ -97,6 +98,8 @@ void Player::initialize()
 		break;
 	case SceneManager::SceneState::SceneResult:
 		initializeResult();
+	case SceneManager::SceneState::SceneSelect:
+		initializeTitle();
 		break;
 	case SceneManager::SceneState::SceneStageEdit:
 		initializeSceneEdit();
@@ -136,8 +139,11 @@ void Player::update(D3DXVECTOR3 CameraForward)
 	case  SceneManager::SceneState::SceneResult:
 		updateResult();
 		break;
-	case  SceneManager::SceneState::SceneStageEdit:
-		updateTitle(CameraForward);
+	case SceneManager::SceneState::SceneStageEdit:
+		updateSelect();
+		break;
+	case SceneManager::SceneState::SceneSelect:
+		updateSelect();
 		break;
 	default:
 		break;
@@ -155,8 +161,6 @@ void Player::draw()
 	// 描画
 	Pawn::drawFrame(hierarchyMeshData.pFrameRoot);
 
-	// コライダー描画
-//	pCollider->DrawCollider();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -173,7 +177,7 @@ void Player::updateResult()
 void Player::initializeTitle()
 {
 	// 位置、移動量、拡大率初期化
-	myTransform.pos = (D3DXVECTOR3(0.0f, -0.01f, -5.0f));
+	myTransform.pos = (D3DXVECTOR3(-10.0f, -0.01f, -5.0f));
 
 	setDefaultValue();
 
@@ -235,7 +239,7 @@ void Player::initializeTitle()
 
 	isUsed = true;
 
-	D3DXQuaternionRotationAxis(&startQuaternion, &getUpVec(), 0);		// クォータニオンでの任意軸回転
+	D3DXQuaternionRotationAxis(&StartQuaternion, &getUpVec(), 0);		// クォータニオンでの任意軸回転
 	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);	// クォータニオンから回転行列掛け合わせ
 }
 
@@ -297,7 +301,7 @@ void Player::initializeGameMain(CHAR *setFilePass)
 	isGround	= true;
 	isUsed = true;
 
-	D3DXQuaternionRotationAxis(&startQuaternion, &getUpVec(), 0);
+	D3DXQuaternionRotationAxis(&StartQuaternion, &getUpVec(), 0);
 	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
 
 }
@@ -461,7 +465,7 @@ void Player::updateTitle(D3DXVECTOR3 CameraForward)
 		D3DXQuaternionRotationAxis(&quatanion, &Upvec, oldRadRot);
 		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
 
-		startQuaternion = quatanion;
+		StartQuaternion = quatanion;
 		fCnt = 0.0f;
 
 		PrintDebugProc("ああああああああああああ");
@@ -471,7 +475,7 @@ void Player::updateTitle(D3DXVECTOR3 CameraForward)
 		D3DXQuaternionRotationAxis(&destQua, &Upvec, radRot);
 
 
-		D3DXQuaternionSlerp(&quatanion, &startQuaternion, &destQua, 1.0f);
+		D3DXQuaternionSlerp(&quatanion, &StartQuaternion, &destQua, 1.0f);
 		fCnt += 0.1f;
 
 		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
@@ -634,14 +638,14 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 		D3DXQuaternionRotationAxis(&quatanion, &Upvec, oldRadRot);
 		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
 
-		startQuaternion = quatanion;
+		StartQuaternion = quatanion;
 		rotCnt = 0.0f;
 	}
 	else
 	{
 		D3DXQuaternionRotationAxis(&destQua, &Upvec, radRot);
 
-		D3DXQuaternionSlerp(&quatanion, &startQuaternion, &destQua, rotCnt);
+		D3DXQuaternionSlerp(&quatanion, &StartQuaternion, &destQua, rotCnt);
 		rotCnt += 0.1f;
 
 		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
@@ -653,9 +657,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 		rotCnt = 1.0f;
 	}
 
-	worldMtx._41 = myTransform.pos.x;
-	worldMtx._42 = myTransform.pos.y;
-	worldMtx._43 = myTransform.pos.z;
+	changePosition();
 
 #if 0
 
@@ -807,6 +809,25 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 
 #endif
 
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// シーンセレクト用更新
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Player::updateSelect()
+{
+	updateAnimation();
+
+	D3DXMatrixRotationY(&worldMtx, D3DXToRadian(myTransform.rotDeg.y));
+	myTransform.rotDeg.y += 1;
+
+	D3DXVECTOR3 cameraPos = Collision::getCameraTransform("Camera", 1)->pos;
+
+	myTransform.pos = cameraPos;
+	myTransform.pos.z += 7.02f;
+	myTransform.pos.x -= 4.0f;
+
+	changePosition();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -981,29 +1002,6 @@ void Player::rebound(size_t index)
 	myTransform.velocity.y = 0.0f;
 
 }
-//
-////＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-//// 衝突判定
-////＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-//bool Player::isHit()
-//{
-//	const Transform* ball1Transform = Collision::getTransform("Ball", 0);
-//	const Transform* ball2Transform = Collision::getTransform("Ball", 1);
-//
-//	D3DXVECTOR3 ballToBallVector = ball1Transform->pos - ball2Transform->pos;
-//	ballToBallVector.y = 0.0f;
-//
-//	FLOAT length = MyVector3::getLength(ballToBallVector);
-//
-//	if (length < HitLength)
-//	{
-//		return true;
-//	}
-//	else
-//	{
-//		return false;
-//	}
-//}
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ボール乗っかり

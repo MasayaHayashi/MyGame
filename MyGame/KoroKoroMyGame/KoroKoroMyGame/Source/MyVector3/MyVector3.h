@@ -32,7 +32,7 @@ public:
 	static const FLOAT getLength(const D3DXVECTOR3& setVector);
 
 	static void Lerp(D3DXVECTOR3* pOut, const D3DXVECTOR3& fStart, const D3DXVECTOR3& fEnd, const FLOAT& fMin, const FLOAT& fMax, const FLOAT& fCurrent);																// 線形補間
-	static void Slerp(D3DXQUATERNION *out, const D3DXQUATERNION &start, const D3DXQUATERNION &end, const FLOAT& fMax, const FLOAT& fCurrent);	// 球面線形補間(クオータニオン)
+	static void Slerp(D3DXQUATERNION *out, const D3DXQUATERNION &Start, const D3DXQUATERNION &end, const FLOAT& fMax, const FLOAT& fCurrent);	// 球面線形補間(クオータニオン)
 
 
 	static FLOAT		Vec3Dot(D3DXVECTOR3 VecA, D3DXVECTOR3 VecB);	// 内積

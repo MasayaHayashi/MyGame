@@ -20,6 +20,7 @@
 // ===== 静的メンバ =====
 std::unordered_map<std::string, std::list<Transform*>> Collision::collisionMapes;
 std::unordered_map<std::string, std::vector<RayHit*>>  Collision::rayHitMapes;
+std::unordered_map<std::string, std::list<CameraTransform*>> Collision::cameraTransforms;
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -83,6 +84,14 @@ void Collision::registerList(Transform *setPawn,std::string keyName)
 {
 	collisionMapes[keyName].push_back(setPawn);
 	rayHitMapes[keyName].push_back(NEW RayHit());
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 登録
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Collision::registerList(CameraTransform *setCamera, std::string keyName)
+{
+	cameraTransforms[keyName].push_back(setCamera);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -289,6 +298,7 @@ INT Collision::Intersect(Pawn *pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRay
 
 		// 交点を算出
 		D3DXVECTOR3 X = P0 + T * W;
+
 		if (pCross)
 		{
 			*pCross = X;
@@ -455,6 +465,21 @@ const std::list<Transform*> Collision::getTransform(std::string keyName)
 
 	}
 	return collisionMapes[keyName];
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 取得
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+const CameraTransform* Collision::getCameraTransform(std::string keyName, INT index)
+{
+	if (index < 0)
+	{
+		throw std::invalid_argument("不正な引数です");
+
+		return nullptr;
+	}
+	
+	return *std::next(cameraTransforms[keyName].begin(), index);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

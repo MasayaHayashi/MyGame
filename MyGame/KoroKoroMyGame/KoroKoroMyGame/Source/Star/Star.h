@@ -8,7 +8,7 @@
 #define STAR_H
 
 // ===== インクルード部 =====
-#include "../Board/Board.h"
+#include "../Particle/Particle.h"
 #include "../SceneManager/SceneManager.h"
 
 // ===== 定数・マクロ定義 =====
@@ -20,7 +20,7 @@
 // ===== 列挙体定義 =====
 
 // ===== クラス定義 =====
-class Star final : public Board
+class Star final : public Particle
 {
 public:
 	Star();

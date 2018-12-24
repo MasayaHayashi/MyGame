@@ -24,7 +24,7 @@ enum class UIType
 class MainField;
 class Player;
 class TitleUI;
-class C_PARTICLE_BASE;
+class C_Star_BASE;
 class HeartObj;
 class Light;
 class Camera;
