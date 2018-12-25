@@ -109,7 +109,6 @@ public:
 	HRESULT AllocAllBoneMatrix(LPD3DXFRAME);
 
 	void setTime(DOUBLE);
-	void changePosition();
 	void drawFrame(LPD3DXFRAME);
 	void RenderMeshContainer(LPD3DXMESHCONTAINER, LPD3DXFRAME );
 

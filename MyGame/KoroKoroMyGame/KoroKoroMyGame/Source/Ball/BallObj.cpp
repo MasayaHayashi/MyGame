@@ -10,16 +10,7 @@
 #include "../DirectX3D/DirectX3D.h"
 #include "../Collision/Collision.h"
 
-/*
-#include "C_MyVector3.h"
-#include "collision.h"
-
-#if _DEBUG
-#include "debugproc.h"
-#endif
-*/
 // ===== 定数・マクロ定義 =====
-
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -30,10 +21,10 @@ BallObj::BallObj()
 	pCollider = nullptr;
 
 	// 位置・向きの初期設定
-	myTransform.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.rotDeg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.pos			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDeg		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDegDest	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// 拡大率設定
 	myTransform.scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
@@ -58,10 +49,10 @@ BallObj::BallObj(UINT setIndex)
 	pCollider = nullptr;
 
 	// 位置・向きの初期設定
-	myTransform.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.rotDeg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.pos			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDeg		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDegDest	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// 拡大率設定
 	myTransform.scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
@@ -86,8 +77,6 @@ BallObj::BallObj(UINT setIndex)
 BallObj::~BallObj()
 {
 
-	// 各種クラス解放
-	//	SAFE_DELETE(pCollider);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -111,7 +100,7 @@ void BallObj::initialize()
 		initializeTitleObj_Result();
 		break;
 	case SceneManager::SceneState::SceneSelect:
-		initializeTitleObj_Title();
+		initializeScelect();
 		break;
 	case SceneManager::SceneState::SceneStageEdit:
 		initializeTitleObj_Title();
@@ -148,6 +137,9 @@ void BallObj::update(D3DXVECTOR3 pos, D3DXVECTOR3 rotVec)
 		break;
 	case SceneManager::SceneState::SceneResult:
 		UpdateTitleObj_Result();
+		break;
+	case SceneManager::SceneState::SceneSelect:
+		updateScelect();
 		break;
 	case SceneManager::SceneState::SceneStageEdit:
 		UpdateTitleObj_Title();
@@ -187,18 +179,18 @@ void BallObj::UpdateTitleObj_Result()
 void BallObj::initializeTitleObj_Title()
 {
 	// 位置、移動量、拡大率初期化
-	myTransform.pos = D3DXVECTOR3(-0.0, 2.0f, 0.0f);
-	myTransform.velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.rotDeg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	myTransform.pos			= D3DXVECTOR3(-0.0, 2.0f, 0.0f);
+	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDeg		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDegDest	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.scale		= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
 	// デバイス取得
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	// 各種変数初期化
-	pD3DTexture = nullptr;
-	meshPtr = nullptr;
+	pD3DTexture		  = nullptr;
+	meshPtr			  = nullptr;
 	materialBufferPtr = nullptr;
 	numMat = 0;
 
@@ -223,10 +215,7 @@ void BallObj::initializeTitleObj_Title()
 
 	isUsed = true;
 
-	// コライダー初期化
-	//	pCollider = NEW C_COLLIDER(pos, MeshData.collitionBox);
-	//	pCollider->initializeCollider();
-	//	pCollider->setUsedFlg(false);
+	Collision::registerList(&myTransform, "Ball");
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -283,10 +272,10 @@ void BallObj::initializeTitleObj_Result()
 	// デバイス取得
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
-	pD3DTexture = nullptr;
-	meshPtr = nullptr;
-	materialBufferPtr = nullptr;
-	numMat = 0;
+	pD3DTexture			= nullptr;
+	meshPtr				= nullptr;
+	materialBufferPtr	= nullptr;
+	numMat				= 0;
 
 	// Xファイルの読み込み
 
@@ -332,4 +321,63 @@ void BallObj::move(const D3DXVECTOR3 moveVector)
 	myTransform.pos.y	= playerPos.y - 0.95f;
 
 	setWorldMtxPos(myTransform.pos);
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// セレクト初期化
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void BallObj::initializeScelect()
+{
+	// 位置、移動量、拡大率初期化
+	myTransform.pos			= D3DXVECTOR3(-7.0f, 2.0f, -7.0f);
+	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDeg		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.rotDegDest  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.scale		= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+
+	// デバイス取得
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
+
+	// 各種変数初期化
+	pD3DTexture		  = nullptr;
+	meshPtr			  = nullptr;
+	materialBufferPtr = nullptr;
+	numMat			  = 0;
+
+	ResourceManager::makeModel(meshDataObj, fileName, meshType);
+	ResourceManager::createTexture(textureData, texFileName);
+
+	// 回転
+	D3DXMATRIX mRotX, mRotY, mRotZ;
+
+	D3DXMatrixRotationY(&mRotX, D3DXToRadian(0));
+	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mRotX);
+
+	// 拡大
+	D3DXMATRIX mScale;
+	D3DXMatrixScaling(&mScale, myTransform.scale.x, myTransform.scale.y, myTransform.scale.z);
+	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mScale);
+
+	// 移動
+	D3DXMATRIX mtxTranslate;
+	D3DXMatrixTranslation(&mtxTranslate, myTransform.pos.x, myTransform.pos.y, myTransform.pos.z);
+	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mtxTranslate);
+
+	isUsed = true;
+
+	Collision::registerList(&myTransform, "Ball");
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// セレクト更新
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void BallObj::updateScelect()
+{
+	setWorldMtxPos(myTransform.pos);
+	
+	
+	myTransform.rotDeg.y += 1;
+
+	D3DXMatrixRotationY(&worldMtx, D3DXToRadian(myTransform.rotDeg.y));
+
 }

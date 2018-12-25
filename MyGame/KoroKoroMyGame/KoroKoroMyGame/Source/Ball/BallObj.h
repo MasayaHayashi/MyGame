@@ -44,6 +44,11 @@ private:
 	void initializeTitleObj_Title();
 	void initializeTitleObj_GameMain();
 	void initializeTitleObj_Result();
+
+	void initializeScelect();
+	void updateScelect();
+
+
 	void UpdateTitleObj_Title();
 	void updateGameMain(D3DXVECTOR3 pos, D3DXVECTOR3 rotVec);
 	void UpdateTitleObj_Result();

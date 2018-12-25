@@ -1106,16 +1106,6 @@ bool Pawn::isHit(std::string keyName)
 	}
 }
 
-//
-// ˆÊ’u”½‰f
-//
-void Pawn::changePosition()
-{
-	worldMtx._41 = myTransform.pos.x;
-	worldMtx._42 = myTransform.pos.y;
-	worldMtx._43 = myTransform.pos.z;
-}
-
 #if _DEBUG
 
 //

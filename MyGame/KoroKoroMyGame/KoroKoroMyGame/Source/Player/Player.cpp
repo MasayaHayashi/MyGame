@@ -657,7 +657,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 		rotCnt = 1.0f;
 	}
 
-	changePosition();
+	setWorldMtxPos(myTransform.pos);
 
 #if 0
 
@@ -824,10 +824,11 @@ void Player::updateSelect()
 	D3DXVECTOR3 cameraPos = Collision::getCameraTransform("Camera", 1)->pos;
 
 	myTransform.pos = cameraPos;
-	myTransform.pos.z += 7.02f;
+	myTransform.pos.z += 8.0f;
 	myTransform.pos.x -= 4.0f;
 
-	changePosition();
+	rideBall(0);
+	setWorldMtxPos(myTransform.pos);
 }
 
 //

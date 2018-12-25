@@ -102,15 +102,15 @@ void SceneSelect::update()
 		gameObject->update();
 	}
 
-	for (const auto &player : playeresPtr)
-	{
-		player->update(cameraPtr->getFowerd());
-	}	
-	
 	for (const auto& ballPtr : ballsPtr)
 	{
 		ballPtr->update(playeresPtr.back()->getPosition(), playeresPtr.back()->getPosition());
 	}
+
+	for (const auto &player : playeresPtr)
+	{
+		player->update(cameraPtr->getFowerd());
+	}	
 
 	for (const auto& board : boardObjectesPtr)
 	{
