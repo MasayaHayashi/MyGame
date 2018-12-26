@@ -70,7 +70,7 @@ private:
 	static SceneState currentSceneType;
 	static SceneState nextSceneType;
 
-	static std::unique_ptr<SceneManager> sceneManagerInstancePtr;
+	static std::unique_ptr<SceneManager> SceneManagerInstancePtr;
 	static std::unique_ptr<SceneBase>	 currentScenePtr;
 	static std::unique_ptr <FadeUI>		 fadePtr;
 

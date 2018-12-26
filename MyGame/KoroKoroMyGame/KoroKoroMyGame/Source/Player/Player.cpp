@@ -108,9 +108,6 @@ void Player::initialize()
 	default:
 		break;
 	}
-
-	// 共通処理
-	score = 0;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -188,7 +185,12 @@ void Player::initializeTitle()
 	pD3DTexture			 = nullptr;
 	meshPtr				 = nullptr;
 	materialBufferPtr	 = nullptr;
-	numMat		 = 0;
+	numMat				 = 0;
+
+	if (idNumber == 0)
+	{
+		strcpy_s(fileName, ModelChick);
+	}
 
 	// Xファイルの読み込み
 	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName, "Player" , meshType);
@@ -239,8 +241,11 @@ void Player::initializeTitle()
 
 	isUsed = true;
 
-	D3DXQuaternionRotationAxis(&StartQuaternion, &getUpVec(), 0);		// クォータニオンでの任意軸回転
-	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);	// クォータニオンから回転行列掛け合わせ
+	D3DXQuaternionRotationAxis(&StartQuaternion, &getUpVec(), 0);
+	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
+
+	ResourceManager::makeHierarchyResouce(ModelChick, ModelChick);
+	ResourceManager::makeHierarchyResouce(ModelPenchanPass, ModelPenchanPass);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -250,9 +255,9 @@ void Player::initializeGameMain(CHAR *setFilePass)
 {
 	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.rotDeg		= D3DXVECTOR3(0.0f, 180.0f, 0.0f);
-	myTransform.rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.scale	= D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
-	playerStateType = PlayerState::velocity;
+	myTransform.rotDegDest	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.scale		= D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
+	playerStateType			= PlayerState::velocity;
 
 	if (idNumber == 0)
 	{
@@ -272,13 +277,10 @@ void Player::initializeGameMain(CHAR *setFilePass)
 	pD3DTexture		  = nullptr;
 	meshPtr			  = nullptr;
 	materialBufferPtr = nullptr;
-	numMat		 = 0;
+	numMat			  = 0;
 
 	// Xファイルの読み込み
 	ResourceManager::makeModelHierarchy(hierarchyMeshData, setFilePass,"Player",meshType);
-
-	// モデル位置調整
-//	myTransform.pos.y -= hierarchyMeshData.CollitionBox.y * 2;
 
 	// 拡大
 	D3DXMATRIX mScale;
@@ -293,17 +295,16 @@ void Player::initializeGameMain(CHAR *setFilePass)
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &translate);
 
 	// 現在のアニメーションセットの設定値を取得
-	D3DXTRACK_DESC TD;   // トラックの能力
+	D3DXTRACK_DESC TD;
 	hierarchyMeshData.pAnimCtrl->GetTrackDesc(0, &TD);
 	hierarchyMeshData.pAnimCtrl->SetTrackDesc(1, &TD);
 
 	playerStateType = PlayerState::Stop;
-	isGround	= true;
-	isUsed = true;
+	isGround		= true;
+	isUsed			= true;
 
 	D3DXQuaternionRotationAxis(&StartQuaternion, &getUpVec(), 0);
 	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
-
 }
 
 
@@ -313,11 +314,11 @@ void Player::initializeGameMain(CHAR *setFilePass)
 void Player::initializeSceneEdit()
 {
 	// 位置、移動量、拡大率初期化
-	myTransform.pos		= D3DXVECTOR3(0.0f, -0.01f, -5.0f);
+	myTransform.pos			= D3DXVECTOR3(0.0f, -0.01f, -5.0f);
 	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.rotDeg		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.scale	= D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
+	myTransform.rotDegDest	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.scale		= D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
 
 	// デバイス取得
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
@@ -526,6 +527,8 @@ void Player::updateTitle(D3DXVECTOR3 CameraForward)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 {
+
+
 	Xnum -= 0.0004f;
 	Ynum -= 0.0004f;
 
@@ -818,16 +821,29 @@ void Player::updateSelect()
 {
 	updateAnimation();
 
+	static bool testFlg = true;
+	static bool testFlg2 = true;
+	if (idNumber == 1)
+	{
+		if(testFlg)
+			ResourceManager::changeHierarchy(hierarchyMeshData, ModelChick);
+
+		testFlg = false;
+	}
+	if (idNumber == 1)
+	{
+		if (testFlg2)
+			ResourceManager::changeHierarchy(hierarchyMeshData, ModelPenchanPass);
+
+		testFlg2 = false;
+	}
+
 	D3DXMatrixRotationY(&worldMtx, D3DXToRadian(myTransform.rotDeg.y));
 	myTransform.rotDeg.y += 1;
 
 	D3DXVECTOR3 cameraPos = Collision::getCameraTransform("Camera", 1)->pos;
 
-	myTransform.pos = cameraPos;
-	myTransform.pos.z += 8.0f;
-	myTransform.pos.x -= 4.0f;
-
-	rideBall(0);
+	rideBall(idNumber);
 	setWorldMtxPos(myTransform.pos);
 }
 

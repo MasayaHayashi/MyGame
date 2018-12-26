@@ -10,11 +10,12 @@
 // ===== インクルード部 =====
 #include "../Pawn/Pawn.h"
 #include "../SceneManager/SceneManager.h"
+#include "../Application/Application.h"
+#include "../Player/Player.h"
 
 // ===== 定数・マクロ定義 =====
 
 // ===== クラスの前方宣言 =====
-class C_COLLIDER;
 
 // ===== 構造体定義 =====
 
@@ -35,9 +36,11 @@ public:
 
 private:
 
-	const std::string ModelFilePass	  = "Data/Model/Ball/Beachball.x";
-	const std::string TextureFilePass = "Data/Model/Ball/Beachball_Albedo.png";
+	const std::string ModelFilePass		 = "Data/Model/Ball/Beachball.x";
+	const std::string TextureFilePass	 = "Data/Model/Ball/Beachball_Albedo.png";
 	static constexpr FLOAT TitleRotSpeed = 0.06f;
+	static constexpr FLOAT StartPosition = -7.5f;
+	static constexpr FLOAT IntervalSpace = 5.0f;
 
 	FLOAT rotCnt = 0;
 
@@ -56,7 +59,6 @@ private:
 
 
 	SceneManager::SceneState currentScene;
-	C_COLLIDER *pCollider;
 };
 
 #endif 

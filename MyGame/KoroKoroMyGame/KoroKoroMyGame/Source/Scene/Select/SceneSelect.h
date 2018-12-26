@@ -57,7 +57,7 @@ private:
 	std::unique_ptr<Light>		lightPtr;
 	std::unique_ptr<Camera>		cameraPtr;
 
-	std::list<BallObj*>  ballsPtr;
+	std::list<BallObj*>					 ballsPtr;
 	std::list<std::unique_ptr<Player>>	 playeresPtr;
 	std::list<std::unique_ptr<Pawn>>	 gameObjectesPtr;
 	std::list<std::unique_ptr<Board>>	 boardObjectesPtr;

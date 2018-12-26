@@ -45,7 +45,7 @@ typedef struct
 
 typedef struct
 {
-	CHAR						szMeshFileName[256];	// ファイル名
+	CHAR						meshFileName[256];			// ファイル名
 	LPD3DXMESH					pD3DXMesh;				// メッシュ情報
 	LPD3DXBUFFER				pD3DXBuffMat;			// マテリアル情報へのポインタ
 	DWORD						uNumMat;				// マテリアル情報の数
@@ -94,6 +94,7 @@ public:
 	static HRESULT createTexture(TEXTURE_DATA &TextureData,CHAR *pszFilename);
 	static HRESULT makeModelHierarchy(HIERARCHY_MESH_DATA &HierarchyMedhData, CHAR *pszFilename, std::string keyName, MeshObjType &MeshType);
 	static HRESULT makevertexBoard(VERTEX_BOARD_DATA &VtxBordData, CHAR *pszFilename);
+	static HRESULT makeHierarchyResouce(std::string keyName,CHAR* setName);
 
 	// 解放
 	static bool destroyMesh(CHAR *pszChakNeme);
@@ -107,6 +108,7 @@ public:
 	static void createFadeTexture(TEXTURE_DATA& TextureData, CHAR *pszFilename);
 
 	static bool createInstance();
+	static void changeHierarchy(HIERARCHY_MESH_DATA &changeData,CHAR* modelName);
 	static std::unique_ptr<ResourceManager> instancePtr;
 
 private:
@@ -116,6 +118,8 @@ private:
 
 	static std::vector<MeshData*>				meshes;
 	static std::vector<HIERARCHY_MESH_DATA*>	hierarchyMesh;
+	static std::unordered_map<std::string, HIERARCHY_MESH_DATA*> resoueceMesh;
+
 	static std::vector<TEXTURE_DATA*>			texture;
 	static std::vector<TEXTURE_DATA*>			fadeTexture;
 	static std::vector<VERTEX_BOARD_DATA*>		vtxBoard;

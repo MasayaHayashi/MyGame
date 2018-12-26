@@ -24,6 +24,9 @@ std::vector<TEXTURE_DATA*>			ResourceManager::fadeTexture;			// テクスチャ情報
 std::vector<VERTEX_BOARD_DATA*>		ResourceManager::vtxBoard;				// ボード頂点情報
 std::vector<VERTEX_BOARD_DATA*>		ResourceManager::vtxFadeBoard;			// ボード頂点情報
 std::vector<HIERARCHY_MESH_DATA*>	ResourceManager::hierarchyMesh;
+std::unordered_map<std::string, HIERARCHY_MESH_DATA*> ResourceManager::resoueceMesh;
+
+
 
 #define SAFE_RELEASE(p)		 { if (p) { (p)->Release(); (p)=NULL; }}
 #define SAFE_DELETE(p)	     { if( p != nullptr ){ delete p;  p = nullptr; }}
@@ -683,7 +686,7 @@ HRESULT ResourceManager::createTexture(TEXTURE_DATA &TextureData,  CHAR *pszFile
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 階層構造用モデル読み込み
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-HRESULT ResourceManager::makeModelHierarchy(HIERARCHY_MESH_DATA &setHierarchyMeshData,CHAR *pszFilename,std::string keyName, MeshObjType &meshType)
+HRESULT ResourceManager::makeModelHierarchy(HIERARCHY_MESH_DATA &setHierarchyMeshData,CHAR *setFilename,std::string keyName, MeshObjType &meshType)
 {
 	// デバイス取得
 	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
@@ -691,26 +694,30 @@ HRESULT ResourceManager::makeModelHierarchy(HIERARCHY_MESH_DATA &setHierarchyMes
 	// メッシュの種類初期化
 	meshType = MeshObjType::HierarchyModel;
 
-	// メッシュ情報セット
-	strcpy_s(setHierarchyMeshData.szMeshFileName, pszFilename);	// ファイル名セット
+	strcpy_s(setHierarchyMeshData.meshFileName, setFilename);
 
 	hierarchyMesh.push_back(&setHierarchyMeshData);
 
 	// ディレクトリ抽出
 	TCHAR szDir[_MAX_PATH];
 	TCHAR szDirWk[_MAX_DIR];
-	_tsplitpath(hierarchyMesh.back()->szMeshFileName, szDir, szDirWk, NULL, NULL);
+	_tsplitpath(hierarchyMesh.back()->meshFileName, szDir, szDirWk, NULL, NULL);
 	lstrcat(szDir, szDirWk);
 	hierarchyMesh.back()->Hierarchy.setDirectory(szDir);
 
 	// 階層構造メッシュの読み込み
-	HRESULT hr = D3DXLoadMeshHierarchyFromX(hierarchyMesh.back()->szMeshFileName, D3DXMESH_MANAGED, pDevice, &hierarchyMesh.back()->Hierarchy, NULL, &hierarchyMesh.back()->pFrameRoot, &hierarchyMesh.back()->pAnimCtrl);
+	HRESULT hr = D3DXLoadMeshHierarchyFromX(hierarchyMesh.back()->meshFileName, D3DXMESH_MANAGED, pDevice, &hierarchyMesh.back()->Hierarchy, NULL, &hierarchyMesh.back()->pFrameRoot, &hierarchyMesh.back()->pAnimCtrl);
 	if (FAILED(hr))
-		return false;
+	{
+		return E_FAIL;
+	}
 
 	// ボーンとフレームの関連付け
-	hr = allocAllBoneMatrix(hierarchyMesh.back()->pFrameRoot, pszFilename);
-	if (FAILED(hr)) return false;
+	hr = allocAllBoneMatrix(hierarchyMesh.back()->pFrameRoot, setFilename);
+	if (FAILED(hr))
+	{
+		return false;
+	}
 
 	// アニメーションセット取得
 	hierarchyMesh.back()->uNumAnimSet = 0;
@@ -730,13 +737,13 @@ HRESULT ResourceManager::makeModelHierarchy(HIERARCHY_MESH_DATA &setHierarchyMes
 	if (hierarchyMesh.back()->pFrameRoot)
 	{
 		// マトリックス更新
-		setTime(0.0, pszFilename);
+		setTime(0.0, setFilename);
 		D3DXMATRIX world;
 		D3DXMatrixIdentity(&world);
 		updateFrameMatrices(hierarchyMesh.back()->pFrameRoot, &world);
 
 		// 境界球/境界ボックス取得
-		calcCollision(hierarchyMesh.back()->pFrameRoot, pszFilename);
+		calcCollision(hierarchyMesh.back()->pFrameRoot, setFilename);
 	}
 
 	// 経過時間計測用時刻設定
@@ -1138,14 +1145,11 @@ bool ResourceManager::destroyAllHierarchymesh()
 		if (hierarchyMesh[i]->pFrameRoot)
 		{
 			D3DXFrameDestroy(hierarchyMesh[i]->pFrameRoot, &hierarchyMesh[i]->Hierarchy);
-			hierarchyMesh[i]->pFrameRoot = nullptr;
+ 			hierarchyMesh[i]->pFrameRoot = nullptr;
 		}
 
 	}
 	hierarchyMesh.clear();
-	return true;
-	
-
 	return true;
 }
 
@@ -1263,4 +1267,28 @@ bool ResourceManager::createInstance()
 	{
 		return false;
 	}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// モデル変更
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void ResourceManager::changeHierarchy(HIERARCHY_MESH_DATA &changeHierarchy,CHAR* modelName)
+{
+
+	changeHierarchy = *resoueceMesh[modelName];
+			
+	
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// プレイヤー用生成
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+HRESULT ResourceManager::makeHierarchyResouce(std::string setName,CHAR* keyName)
+{
+	resoueceMesh[setName] = NEW HIERARCHY_MESH_DATA();
+	 
+	MeshObjType type = MeshObjType::HierarchyModel;
+	makeModelHierarchy(*resoueceMesh[setName], keyName, setName, type);
+
+	return E_FAIL;
 }

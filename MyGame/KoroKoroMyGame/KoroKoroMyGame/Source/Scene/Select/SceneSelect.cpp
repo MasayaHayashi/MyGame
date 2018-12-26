@@ -24,13 +24,17 @@ UINT	SceneSelect::prevScore = 0;
 SceneSelect::SceneSelect()
 {
 	prevScore = 0;
-	lightPtr.reset(NEW Light());
+	lightPtr.reset(	NEW Light() );
 	cameraPtr.reset(NEW Camera());
-	playeresPtr.push_back( static_cast<std::unique_ptr<Player>> (NEW Player(D3DXVECTOR3(-2.0f, 0.0f, 0.0f), playeresPtr.size())));
 
-	for (UINT ballCnt = 0; ballCnt < playeresPtr.size(); ballCnt++)
+	for (UINT playerIndex = 1; playerIndex < Player::MaxPlayer + 1; playerIndex++)
 	{
-		ballsPtr.push_back( NEW BallObj(ballCnt));
+		playeresPtr.push_back(static_cast<std::unique_ptr<Player>> (NEW Player(D3DXVECTOR3( -2.0f * playerIndex, 0.0f, 0.0f), playeresPtr.size())));
+	}
+
+	for (UINT ballIndex = 0; ballIndex < playeresPtr.size(); ballIndex++)
+	{
+		ballsPtr.push_back( NEW BallObj(ballIndex));
 	}
 	
 	boardObjectesPtr.push_back(std::unique_ptr<Board>( NEW BackGround()) );

@@ -10,16 +10,13 @@
 #include "../DirectX3D/DirectX3D.h"
 #include "../Collision/Collision.h"
 
-// ===== 定数・マクロ定義 =====
+// ===== 定数・マクロ定義 ===== 
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 BallObj::BallObj()
 {
-	// 各種クラス初期化
-	pCollider = nullptr;
-
 	// 位置・向きの初期設定
 	myTransform.pos			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -45,9 +42,6 @@ BallObj::BallObj()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 BallObj::BallObj(UINT setIndex)
 {
-	// 各種クラス初期化
-	pCollider = nullptr;
-
 	// 位置・向きの初期設定
 	myTransform.pos			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -329,7 +323,7 @@ void BallObj::move(const D3DXVECTOR3 moveVector)
 void BallObj::initializeScelect()
 {
 	// 位置、移動量、拡大率初期化
-	myTransform.pos			= D3DXVECTOR3(-7.0f, 2.0f, -7.0f);
+	myTransform.pos			= D3DXVECTOR3(StartPosition + IntervalSpace * idNumber, 2.0f, -7.0f);
 	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.rotDeg		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.rotDegDest  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -373,11 +367,10 @@ void BallObj::initializeScelect()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void BallObj::updateScelect()
 {
-	setWorldMtxPos(myTransform.pos);
-	
-	
 	myTransform.rotDeg.y += 1;
 
 	D3DXMatrixRotationY(&worldMtx, D3DXToRadian(myTransform.rotDeg.y));
+
+	setWorldMtxPos(myTransform.pos);
 
 }

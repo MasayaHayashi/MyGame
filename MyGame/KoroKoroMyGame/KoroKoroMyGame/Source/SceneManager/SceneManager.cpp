@@ -14,7 +14,7 @@
 #include "../Fade/FadeUI.h"
 
 // ===== Ã“Iƒƒ“ƒo =====
-std::unique_ptr<SceneManager>	SceneManager::sceneManagerInstancePtr(nullptr);
+std::unique_ptr<SceneManager>	SceneManager::SceneManagerInstancePtr(nullptr);
 std::unique_ptr<SceneBase>		SceneManager::currentScenePtr(nullptr);
 std::unique_ptr<FadeUI>			SceneManager::fadePtr(nullptr);
 
@@ -51,9 +51,9 @@ SceneManager::~SceneManager()
 //
 bool SceneManager::create()
 {
-	if (sceneManagerInstancePtr.get() == nullptr)
+	if (SceneManagerInstancePtr.get() == nullptr)
 	{
-		sceneManagerInstancePtr.reset(NEW SceneManager());
+		SceneManagerInstancePtr.reset(NEW SceneManager());
 		return true;
 	}
 	else
