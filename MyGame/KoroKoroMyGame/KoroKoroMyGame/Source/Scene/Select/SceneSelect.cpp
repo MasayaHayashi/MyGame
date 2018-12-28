@@ -13,6 +13,7 @@
 #include "../../MyDelete/MyDelete.h"
 #include "../../Board/Board.h"
 #include "../../BackGround/BackGround.h"
+#include "../../SelectManager/SelectManager.h"
 
 // ===== Ã“Iƒƒ“ƒo•Ï” =====
 UINT	SceneSelect::currentStage = 0;
@@ -27,7 +28,7 @@ SceneSelect::SceneSelect()
 	lightPtr.reset(	NEW Light() );
 	cameraPtr.reset(NEW Camera());
 
-	for (UINT playerIndex = 1; playerIndex < Player::MaxPlayer + 1; playerIndex++)
+	for (UINT playerIndex = 1; playerIndex < SelectManager::MaxPlayer + 1; playerIndex++)
 	{
 		playeresPtr.push_back(static_cast<std::unique_ptr<Player>> (NEW Player(D3DXVECTOR3( -2.0f * playerIndex, 0.0f, 0.0f), playeresPtr.size())));
 	}

@@ -22,7 +22,7 @@ Player::Player()
 	setDefaultValue();
 
 	// ファイルパス設定
-	strcpy_s(fileName, ModelPenchanPass);
+	strcpy_s(fileName, ResourceManager::ModelPenchanPass);
 
 	// 識別用タグ設定
 	tagName		= "Player";
@@ -49,7 +49,7 @@ Player::Player(D3DXVECTOR3 StartPos,UINT setNumber)
 	setDefaultValue();
 
 	// ファイルパス設定
-	strcpy_s(fileName, ModelPenchanPass);
+	strcpy_s(fileName, ResourceManager::ModelPenchanPass);
 
 	// 識別用タグ設定
 	tagName = "Player";
@@ -89,11 +89,11 @@ void Player::initialize()
 	case SceneManager::SceneState::SceneMain:
 		if (idNumber == 0)
 		{
-			initializeGameMain(ModelPenchanPass);
+			initializeGameMain(ResourceManager::ModelPenchanPass);
 		}
 		else if(idNumber == 1)
 		{
-			initializeGameMain(ModelChick);
+			initializeGameMain(ResourceManager::ModelChick);
 		}
 		break;
 	case SceneManager::SceneState::SceneResult:
@@ -189,7 +189,7 @@ void Player::initializeTitle()
 
 	if (idNumber == 0)
 	{
-		strcpy_s(fileName, ModelChick);
+		strcpy_s(fileName, ResourceManager::ModelChick);
 	}
 
 	// Xファイルの読み込み
@@ -227,12 +227,20 @@ void Player::initializeTitle()
 	// 表示フラグ初期化
 	//pCollider->setUsedFlg(false);
 
-	ResourceManager::makeModelHierarchy(hierarchyMeshData,ModelChick, ModelChick, meshType);
-//	ResourceManager::makeHierarchyResouce(hierarchyMeshData,ModelPenchanPass, ModelPenchanPass,idNumber);
-
+	
+		ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelPenchanPass, ResourceManager::ModelPenchanPass, meshType, idNumber);
+		ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelChick, ResourceManager::ModelChick, meshType, idNumber);
+		ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelPenNoHahaPass, ResourceManager::ModelPenNoHahaPass, meshType,idNumber);
 	meshType = MeshObjType::HierarchyModel;
 
-//	ResourceManager::setHierarchy(hierarchyMeshData, ModelChick,idNumber);
+	if (idNumber == 2)
+	{
+		ResourceManager::setHierarchy(&hierarchyMeshData, ResourceManager::ModelPenchanPass, idNumber);
+	}
+	else
+	{
+		ResourceManager::setHierarchy(&hierarchyMeshData, ResourceManager::ModelChick, idNumber);
+	}
 
 	//// 現在のアニメーションセットの設定値を取得
 	//D3DXTRACK_DESC TD;   // トラックの能力
@@ -287,7 +295,7 @@ void Player::initializeGameMain(CHAR *setFilePass)
 	numMat			  = 0;
 
 	// Xファイルの読み込み
-	ResourceManager::makeModelHierarchy(hierarchyMeshData, setFilePass,"Player",meshType);
+	ResourceManager::makeModelHierarchy(hierarchyMeshData, setFilePass,"Player",meshType,idNumber);
 
 	// 拡大
 	D3DXMATRIX mScale;
@@ -337,7 +345,7 @@ void Player::initializeSceneEdit()
 	numMat				= 0;
 
 	// Xファイルの読み込み
-	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName,"Player",meshType);
+	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName,"Player",meshType,idNumber);
 	
 	// モデル回転
 	myTransform.pos.y -= hierarchyMeshData.CollitionBox.y * 2;
@@ -826,6 +834,22 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updateSelect()
 {
+	/*
+	if (idNumber == 1)
+	{
+		if (Keyboard::getTrigger(DIK_RIGHTARROW))
+		{
+			ResourceManager::setHierarchy(&hierarchyMeshData, ModelPenchanPass, idNumber);
+		}
+		if (Keyboard::getTrigger(DIK_LEFTARROW))
+		{
+			ResourceManager::setHierarchy(&hierarchyMeshData, ModelPenNoHahaPass, idNumber);
+		}
+	}*/
+
+	
+
+
 	if (Keyboard::getTrigger(DIK_2))
 	{
 		SceneManager::setNextScene(SceneManager::SceneState::SceneMain);

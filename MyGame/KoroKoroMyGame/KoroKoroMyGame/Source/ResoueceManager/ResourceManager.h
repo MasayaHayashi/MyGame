@@ -89,12 +89,16 @@ public:
 	ResourceManager();
 	~ResourceManager();
 
+	static constexpr CHAR* ModelPenchanPass = "Data/Model/Character/PenChan/PenguinC.x";
+	static constexpr CHAR* ModelPenNoHahaPass = "Data/Model/Character/PenNoHaha/PenguinA.x";
+	static constexpr CHAR* ModelChick = "Data/Model/Character/Chick/Chick.x";
+
 	// ê∂ê¨
 	static HRESULT makeModel(MeshData &MeshData, CHAR *pszFilename, MeshObjType &uMeshType);
 	static HRESULT createTexture(TEXTURE_DATA &TextureData,CHAR *pszFilename);
-	static HRESULT makeModelHierarchy(HIERARCHY_MESH_DATA &HierarchyMedhData, CHAR *pszFilename, std::string keyName, MeshObjType &MeshType);
+	static HRESULT makeModelHierarchy(HIERARCHY_MESH_DATA &HierarchyMedhData, CHAR *pszFilename, std::string keyName, MeshObjType &MeshType,UINT index);
 	static HRESULT makevertexBoard(VERTEX_BOARD_DATA &VtxBordData, CHAR *pszFilename);
-	static HRESULT makeModelHierarchyResouce(HIERARCHY_MESH_DATA &setHierarchyMeshData, CHAR *setFilename, std::string keyName, UINT index);
+	static HRESULT makeModelHierarchyResouce(HIERARCHY_MESH_DATA &setHierarchyMeshData, CHAR *setFilename, std::string keyName, MeshObjType &meshType,UINT index);
 	static HRESULT makeHierarchyResouce(HIERARCHY_MESH_DATA& meshData, std::string setName, CHAR* keyName, UINT index);
 
 
@@ -113,8 +117,8 @@ public:
 	static bool createInstance();
 	static void changeHierarchy(HIERARCHY_MESH_DATA &changeData,CHAR* modelName,UINT index);
 
-	static HRESULT makeModelHierarchyResouce(HIERARCHY_MESH_DATA &setHierarchyMeshData, CHAR *setFilename, std::string keyName, MeshObjType &meshType, UINT index);
-	static void setHierarchy(HIERARCHY_MESH_DATA &meshData, std::string keyName,UINT index);
+//	static HRESULT makeModelHierarchyResouce(HIERARCHY_MESH_DATA &setHierarchyMeshData, CHAR *setFilename, std::string keyName, MeshObjType &meshType, UINT index);
+	static void setHierarchy(HIERARCHY_MESH_DATA *meshData, std::string keyName,UINT index);
 
 	static std::unique_ptr<ResourceManager> instancePtr;
 
@@ -125,7 +129,7 @@ private:
 
 	static std::vector<MeshData*>											meshes;
 	static std::vector<HIERARCHY_MESH_DATA*>								hierarchyMesh;
-	static std::vector<HIERARCHY_MESH_DATA*>								resoueceMesh;
+	static std::unordered_map<std::string ,std::vector<HIERARCHY_MESH_DATA*>>	resoueceMesh;
 
 	static std::vector<TEXTURE_DATA*>			texture;
 	static std::vector<TEXTURE_DATA*>			fadeTexture;
@@ -136,13 +140,13 @@ private:
 	static bool checkExisting(CHAR *pszChakNeme, TEXTURE_DATA &textureData);
 	static bool checkExisting(CHAR *pszChakNeme, VERTEX_BOARD_DATA &textureData);
 
-	static void setTime(DOUBLE dTime, CHAR *pszFilename);
+	static void setTime(DOUBLE dTime, CHAR *pszFilename, std::string keyName, UINT index);
 	
-	static 	HRESULT allocBoneMatrix(LPD3DXMESHCONTAINER meshContainerPtrBase, CHAR *pszFilename);
-	static 	HRESULT allocAllBoneMatrix(LPD3DXFRAME pFrameBase, CHAR *pszFilename);
-	static	void calcCollision(LPD3DXFRAME pFrame, CHAR *pszFilename);
-	static	void calcCollisionFrame(LPD3DXFRAME pFrame, CHAR *pszFilename);
-	static	void calcCollisionMeshContainer(LPD3DXMESHCONTAINER meshContainerPtr, LPD3DXFRAME pFrame, CHAR *pszFilename);
+	static 	HRESULT allocBoneMatrix(LPD3DXMESHCONTAINER meshContainerPtrBase, CHAR *pszFilename,std::string keyName,UINT index);
+	static 	HRESULT allocAllBoneMatrix(LPD3DXFRAME pFrameBase, CHAR *pszFilename,std::string keyName,UINT index);
+	static	void calcCollision(LPD3DXFRAME pFrame, CHAR *pszFilename,std::string,UINT index);
+	static	void calcCollisionFrame(LPD3DXFRAME pFrame, CHAR *pszFilename,std::string keyName,UINT index);
+	static	void calcCollisionMeshContainer(LPD3DXMESHCONTAINER meshContainerPtr, LPD3DXFRAME pFrame, CHAR *pszFilename,std::string keyName,UINT index);
 	static	void updateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX pParentMatrix);
 	static  void destroyResouceMesh(std::string keyName,UINT index);
 	

@@ -10,10 +10,12 @@
 // ===== インクルード部 =====
 #include "../Pawn/Pawn.h"
 #include "../SceneManager/SceneManager.h"
+#include "../SelectManager/SelectManager.h"
 
 // ===== クラスの前方宣言 =====
 class Collider;
 class BallObj;
+class SelectManager;
 
 // ===== クラス定義 =====
 class Player final : public Pawn
@@ -23,8 +25,6 @@ public:
 	Player(D3DXVECTOR3 StartPos,UINT setNumber);
 	~Player();
 	
-	static constexpr UINT  MaxPlayer = 4;
-
 	enum class PlayerState
 	{
 		Stop = 0,
@@ -36,9 +36,6 @@ public:
 		Dead
 	};
 
-	static constexpr CHAR* ModelPenchanPass   = "Data/Model/Character/PenChan/PenguinC.x";
-	static constexpr CHAR* ModelPenNoHahaPass = "Data/Model/Character/PenNoHaha/PenguinA.x";
-	static constexpr CHAR* ModelChick		  = "Data/Model/Character/Chick/Chick.x";
 
 	void initialize();
 	void finalize();
@@ -84,6 +81,8 @@ private:
 	void changeStatus();	// ステータス変更処理
 	void changeState();		// 状態変更処理
 
+	SelectManager selectManagerObj;
+
 	FLOAT rotCnt = 0.0f;
 
 	D3DXVECTOR3	moveVector;
@@ -96,6 +95,7 @@ private:
 
 	D3DXVECTOR3		oldPos;
 	D3DXQUATERNION	StartQuaternion;
+
 
 };
 

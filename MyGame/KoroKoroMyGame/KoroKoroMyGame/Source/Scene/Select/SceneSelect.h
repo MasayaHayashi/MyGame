@@ -7,6 +7,7 @@
 // ===== インクルード部 =====
 #include "../../SceneInterface/sceneBase.h"
 #include "../../DirectX3D/DirectX3D.h"
+#include "../../SelectManager/SelectManager.h"
 #include <memory>
 #include <list>
 
@@ -61,6 +62,8 @@ private:
 	std::list<std::unique_ptr<Player>>	 playeresPtr;
 	std::list<std::unique_ptr<Pawn>>	 gameObjectesPtr;
 	std::list<std::unique_ptr<Board>>	 boardObjectesPtr;
+
+	SelectManager			selectManagerObj;
 
 	GameState				currentGameState;
 	static UINT				currentStage;

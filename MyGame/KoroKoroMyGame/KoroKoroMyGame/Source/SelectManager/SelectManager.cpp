@@ -5,6 +5,7 @@
 
 // ===== インクルード部 =====
 #include "SelectManager.h"
+#include "../DirectX3D/DirectX3D.h"
 
 // ===== 静的メンバ =====
 
@@ -13,7 +14,10 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 SelectManager::SelectManager()
 {
-
+	for (UINT playerindex = 0; playerindex < MaxPlayer; playerindex ++)
+	{
+		currentSelectModels[playerindex] = playerindex;
+	}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -24,50 +28,15 @@ SelectManager::~SelectManager()
 	
 }
 
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// シーン初期化
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void SelectManager::initialize()
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// インデックス取得
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+UINT SelectManager::getModelIgndex(UINT playerIndex)
 {
+	if (playerIndex < currentSelectModels.size())
+	{
+		return -1;
+	}
 
-}
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// シーン終了処理
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void SelectManager::finalize()
-{
-
-}
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// シーン更新
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void SelectManager::update()
-{
-
-}
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// フェード更新
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void SelectManager::updateFade()
-{
-	
-}
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// シーン描画
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void SelectManager::draw()
-{
-
-}
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// フェードシーン描画
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void SelectManager::drawFade()
-{
-
+	return currentSelectModels[playerIndex];
 }

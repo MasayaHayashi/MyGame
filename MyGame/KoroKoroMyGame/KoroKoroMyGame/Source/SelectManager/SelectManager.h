@@ -8,8 +8,10 @@
 #define SELECT_MANAGER_H
 
 // ===== インクルード部 =====
-#include <memory>
-#include <map>
+#include <array>
+#include <unordered_map>
+#include "../ResoueceManager/ResourceManager.h"
+#include "../DirectX3D/DirectX3D.h"
 
 // ===== クラスの前方宣言 =====
 
@@ -21,17 +23,22 @@ public:
 	SelectManager();
 	~SelectManager();
 
-	static void initialize();
-	static void update();
-	static void updateFade();
-	static void draw();
-	static void drawFade();
-	static void finalize();
+	static constexpr UINT MaxPlayer = 4;
+
+	UINT getModelIgndex(UINT playerIndex);
+
 
 protected:
 
 private:
-	static std::unique_ptr<SelectManager> SelectManagerInstancePtr;
+
+	std::array<UINT, MaxPlayer>		currentSelectModels;
+	std::unordered_map<UINT, std::string>	changeUintToPass =
+	{
+		{ 0, ResourceManager::ModelPenchanPass }, 
+		{ 1, ResourceManager::ModelPenNoHahaPass },
+		{ 2, ResourceManager::ModelChick },
+	};
 };
 
 #endif

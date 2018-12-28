@@ -25,8 +25,7 @@ std::vector<TEXTURE_DATA*>										   ResourceManager::fadeTexture;
 std::vector<VERTEX_BOARD_DATA*>									   ResourceManager::vtxBoard;	
 std::vector<VERTEX_BOARD_DATA*>									   ResourceManager::vtxFadeBoard;
 std::vector<HIERARCHY_MESH_DATA*>								   ResourceManager::hierarchyMesh;
-std::vector<HIERARCHY_MESH_DATA*>								   ResourceManager::resoueceMesh;
-
+std::unordered_map<std::string, std::vector<HIERARCHY_MESH_DATA*>>	ResourceManager::resoueceMesh;
 
 
 #define SAFE_RELEASE(p)		 { if (p) { (p)->Release(); (p)=NULL; }}
@@ -77,7 +76,6 @@ HRESULT ResourceManager::makeModel(MeshData &meshData, CHAR *pszFilename, MeshOb
 	strcpy_s(meshData.meshFileName, pszFilename);
 
 	// メッシュ情報セット
-
 	meshes.push_back(&meshData);
 	
 	// Xファイルの読み込み
@@ -687,8 +685,9 @@ HRESULT ResourceManager::createTexture(TEXTURE_DATA &TextureData,  CHAR *pszFile
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 階層構造用モデル読み込み
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-HRESULT ResourceManager::makeModelHierarchy(HIERARCHY_MESH_DATA &setHierarchyMeshData,CHAR *setFilename,std::string keyName, MeshObjType &meshType)
+HRESULT ResourceManager::makeModelHierarchy(HIERARCHY_MESH_DATA &setHierarchyMeshData,CHAR *setFilename,std::string keyName, MeshObjType &meshType,UINT index)
 {
+#if 0
 	// デバイス取得
 	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
 
@@ -738,7 +737,7 @@ HRESULT ResourceManager::makeModelHierarchy(HIERARCHY_MESH_DATA &setHierarchyMes
 	if (hierarchyMesh.back()->pFrameRoot)
 	{
 		// マトリックス更新
-		setTime(0.0, setFilename);
+		setTime(0.0, setFilename,keyName,index);
 		D3DXMATRIX world;
 		D3DXMatrixIdentity(&world);
 		updateFrameMatrices(hierarchyMesh.back()->pFrameRoot, &world);
@@ -751,70 +750,76 @@ HRESULT ResourceManager::makeModelHierarchy(HIERARCHY_MESH_DATA &setHierarchyMes
 	hierarchyMesh.back()->dwPrev = timeGetTime();
 
 	return SUCCEEDED(hr);
+#endif
+	return E_FAIL;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 階層構造用モデル読み込み
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-HRESULT ResourceManager::makeModelHierarchyResouce(HIERARCHY_MESH_DATA &setHierarchyMeshData, CHAR *setFilename, std::string keyName, UINT index)
+HRESULT ResourceManager::makeModelHierarchyResouce(HIERARCHY_MESH_DATA &setHierarchyMeshData, CHAR *setFilename, std::string keyName, MeshObjType &meshType,UINT index)
 {
 	// デバイス取得
 	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
 
-	strcpy_s(setHierarchyMeshData.meshFileName, setFilename);
+	// メッシュの種類初期化
+	meshType = MeshObjType::HierarchyModel;
 
-	resoueceMesh.push_back(&setHierarchyMeshData);
+
+	resoueceMesh[keyName].push_back(NEW HIERARCHY_MESH_DATA());
+	
+	strcpy_s(resoueceMesh[keyName][index]->meshFileName, setFilename);
 
 	// ディレクトリ抽出
 	TCHAR szDir[_MAX_PATH];
 	TCHAR szDirWk[_MAX_DIR];
-	_tsplitpath(resoueceMesh.back()->meshFileName, szDir, szDirWk, NULL, NULL);
+	_tsplitpath(resoueceMesh[keyName][index]->meshFileName, szDir, szDirWk, NULL, NULL);
 	lstrcat(szDir, szDirWk);
-	resoueceMesh.back()->Hierarchy.setDirectory(szDir);
+	resoueceMesh[keyName][index]->Hierarchy.setDirectory(szDir);
 
 	// 階層構造メッシュの読み込み
-	HRESULT hr = D3DXLoadMeshHierarchyFromX(resoueceMesh.back()->meshFileName, D3DXMESH_MANAGED, pDevice, &resoueceMesh.back()->Hierarchy, NULL, &resoueceMesh.back()->pFrameRoot, &resoueceMesh.back()->pAnimCtrl);
+	HRESULT hr = D3DXLoadMeshHierarchyFromX(resoueceMesh[keyName][index]->meshFileName, D3DXMESH_MANAGED, pDevice, &resoueceMesh[keyName][index]->Hierarchy, NULL, &resoueceMesh[keyName][index]->pFrameRoot, &resoueceMesh[keyName][index]->pAnimCtrl);
 	if (FAILED(hr))
 	{
 		return E_FAIL;
 	}
 
 	// ボーンとフレームの関連付け
-	hr = allocAllBoneMatrix(resoueceMesh.back()->pFrameRoot, setFilename);
+	hr = allocAllBoneMatrix(resoueceMesh[keyName][index]->pFrameRoot, setFilename,keyName,index);
 	if (FAILED(hr))
 	{
 		return false;
 	}
 
 	// アニメーションセット取得
-	resoueceMesh.back()->uNumAnimSet = 0;
-	if (resoueceMesh.back()->pAnimCtrl)
+	resoueceMesh[keyName][index]->uNumAnimSet = 0;
+	if (resoueceMesh[keyName][index]->pAnimCtrl)
 	{
-		resoueceMesh.back()->uNumAnimSet = resoueceMesh.back()->pAnimCtrl->GetNumAnimationSets();
-		if (resoueceMesh.back()->uNumAnimSet > 0)
+		resoueceMesh[keyName][index]->uNumAnimSet = resoueceMesh[keyName][index]->pAnimCtrl->GetNumAnimationSets();
+		if (resoueceMesh[keyName][index]->uNumAnimSet > 0)
 		{
-			resoueceMesh.back()->ppAnimSet = NEW LPD3DXANIMATIONSET[resoueceMesh.back()->uNumAnimSet];
-			for (DWORD u = 0; u < resoueceMesh.back()->uNumAnimSet; u++)
+			resoueceMesh[keyName][index]->ppAnimSet = NEW LPD3DXANIMATIONSET[resoueceMesh[keyName][index]->uNumAnimSet];
+			for (DWORD u = 0; u < resoueceMesh[keyName][index]->uNumAnimSet; u++)
 			{
-				resoueceMesh.back()->pAnimCtrl->GetAnimationSet(u, &resoueceMesh.back()->ppAnimSet[u]);
+				resoueceMesh[keyName][index]->pAnimCtrl->GetAnimationSet(u, &resoueceMesh[keyName][index]->ppAnimSet[u]);
 			}
 		}
 	}
 
-	if (resoueceMesh.back()->pFrameRoot)
+	if (resoueceMesh[keyName][index]->pFrameRoot)
 	{
 		// マトリックス更新
-		setTime(0.0, setFilename);
+		setTime(0.0, setFilename,keyName,index);
 		D3DXMATRIX world;
 		D3DXMatrixIdentity(&world);
-		updateFrameMatrices(resoueceMesh.back()->pFrameRoot, &world);
+		updateFrameMatrices(resoueceMesh[keyName][index]->pFrameRoot, &world);
 
 		// 境界球/境界ボックス取得
-		calcCollision(resoueceMesh.back()->pFrameRoot, setFilename);
+		calcCollision(resoueceMesh[keyName][index]->pFrameRoot, setFilename,keyName,index);
 	}
 
 	// 経過時間計測用時刻設定
-	resoueceMesh.back()->dwPrev = timeGetTime();
+	resoueceMesh[keyName][index]->dwPrev = timeGetTime();
 
 	return SUCCEEDED(hr);
 }
@@ -852,26 +857,26 @@ void ResourceManager::updateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX p
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // アニメーション開始時間設定
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void ResourceManager::setTime(DOUBLE dTime,CHAR *pszFilename)
+void ResourceManager::setTime(DOUBLE dTime,CHAR *pszFilename,std::string keyName,UINT index)
 {
-	if (hierarchyMesh.back()->pAnimCtrl == nullptr)
+	if (resoueceMesh[keyName][index]->pAnimCtrl == nullptr)
 	{
 		return;
 	}
 
-	for (DWORD i = 0; i < hierarchyMesh.back()->pAnimCtrl->GetMaxNumTracks(); ++i)
+	for (DWORD i = 0; i < resoueceMesh[keyName][index]->pAnimCtrl->GetMaxNumTracks(); ++i)
 	{
-		hierarchyMesh.back()->pAnimCtrl->SetTrackPosition(i, 0);
+		resoueceMesh[keyName][index]->pAnimCtrl->SetTrackPosition(i, 0);
 	}
 
-	hierarchyMesh.back()->pAnimCtrl->ResetTime();
-	hierarchyMesh.back()->pAnimCtrl->AdvanceTime(dTime, nullptr);
+	resoueceMesh[keyName][index]->pAnimCtrl->ResetTime();
+	resoueceMesh[keyName][index]->pAnimCtrl->AdvanceTime(dTime, nullptr);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ボーン用ワールド・マトリックス領域確保
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-HRESULT ResourceManager::allocBoneMatrix(LPD3DXMESHCONTAINER meshContainerPtrBase, CHAR *pszFilename)
+HRESULT ResourceManager::allocBoneMatrix(LPD3DXMESHCONTAINER meshContainerPtrBase, CHAR *pszFilename,std::string keyName,UINT index)
 {
 	MYMESHCONTAINER* meshContainerPtr = (MYMESHCONTAINER*)meshContainerPtrBase;
 
@@ -885,7 +890,7 @@ HRESULT ResourceManager::allocBoneMatrix(LPD3DXMESHCONTAINER meshContainerPtrBas
 
 	for (DWORD i = 0; i < dwBoneNum; i++)
 	{
-		MYFRAME* pFrame = (MYFRAME*)D3DXFrameFind(hierarchyMesh.back()->pFrameRoot, meshContainerPtr->pSkinInfo->GetBoneName(i));
+		MYFRAME* pFrame = (MYFRAME*)D3DXFrameFind(resoueceMesh[keyName][index]->pFrameRoot, meshContainerPtr->pSkinInfo->GetBoneName(i));
 
 		if (pFrame == nullptr)
 		{
@@ -900,13 +905,13 @@ HRESULT ResourceManager::allocBoneMatrix(LPD3DXMESHCONTAINER meshContainerPtrBas
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ボーン用ワールド・マトリックス領域確保
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-HRESULT ResourceManager::allocAllBoneMatrix(LPD3DXFRAME pFrameBase, CHAR *pszFilename)
+HRESULT ResourceManager::allocAllBoneMatrix(LPD3DXFRAME pFrameBase, CHAR *pszFilename,std::string keyName,UINT index)
 {
 	MYFRAME* pFrame = (MYFRAME*)pFrameBase;
 	HRESULT hr = S_OK;
 	if (pFrame->pMeshContainer)
 	{
-		hr = allocBoneMatrix(pFrame->pMeshContainer,pszFilename);
+		hr = allocBoneMatrix(pFrame->pMeshContainer,pszFilename,keyName,index);
 		if (FAILED(hr))
 		{
 			return hr;
@@ -914,7 +919,7 @@ HRESULT ResourceManager::allocAllBoneMatrix(LPD3DXFRAME pFrameBase, CHAR *pszFil
 	}
 	if (pFrame->pFrameSibling)
 	{
-		hr = allocAllBoneMatrix(pFrame->pFrameSibling,pszFilename);
+		hr = allocAllBoneMatrix(pFrame->pFrameSibling,pszFilename,keyName,index);
 		if (FAILED(hr))
 		{
 			return hr;
@@ -922,7 +927,7 @@ HRESULT ResourceManager::allocAllBoneMatrix(LPD3DXFRAME pFrameBase, CHAR *pszFil
 	}
 	if (pFrame->pFrameFirstChild)
 	{
-		hr = allocAllBoneMatrix(pFrame->pFrameFirstChild, pszFilename);
+		hr = allocAllBoneMatrix(pFrame->pFrameFirstChild, pszFilename,keyName,index);
 	}
 
 	return hr;
@@ -931,57 +936,57 @@ HRESULT ResourceManager::allocAllBoneMatrix(LPD3DXFRAME pFrameBase, CHAR *pszFil
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 //  階層構造用 境界球/境界ボックス取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void ResourceManager::calcCollision(LPD3DXFRAME pFrame,CHAR *pszFilename)
+void ResourceManager::calcCollision(LPD3DXFRAME pFrame,CHAR *pszFilename,std::string keyName,UINT index)
 {
-	D3DXVECTOR3& vMax = hierarchyMesh.back()->CollitionBox;
-	D3DXVECTOR3& vMin = hierarchyMesh.back()->CenterPos;
+	D3DXVECTOR3& vMax = resoueceMesh[keyName][index]->CollitionBox;
+	D3DXVECTOR3& vMin = resoueceMesh[keyName][index]->CenterPos;
 
 	vMax.x = vMax.y = vMax.z = -FLT_MAX;
 	vMin.x = vMin.y = vMin.z = FLT_MAX;
 	
-	hierarchyMesh.back()->fCollisionRadus = -1.0f;
-	calcCollisionFrame(pFrame,pszFilename);
+	resoueceMesh[keyName][index]->fCollisionRadus = -1.0f;
+	calcCollisionFrame(pFrame,pszFilename,keyName,index);
 	
 	D3DXVECTOR3 vBBox, vCenter;
 	vBBox = (vMax - vMin) / 2.0f;
 	vCenter = (vMax + vMin) / 2.0f;
 	
-	hierarchyMesh.back()->CollitionBox = vBBox;
-	hierarchyMesh.back()->CenterPos = vCenter;
-	hierarchyMesh.back()->fCollisionRadus = 0.0f;
-	calcCollisionFrame(pFrame,pszFilename);
+	resoueceMesh[keyName][index]->CollitionBox = vBBox;
+	resoueceMesh[keyName][index]->CenterPos = vCenter;
+	resoueceMesh[keyName][index]->fCollisionRadus = 0.0f;
+	calcCollisionFrame(pFrame,pszFilename,keyName,index);
 }
 
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // フレーム毎の頂点座標の抽出
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void ResourceManager::calcCollisionFrame(LPD3DXFRAME pFrame, CHAR *pszFilename)
+void ResourceManager::calcCollisionFrame(LPD3DXFRAME pFrame, CHAR *pszFilename,std::string keyName,UINT index)
 {
 	LPD3DXMESHCONTAINER meshContainerPtr = pFrame->pMeshContainer;
 	while (meshContainerPtr)
 	{
 		// メッシュコンテナ毎の頂点座標の抽出
-		calcCollisionMeshContainer(meshContainerPtr, pFrame,pszFilename);
+		calcCollisionMeshContainer(meshContainerPtr, pFrame,pszFilename,keyName,index);
 		// 次のメッシュコンテナ
 		meshContainerPtr = meshContainerPtr->pNextMeshContainer;
 	}
 	// 兄弟フレームがあれば兄弟フレームを描画
 	if (pFrame->pFrameSibling)
 	{
-		calcCollisionFrame(pFrame->pFrameSibling, pszFilename);
+		calcCollisionFrame(pFrame->pFrameSibling, pszFilename,keyName,index);
 	}
 	// 子フレームがあれば子フレームを描画
 	if (pFrame->pFrameFirstChild)
 	{
-		calcCollisionFrame(pFrame->pFrameFirstChild, pszFilename);
+		calcCollisionFrame(pFrame->pFrameFirstChild, pszFilename,keyName,index);
 	}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // メッシュコンテナ毎の頂点座標の抽出
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void ResourceManager::calcCollisionMeshContainer(LPD3DXMESHCONTAINER meshContainerPtr, LPD3DXFRAME pFrame, CHAR *pszFilename)
+void ResourceManager::calcCollisionMeshContainer(LPD3DXMESHCONTAINER meshContainerPtr, LPD3DXFRAME pFrame, CHAR *pszFilename,std::string keyName,UINT index)
 {
 	D3DXMATRIX& matrix = ((MYFRAME*)pFrame)->combinedTransformationMatrix;
 	// 頂点座標の抽出
@@ -994,10 +999,10 @@ void ResourceManager::calcCollisionMeshContainer(LPD3DXMESHCONTAINER meshContain
 	for (DWORD i = 0; i < dwVtx; ++i, pVtx += dwStride)
 	{
 		D3DXVec3TransformCoord(&vtx, (LPD3DXVECTOR3)pVtx, &matrix);
-		if (hierarchyMesh.back()->fCollisionRadus < 0.0f)
+		if (resoueceMesh[keyName][index]->fCollisionRadus < 0.0f)
 		{
-			D3DXVECTOR3& vMax = hierarchyMesh.back()->CollitionBox;
-			D3DXVECTOR3& vMin = hierarchyMesh.back()->CenterPos;
+			D3DXVECTOR3& vMax = resoueceMesh[keyName][index]->CollitionBox;
+			D3DXVECTOR3& vMin = resoueceMesh[keyName][index]->CenterPos;
 			if (vMax.x < vtx.x) { vMax.x = vtx.x; }
 			if (vMax.y < vtx.y) { vMax.y = vtx.y; }
 			if (vMax.z < vtx.z) { vMax.z = vtx.z; }
@@ -1007,10 +1012,10 @@ void ResourceManager::calcCollisionMeshContainer(LPD3DXMESHCONTAINER meshContain
 		}
 		else
 		{
-			float fRadius = D3DXVec3Length(&(vtx - hierarchyMesh.back()->CenterPos));
-			if (hierarchyMesh.back()->fCollisionRadus < fRadius)
+			float fRadius = D3DXVec3Length(&(vtx - resoueceMesh[keyName][index]->CenterPos));
+			if (resoueceMesh[keyName][index]->fCollisionRadus < fRadius)
 			{
-				hierarchyMesh.back()->fCollisionRadus = fRadius;
+				resoueceMesh[keyName][index]->fCollisionRadus = fRadius;
 			}
 		}
 	}
@@ -1224,8 +1229,8 @@ bool ResourceManager::destroyAllHierarchymesh()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 bool ResourceManager::destroyAllResouce()
 {
-	destroyResouceMesh(Player::ModelChick,0);
-	destroyResouceMesh(Player::ModelPenchanPass,0);
+	destroyResouceMesh(ModelChick,0);
+	destroyResouceMesh(ModelPenchanPass,0);
 //	destroyResouceMesh(Player::ModelPenNoHahaPass);
 
 	resoueceMesh.clear();
@@ -1238,21 +1243,21 @@ bool ResourceManager::destroyAllResouce()
 void ResourceManager::destroyResouceMesh(std::string keyName,UINT index)
 {
 	// アニメーション解放
-	if (resoueceMesh[index]->ppAnimSet)
+	if (resoueceMesh[keyName][index]->ppAnimSet)
 	{
-		for (UINT j = 0; j < resoueceMesh[index]->uNumAnimSet; j++)
+		for (UINT j = 0; j < resoueceMesh[keyName][index]->uNumAnimSet; j++)
 		{
-			SAFE_RELEASE(resoueceMesh[index]->ppAnimSet[j]);
+			SAFE_RELEASE(resoueceMesh[keyName][index]->ppAnimSet[j]);
 		}
-		SAFE_DELETE_ARRAY(resoueceMesh[index]->ppAnimSet);
+		SAFE_DELETE_ARRAY(resoueceMesh[keyName][index]->ppAnimSet);
 	}
-	SAFE_RELEASE(resoueceMesh[index]->pAnimCtrl);
+	SAFE_RELEASE(resoueceMesh[keyName][index]->pAnimCtrl);
 
 	// メッシュ解放
-	if (resoueceMesh[index]->pFrameRoot)
+	if (resoueceMesh[keyName][index]->pFrameRoot)
 	{
-		D3DXFrameDestroy(resoueceMesh[index]->pFrameRoot, &resoueceMesh[index]->Hierarchy);
-		resoueceMesh[index]->pFrameRoot = nullptr;
+		D3DXFrameDestroy(resoueceMesh[keyName][index]->pFrameRoot, &resoueceMesh[keyName][index]->Hierarchy);
+		resoueceMesh[keyName][index]->pFrameRoot = nullptr;
 	}
 
 	
@@ -1380,7 +1385,7 @@ bool ResourceManager::createInstance()
 void ResourceManager::changeHierarchy(HIERARCHY_MESH_DATA &changeHierarchy,CHAR* keyName,UINT index)
 {
 
-	changeHierarchy = *resoueceMesh[index];
+	changeHierarchy = *resoueceMesh[keyName][index];
 			
 	
 }
@@ -1399,7 +1404,8 @@ HRESULT ResourceManager::makeHierarchyResouce(HIERARCHY_MESH_DATA& meshData,std:
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // セット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void ResourceManager::setHierarchy(HIERARCHY_MESH_DATA &meshData,std::string keyName,UINT index)
+void ResourceManager::setHierarchy(HIERARCHY_MESH_DATA *meshData,std::string keyName,UINT index)
 {
-	meshData = *resoueceMesh[index];
+	std::memcpy(meshData, resoueceMesh[keyName][index], sizeof(HIERARCHY_MESH_DATA));
+
 }
