@@ -193,7 +193,7 @@ void Player::initializeTitle()
 	}
 
 	// Xファイルの読み込み
-	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName, "Player" , meshType);
+//	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName, "Player" , meshType);
 
 	myTransform.pos.y -= hierarchyMeshData.CollitionBox.y * 2;
 
@@ -227,25 +227,32 @@ void Player::initializeTitle()
 	// 表示フラグ初期化
 	//pCollider->setUsedFlg(false);
 
-	// 現在のアニメーションセットの設定値を取得
-	D3DXTRACK_DESC TD;   // トラックの能力
-	hierarchyMeshData.pAnimCtrl->GetTrackDesc(0, &TD);
+	ResourceManager::makeModelHierarchy(hierarchyMeshData,ModelChick, ModelChick, meshType);
+//	ResourceManager::makeHierarchyResouce(hierarchyMeshData,ModelPenchanPass, ModelPenchanPass,idNumber);
 
-	// 今のアニメーションをトラック1に移行し
-	// トラックの設定値も移行
-	hierarchyMeshData.pAnimCtrl->SetTrackAnimationSet(1, hierarchyMeshData.ppAnimSet[0]);
-	hierarchyMeshData.pAnimCtrl->SetTrackDesc(1, &TD);
+	meshType = MeshObjType::HierarchyModel;
 
-	// 新しいアニメーションセットをトラック0に設定
-	hierarchyMeshData.pAnimCtrl->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[2]);
+//	ResourceManager::setHierarchy(hierarchyMeshData, ModelChick,idNumber);
+
+	//// 現在のアニメーションセットの設定値を取得
+	//D3DXTRACK_DESC TD;   // トラックの能力
+	//hierarchyMeshData.pAnimCtrl->GetTrackDesc(0, &TD);
+
+	//// 今のアニメーションをトラック1に移行し
+	//// トラックの設定値も移行
+	//hierarchyMeshData.pAnimCtrl->SetTrackAnimationSet(1, hierarchyMeshData.ppAnimSet[0]);
+	//hierarchyMeshData.pAnimCtrl->SetTrackDesc(1, &TD);
+
+	//// 新しいアニメーションセットをトラック0に設定
+	//hierarchyMeshData.pAnimCtrl->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[2]);
 
 	isUsed = true;
 
 	D3DXQuaternionRotationAxis(&StartQuaternion, &getUpVec(), 0);
 	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
 
-	ResourceManager::makeHierarchyResouce(ModelChick, ModelChick);
-	ResourceManager::makeHierarchyResouce(ModelPenchanPass, ModelPenchanPass);
+
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -540,7 +547,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	{
 		Ynum = 0.0f;
 	}
-
+	 
 	updateAnimation();
 
 	if (isHit("Ball"))
@@ -819,24 +826,31 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updateSelect()
 {
+	if (Keyboard::getTrigger(DIK_2))
+	{
+		SceneManager::setNextScene(SceneManager::SceneState::SceneMain);
+	}
+
 	updateAnimation();
 
+	/*
 	static bool testFlg = true;
 	static bool testFlg2 = true;
-	if (idNumber == 1)
+	if (idNumber == 2)
 	{
 		if(testFlg)
-			ResourceManager::changeHierarchy(hierarchyMeshData, ModelChick);
+			ResourceManager::changeHierarchy(hierarchyMeshData, ModelChick,idNumber); 
 
 		testFlg = false;
 	}
-	if (idNumber == 1)
+	if (idNumber == 2)
 	{
 		if (testFlg2)
-			ResourceManager::changeHierarchy(hierarchyMeshData, ModelPenchanPass);
+			ResourceManager::changeHierarchy(hierarchyMeshData, ModelChick,idNumber);
 
 		testFlg2 = false;
 	}
+	*/
 
 	D3DXMatrixRotationY(&worldMtx, D3DXToRadian(myTransform.rotDeg.y));
 	myTransform.rotDeg.y += 1;

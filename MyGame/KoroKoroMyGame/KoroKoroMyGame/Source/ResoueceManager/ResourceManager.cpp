@@ -15,16 +15,17 @@
 #include "../Board/Board.h"
 #include "../DirectX3D/DirectX3D.h"
 #include "../Pawn/Pawn.h"
+#include "../Player/Player.h"
 
 // ===== 静的メンバ変数 =====
-std::unique_ptr<ResourceManager>    ResourceManager::instancePtr = nullptr;
-std::vector <MeshData*>				ResourceManager::meshes;
-std::vector<TEXTURE_DATA*>			ResourceManager::texture;				// テクスチャ情報
-std::vector<TEXTURE_DATA*>			ResourceManager::fadeTexture;			// テクスチャ情報
-std::vector<VERTEX_BOARD_DATA*>		ResourceManager::vtxBoard;				// ボード頂点情報
-std::vector<VERTEX_BOARD_DATA*>		ResourceManager::vtxFadeBoard;			// ボード頂点情報
-std::vector<HIERARCHY_MESH_DATA*>	ResourceManager::hierarchyMesh;
-std::unordered_map<std::string, HIERARCHY_MESH_DATA*> ResourceManager::resoueceMesh;
+std::unique_ptr<ResourceManager>								   ResourceManager::instancePtr = nullptr;
+std::vector <MeshData*>											   ResourceManager::meshes;
+std::vector<TEXTURE_DATA*>										   ResourceManager::texture;	
+std::vector<TEXTURE_DATA*>										   ResourceManager::fadeTexture;
+std::vector<VERTEX_BOARD_DATA*>									   ResourceManager::vtxBoard;	
+std::vector<VERTEX_BOARD_DATA*>									   ResourceManager::vtxFadeBoard;
+std::vector<HIERARCHY_MESH_DATA*>								   ResourceManager::hierarchyMesh;
+std::vector<HIERARCHY_MESH_DATA*>								   ResourceManager::resoueceMesh;
 
 
 
@@ -752,6 +753,71 @@ HRESULT ResourceManager::makeModelHierarchy(HIERARCHY_MESH_DATA &setHierarchyMes
 	return SUCCEEDED(hr);
 }
 
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 階層構造用モデル読み込み
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+HRESULT ResourceManager::makeModelHierarchyResouce(HIERARCHY_MESH_DATA &setHierarchyMeshData, CHAR *setFilename, std::string keyName, UINT index)
+{
+	// デバイス取得
+	LPDIRECT3DDEVICE9 pDevice = DirectX3D::getDevice();
+
+	strcpy_s(setHierarchyMeshData.meshFileName, setFilename);
+
+	resoueceMesh.push_back(&setHierarchyMeshData);
+
+	// ディレクトリ抽出
+	TCHAR szDir[_MAX_PATH];
+	TCHAR szDirWk[_MAX_DIR];
+	_tsplitpath(resoueceMesh.back()->meshFileName, szDir, szDirWk, NULL, NULL);
+	lstrcat(szDir, szDirWk);
+	resoueceMesh.back()->Hierarchy.setDirectory(szDir);
+
+	// 階層構造メッシュの読み込み
+	HRESULT hr = D3DXLoadMeshHierarchyFromX(resoueceMesh.back()->meshFileName, D3DXMESH_MANAGED, pDevice, &resoueceMesh.back()->Hierarchy, NULL, &resoueceMesh.back()->pFrameRoot, &resoueceMesh.back()->pAnimCtrl);
+	if (FAILED(hr))
+	{
+		return E_FAIL;
+	}
+
+	// ボーンとフレームの関連付け
+	hr = allocAllBoneMatrix(resoueceMesh.back()->pFrameRoot, setFilename);
+	if (FAILED(hr))
+	{
+		return false;
+	}
+
+	// アニメーションセット取得
+	resoueceMesh.back()->uNumAnimSet = 0;
+	if (resoueceMesh.back()->pAnimCtrl)
+	{
+		resoueceMesh.back()->uNumAnimSet = resoueceMesh.back()->pAnimCtrl->GetNumAnimationSets();
+		if (resoueceMesh.back()->uNumAnimSet > 0)
+		{
+			resoueceMesh.back()->ppAnimSet = NEW LPD3DXANIMATIONSET[resoueceMesh.back()->uNumAnimSet];
+			for (DWORD u = 0; u < resoueceMesh.back()->uNumAnimSet; u++)
+			{
+				resoueceMesh.back()->pAnimCtrl->GetAnimationSet(u, &resoueceMesh.back()->ppAnimSet[u]);
+			}
+		}
+	}
+
+	if (resoueceMesh.back()->pFrameRoot)
+	{
+		// マトリックス更新
+		setTime(0.0, setFilename);
+		D3DXMATRIX world;
+		D3DXMatrixIdentity(&world);
+		updateFrameMatrices(resoueceMesh.back()->pFrameRoot, &world);
+
+		// 境界球/境界ボックス取得
+		calcCollision(resoueceMesh.back()->pFrameRoot, setFilename);
+	}
+
+	// 経過時間計測用時刻設定
+	resoueceMesh.back()->dwPrev = timeGetTime();
+
+	return SUCCEEDED(hr);
+}
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // フレームのマトリックスを更新
@@ -1111,7 +1177,7 @@ bool ResourceManager::destroyHierarchymesh(CHAR *pszChakNeme,std::string keyName
 				hierarchyMesh.pop_back();
 			}
 
-			return true;
+			//return true;
 		}
 		else
 		{
@@ -1151,6 +1217,45 @@ bool ResourceManager::destroyAllHierarchymesh()
 	}
 	hierarchyMesh.clear();
 	return true;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+bool ResourceManager::destroyAllResouce()
+{
+	destroyResouceMesh(Player::ModelChick,0);
+	destroyResouceMesh(Player::ModelPenchanPass,0);
+//	destroyResouceMesh(Player::ModelPenNoHahaPass);
+
+	resoueceMesh.clear();
+	return true;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// リソース解放
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void ResourceManager::destroyResouceMesh(std::string keyName,UINT index)
+{
+	// アニメーション解放
+	if (resoueceMesh[index]->ppAnimSet)
+	{
+		for (UINT j = 0; j < resoueceMesh[index]->uNumAnimSet; j++)
+		{
+			SAFE_RELEASE(resoueceMesh[index]->ppAnimSet[j]);
+		}
+		SAFE_DELETE_ARRAY(resoueceMesh[index]->ppAnimSet);
+	}
+	SAFE_RELEASE(resoueceMesh[index]->pAnimCtrl);
+
+	// メッシュ解放
+	if (resoueceMesh[index]->pFrameRoot)
+	{
+		D3DXFrameDestroy(resoueceMesh[index]->pFrameRoot, &resoueceMesh[index]->Hierarchy);
+		resoueceMesh[index]->pFrameRoot = nullptr;
+	}
+
+	
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -1272,10 +1377,10 @@ bool ResourceManager::createInstance()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // モデル変更
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void ResourceManager::changeHierarchy(HIERARCHY_MESH_DATA &changeHierarchy,CHAR* modelName)
+void ResourceManager::changeHierarchy(HIERARCHY_MESH_DATA &changeHierarchy,CHAR* keyName,UINT index)
 {
 
-	changeHierarchy = *resoueceMesh[modelName];
+	changeHierarchy = *resoueceMesh[index];
 			
 	
 }
@@ -1283,12 +1388,18 @@ void ResourceManager::changeHierarchy(HIERARCHY_MESH_DATA &changeHierarchy,CHAR*
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // プレイヤー用生成
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-HRESULT ResourceManager::makeHierarchyResouce(std::string setName,CHAR* keyName)
+HRESULT ResourceManager::makeHierarchyResouce(HIERARCHY_MESH_DATA& meshData,std::string setName,CHAR* keyName,UINT index)
 {
-	resoueceMesh[setName] = NEW HIERARCHY_MESH_DATA();
-	 
-	MeshObjType type = MeshObjType::HierarchyModel;
-	makeModelHierarchy(*resoueceMesh[setName], keyName, setName, type);
+//	MeshObjType type = MeshObjType::HierarchyModel;
+//	makeModelHierarchyResouce(meshData, keyName, setName, type,index);
 
 	return E_FAIL;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// セット
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void ResourceManager::setHierarchy(HIERARCHY_MESH_DATA &meshData,std::string keyName,UINT index)
+{
+	meshData = *resoueceMesh[index];
 }

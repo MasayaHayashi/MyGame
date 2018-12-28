@@ -130,6 +130,8 @@ void SceneMain::finalize()
 	}
 
 	collisionPtr->finalize("Player");
+
+
 }
 
 //

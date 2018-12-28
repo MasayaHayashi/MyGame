@@ -513,3 +513,11 @@ void Collision::setVelocity(std::string keyName, UINT index, D3DXVECTOR3 setVelo
 		indexCnt++;
 	}
 }
+
+//
+// ‰ğ•ú
+//
+void Collision::release(std::string keyName)
+{
+	collisionMapes[keyName].clear();
+}

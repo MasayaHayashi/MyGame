@@ -94,7 +94,9 @@ public:
 	static HRESULT createTexture(TEXTURE_DATA &TextureData,CHAR *pszFilename);
 	static HRESULT makeModelHierarchy(HIERARCHY_MESH_DATA &HierarchyMedhData, CHAR *pszFilename, std::string keyName, MeshObjType &MeshType);
 	static HRESULT makevertexBoard(VERTEX_BOARD_DATA &VtxBordData, CHAR *pszFilename);
-	static HRESULT makeHierarchyResouce(std::string keyName,CHAR* setName);
+	static HRESULT makeModelHierarchyResouce(HIERARCHY_MESH_DATA &setHierarchyMeshData, CHAR *setFilename, std::string keyName, UINT index);
+	static HRESULT makeHierarchyResouce(HIERARCHY_MESH_DATA& meshData, std::string setName, CHAR* keyName, UINT index);
+
 
 	// 解放
 	static bool destroyMesh(CHAR *pszChakNeme);
@@ -104,11 +106,16 @@ public:
 	static bool destroyAllTexture();
 	static bool destroyVtx();
 	static bool destroyFadeVtx();
-	
+	static bool destroyAllResouce();
+
 	static void createFadeTexture(TEXTURE_DATA& TextureData, CHAR *pszFilename);
 
 	static bool createInstance();
-	static void changeHierarchy(HIERARCHY_MESH_DATA &changeData,CHAR* modelName);
+	static void changeHierarchy(HIERARCHY_MESH_DATA &changeData,CHAR* modelName,UINT index);
+
+	static HRESULT makeModelHierarchyResouce(HIERARCHY_MESH_DATA &setHierarchyMeshData, CHAR *setFilename, std::string keyName, MeshObjType &meshType, UINT index);
+	static void setHierarchy(HIERARCHY_MESH_DATA &meshData, std::string keyName,UINT index);
+
 	static std::unique_ptr<ResourceManager> instancePtr;
 
 private:
@@ -116,9 +123,9 @@ private:
 #define	FVF_VERTEX_2D	(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1)
 #define	FVF_VERTEX_3D	(D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1)
 
-	static std::vector<MeshData*>				meshes;
-	static std::vector<HIERARCHY_MESH_DATA*>	hierarchyMesh;
-	static std::unordered_map<std::string, HIERARCHY_MESH_DATA*> resoueceMesh;
+	static std::vector<MeshData*>											meshes;
+	static std::vector<HIERARCHY_MESH_DATA*>								hierarchyMesh;
+	static std::vector<HIERARCHY_MESH_DATA*>								resoueceMesh;
 
 	static std::vector<TEXTURE_DATA*>			texture;
 	static std::vector<TEXTURE_DATA*>			fadeTexture;
@@ -137,6 +144,8 @@ private:
 	static	void calcCollisionFrame(LPD3DXFRAME pFrame, CHAR *pszFilename);
 	static	void calcCollisionMeshContainer(LPD3DXMESHCONTAINER meshContainerPtr, LPD3DXFRAME pFrame, CHAR *pszFilename);
 	static	void updateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX pParentMatrix);
+	static  void destroyResouceMesh(std::string keyName,UINT index);
+	
 	
 	static 	bool makeVtx(VERTEX_BOARD_DATA&);		// 通常
 	static 	bool makeVtxFade(VERTEX_BOARD_DATA&);	// フェード用

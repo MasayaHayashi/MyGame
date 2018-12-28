@@ -70,7 +70,6 @@ BallObj::BallObj(UINT setIndex)
 //
 BallObj::~BallObj()
 {
-
 }
 
 //
@@ -111,6 +110,9 @@ void BallObj::initialize()
 void BallObj::finalize()
 {
 	ResourceManager::destroyAllMesh();
+
+	Collision::release("Ball");
+
 }
 
 //
@@ -217,8 +219,11 @@ void BallObj::initializeTitleObj_Title()
 //
 void BallObj::initializeTitleObj_GameMain()
 {
+	// Šg‘å—¦İ’è
+	myTransform.scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+
 	myTransform.pos			 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.velocity	 = D3DXVECTOR3(0.0f, 5.0f, 0.0f);
+	myTransform.velocity	 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.rotDeg		 = D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
 	myTransform.rotDegDest	 = D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
 	myTransform.scale		 = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
@@ -302,6 +307,9 @@ void BallObj::updateGameMain(D3DXVECTOR3 pos,D3DXVECTOR3 rotVec)
 	setWorldMtxPos(myTransform.pos);
 
 	myTransform.pos += myTransform.velocity;
+
+	DirectX3D::printDebug("\n%faaaa:\n", myTransform.pos.y);
+
 }
 
 //

@@ -86,6 +86,7 @@ public:
 	static const RayHit*    getRayHitData(std::string keyName, UINT index);
 	static const std::list<Transform*> getTransform(std::string keyName);
 	static void setVelocity(std::string keyName, UINT index,D3DXVECTOR3 velocity);
+	static void release(std::string keyName);
 	void finalize(std::string keyName);
 
 	void setPlayer(Pawn* playerPtr);

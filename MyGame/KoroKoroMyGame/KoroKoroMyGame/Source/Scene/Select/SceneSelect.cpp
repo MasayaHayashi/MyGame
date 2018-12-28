@@ -89,11 +89,12 @@ void SceneSelect::initialize()
 //
 void SceneSelect::finalize()
 {
+	
 	for (const auto &player : playeresPtr)
 	{
 		player->finalize();
 	}
-
+	
 }
 
 //
