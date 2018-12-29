@@ -5,19 +5,24 @@
 
 // ===== インクルード部 =====
 #include "SelectManager.h"
+#include "../ResoueceManager/ResourceManager.h"
 #include "../DirectX3D/DirectX3D.h"
 
 // ===== 静的メンバ =====
+std::vector<std::string>				SelectManager::changeUintToPass;
+INT									SelectManager::currentSelectModel;
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 SelectManager::SelectManager()
 {
-	for (UINT playerindex = 0; playerindex < MaxPlayer; playerindex ++)
-	{
-		currentSelectModels[playerindex] = playerindex;
-	}
+	changeUintToPass.push_back(ResourceManager::ModelPenchanPass);
+	changeUintToPass.push_back(ResourceManager::ModelPenNoHahaPass);
+	changeUintToPass.push_back(ResourceManager::ModelChick);
+	changeUintToPass.push_back(ResourceManager::ModelPenchanPass);
+
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -30,13 +35,42 @@ SelectManager::~SelectManager()
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // インデックス取得
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-UINT SelectManager::getModelIgndex(UINT playerIndex)
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+std::string SelectManager::getModelPass(INT playerIndex)
 {
-	if (playerIndex < currentSelectModels.size())
-	{
-		return -1;
-	}
+	return changeUintToPass[playerIndex];
+}
 
-	return currentSelectModels[playerIndex];
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 現在選択中のモデル
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+INT SelectManager::getSelect()
+{
+	return currentSelectModel;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// セレクト用加算
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void SelectManager::addSelect()
+{
+	currentSelectModel ++;
+
+	if (currentSelectModel > MaxPlayer - 1)
+	{
+		currentSelectModel = MaxPlayer - 1;
+	}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// セレクト用減算
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void SelectManager::subSelect()
+{
+	currentSelectModel --;
+
+	if (currentSelectModel < 0)
+	{
+		currentSelectModel = 0;
+	}
 }

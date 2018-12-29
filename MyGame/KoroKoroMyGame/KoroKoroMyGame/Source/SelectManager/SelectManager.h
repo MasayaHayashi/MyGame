@@ -23,22 +23,23 @@ public:
 	SelectManager();
 	~SelectManager();
 
-	static constexpr UINT MaxPlayer = 4;
+	static constexpr size_t MaxPlayer = 4;
+	static constexpr size_t MaxModel  = 3;
 
-	UINT getModelIgndex(UINT playerIndex);
+	static std::string SelectManager::getModelPass(INT playerIndex);
+
+
+	static INT getSelect();
+	static void addSelect();
+	static void subSelect();
+
 
 
 protected:
 
 private:
-
-	std::array<UINT, MaxPlayer>		currentSelectModels;
-	std::unordered_map<UINT, std::string>	changeUintToPass =
-	{
-		{ 0, ResourceManager::ModelPenchanPass }, 
-		{ 1, ResourceManager::ModelPenNoHahaPass },
-		{ 2, ResourceManager::ModelChick },
-	};
+	static INT							currentSelectModel;
+	static std::vector<std::string>			changeUintToPass;
 };
 
 #endif

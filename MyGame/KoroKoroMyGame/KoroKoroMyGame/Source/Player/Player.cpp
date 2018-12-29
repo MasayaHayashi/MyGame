@@ -35,6 +35,8 @@ Player::Player()
 	D3DXMatrixIdentity(&translateMtx);
 
 	score = 0;
+
+	currentModelType = idNumber;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -228,19 +230,15 @@ void Player::initializeTitle()
 	//pCollider->setUsedFlg(false);
 
 	
-		ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelPenchanPass, ResourceManager::ModelPenchanPass, meshType, idNumber);
-		ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelChick, ResourceManager::ModelChick, meshType, idNumber);
-		ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelPenNoHahaPass, ResourceManager::ModelPenNoHahaPass, meshType,idNumber);
+	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelPenchanPass, ResourceManager::ModelPenchanPass, meshType, idNumber);
+	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelChick, ResourceManager::ModelChick, meshType, idNumber);
+	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelPenNoHahaPass, ResourceManager::ModelPenNoHahaPass, meshType,idNumber);
+	
 	meshType = MeshObjType::HierarchyModel;
 
-	if (idNumber == 2)
-	{
-		ResourceManager::setHierarchy(&hierarchyMeshData, ResourceManager::ModelPenchanPass, idNumber);
-	}
-	else
-	{
-		ResourceManager::setHierarchy(&hierarchyMeshData, ResourceManager::ModelChick, idNumber);
-	}
+
+	ResourceManager::setHierarchy(&hierarchyMeshData, SelectManager::getModelPass(idNumber), idNumber);
+
 
 	//// 現在のアニメーションセットの設定値を取得
 	//D3DXTRACK_DESC TD;   // トラックの能力
@@ -542,7 +540,7 @@ void Player::updateTitle(D3DXVECTOR3 CameraForward)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 {
-
+	
 
 	Xnum -= 0.0004f;
 	Ynum -= 0.0004f;
@@ -834,6 +832,25 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updateSelect()
 {
+
+	changeModel();
+
+	if (idNumber == 0)
+	{
+		if (Keyboard::getRelease(DIK_H))
+		{
+			SelectManager::subSelect();
+		}
+
+		if (Keyboard::getTrigger(DIK_G))
+		{
+			SelectManager::addSelect();
+		}
+	}
+
+	DirectX3D::printDebug("%d", (INT)SelectManager::getSelect());
+
+
 	/*
 	if (idNumber == 1)
 	{
@@ -1095,6 +1112,38 @@ void Player::fall(size_t checkIndex)
 			myTransform.velocity.y = 0.0f;
 		}
 	}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// モデル変更
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Player::changeModel()
+{
+	if (idNumber != SelectManager::getSelect())
+	{
+		return;
+	}
+
+	if (Keyboard::getTrigger(DIK_RIGHTARROW))
+	{
+		currentModelType ++;
+		currentModelType %= ResourceManager::MaxModelType;
+
+		auto a = SelectManager::getModelPass(currentModelType);
+		ResourceManager::setHierarchy(&hierarchyMeshData, SelectManager::getModelPass(currentModelType), idNumber);
+
+	}
+	if (Keyboard::getTrigger(DIK_LEFTARROW))
+	{
+		currentModelType --;
+		currentModelType %= ResourceManager::MaxModelType;
+
+		ResourceManager::setHierarchy(&hierarchyMeshData, SelectManager::getModelPass(currentModelType), idNumber);
+
+	}
+
+
+
 }
 
 void Player::input()

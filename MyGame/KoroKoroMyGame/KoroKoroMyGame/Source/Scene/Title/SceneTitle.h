@@ -58,8 +58,6 @@ private:
 	std::unique_ptr <TitleUI>		titleUiPtr  = nullptr;
 	std::unique_ptr <HeartObj>		heartObjPtr = nullptr;
 
-//	Board					*pBoard[MaxUIType];					// UI関連
-
 	bool					bChangeScene;						// シーン切り替え
 	INT						nChangeSceneWaitCnt;				// 待機用カウンタ
 	UINT					uSelectScene;

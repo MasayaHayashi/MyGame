@@ -126,6 +126,7 @@ public:
 	void setDefaultValue();										// 初期値セット
 	void setDestLanding(D3DXVECTOR3 setLanding);				// 着地位置セット
 	void setHitIndex(INT);										// 当たったオブジェクトのインデックスをセット
+	void setHierarchyModel(INT);
 
 	void setAnimChange(UINT, UINT);
 

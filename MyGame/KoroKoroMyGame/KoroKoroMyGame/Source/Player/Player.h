@@ -54,6 +54,8 @@ public:
 
 	void addScore();
 
+	void changeModel();
+
 	PlayerState getState()   const;
 	INT  getScore() const;
 
@@ -81,8 +83,6 @@ private:
 	void changeStatus();	// ステータス変更処理
 	void changeState();		// 状態変更処理
 
-	SelectManager selectManagerObj;
-
 	FLOAT rotCnt = 0.0f;
 
 	D3DXVECTOR3	moveVector;
@@ -96,6 +96,7 @@ private:
 	D3DXVECTOR3		oldPos;
 	D3DXQUATERNION	StartQuaternion;
 
+	UINT currentModelType = 0;
 
 };
 

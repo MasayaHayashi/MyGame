@@ -83,6 +83,7 @@ void Collision::update()
 void Collision::registerList(Transform *setPawn,std::string keyName)
 {
 	collisionMapes[keyName].push_back(setPawn);
+
 	rayHitMapes[keyName].push_back(NEW RayHit());
 }
 

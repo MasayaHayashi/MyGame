@@ -93,6 +93,8 @@ public:
 	static constexpr CHAR* ModelPenNoHahaPass = "Data/Model/Character/PenNoHaha/PenguinA.x";
 	static constexpr CHAR* ModelChick = "Data/Model/Character/Chick/Chick.x";
 
+	static constexpr UINT MaxModelType = 3;
+
 	// ê∂ê¨
 	static HRESULT makeModel(MeshData &MeshData, CHAR *pszFilename, MeshObjType &uMeshType);
 	static HRESULT createTexture(TEXTURE_DATA &TextureData,CHAR *pszFilename);

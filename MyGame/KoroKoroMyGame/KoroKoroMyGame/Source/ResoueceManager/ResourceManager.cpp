@@ -1395,9 +1395,6 @@ void ResourceManager::changeHierarchy(HIERARCHY_MESH_DATA &changeHierarchy,CHAR*
 //
 HRESULT ResourceManager::makeHierarchyResouce(HIERARCHY_MESH_DATA& meshData,std::string setName,CHAR* keyName,UINT index)
 {
-//	MeshObjType type = MeshObjType::HierarchyModel;
-//	makeModelHierarchyResouce(meshData, keyName, setName, type,index);
-
 	return E_FAIL;
 }
 

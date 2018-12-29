@@ -1129,3 +1129,11 @@ void Pawn::debugMove()
 }
 
 #endif
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// モデルデータセット
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Pawn::setHierarchyModel(INT index)
+{
+	ResourceManager::setHierarchy(&hierarchyMeshData, ResourceManager::ModelPenchanPass, index);
+}
