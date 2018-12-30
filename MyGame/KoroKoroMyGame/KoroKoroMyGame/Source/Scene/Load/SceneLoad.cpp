@@ -155,7 +155,9 @@ void SceneLoad::enable()
 
 			// ƒ[ƒhŠ®—¹
 			if (isFinishedLoad)
+			{
 				break;
+			}
 		}
 	}
 	Thred.join();

@@ -62,11 +62,10 @@ void Collision::update()
 		{
 			if (MyVector3::getLength(length) < 1.02f)
 			{
-				DirectX3D::printDebug("あたっています");
+				DirectX3D::printDebug("あたっています%d",playerIndex);
 			}
 
 			rayHitMapes["Player"][playerIndex]->isHit = true;
-
 		}
 		else
 		{
@@ -162,9 +161,17 @@ bool Collision::IsHitSphereToSphere(Pawn *pPawnA,Pawn *pPawnB)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // プレイヤーセット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Collision::setPlayer(Pawn* playerPtr)
+void Collision::registerPlayer(Pawn* playerPtr)
 {
 	playersPtr.push_back(playerPtr);
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// フィールドセット
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Collision::registerField(Pawn* setFieldPtr)
+{
+	fieldPtr = setFieldPtr;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -183,8 +190,6 @@ INT Collision::isHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos,
 {
 	// ワールドマトリックスの逆マトリックスを生成
 	D3DXMATRIX mInvWorld;
-
-	D3DXMATRIX test = *pPawnA->getWorldMtx();
 
 	D3DXMatrixInverse(&mInvWorld, NULL, pPawnA->getWorldMtx());
 	// レイを逆ワールド変換

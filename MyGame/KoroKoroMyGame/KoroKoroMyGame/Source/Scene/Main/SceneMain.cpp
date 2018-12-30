@@ -60,22 +60,30 @@ SceneMain::SceneMain()
 	lightPtr.reset(NEW Light());
 	cameraPtr.reset(NEW Camera());
 
-	playeresPtr.push_back( static_cast<std::unique_ptr<Player>>( NEW Player(D3DXVECTOR3(-2.0f, 0.0f, 0.0f) , playeresPtr.size() )));
-	playeresPtr.push_back( static_cast<std::unique_ptr<Player>>( NEW Player(D3DXVECTOR3( 4.0f, 0.0f, 2.0f) , playeresPtr.size()	)));
+	for (UINT playerIndex = 0; playerIndex < SelectManager::MaxPlayer; playerIndex++)
+	{
+		playeresPtr.push_back(static_cast<std::unique_ptr<Player>>(NEW Player(D3DXVECTOR3(-2.0f, 0.0f, 0.0f), playeresPtr.size())));
+	}
 
 	for (UINT ballCnt = 0; ballCnt < playeresPtr.size(); ballCnt++)
 	{
 		ballsPtr.push_back( NEW BallObj(ballCnt));
 	}
 
-	gameObjectesPtr.push_back(  std::unique_ptr<Pawn>( NEW Skydome())   );
 	gameObjectesPtr.push_back(  std::unique_ptr<Pawn>( NEW MainField()) );
+	gameObjectesPtr.push_back(  std::unique_ptr<Pawn>( NEW Skydome())   );
+
 
 	boardObjectesPtr.push_back( std::unique_ptr<Board>(NEW Star() ));
 
-	collisionPtr.reset(NEW Collision(playeresPtr.front().get(),gameObjectesPtr.back().get()));
-	collisionPtr.get()->setPlayer(playeresPtr.back().get());
 
+	collisionPtr.reset(NEW Collision());
+
+	for (auto& player : playeresPtr)
+	{
+		collisionPtr->registerPlayer(player.get());
+	}
+	collisionPtr->registerField(gameObjectesPtr.front().get());
 }
 
 //
@@ -161,7 +169,7 @@ void SceneMain::update()
 	
 	if (Keyboard::getPress(DIK_1))
 	{
-		SceneManager::setNextScene(SceneManager::SceneState::SceneTitle);
+		SceneManager::setNextScene(SceneManager::SceneState::SceneMain);
 	}
 
 	collisionPtr->update();

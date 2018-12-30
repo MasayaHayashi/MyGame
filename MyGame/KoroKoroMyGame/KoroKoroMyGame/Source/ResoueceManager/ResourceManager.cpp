@@ -10,6 +10,7 @@
 #include <string>
 #include <tchar.h>
 #include <utility>
+#include "../MyDelete/MyDelete.h"
 #include "../CrtDebug/CrtDebug.h"
 #include "../Pawn/Pawn.h"
 #include "../Board/Board.h"
@@ -1227,13 +1228,23 @@ bool ResourceManager::destroyAllHierarchymesh()
 //
 // 
 //
-bool ResourceManager::destroyAllResouce()
+bool ResourceManager::destroyAllResouce(size_t index)
 {
-	destroyResouceMesh(ModelChick,0);
-	destroyResouceMesh(ModelPenchanPass,0);
-//	destroyResouceMesh(Player::ModelPenNoHahaPass);
+	destroyResouceMesh(ModelChick,index);
+	destroyResouceMesh(ModelPenchanPass, index);
+	destroyResouceMesh(ModelPenNoHahaPass,index);
 
-	resoueceMesh.clear();
+//	resoueceMesh.clear();
+	if (index == SelectManager::MaxPlayer - 1)
+	{
+		resoueceMesh[ModelChick].clear();
+		resoueceMesh[ModelPenchanPass].clear();
+		resoueceMesh[ModelPenNoHahaPass].clear();
+
+
+		resoueceMesh.clear();
+	}
+
 	return true;
 }
 
@@ -1260,6 +1271,7 @@ void ResourceManager::destroyResouceMesh(std::string keyName,UINT index)
 		resoueceMesh[keyName][index]->pFrameRoot = nullptr;
 	}
 
+	Mydelete::safeDelete(resoueceMesh[keyName][index]);
 	
 }
 

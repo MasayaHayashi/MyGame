@@ -125,7 +125,7 @@ void SceneSelect::update()
 
 	if (Keyboard::getPress(DIK_1))
 	{
-		SceneManager::setNextScene(SceneManager::SceneState::SceneTitle);
+		SceneManager::setNextScene(SceneManager::SceneState::SceneMain);
 	}
 }
 

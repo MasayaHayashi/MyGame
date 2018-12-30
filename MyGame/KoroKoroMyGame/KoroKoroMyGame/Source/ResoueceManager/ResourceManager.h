@@ -112,14 +112,13 @@ public:
 	static bool destroyAllTexture();
 	static bool destroyVtx();
 	static bool destroyFadeVtx();
-	static bool destroyAllResouce();
+	static bool destroyAllResouce(size_t index);
 
 	static void createFadeTexture(TEXTURE_DATA& TextureData, CHAR *pszFilename);
 
 	static bool createInstance();
 	static void changeHierarchy(HIERARCHY_MESH_DATA &changeData,CHAR* modelName,UINT index);
 
-//	static HRESULT makeModelHierarchyResouce(HIERARCHY_MESH_DATA &setHierarchyMeshData, CHAR *setFilename, std::string keyName, MeshObjType &meshType, UINT index);
 	static void setHierarchy(HIERARCHY_MESH_DATA *meshData, std::string keyName,UINT index);
 
 	static std::unique_ptr<ResourceManager> instancePtr;

@@ -1,60 +1,47 @@
 ﻿  Application.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\application\Application.h(16): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
   MyAudiere.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\audio\MyAudiere.h(12): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  BackGround.cpp
+  BallObj.cpp
   Board.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\board\../ResoueceManager/ResourceManager.h(12): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
   Camera.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\camera\Camera.h(12): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
   Collider.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\collider\Collider.h(16): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
   Collision.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\collision\../Pawn/Pawn.h(11): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
   DirectX3D.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\directx3d\DirectX3D.h(13): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
   Main.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\entrypoint\../Application/Application.h(16): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
   FadeUI.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\board\../ResoueceManager/ResourceManager.h(12): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
   Figure.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\figure\Figure.h(11): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
-  GameObjectBase.cpp
+  Fream.cpp
   HeartObj.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\heartobj\../Pawn/Pawn.h(11): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
   Keyboard.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\keyboard\Keyboard.h(16): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
   Light.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\light\Light.h(8): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
   MyLoadIcon.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\board\../ResoueceManager/ResourceManager.h(12): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
   MainField.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\mainfield\../Pawn/Pawn.h(11): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
   MeshFieldBase.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\meshfieldbase\../Pawn/Pawn.h(11): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
-  MyHierarchy.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\myhierarchy\MyHierarchy.h(11): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
-  MyVector3.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\myvector3\MyVector3.h(11): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
-  Pawn.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\pawn\Pawn.h(11): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  MyDelete.cpp
   コンパイル中...
+  MyHierarchy.cpp
+  MyVector3.cpp
+Source\MyVector3\MyVector3.cpp(69): warning C4244: '=': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
+Source\MyVector3\MyVector3.cpp(256): warning C4244: '=': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
+Source\MyVector3\MyVector3.cpp(278): warning C4244: '=': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
+Source\MyVector3\MyVector3.cpp(289): warning C4244: '初期化中': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
+  Particle.cpp
+  Pawn.cpp
   Player.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\player\../Pawn/Pawn.h(11): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  MyRandom.cpp
   ResourceManager.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\resouecemanager\ResourceManager.h(12): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
   sceneBase.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\sceneinterface\SceneBase.h(15): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
   SceneManager.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\scenemanager\../SceneInterface/sceneBase.h(15): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
   SceneLoad.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\scene\load\../../SceneInterface/sceneBase.h(15): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
   SceneMain.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\scene\main\../../SceneInterface/sceneBase.h(15): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  SceneSelect.cpp
   SceneTitle.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\scene\title\../../SceneInterface/sceneBase.h(15): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  SelectManager.cpp
   Skydome.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\skydome\../Pawn/Pawn.h(11): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  Star.cpp
   TitleUI.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\board\../ResoueceManager/ResourceManager.h(12): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
-  Transform.cpp
-d:\git\mygame\korokoromygame\korokoromygame\source\transform\Transform.h(13): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  コード生成しています。
+  All 3761 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  コード生成が終了しました。
+  KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Release\KoroKoroMyGame.exe
+  KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Release\KoroKoroMyGame.pdb (Full PDB)

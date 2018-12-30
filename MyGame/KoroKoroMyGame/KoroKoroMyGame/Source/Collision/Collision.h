@@ -89,7 +89,8 @@ public:
 	static void release(std::string keyName);
 	void finalize(std::string keyName);
 
-	void setPlayer(Pawn* playerPtr);
+	void registerPlayer(Pawn* playerPtr);
+	void registerField(Pawn* fieldPtr);
 
 
 private:

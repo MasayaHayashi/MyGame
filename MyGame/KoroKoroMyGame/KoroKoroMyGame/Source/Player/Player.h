@@ -60,6 +60,7 @@ public:
 	INT  getScore() const;
 
 private:
+	
 	static constexpr FLOAT FallSpeed			= 0.01f;
 	static constexpr FLOAT VelocityForwardSpeed = 0.45f;
 	static constexpr FLOAT VelocitySideSpeed	= 0.3f;
@@ -69,7 +70,7 @@ private:
 
 	void initializeTitle();
 	void initializeSceneEdit();
-	void initializeGameMain(CHAR* setFilePass);
+	void initializeGameMain();
 	void initializeResult();
 	void updateTitle(D3DXVECTOR3);
 	void updateResult();

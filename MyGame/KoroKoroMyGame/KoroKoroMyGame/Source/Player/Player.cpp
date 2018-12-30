@@ -89,14 +89,7 @@ void Player::initialize()
 		initializeTitle();
 		break;
 	case SceneManager::SceneState::SceneMain:
-		if (idNumber == 0)
-		{
-			initializeGameMain(ResourceManager::ModelPenchanPass);
-		}
-		else if(idNumber == 1)
-		{
-			initializeGameMain(ResourceManager::ModelChick);
-		}
+		initializeGameMain();
 		break;
 	case SceneManager::SceneState::SceneResult:
 		initializeResult();
@@ -117,7 +110,7 @@ void Player::initialize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::finalize()
 {
-	ResourceManager::destroyAllHierarchymesh();
+	ResourceManager::destroyAllResouce(idNumber);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -189,14 +182,6 @@ void Player::initializeTitle()
 	materialBufferPtr	 = nullptr;
 	numMat				 = 0;
 
-	if (idNumber == 0)
-	{
-		strcpy_s(fileName, ResourceManager::ModelChick);
-	}
-
-	// Xファイルの読み込み
-//	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName, "Player" , meshType);
-
 	myTransform.pos.y -= hierarchyMeshData.CollitionBox.y * 2;
 
 	// 回転
@@ -228,14 +213,12 @@ void Player::initializeTitle()
 
 	// 表示フラグ初期化
 	//pCollider->setUsedFlg(false);
-
 	
 	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelPenchanPass, ResourceManager::ModelPenchanPass, meshType, idNumber);
 	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelChick, ResourceManager::ModelChick, meshType, idNumber);
 	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelPenNoHahaPass, ResourceManager::ModelPenNoHahaPass, meshType,idNumber);
 	
 	meshType = MeshObjType::HierarchyModel;
-
 
 	ResourceManager::setHierarchy(&hierarchyMeshData, SelectManager::getModelPass(idNumber), idNumber);
 
@@ -264,7 +247,7 @@ void Player::initializeTitle()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // シーンメイン用プレイヤー初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Player::initializeGameMain(CHAR *setFilePass)
+void Player::initializeGameMain()
 {
 	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.rotDeg		= D3DXVECTOR3(0.0f, 180.0f, 0.0f);
@@ -272,13 +255,22 @@ void Player::initializeGameMain(CHAR *setFilePass)
 	myTransform.scale		= D3DXVECTOR3(ScaleSize, ScaleSize, ScaleSize);
 	playerStateType			= PlayerState::velocity;
 
-	if (idNumber == 0)
+	switch (idNumber)
 	{
-		myTransform.pos = D3DXVECTOR3(-5.0f, 5.0f, -5.0f);
-	}
-	else
-	{
-		myTransform.pos = D3DXVECTOR3(5.0f, 5.0f, 0.0f);
+	case 0:
+		myTransform.pos = D3DXVECTOR3(-5.0f, 5.0f, 5.0f);
+		break;
+	case 1:
+		myTransform.pos = D3DXVECTOR3(-10.0f, 5.0f, -5.0f);
+		break;
+	case 2:
+		myTransform.pos = D3DXVECTOR3(5.0f, 5.0f, 5.0f);
+		break;
+	case 3:
+		myTransform.pos = D3DXVECTOR3(5.0f, 5.0f, -5.0f);
+		break;
+	default:
+		break;
 	}
 
 	Collision::registerList(&myTransform, "Player");
@@ -293,7 +285,13 @@ void Player::initializeGameMain(CHAR *setFilePass)
 	numMat			  = 0;
 
 	// Xファイルの読み込み
-	ResourceManager::makeModelHierarchy(hierarchyMeshData, setFilePass,"Player",meshType,idNumber);
+	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelPenchanPass, ResourceManager::ModelPenchanPass, meshType, idNumber);
+	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelChick, ResourceManager::ModelChick, meshType, idNumber);
+	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelPenNoHahaPass, ResourceManager::ModelPenNoHahaPass, meshType, idNumber);
+
+	meshType = MeshObjType::HierarchyModel;
+
+	ResourceManager::setHierarchy(&hierarchyMeshData, SelectManager::getModelPass(idNumber), idNumber);
 
 	// 拡大
 	D3DXMATRIX mScale;
@@ -540,10 +538,15 @@ void Player::updateTitle(D3DXVECTOR3 CameraForward)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 {
-	
+	if (idNumber == 0)
+	{
+		DirectX3D::printDebug("VELOCITY_X :%f  IDNumber :%f \n", myTransform.velocity.x, idNumber);
+		DirectX3D::printDebug("VELOCITY_Y :%f  IDNumber :%f \n", myTransform.velocity.y, idNumber);
+		DirectX3D::printDebug("VELOCITY_Z :%f  IDNumber :%f \n", myTransform.velocity.z, idNumber);
+	}
 
-	Xnum -= 0.0004f;
-	Ynum -= 0.0004f;
+	Xnum -= 0.00000004f;
+	Ynum -= 0.00000004f;
 
 	if (Xnum <= 0.0f)
 	{
