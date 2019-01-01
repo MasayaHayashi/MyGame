@@ -10,11 +10,10 @@
 // ===== インクルード部 =====
 #include "GameObjectBase.h"
 
-// ===== 列挙体定義 =====
-enum class GameObjType
+enum class GAME_OBJ_TYPE
 {
 	NormalBlockObj = 0,
-	velocityBlockObj,
+	MoveBlockOBj,
 	StarObj,
 	GoalObj,
 };
@@ -23,6 +22,8 @@ enum class GameObjType
 class GameObjectBase
 {
 	public:
+		static constexpr size_t MaxGameObjType = static_cast<size_t>( GAME_OBJ_TYPE::GoalObj) + 1;
+
 		GameObjectBase();
 		virtual ~GameObjectBase();
 

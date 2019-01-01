@@ -121,11 +121,13 @@
     <ClCompile Include="Source\Audio\MyAudiere.cpp" />
     <ClCompile Include="Source\BackGround\BackGround.cpp" />
     <ClCompile Include="Source\Ball\BallObj.cpp" />
+    <ClCompile Include="Source\Block\Block.cpp" />
     <ClCompile Include="Source\Board\Board.cpp" />
     <ClCompile Include="Source\Camera\Camera.cpp" />
     <ClCompile Include="Source\Collider\Collider.cpp" />
     <ClCompile Include="Source\Collision\Collision.cpp" />
     <ClCompile Include="Source\DirectX3D\DirectX3D.cpp" />
+    <ClCompile Include="Source\Edit\Editor\StageEditor.cpp" />
     <ClCompile Include="Source\EntryPoint\Main.cpp" />
     <ClCompile Include="Source\Fade\FadeUI.cpp" />
     <ClCompile Include="Source\Figure\Figure.cpp" />
@@ -150,6 +152,7 @@
     <ClCompile Include="Source\Scene\Load\SceneLoad.cpp" />
     <ClCompile Include="Source\Scene\Main\SceneMain.cpp" />
     <ClCompile Include="Source\Scene\Select\SceneSelect.cpp" />
+    <ClCompile Include="Source\Scene\StageEdit\SceneStageEdit.cpp" />
     <ClCompile Include="Source\Scene\Title\SceneTitle.cpp" />
     <ClCompile Include="Source\SelectManager\SelectManager.cpp" />
     <ClCompile Include="Source\Skydome\Skydome.cpp" />
@@ -163,11 +166,13 @@
     <ClInclude Include="Source\Audio\MyAudiere.h" />
     <ClInclude Include="Source\BackGround\BackGround.h" />
     <ClInclude Include="Source\Ball\BallObj.h" />
+    <ClInclude Include="Source\Block\Block.h" />
     <ClInclude Include="Source\Board\Board.h" />
     <ClInclude Include="Source\Camera\Camera.h" />
     <ClInclude Include="Source\Collider\Collider.h" />
     <ClInclude Include="Source\Collision\Collision.h" />
     <ClInclude Include="Source\DirectX3D\DirectX3D.h" />
+    <ClInclude Include="Source\Edit\Editor\StageEditor.h" />
     <ClInclude Include="Source\Fade\FadeUI.h" />
     <ClInclude Include="Source\Figure\Figure.h" />
     <ClInclude Include="Source\Fream\Fream.h" />
@@ -193,6 +198,7 @@
     <ClInclude Include="Source\Scene\Load\SceneLoad.h" />
     <ClInclude Include="Source\Scene\Main\SceneMain.h" />
     <ClInclude Include="Source\Scene\Select\SceneSelect.h" />
+    <ClInclude Include="Source\Scene\StageEdit\SceneStageEdit.h" />
     <ClInclude Include="Source\Scene\Title\SceneTitle.h" />
     <ClInclude Include="Source\SelectManager\SelectManager.h" />
     <ClInclude Include="Source\Skydome\Skydome.h" />

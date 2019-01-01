@@ -148,6 +148,15 @@
     <Filter Include="ソース ファイル\SelectManager">
       <UniqueIdentifier>{6a087e89-524a-4db3-8165-06f7707031ea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Edit">
+      <UniqueIdentifier>{c7abfd2e-07e3-4133-a354-d2e387d85343}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene\StageEdit">
+      <UniqueIdentifier>{c7056d2a-2e2b-4d67-b792-32c7f566cfa9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Block">
+      <UniqueIdentifier>{e6e14a8b-56af-4b83-8eb2-27baba6de038}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Audio\MyAudiere.cpp">
@@ -263,6 +272,15 @@
     </ClCompile>
     <ClCompile Include="Source\SelectManager\SelectManager.cpp">
       <Filter>ソース ファイル\SelectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\StageEdit\SceneStageEdit.cpp">
+      <Filter>ソース ファイル\Scene\StageEdit</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Edit\Editor\StageEditor.cpp">
+      <Filter>ソース ファイル\Edit</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Block\Block.cpp">
+      <Filter>ソース ファイル\Block</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -388,6 +406,15 @@
     </ClInclude>
     <ClInclude Include="Source\SelectManager\SelectManager.h">
       <Filter>ソース ファイル\SelectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\StageEdit\SceneStageEdit.h">
+      <Filter>ソース ファイル\Scene\StageEdit</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Edit\Editor\StageEditor.h">
+      <Filter>ソース ファイル\Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Block\Block.h">
+      <Filter>ソース ファイル\Block</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -11,6 +11,7 @@
 #include "../Scene/Main/SceneMain.h"
 #include "../Scene/Select/SceneSelect.h"
 #include "../Scene/Result/C_SceneResult.h"
+#include "../Scene/StageEdit/SceneStageEdit.h"
 #include "../Fade/FadeUI.h"
 
 // ===== 静的メンバ =====
@@ -160,6 +161,9 @@ void SceneManager::changeScene(SceneState Scene)
 	case SceneState::SceneSelect:
 		currentScenePtr.reset(NEW SceneSelect());
 		break;
+	case SceneState::SceneStageEdit:
+		currentScenePtr.reset(NEW SceneStageEdit());
+		break;
 	/*
 	case SceneState::SceneResult:
 		delete currentScenePtr.get();
@@ -236,7 +240,7 @@ void SceneManager::loadSettingFile()
 
 	if (!ret)
 	{
-		MessageBox(nullptr, TEXT("シーン読み込みエラー"), TEXT("Error"), MB_ICONERROR);
+		MessageBox(nullptr, TEXT("Error"), TEXT("シーン読み込みエラー"), MB_ICONERROR);
 	}
 }
 
@@ -254,6 +258,7 @@ void SceneManager::makeStartScene()
 		currentScenePtr.reset(NEW SceneMain());
 		break;
 	case SceneState::SceneStageEdit: 
+ 		currentScenePtr.reset(NEW SceneStageEdit());
 		break;
 	case SceneState::SceneSelect:
 		currentScenePtr.reset(NEW SceneSelect());

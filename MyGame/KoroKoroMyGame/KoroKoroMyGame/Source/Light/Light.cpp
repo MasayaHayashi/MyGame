@@ -16,11 +16,6 @@ HRESULT Light::initialize()
 {
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
-	for (auto &light : lightPtrArray)
-	{
-		light.reset(NEW D3DLIGHT9);
-	}
-
 	// D3DLIGHT9構造体を0でクリアする
 	//ZeroMemory(&pLight[0], sizeof(D3DLIGHT9));
 
@@ -30,20 +25,20 @@ HRESULT Light::initialize()
 	// ライトのタイプの設定
 	for (auto &light : lightPtrArray)
 	{
-		light->Type = D3DLIGHT_DIRECTIONAL;
+		light.Type = D3DLIGHT_DIRECTIONAL;
 
 		// 拡散光
-		light->Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		light.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
 		// 環境光
-		light->Ambient = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);
+		light.Ambient = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);
 
 		// ライトの方向の設定
 		vecDir = D3DXVECTOR3(0.0f, -1.0f, 0.80f);
-		D3DXVec3Normalize((D3DXVECTOR3*)&light->Direction, &vecDir);
+		D3DXVec3Normalize((D3DXVECTOR3*)&light.Direction, &vecDir);
 
 		// ライトをレンダリングパイプラインに設定
-		devicePtr->SetLight(0, light.get());
+		devicePtr->SetLight(0, &light);
 
 		// ライトの設定
 		devicePtr->LightEnable(0, true);

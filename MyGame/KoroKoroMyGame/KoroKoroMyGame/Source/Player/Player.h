@@ -44,8 +44,7 @@ public:
 
 	virtual void initializeStatus();
 
-	// シーン別更新
-	void updateSceneEdit();
+	void updateStageEdit();
 	void updateGameMain(D3DXVECTOR3);
 	void updateSelect();
 

@@ -76,7 +76,6 @@ SceneMain::SceneMain()
 
 	boardObjectesPtr.push_back( std::unique_ptr<Board>(NEW Star() ));
 
-
 	collisionPtr.reset(NEW Collision());
 
 	for (auto& player : playeresPtr)

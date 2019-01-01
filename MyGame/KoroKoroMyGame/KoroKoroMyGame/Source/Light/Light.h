@@ -27,7 +27,7 @@ private:
 
 	BYTE LightID;
 
-	std::unique_ptr<D3DLIGHT9> lightPtrArray[MaxLight];
+	D3DLIGHT9 lightPtrArray[MaxLight];
 
 
 	D3DLIGHT9 *pLight[MaxLight];

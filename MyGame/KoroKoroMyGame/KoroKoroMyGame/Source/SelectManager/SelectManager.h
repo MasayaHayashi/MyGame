@@ -40,6 +40,8 @@ protected:
 private:
 	static INT							currentSelectModel;
 	static std::vector<std::string>			changeUintToPass;
+
+	static SelectManager instance;
 };
 
 #endif

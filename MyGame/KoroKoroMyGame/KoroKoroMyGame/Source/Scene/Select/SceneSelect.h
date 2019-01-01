@@ -63,8 +63,6 @@ private:
 	std::list<std::unique_ptr<Pawn>>	 gameObjectesPtr;
 	std::list<std::unique_ptr<Board>>	 boardObjectesPtr;
 
-	SelectManager			selectManagerObj;
-
 	GameState				currentGameState;
 	static UINT				currentStage;
 	static UINT				prevScore;

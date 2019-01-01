@@ -42,10 +42,10 @@ Player::Player()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-Player::Player(D3DXVECTOR3 StartPos,UINT setNumber)
+Player::Player(D3DXVECTOR3 startPosition,UINT setNumber)
 {
 	// 位置・向きの初期設定
-	myTransform.pos = (StartPos);
+	myTransform.pos = (startPosition);
 	myTransform.velocity = (D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	setDefaultValue();
@@ -132,7 +132,7 @@ void Player::update(D3DXVECTOR3 CameraForward)
 		updateResult();
 		break;
 	case SceneManager::SceneState::SceneStageEdit:
-		updateSelect();
+		updateStageEdit();
 		break;
 	case SceneManager::SceneState::SceneSelect:
 		updateSelect();
@@ -340,9 +340,14 @@ void Player::initializeSceneEdit()
 	materialBufferPtr	= nullptr;
 	numMat				= 0;
 
-	// Xファイルの読み込み
-	ResourceManager::makeModelHierarchy(hierarchyMeshData, fileName,"Player",meshType,idNumber);
-	
+	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelPenchanPass, ResourceManager::ModelPenchanPass, meshType, idNumber);
+	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelChick, ResourceManager::ModelChick, meshType, idNumber);
+	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelPenNoHahaPass, ResourceManager::ModelPenNoHahaPass, meshType, idNumber);
+
+	meshType = MeshObjType::HierarchyModel;
+
+	ResourceManager::setHierarchy(&hierarchyMeshData, SelectManager::getModelPass(idNumber), idNumber);
+
 	// モデル回転
 	myTransform.pos.y -= hierarchyMeshData.CollitionBox.y * 2;
 	
@@ -908,8 +913,12 @@ void Player::updateSelect()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // シーンエディット用更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Player::updateSceneEdit()
+void Player::updateStageEdit()
 {
+	updateAnimation();
+	setWorldMtxPos(myTransform.pos);
+
+
 #if 0
 
 

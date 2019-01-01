@@ -10,7 +10,8 @@
 
 // ===== 静的メンバ =====
 std::vector<std::string>				SelectManager::changeUintToPass;
-INT									SelectManager::currentSelectModel;
+INT										SelectManager::currentSelectModel;
+SelectManager							SelectManager::instance;
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -21,8 +22,6 @@ SelectManager::SelectManager()
 	changeUintToPass.push_back(ResourceManager::ModelPenNoHahaPass);
 	changeUintToPass.push_back(ResourceManager::ModelChick);
 	changeUintToPass.push_back(ResourceManager::ModelPenchanPass);
-
-
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

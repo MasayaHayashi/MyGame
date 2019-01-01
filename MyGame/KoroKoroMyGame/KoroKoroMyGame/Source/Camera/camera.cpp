@@ -112,7 +112,7 @@ void Camera::debugMove()
 void Camera::initialize()
 {
 
-	myTransform.pos	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);							// カメラの視点
+	myTransform.pos	= D3DXVECTOR3(0.0f, 0.0f, -5.0f);							// カメラの視点
 	myTransform.look  = D3DXVECTOR3(0.0f,0.0f,0.0f);	// カメラの注視点
 	cameraUp	= D3DXVECTOR3(0.0f, 1.0f, 0.0f);									// カメラの上方向
 	

@@ -41,6 +41,11 @@ typedef struct
 
 typedef struct
 {
+	Transform myTransform;
+} ExportData;
+
+typedef struct
+{
 	D3DXVECTOR3 hitRay	 = D3DXVECTOR3(0.0f,0.0f,0.0f);
 	D3DXVECTOR3 hitCross = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	bool isHitAABB		 = false;
@@ -144,6 +149,7 @@ public:
 protected:
 	std::unique_ptr <Collider> colliderPtr = nullptr;
 
+
 	MeshData				meshDataObj;
 	HIERARCHY_MESH_DATA		hierarchyMeshData;
 	TEXTURE_DATA			textureData;
@@ -209,8 +215,6 @@ protected:
 	MyHierarchy					Hierarchy;		// 階層メモリ確保/解放クラス
 	DWORD						dwPrev;			// 直前の時刻
 	
-
-	GameObjType					objType;
 	MeshObjType					meshType;				// メッシュの種類
 	UINT						currentAnim;			// アニメーション
 private:

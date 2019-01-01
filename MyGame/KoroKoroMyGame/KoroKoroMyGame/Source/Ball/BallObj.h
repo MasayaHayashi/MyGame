@@ -1,5 +1,5 @@
 //
-// HeartObj.cpp
+// BallObj.cpp
 // Author : Masaya Hayashi
 //
 
