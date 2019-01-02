@@ -3,14 +3,15 @@
 // Author : Masaya Hayashi
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
-#define _CRT_SECURE_NO_WARNINGS
-
 // ===== インクルード部 =====
 #include "../Editor/StageEditor.h"
 #include "../../Light/Light.h"
 #include "../../Camera/Camera.h"
 #include "../../Player/Player.h"
 #include "../../Block/Block.h"
+#include "../../MyDelete/MyDelete.h"
+#include "../../EditUI/WhatStageSaveUI.h"
+#include <stdio.h>
 
 //
 //#include "C_MoveBlock.h"
@@ -29,8 +30,6 @@
 //#include "collision.h"
 
 // ===== 定数・マクロ定義 =====
-#define MODEL_NAME				 "data/MODEL/Qube.x"
-#define PRESS_MOVE_SPEED (0.5f)
 
 //#define TEXTURE_NAME "data/TEXTURE/penguin1.png"
 
@@ -41,13 +40,18 @@ StageEditor::StageEditor()
 {
 	// フラグ初期化
 	nErrorFopen			= false;
-	bIsSelectSaveStage	= false;
-	uSaveStage  = STAGE_SELECT1;
-	uSelectMode = MODE_EDIT;
+	isSelectSaveStage	= false;
+	uSaveStage			= static_cast<INT>(STAGE_SELECT_TYPE::STAGE_SELECT1);
+	uSelectMode			= static_cast<INT>(EDIT_MODE_TYPE::MODE_EDIT);
 	
 	for (UINT gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
 	{
 		creteGameObj(gameObjTypeIndex);
+	}
+
+	for (UINT boardObjTypeIndex = 0; boardObjTypeIndex < GameObjectBase::MaxGameObjType; boardObjTypeIndex++)
+	{
+		createBoard(boardObjTypeIndex);
 	}
 
 	/*
@@ -57,13 +61,14 @@ StageEditor::StageEditor()
 	}
 	*/
 
+	/*
 	// ステージ読み込み初期化
 	for (INT StageCnt = 0; StageCnt < MAX_STAGE; StageCnt++)
 	{
 		switch (StageCnt)
 		{
 		case 0 :
-			strcpy(&szStageFileName[StageCnt][0], STAGE_TUTORIAL_FILE_NAME);
+			strcpy_s(szStageFileName[StageCnt][0], STAGE_TUTORIAL_FILE_NAME);
 			break;
 		case 1:
 			strcpy(&szStageFileName[StageCnt][0], STAGE_1_FILE_NAME);
@@ -79,6 +84,7 @@ StageEditor::StageEditor()
 			break;
 		}
 	}
+	*/
 
 	lightPtr.reset(NEW Light());
 	cameraPtr.reset(NEW Camera());
@@ -101,6 +107,22 @@ void StageEditor::initialize()
 	lightPtr->initialize();
 	cameraPtr->initialize();
 	playerPtr->initialize();
+
+	for (UINT gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
+	{
+		for (auto itr = gameObjPtr[gameObjTypeIndex].begin(); itr != gameObjPtr[gameObjTypeIndex].end(); itr++)
+		{
+			(*itr)->initialize();
+		}
+	}
+
+	for (UINT boardTypeIndex = 0; boardTypeIndex < MaxBoardObj; boardTypeIndex++)
+	{
+		for (auto itr = boardObjPtr[boardTypeIndex].begin(); itr != boardObjPtr[boardTypeIndex].end(); itr++)
+		{
+			(*itr)->initialize();
+		}
+	}
 
 	/*
 	// UI初期化
@@ -136,16 +158,6 @@ void StageEditor::initialize()
 	}
 	*/
 
-	/*
-	// ブロック初期化
-	for (auto mapItr = gameObjPtr.begin(); mapItr != gameObjPtr.end(); mapItr ++)
-	{
-		for (auto listItr = mapItr->second.begin(); listItr != mapItr->second.end(); listItr++)
-		{
-			listItr->initialize();
-		}
-	}
-	*/
 
 	//// 衝突用クラス生成
 	//pCollision = NEW C_COLLISION;
@@ -181,6 +193,14 @@ void StageEditor::finalize()
 
 	playerPtr->finalize();
 
+	for (UINT gameObjIndex = 0; gameObjIndex < GameObjectBase::MaxGameObjType; gameObjIndex++)
+	{
+		for (auto itr = gameObjPtr[gameObjIndex].begin(); itr != gameObjPtr[gameObjIndex].end(); itr++)
+		{
+			(*itr)->finalize();
+			Mydelete::safeDelete(*itr);
+		}
+	}
 
 	//// UI関連後処理
 	//for (INT i = 0; i < MAX_EDITOR_UI_TYPE; i++)
@@ -212,6 +232,28 @@ void StageEditor::finalize()
 void StageEditor::update()
 {
 	playerPtr->update(cameraPtr->getFowerd());
+
+	for (UINT gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
+	{
+		for (auto itr = gameObjPtr[gameObjTypeIndex].begin(); itr != gameObjPtr[gameObjTypeIndex].end(); itr++)
+		{
+			(*itr)->update();
+		}
+	}
+
+	for (UINT boardTypeIndex = 0; boardTypeIndex < MaxBoardObj; boardTypeIndex++)
+	{
+		for (auto itr = boardObjPtr[boardTypeIndex].begin(); itr != boardObjPtr[boardTypeIndex].end(); itr++)
+		{
+			(*itr)->update();
+		}
+	}
+
+	move();
+
+	place();
+	
+	cameraPtr->updateStageEdit(selectGameObjIndex);
 
 //	cameraPtr->update();
 //{
@@ -291,7 +333,25 @@ void StageEditor::draw()
 {
 	playerPtr->draw();
 
+	for (UINT gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
+	{
+		for (auto itr = gameObjPtr[gameObjTypeIndex].begin(); itr != gameObjPtr[gameObjTypeIndex].end(); itr++)
+		{
+			(*itr)->draw();
+		}
+	}
+
+	for (UINT boardTypeIndex = 0; boardTypeIndex < MaxBoardObj; boardTypeIndex++)
+	{
+		for (auto itr = boardObjPtr[boardTypeIndex].begin(); itr != boardObjPtr[boardTypeIndex].end(); itr++)
+		{
+			(*itr)->draw();
+		}
+	}
+
 	cameraPtr->setCamera();
+
+
 	//// ポーズ処理
 	//if (bPause)
 	//{
@@ -480,131 +540,167 @@ void StageEditor::deleteObj()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // オブジェクト移動
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void StageEditor::moveObj()
+void StageEditor::move()
 {
-//{
-//	// キーボード操作
-//	D3DXVECTOR3 BlockPos = pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->GetPosition();
-//	D3DXVECTOR3 BlockRot = pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->GetRotation();
-//	D3DXVECTOR3 BlockSize = pGameObj[0][0]->GetCollisionBox() * 0.5f;
-//
-//	// 左移動
-//	if (GetKeyboardTrigger(DIK_A))
-//	{
-//		D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x - BlockSize.x, BlockPos.y, BlockPos.z);
-//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
-//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
-//	}
-//	if (GetKeyboardTrigger(DIK_D))
-//	{
-//		D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x + BlockSize.x, BlockPos.y, BlockPos.z);
-//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
-//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
-//
-//	}
-//	if (GetKeyboardTrigger(DIK_S))
-//	{
-//		D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x, BlockPos.y, BlockPos.z - BlockSize.z);
-//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
-//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
-//
-//	}
-//	if (GetKeyboardTrigger(DIK_W))
-//	{
-//		D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x, BlockPos.y, BlockPos.z + BlockSize.z);
-//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
-//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
-//	}
-//
-//	// 高速移動
-//	if (GetKeyboardPress(DIK_J))
-//	{
-//
-//		if (GetKeyboardPress(DIK_A))
-//		{
-//			D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x - BlockSize.x * 0.25f, BlockPos.y, BlockPos.z);
-//			pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
-//			pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
-//		}
-//		if (GetKeyboardPress(DIK_D))
-//		{
-//			D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x + BlockSize.x * 0.25f, BlockPos.y, BlockPos.z);
-//			pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
-//			pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
-//
-//		}
-//		if (GetKeyboardPress(DIK_S))
-//		{
-//			D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x, BlockPos.y, BlockPos.z - BlockSize.z * 0.25f);
-//			pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
-//			pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
-//
-//		}
-//		if (GetKeyboardPress(DIK_W))
-//		{
-//			D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x, BlockPos.y, BlockPos.z + BlockSize.z * 0.25f);
-//			pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
-//			pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
-//		}
-//
-//
-//	}
-//	// 上下移動、回転
-//
-//	// 設置
-//	if (GetKeyboardTrigger(DIK_SPACE))
-//	{
-//		// 例外処理
-//		if (uSelectObjNum[CurrentSelectType] < MAX_GAME_OBJ - 1)
-//		{
-//			uSelectObjNum[CurrentSelectType] ++;
-//			pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType] - 1]->GetPosition());
-//			pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
-//		}
-//	}
-//
-//	// 上下移動
-//	if (GetKeyboardPress(DIK_RCONTROL))
-//	{
-//		if (GetKeyboardTrigger(DIK_UP))
-//		{
-//			D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x, BlockPos.y + BlockSize.y, BlockPos.z);
-//			pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
-//		}
-//
-//		if (GetKeyboardTrigger(DIK_DOWN))
-//		{
-//			D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x, BlockPos.y - BlockSize.y * 2.0f, BlockPos.z);
-//			pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
-//		}
-//
-//	}
-//
-//	if (GetKeyboardPress(DIK_U))
-//	{
-//		// 回転
-//		if (GetKeyboardTrigger(DIK_A))
-//		{
-//			D3DXVECTOR3 Rot = D3DXVECTOR3(BlockRot.x, BlockRot.y + D3DXToRadian(10), BlockRot.z);
-//			pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetRotation(Rot);
-//		}
-//		if (GetKeyboardTrigger(DIK_D))
-//		{
-//			D3DXVECTOR3 Rot = D3DXVECTOR3(BlockRot.x, BlockRot.y - D3DXToRadian(10), BlockRot.z);
-//			pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetRotation(Rot);
-//		}
-//
-//		if (GetKeyboardTrigger(DIK_W))
-//		{
-//			D3DXVECTOR3 Rot = D3DXVECTOR3(BlockRot.x + D3DXToRadian(10), BlockRot.y, BlockRot.z);
-//			pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetRotation(Rot);
-//		}
-//		if (GetKeyboardTrigger(DIK_S))
-//		{
-//			D3DXVECTOR3 Rot = D3DXVECTOR3(BlockRot.x + D3DXToRadian(10), BlockRot.y , BlockRot.z);
-//			pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetRotation(Rot);
-//		}
-//	}
+	if (Keyboard::getTrigger(DIK_W))
+	{
+		move(DIK_W);
+	}
+
+	if (Keyboard::getTrigger(DIK_A))
+	{
+		move(DIK_A);
+	}
+
+	if (Keyboard::getTrigger(DIK_S))
+	{
+		move(DIK_S);
+	}
+
+	if (Keyboard::getTrigger(DIK_D))
+	{
+		move(DIK_D);
+	}
+	/*
+	if (GetKeyboardTrigger(DIKA))
+	{
+		D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x - BlockSize.x, BlockPos.y, BlockPos.z);
+		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
+		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
+	}
+	*/
+	//// キーボード操作
+	//D3DXVECTOR3 BlockPos = gameObjPtr[selectGameObjType] [selectGameObjIndex]->GetPosition();
+	//D3DXVECTOR3 BlockRot = pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->GetRotation();
+	//D3DXVECTOR3 BlockSize = pGameObj[0][0]->GetCollisionBox() * 0.5f;
+
+	//// 左移動
+	//if (GetKeyboardTrigger(DIK_A))
+	//{
+	//	D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x - BlockSize.x, BlockPos.y, BlockPos.z);
+	//	pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
+	//	pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
+	//}
+	//if (GetKeyboardTrigger(DIK_D))
+	//{
+	//	D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x + BlockSize.x, BlockPos.y, BlockPos.z);
+	//	pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
+	//	pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
+
+	//}
+	//if (GetKeyboardTrigger(DIK_S))
+	//{
+	//	D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x, BlockPos.y, BlockPos.z - BlockSize.z);
+	//	pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
+	//	pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
+
+	//}
+	//if (GetKeyboardTrigger(DIK_W))
+	//{
+	//	D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x, BlockPos.y, BlockPos.z + BlockSize.z);
+	//	pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
+	//	pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
+	//}
+
+	//// 高速移動
+	//if (GetKeyboardPress(DIK_J))
+	//{
+
+	//	if (GetKeyboardPress(DIK_A))
+	//	{
+	//		D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x - BlockSize.x * 0.25f, BlockPos.y, BlockPos.z);
+	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
+	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
+	//	}
+	//	if (GetKeyboardPress(DIK_D))
+	//	{
+	//		D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x + BlockSize.x * 0.25f, BlockPos.y, BlockPos.z);
+	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
+	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
+
+	//	}
+	//	if (GetKeyboardPress(DIK_S))
+	//	{
+	//		D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x, BlockPos.y, BlockPos.z - BlockSize.z * 0.25f);
+	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
+	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
+
+	//	}
+	//	if (GetKeyboardPress(DIK_W))
+	//	{
+	//		D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x, BlockPos.y, BlockPos.z + BlockSize.z * 0.25f);
+	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
+	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
+	//	}
+
+
+	//}
+	//// 上下移動、回転
+
+	//// 設置
+	//if (GetKeyboardTrigger(DIK_SPACE))
+	//{
+	//	// 例外処理
+	//	if (uSelectObjNum[CurrentSelectType] < MaxGameObj - 1)
+	//	{
+	//		uSelectObjNum[CurrentSelectType] ++;
+	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType] - 1]->GetPosition());
+	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
+	//	}
+	//}
+
+	//// 上下移動
+	//if (GetKeyboardPress(DIK_RCONTROL))
+	//{
+	//	if (GetKeyboardTrigger(DIK_UP))
+	//	{
+	//		D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x, BlockPos.y + BlockSize.y, BlockPos.z);
+	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
+	//	}
+
+	//	if (GetKeyboardTrigger(DIK_DOWN))
+	//	{
+	//		D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x, BlockPos.y - BlockSize.y * 2.0f, BlockPos.z);
+	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
+	//	}
+
+	//}
+
+	//if (GetKeyboardPress(DIK_U))
+	//{
+	//	// 回転
+	//	if (GetKeyboardTrigger(DIK_A))
+	//	{
+	//		D3DXVECTOR3 Rot = D3DXVECTOR3(BlockRot.x, BlockRot.y + D3DXToRadian(90), BlockRot.z);
+	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetRotation(Rot);
+	//	}
+	//	if (GetKeyboardTrigger(DIK_D))
+	//	{
+	//		D3DXVECTOR3 Rot = D3DXVECTOR3(BlockRot.x, BlockRot.y - D3DXToRadian(90), BlockRot.z);
+	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetRotation(Rot);
+	//	}
+	//}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 設置
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void StageEditor::place()
+{
+	if (!Keyboard::getTrigger(DIK_SPACE))
+	{
+		return;
+	}
+
+	const auto currentGameObject = std::next(gameObjPtr[selectGameObjType].begin(), selectGameObjIndex);
+
+	D3DXVECTOR3 blockPos = (*currentGameObject)->getPosition();
+	D3DXVECTOR3 blockRot = (*currentGameObject)->getRotation();
+	D3DXVECTOR3 blockSize = (*currentGameObject)->getCollisionBox();
+
+	(*currentGameObject)->setPosition((*currentGameObject)->getPosition());
+	(*currentGameObject)->setUsedFlg(true);
+	selectGameObjIndex++;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -649,7 +745,7 @@ void StageEditor::creteGameObj(size_t objType)
 	case static_cast<INT>( GAME_OBJ_TYPE::NormalBlockObj ):
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
 		{
-			gameObjPtr[objType].push_back(NEW Block());
+			gameObjPtr[objType].push_back(NEW Block(objIndex));
 		}
 
 		break;
@@ -659,6 +755,70 @@ void StageEditor::creteGameObj(size_t objType)
 		break;
 	case static_cast<INT>((GAME_OBJ_TYPE::GoalObj)):
 		break;
+	default:
+		break;
+	}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// ボード生成
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void StageEditor::createBoard(size_t objType)
+{
+	switch (objType)
+	{
+	case static_cast<INT>( BoardObjType::WhatSave):
+	{
+		boardObjPtr[objType].push_back(std::unique_ptr<WhatStageSaveUi>(NEW WhatStageSaveUi()));
+	}
+	break;
+
+	default:
+		break;
+	}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void StageEditor::move(INT input)
+{
+	const auto currentGameObject = std::next(gameObjPtr[selectGameObjType].begin(), selectGameObjIndex);
+
+	D3DXVECTOR3 blockPos = (*currentGameObject)->getPosition();
+	D3DXVECTOR3 blockRot = (*currentGameObject)->getRotation();
+	D3DXVECTOR3 blockSize = (*currentGameObject)->getCollisionBox();
+
+	switch (input)
+	{
+	case DIK_W:
+	{
+		D3DXVECTOR3 Pos = D3DXVECTOR3(blockPos.x, blockPos.y, blockPos.z + blockSize.z);
+		(*currentGameObject)->setPosition(Pos);
+		(*currentGameObject)->setUsedFlg(true);
+		break;
+	}
+	case DIK_A:
+	{
+		D3DXVECTOR3 Pos = D3DXVECTOR3(blockPos.x - blockSize.x, blockPos.y, blockPos.z);
+		(*currentGameObject)->setPosition(Pos);
+		(*currentGameObject)->setUsedFlg(true);
+		break;
+	}
+	case DIK_S:
+	{
+		D3DXVECTOR3 Pos = D3DXVECTOR3(blockPos.x, blockPos.y, blockPos.z - blockSize.z);
+		(*currentGameObject)->setPosition(Pos);
+		(*currentGameObject)->setUsedFlg(true);
+		break;
+	}
+	case DIK_D:
+	{
+		D3DXVECTOR3 Pos = D3DXVECTOR3(blockPos.x + blockSize.x, blockPos.y, blockPos.z);
+		(*currentGameObject)->setPosition(Pos);
+		(*currentGameObject)->setUsedFlg(true);
+		break;
+	}
 	default:
 		break;
 	}

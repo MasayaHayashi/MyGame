@@ -1126,7 +1126,7 @@ bool ResourceManager::destroyAllMesh()
 	if (meshes.size() == 0)
 		return true;
 
-	for (INT i = 0; i < (INT)meshes.size(); i++)
+	for (INT i = 0; i < static_cast<INT>(meshes.size()); i++)
 	{
 		delete meshes[i]->attrPtr;
 		delete meshes[i]->indexPtr;

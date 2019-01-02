@@ -7,6 +7,7 @@
 // ===== インクルード部 =====
 #include "../Block/Block.h"
 #include "../ResoueceManager/ResourceManager.h"
+#include "../Collision/Collision.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -24,22 +25,22 @@ Block::Block(UINT uSetNumber)
 	// ブロックの種類初期化
 	tagName = "NormalBlock";
 
-	// ファイルパス設定
-	strcpy_s(fileName, ModelPass.c_str());
-	strcpy_s(texFileName, TexturePass.c_str());
-
-	// モデル生成
-	ResourceManager::makeModel(meshDataObj, fileName,meshType);
-	ResourceManager::createTexture(textureData, texFileName);
-
-	myTransform.pos = D3DXVECTOR3(0.0f, -meshDataObj.collitionBox.y * 2 , 0.0f);
-
 	// 選択番号初期化
 	idNumber = uSetNumber;	// 識別番号
 	uCurrentSelect = 0;		// 現在の選択番号
 
+	Collision::registerList(&myTransform, "Block");
+
 	// 使用フラグ更新
-	isUsed = false;
+	
+	if (idNumber == 0)
+	{
+		isUsed = true;
+	}
+	else
+	{
+		isUsed = false;
+	}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -55,7 +56,19 @@ Block::~Block()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Block::initialize()
 {
+	// ファイルパス設定
+	strcpy_s(fileName, ModelPass.c_str());
+	strcpy_s(texFileName, TexturePass.c_str());
 
+	// モデル生成
+	ResourceManager::makeModel(meshDataObj, fileName, meshType);
+	ResourceManager::createTexture(textureData, texFileName);
+
+
+	// 位置、移動量、拡大率初期化
+	myTransform.scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	myTransform.rotDeg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.pos = D3DXVECTOR3(0.0f, -meshDataObj.collitionBox.y * 2, 0.0f);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

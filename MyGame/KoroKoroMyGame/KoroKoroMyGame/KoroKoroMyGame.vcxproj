@@ -127,6 +127,7 @@
     <ClCompile Include="Source\Collider\Collider.cpp" />
     <ClCompile Include="Source\Collision\Collision.cpp" />
     <ClCompile Include="Source\DirectX3D\DirectX3D.cpp" />
+    <ClCompile Include="Source\EditUI\WhatStageSaveUI.cpp" />
     <ClCompile Include="Source\Edit\Editor\StageEditor.cpp" />
     <ClCompile Include="Source\EntryPoint\Main.cpp" />
     <ClCompile Include="Source\Fade\FadeUI.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="Source\Collider\Collider.h" />
     <ClInclude Include="Source\Collision\Collision.h" />
     <ClInclude Include="Source\DirectX3D\DirectX3D.h" />
+    <ClInclude Include="Source\EditUI\WhatStageSaveUI.h" />
     <ClInclude Include="Source\Edit\Editor\StageEditor.h" />
     <ClInclude Include="Source\Fade\FadeUI.h" />
     <ClInclude Include="Source\Figure\Figure.h" />

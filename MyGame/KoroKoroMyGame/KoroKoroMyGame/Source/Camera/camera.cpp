@@ -428,9 +428,9 @@ void Camera::updateTitle(Pawn *pPlayer)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ更新(ステージエディットシーン)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::updateStageEdit(const D3DXVECTOR3 &Pos)
+void Camera::updateStageEdit(UINT selectIndex)
 {
-	D3DXVECTOR3 BlockPos = Pos;
+	D3DXVECTOR3 BlockPos = Collision::getTransform("Block", selectIndex)->pos;
 
 	myTransform.posDest = D3DXVECTOR3(BlockPos.x, BlockPos.y + 20.0f, BlockPos.z - 20.0f);
 
@@ -441,7 +441,10 @@ void Camera::updateStageEdit(const D3DXVECTOR3 &Pos)
 	D3DXVec3Lerp(&myTransform.pos,  &myTransform.pos,		  &myTransform.posDest,  fcnt);
 	D3DXVec3Lerp(&myTransform.look, &myTransform.look,		  &myTransform.lookDest, fcnt);
 	if (fcnt > 0.2f)
+	{
 		fcnt = 0.0f;
+	}
+
 #if _DEBUG
 
 #if 0	// デバッグ用カメラ移動

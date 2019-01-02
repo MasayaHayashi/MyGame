@@ -569,9 +569,9 @@ HRESULT Pawn::AllocAllBoneMatrix(LPD3DXFRAME pFrameBase)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 位置座標セット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::setPosition(D3DXVECTOR3 SetPos)
+void Pawn::setPosition(D3DXVECTOR3 setPos)
 {
-	myTransform.pos = SetPos;
+	myTransform.pos = setPos;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

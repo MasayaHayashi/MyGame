@@ -157,6 +157,9 @@
     <Filter Include="ソース ファイル\Block">
       <UniqueIdentifier>{e6e14a8b-56af-4b83-8eb2-27baba6de038}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\EditUI">
+      <UniqueIdentifier>{24aa20c9-5140-42a5-905d-9a84bcb6eda2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Audio\MyAudiere.cpp">
@@ -281,6 +284,9 @@
     </ClCompile>
     <ClCompile Include="Source\Block\Block.cpp">
       <Filter>ソース ファイル\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EditUI\WhatStageSaveUI.cpp">
+      <Filter>ソース ファイル\EditUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -415,6 +421,9 @@
     </ClInclude>
     <ClInclude Include="Source\Block\Block.h">
       <Filter>ソース ファイル\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EditUI\WhatStageSaveUI.h">
+      <Filter>ソース ファイル\EditUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

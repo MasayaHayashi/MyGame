@@ -13,7 +13,6 @@
 #include <vector>
 
 // ===== 定数・マクロ定義 =====
-#define MAX_GAME_OBJ (5000)
 
 // ===== クラスの前方定義 =====
 class C_COLLIDER;
@@ -49,8 +48,8 @@ protected:
 	UINT				uCurrentSelect;
 private:
 
-	const std::string ModelPass		= "data/MODEL/box.x";
-	const std::string TexturePass	= "data/TEXTURE/IceStone.png";
+	const std::string ModelPass		= "Data/Model/Block/box.x";
+	const std::string TexturePass	= "Data/Texture/IceStone.png";
 
 
 };

@@ -67,7 +67,7 @@ public:
 	void finalize();
 	void update(Player *,Board *);
 	void updateTitle(Pawn*);
-	void updateStageEdit(const D3DXVECTOR3&);
+	void updateStageEdit(UINT selectIndex);
 	void updateGameMain(Player*,Board*);
 	void setState(MoceType setState);
 

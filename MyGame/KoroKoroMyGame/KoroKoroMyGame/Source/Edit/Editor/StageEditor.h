@@ -39,25 +39,26 @@ enum EDITOR_UI_TYPE
 	UI_SAVE_OK,				// セーブ完了
 	UI_STAGE_EDIT,
 	UI_DESCR,				// 説明
-	MAX_EDITOR_UI_TYPE,
 };
 
-enum EDIT_MODE_TYPE
+enum class EDIT_MODE_TYPE
 {
 	MODE_EDIT = 0,		// エディットモード
 	MODE_SAVE_CONF,		// セーブ確認モード
-	MAX_EDIT_MODE_TYPE,
-};	// モード状態
+};
 
-enum STAGE_SELECT_TYPE
+enum class STAGE_SELECT_TYPE
 {
 	STAGE_SELECT1 = 0,
 	STAGE_SELECT2,
 	STAGE_SELECT3,
 	STAGE_CANCEL,
-	MAX_STAGE_SELECT_TYPE,
-};	// 選択されたステージ
+};
 
+enum class BoardObjType
+{
+	WhatSave = 0,
+};
 
 // ===== 構造体定義 =====
 
@@ -77,12 +78,17 @@ public:
 	
 private:
 	static constexpr UINT MaxGameObj = 1000;
+	static constexpr size_t MaxBoardObj = static_cast<size_t>(BoardObjType::WhatSave) + 1;
+
 
 	void saveStageData();		// ステージ情報書き込み
 	void loadStageData(UINT);	// ステージ情報読み込み
 	void checkSaveData();		// ステージ情報書き込みの確認
 
-	void moveObj();			// オブジェクト移動
+	void move();
+	void move(INT input);
+	void place();
+
 	void deleteObj();		// オブジェクト削除
 	void rotObj();			// オブジェクト回転
 	void changeSelectObj();	// 選択オブジェクト切り替え
@@ -91,17 +97,22 @@ private:
 	std::unique_ptr<Camera> cameraPtr;
 	std::unique_ptr<Player> playerPtr;
 
-
-	std::array<std::list<Pawn*>,GameObjectBase::MaxGameObjType> gameObjPtr;
+	std::array<std::list<std::unique_ptr<Board>>,MaxBoardObj>						boardObjPtr;
+	std::array<std::list<Pawn*>,GameObjectBase::MaxGameObjType>						gameObjPtr;
 
 	void creteGameObj(size_t objType);
+	void createBoard(size_t setSize);
+
+	INT selectGameObjType	= 0;
+	INT selectGameObjIndex	= 0;
+
 
 	/*
 	template<class T>
 	void creteGamesObj(T dataType, size_t size);
 	*/
 
-	Board 					*pUIObj[MAX_EDITOR_UI_TYPE];
+//	Board 					*pUIObj[MAX_EDITOR_UI_TYPE];
 
 	//C_COLLISION				*pCollision;								// 衝突用
 	//C_PAUSE					*pPause;									// ポーズ用
@@ -109,7 +120,6 @@ private:
 	UINT					uSaveStage;									// 保存先ステージ番号
 
 	UINT					uExportBlockCnt[2];			// 出力用カウンタ
-	UINT					CurrentSelectType;							// 現在の選択オブジェクトの種類
 	UINT					uSelectObjNum[2];			// 現在の選択されているオブジェクトの識別番号
 	CHAR					szStageFileName[MAX_STAGE][MAX_FILE_NAME];	// ステージ読み込みのファイル名
 	
@@ -118,7 +128,7 @@ private:
 	ExportData				ExportWorkData;								// 書き出し用データ保存場所
 
 	bool					bPause;
-	bool					bIsSelectSaveStage;							// セーブステージを選んだか
+	bool					isSelectSaveStage;							// セーブステージを選んだか
 	UINT					uSelectMode;								// 現在の選択モード
 };
 
