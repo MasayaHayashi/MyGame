@@ -1137,3 +1137,30 @@ void Pawn::setHierarchyModel(INT index)
 {
 	ResourceManager::setHierarchy(&hierarchyMeshData, ResourceManager::ModelPenchanPass, index);
 }
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 書き出し用データ取得
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+const ExportData& Pawn::getExportData() const
+{
+	return myExportData;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 書き出し用データセット
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Pawn::reflectionExportData(const ExportData setExport)
+{
+	myTransform = setExport.myTransform;
+	isUsed		= setExport.isUsed;
+	myGameObjType = setExport.gameObjType;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 出力用データ更新
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Pawn::updateExportData()
+{
+	myExportData.myTransform = myTransform;
+	myExportData.isUsed		= isUsed;
+}

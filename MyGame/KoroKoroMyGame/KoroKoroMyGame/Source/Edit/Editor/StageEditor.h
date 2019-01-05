@@ -15,6 +15,7 @@
 #include "../../SceneInterface/sceneBase.h"
 #include "../../Block/Block.h"
 #include <array>
+#include <fstream>
 
 
 // ===== 定数・マクロ定義 =====
@@ -80,9 +81,10 @@ private:
 	static constexpr UINT MaxGameObj = 1000;
 	static constexpr size_t MaxBoardObj = static_cast<size_t>(BoardObjType::WhatSave) + 1;
 
+	const std::string StagePassName = "Stage";
 
-	void saveStageData();		// ステージ情報書き込み
-	void loadStageData(UINT);	// ステージ情報読み込み
+	void saveStageData(size_t stageNumber);
+	void loadStageData(size_t stageNumber);
 	void checkSaveData();		// ステージ情報書き込みの確認
 
 	void move();
@@ -98,7 +100,7 @@ private:
 	std::unique_ptr<Player> playerPtr;
 
 	std::array<std::list<std::unique_ptr<Board>>,MaxBoardObj>						boardObjPtr;
-	std::array<std::list<Pawn*>,GameObjectBase::MaxGameObjType>						gameObjPtr;
+	std::array<std::vector<Pawn*>,GameObjectBase::MaxGameObjType>							gameObjPtr;
 
 	void creteGameObj(size_t objType);
 	void createBoard(size_t setSize);
@@ -106,6 +108,9 @@ private:
 	INT selectGameObjType	= 0;
 	INT selectGameObjIndex	= 0;
 
+	const std::string StageFilePass = "Stage";
+
+	std::vector<std::string> stagePass;
 
 	/*
 	template<class T>
@@ -125,7 +130,7 @@ private:
 	
 	FILE					*fp;										// ファイルポインタ
 	errno_t 				nErrorFopen;								// ファイルオープンフラグ
-	ExportData				ExportWorkData;								// 書き出し用データ保存場所
+	ExportData				exportWorkData;								// 書き出し用データ保存場所
 
 	bool					bPause;
 	bool					isSelectSaveStage;							// セーブステージを選んだか

@@ -32,7 +32,7 @@ WhatStageSaveUi::WhatStageSaveUi()
 	animPattern = texPatternDivideX * texPatternDivideY;
 	intervalChangePattern = 1;
 
-	isUsed = true;
+	isUsed = false;
 }
 
 //

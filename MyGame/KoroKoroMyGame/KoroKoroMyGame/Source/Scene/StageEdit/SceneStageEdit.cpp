@@ -48,9 +48,8 @@ void SceneStageEdit::finalize()
 //
 void SceneStageEdit::update()
 {
-	skydomePtr->update();	
+	skydomePtr->update();
 	stageEditorPtr->update();
-
 }
 
 //

@@ -12,6 +12,8 @@
 #include "../../MyDelete/MyDelete.h"
 #include "../../EditUI/WhatStageSaveUI.h"
 #include <stdio.h>
+#include <fstream>
+#include <iostream>
 
 //
 //#include "C_MoveBlock.h"
@@ -124,6 +126,8 @@ void StageEditor::initialize()
 		}
 	}
 
+	loadStageData(1);
+
 	/*
 	// UI初期化
 	for (INT UiCnt = 0; UiCnt < MAX_EDITOR_UI_TYPE; UiCnt++)
@@ -193,9 +197,9 @@ void StageEditor::finalize()
 
 	playerPtr->finalize();
 
-	for (UINT gameObjIndex = 0; gameObjIndex < GameObjectBase::MaxGameObjType; gameObjIndex++)
+	for (UINT gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
 	{
-		for (auto itr = gameObjPtr[gameObjIndex].begin(); itr != gameObjPtr[gameObjIndex].end(); itr++)
+		for (auto itr = gameObjPtr[gameObjTypeIndex].begin(); itr != gameObjPtr[gameObjTypeIndex].end(); itr++)
 		{
 			(*itr)->finalize();
 			Mydelete::safeDelete(*itr);
@@ -252,6 +256,9 @@ void StageEditor::update()
 	move();
 
 	place();
+
+	saveStageData(1);
+
 	
 	cameraPtr->updateStageEdit(selectGameObjIndex);
 
@@ -377,93 +384,59 @@ void StageEditor::draw()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ステージデータ書き出し
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void StageEditor::saveStageData()
+void StageEditor::saveStageData(size_t stageNumber)
 {
-//{
-//	// ファイルオープン
-//	nErrorFopen = fopen_s(&fp,&szStageFileName[uSaveStage + 1][0], "wb");
-//
-//	// 例外処理
-//	if (nErrorFopen)
-//		return;
-//
-//	for (int j = 0; j < MAX_GAME_OBJ_TYPE; j++)
-//		for (int i = 0; i < MAX_GAME_OBJ; i++)
-//			fwrite(pGameObj[j][i]->GetExportData(), sizeof(EXPORT_GAMEOBJ_DATA), 1, fp);
-//
-//	// ファイルクローズ
-//	fclose(fp);
+	if (!Keyboard::getTrigger(DIK_O))
+	{
+		return;
+	}
+
+	std::ofstream exportFile;
+	std::string stageString = std::to_string(stageNumber);
+	exportFile.open(StagePassName + stageString + ".bin", std::ios::binary);
+
+	for (size_t gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
+	{
+		for (auto itr = gameObjPtr[gameObjTypeIndex].begin(); itr != gameObjPtr[gameObjTypeIndex].end(); itr++)
+		{
+			exportWorkData = (*itr)->getExportData();
+			exportFile.write((CHAR*)( &exportWorkData), sizeof(ExportData));
+		}
+	}
+
+	boardObjPtr[0].back()->setUsedFlg(true);
+
+	exportFile.close();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// ステージデータ読み込み
+// データ読み込み
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void StageEditor::loadStageData(UINT LoadStageNum)
+void StageEditor::loadStageData(size_t stageNumber)
 {
-//	// ファイルオープン
-//	nErrorFopen = fopen_s(&fp, &szStageFileName[LoadStageNum + 1][0], "rb");
-//
-//	// 例外処理
-//	if (nErrorFopen)
-//		return;
-//
-//#if 1
-//
-//	// ファイル読み込み
-//	INT nLoadCnt[MAX_GAME_OBJ_TYPE] = { 0, 0, 0, };
-//
-//	for (INT i = 0; i < MAX_GAME_OBJ * MAX_GAME_OBJ_TYPE; i++)
-//	{
-//		fread(&ExportWorkData, sizeof(EXPORT_GAMEOBJ_DATA), 1, fp);
-//		switch (ExportWorkData.ObjType)
-//		{
-//		case NORMAL_BLOCK_OBJ:
-//			// 読み込みデータセット
-//			pGameObj[NORMAL_BLOCK_OBJ][nLoadCnt[NORMAL_BLOCK_OBJ]]->SetExportData(ExportWorkData);
-//
-//			// 選択番号更新
-//			if (pGameObj[NORMAL_BLOCK_OBJ][nLoadCnt[NORMAL_BLOCK_OBJ]]->GetUsedFlg())
-//				uSelectObjNum[NORMAL_BLOCK_OBJ] ++;
-//
-//			// 読み込みカウンタ更新
-//			nLoadCnt[NORMAL_BLOCK_OBJ] ++;
-//
-//			break;
-//
-//		case MOVE_BLOCK_OBJ:
-//			// 読み込みデータセット
-//			pGameObj[MOVE_BLOCK_OBJ][nLoadCnt[MOVE_BLOCK_OBJ]]->SetExportData(ExportWorkData);
-//
-//			// 選択番号更新
-//			if (pGameObj[MOVE_BLOCK_OBJ][nLoadCnt[MOVE_BLOCK_OBJ]]->GetUsedFlg())
-//				uSelectObjNum[MOVE_BLOCK_OBJ] ++;
-//
-//			// 読み込みカウンタ更新
-//			nLoadCnt[MOVE_BLOCK_OBJ] ++;
-//
-//			break;
-//
-//		case STAR_OBJ:
-//			// 読み込みデータセット
-//			pGameObj[STAR_OBJ][nLoadCnt[STAR_OBJ]]->SetExportData(ExportWorkData);
-//
-//			// 選択番号更新
-//			if (pGameObj[STAR_OBJ][nLoadCnt[STAR_OBJ]]->GetUsedFlg())
-//				uSelectObjNum[STAR_OBJ] ++;
-//
-//			// 読み込みカウンタ更新
-//			nLoadCnt[STAR_OBJ] ++;
-//
-//			break;
-//		default:
-//			break;
-//		}
-//	}
-//
-//#endif
-//
-//	// ファイルクローズ
-//	fclose(fp);
+	std::ifstream loadtFile;
+
+	std::string stageString = std::to_string(stageNumber);
+	loadtFile.open(StagePassName + stageString + ".bin", std::ios::binary);
+
+	if (!loadtFile)
+	{
+		MessageBox(nullptr, TEXT("Error"), TEXT("ステージデータ読み込みエラー"), MB_ICONERROR);
+		return;
+	}
+
+	for (size_t gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
+	{
+		for (UINT gameIndex = 0; gameIndex < MaxGameObj; gameIndex++)
+		{
+			loadtFile.read((CHAR*) (&exportWorkData), sizeof(ExportData));
+			gameObjPtr[gameObjTypeIndex][gameIndex]->reflectionExportData(exportWorkData);
+		}
+	}
+
+	loadtFile.clear();
+	loadtFile.close();
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -691,15 +664,15 @@ void StageEditor::place()
 	{
 		return;
 	}
+	
+	const auto currentGameObjectType = std::next(gameObjPtr[0].begin(), selectGameObjIndex);
 
-	const auto currentGameObject = std::next(gameObjPtr[selectGameObjType].begin(), selectGameObjIndex);
+	D3DXVECTOR3 blockPos  = (*currentGameObjectType)->getPosition();
+	D3DXVECTOR3 blockRot  = (*currentGameObjectType)->getRotation();
+	D3DXVECTOR3 blockSize = (*currentGameObjectType)->getCollisionBox();
 
-	D3DXVECTOR3 blockPos = (*currentGameObject)->getPosition();
-	D3DXVECTOR3 blockRot = (*currentGameObject)->getRotation();
-	D3DXVECTOR3 blockSize = (*currentGameObject)->getCollisionBox();
-
-	(*currentGameObject)->setPosition((*currentGameObject)->getPosition());
-	(*currentGameObject)->setUsedFlg(true);
+	(*currentGameObjectType)->setPosition((*currentGameObjectType)->getPosition());
+	(*currentGameObjectType)->setUsedFlg(true);
 	selectGameObjIndex++;
 }
 
@@ -745,15 +718,28 @@ void StageEditor::creteGameObj(size_t objType)
 	case static_cast<INT>( GAME_OBJ_TYPE::NormalBlockObj ):
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
 		{
-			gameObjPtr[objType].push_back(NEW Block(objIndex));
+			gameObjPtr[0].push_back(NEW Block(objIndex));
+		}
+		break;
+	case static_cast<INT>(GAME_OBJ_TYPE::MoveBlockOBj):
+		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
+		{
+			gameObjPtr[1].push_back(NEW Block(objIndex));
 		}
 
 		break;
-	case static_cast<INT>(GAME_OBJ_TYPE::MoveBlockOBj):
-		break;
 	case static_cast<INT>((GAME_OBJ_TYPE::StarObj)):
+		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
+		{
+			gameObjPtr[2].push_back(NEW Block(objIndex));
+		}
+
 		break;
 	case static_cast<INT>((GAME_OBJ_TYPE::GoalObj)):
+		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
+		{
+			gameObjPtr[3].push_back(NEW Block(objIndex));
+		}
 		break;
 	default:
 		break;
@@ -783,7 +769,7 @@ void StageEditor::createBoard(size_t objType)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void StageEditor::move(INT input)
 {
-	const auto currentGameObject = std::next(gameObjPtr[selectGameObjType].begin(), selectGameObjIndex);
+	const auto currentGameObject = std::next(gameObjPtr[0].begin(), selectGameObjIndex);
 
 	D3DXVECTOR3 blockPos = (*currentGameObject)->getPosition();
 	D3DXVECTOR3 blockRot = (*currentGameObject)->getRotation();

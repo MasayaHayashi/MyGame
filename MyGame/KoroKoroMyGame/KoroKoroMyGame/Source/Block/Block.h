@@ -10,6 +10,7 @@
 
 // ===== インクルード部 =====
 #include "../Pawn/Pawn.h"
+#include "../GameObjectBase/GameObjectBase.h"
 #include <vector>
 
 // ===== 定数・マクロ定義 =====
@@ -47,6 +48,7 @@ protected:
 //	C_COLLIDER		    *pCollider;
 	UINT				uCurrentSelect;
 private:
+
 
 	const std::string ModelPass		= "Data/Model/Block/box.x";
 	const std::string TexturePass	= "Data/Texture/IceStone.png";

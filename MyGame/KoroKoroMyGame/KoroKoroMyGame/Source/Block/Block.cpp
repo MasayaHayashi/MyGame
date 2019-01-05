@@ -24,6 +24,7 @@ Block::Block(UINT uSetNumber)
 {
 	// ブロックの種類初期化
 	tagName = "NormalBlock";
+	myGameObjType = GAME_OBJ_TYPE::NormalBlockObj;
 
 	// 選択番号初期化
 	idNumber = uSetNumber;	// 識別番号
@@ -69,6 +70,7 @@ void Block::initialize()
 	myTransform.scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 	myTransform.rotDeg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.pos = D3DXVECTOR3(0.0f, -meshDataObj.collitionBox.y * 2, 0.0f);
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -89,7 +91,7 @@ void Block::update()
 //	pCollider->UpdateCollider(mtxWorldPawn, FIELD_BOX_COLOR );
 
 	// 書き出し用データ更新
-//	updateExportData();
+	updateExportData();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

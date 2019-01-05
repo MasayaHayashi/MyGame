@@ -41,7 +41,9 @@ typedef struct
 
 typedef struct
 {
-	Transform myTransform;
+	Transform		myTransform;
+	GAME_OBJ_TYPE	gameObjType;
+	bool			isUsed = false;
 } ExportData;
 
 typedef struct
@@ -77,7 +79,8 @@ public:
 	virtual void finalize();
 
 	virtual void initializeStatus();	// 各種ステータスを初期値にする
-
+	
+	void updateExportData();
 	void drawObjectLocal();
 
 	// ゲッター
@@ -132,12 +135,12 @@ public:
 	void setDestLanding(D3DXVECTOR3 setLanding);				// 着地位置セット
 	void setHitIndex(INT);										// 当たったオブジェクトのインデックスをセット
 	void setHierarchyModel(INT);
-
 	void setAnimChange(UINT, UINT);
-
 	void setPawn(Pawn);
-
 	void setWorldMtxPos(const D3DXVECTOR3 setPos);
+
+	const ExportData& getExportData() const;
+	void reflectionExportData(const ExportData setExport);
 
 	bool isHit(std::string keyName);
 
@@ -148,7 +151,6 @@ public:
 #endif
 protected:
 	std::unique_ptr <Collider> colliderPtr = nullptr;
-
 
 	MeshData				meshDataObj;
 	HIERARCHY_MESH_DATA		hierarchyMeshData;
@@ -207,6 +209,8 @@ protected:
 
 	UINT				curSelectAnim;			// 現在選択中のアニメーション番号
 
+	ExportData			myExportData;
+
 	// 階層構造用
 	LPD3DXFRAME					frameRoot;		// ルート フレーム オブジェクト
 	LPD3DXANIMATIONCONTROLLER	animCtrlPtr;	// アニメーション コントローラ オブジェクト
@@ -216,9 +220,9 @@ protected:
 	DWORD						dwPrev;			// 直前の時刻
 	
 	MeshObjType					meshType;				// メッシュの種類
+	GAME_OBJ_TYPE				myGameObjType;
 	UINT						currentAnim;			// アニメーション
 private:
-
 
 #define FVF_TVERTEX	(D3DFVF_XYZ|D3DFVF_NORMAL|D3DFVF_TEX1)
 
@@ -238,6 +242,7 @@ private:
 	DWORD				dwAttrNum;				// 属性値
 
 	FLOAT				colorAlpha;				// アルファ値変更用変数
+
 };
 
 #endif
