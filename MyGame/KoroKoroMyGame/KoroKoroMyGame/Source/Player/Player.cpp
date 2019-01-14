@@ -222,6 +222,7 @@ void Player::initializeTitle()
 
 	ResourceManager::setHierarchy(&hierarchyMeshData, SelectManager::getModelPass(idNumber), idNumber);
 
+	Collision::registerList(&myTransform, "Player");
 
 	//// 現在のアニメーションセットの設定値を取得
 	//D3DXTRACK_DESC TD;   // トラックの能力
@@ -258,7 +259,7 @@ void Player::initializeGameMain()
 	switch (idNumber)
 	{
 	case 0:
-		myTransform.pos = D3DXVECTOR3(-5.0f, 5.0f, 5.0f);
+		myTransform.pos = D3DXVECTOR3(0.0f, 5.0f, 5.0f);
 		break;
 	case 1:
 		myTransform.pos = D3DXVECTOR3(-10.0f, 5.0f, -5.0f);
@@ -285,9 +286,9 @@ void Player::initializeGameMain()
 	numMat			  = 0;
 
 	// Xファイルの読み込み
-	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelPenchanPass, ResourceManager::ModelPenchanPass, meshType, idNumber);
-	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelChick, ResourceManager::ModelChick, meshType, idNumber);
-	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelPenNoHahaPass, ResourceManager::ModelPenNoHahaPass, meshType, idNumber);
+	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelPenchanPass,	ResourceManager::ModelPenchanPass,		meshType, idNumber);
+	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelChick,			ResourceManager::ModelChick,			meshType, idNumber);
+	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelPenNoHahaPass,  ResourceManager::ModelPenNoHahaPass,	meshType, idNumber);
 
 	meshType = MeshObjType::HierarchyModel;
 
@@ -340,13 +341,15 @@ void Player::initializeSceneEdit()
 	materialBufferPtr	= nullptr;
 	numMat				= 0;
 
-	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelPenchanPass, ResourceManager::ModelPenchanPass, meshType, idNumber);
-	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelChick, ResourceManager::ModelChick, meshType, idNumber);
-	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelPenNoHahaPass, ResourceManager::ModelPenNoHahaPass, meshType, idNumber);
+	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelPenchanPass,	ResourceManager::ModelPenchanPass,		meshType, idNumber);
+	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelChick,			ResourceManager::ModelChick,			meshType, idNumber);
+	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelPenNoHahaPass,	ResourceManager::ModelPenNoHahaPass,	meshType, idNumber);
 
 	meshType = MeshObjType::HierarchyModel;
 
 	ResourceManager::setHierarchy(&hierarchyMeshData, SelectManager::getModelPass(idNumber), idNumber);
+
+	Collision::registerList(&myTransform, "Player");
 
 	// モデル回転
 	myTransform.pos.y -= hierarchyMeshData.CollitionBox.y * 2;
@@ -543,54 +546,62 @@ void Player::updateTitle(D3DXVECTOR3 CameraForward)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 {
-	if (idNumber == 0)
+	if (!isKeyInput)
 	{
-		DirectX3D::printDebug("VELOCITY_X :%f  IDNumber :%f \n", myTransform.velocity.x, idNumber);
-		DirectX3D::printDebug("VELOCITY_Y :%f  IDNumber :%f \n", myTransform.velocity.y, idNumber);
-		DirectX3D::printDebug("VELOCITY_Z :%f  IDNumber :%f \n", myTransform.velocity.z, idNumber);
+		inputVec.x = 0.0f;
+		inputVec.y = 0.0f;
+		inputVec.z = 0.0f;
 	}
+	
+	D3DXVECTOR3 vv;
 
-	Xnum -= 0.00000004f;
-	Ynum -= 0.00000004f;
+	fall(0);
 
-	if (Xnum <= 0.0f)
-	{
-		Xnum = 0.0f;
-	}
-	if (Ynum <= 0.0f)
-	{
-		Ynum = 0.0f;
-	}
-	 
 	updateAnimation();
 
-	if (isHit("Ball"))
-	{
-		rebound(idNumber);
-	}
-
-	rideBall(idNumber);
-
-	if (idNumber == 0 && !isHit("Ball"))
+	if (idNumber == 0)
 	{
 		if (Keyboard::getPress(DIK_D))
 		{
-			Xnum += MoveSpeed;
+			inputVec.x = MoveSpeed;
+			isKeyInput = true;
 		}
+		else
+		{
+			isKeyInput = false;
+		}
+
 		if (Keyboard::getPress(DIK_A))
 		{
-			Xnum -= MoveSpeed;
+			inputVec.x = -MoveSpeed;
+			isKeyInput = true;
 		}
+		else
+		{
+			isKeyInput = false;
+		}
+
 		if (Keyboard::getPress(DIK_S))
 		{
-			Ynum -= MoveSpeed;
+			inputVec.z = -MoveSpeed;
+			isKeyInput = true;
 		}
+		else
+		{
+			isKeyInput = false;
+		}
+
 		if (Keyboard::getPress(DIK_W))
 		{
-			Ynum += MoveSpeed;
+			inputVec.z = MoveSpeed;
+			isKeyInput = true;
+		}
+		else
+		{
+			isKeyInput = false;
 		}
 	}
-	else if (idNumber == 1 && !isHit("Ball"))
+	else if (idNumber == 1)
 	{
 		if (Keyboard::getPress(DIK_L))
 		{
@@ -609,11 +620,9 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 			Ynum += MoveSpeed;
 		}
 	}
-
-	fall(idNumber);
-
+	
 	D3DXVECTOR3 CameraRight = D3DXVECTOR3(CameraForward.z, 0.0f, -CameraForward.x);
-	moveVector = CameraRight * Xnum + CameraForward * Ynum;
+	moveVector = CameraRight * inputVec.x + CameraForward * inputVec.z;
 
 	D3DXVECTOR3 UpVec = getUpVec();
 	D3DXVec3Normalize(&UpVec, &UpVec);
@@ -621,40 +630,38 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	D3DXQuaternionRotationAxis(&quatanion, &UpVec, 0);
 	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
 	D3DXVec3Normalize(&moveVector, &moveVector);
-
+	
 	moveVector.y = 0.0f;
 
 	myTransform.velocity += (moveVector * 0.1f);
-	DirectX3D::printDebug("velocityXXXXXXXXXXXXXX%f", myTransform.velocity.x);
+	
+	D3DXVec3Normalize(&vv, &inputVec);
+	vv *= 0.1f;
 
-	Collision::setVelocity("Ball", idNumber, myTransform.velocity);
-
-	if (myTransform.velocity.x > MaxSpeed)
-	{
-		myTransform.velocity.x = MaxSpeed;
-	}
-	if (myTransform.velocity.x < -MaxSpeed)
-	{
-		myTransform.velocity.x = -MaxSpeed;
-	}
-
-	if (myTransform.velocity.z > MaxSpeed)
-	{
-		myTransform.velocity.z = MaxSpeed;
-	}
-	if (myTransform.velocity.z < -MaxSpeed)
-	{
-		myTransform.velocity.z = -MaxSpeed;
-	}
-
+	myTransform.velocity += vv;
 	myTransform.pos += myTransform.velocity;
-	myTransform.velocity *= 0.964f;
 
-	D3DXVECTOR3 FowrdVec = getForwardVec();
+
+	if (idNumber == 0)
+	{
+		DirectX3D::printDebug("inputX :%f  IDNumber :%d \n", inputVec.x, idNumber);
+		DirectX3D::printDebug("inputY :%f  IDNumber :%d \n", inputVec.y, idNumber);
+		DirectX3D::printDebug("inputZ :%f  IDNumber :%d \n", inputVec.z, idNumber);
+
+		DirectX3D::printDebug("xNum :%f \n", Xnum, idNumber);
+		DirectX3D::printDebug("yNum :%f \n", Ynum, idNumber);
+	}
+	
+	D3DXVECTOR3 fowrdVec = getForwardVec();
 	D3DXVECTOR3	RightVec = getRightVec();
 	D3DXVECTOR3 Upvec = getUpVec();
 
-	radRot = MyVector3::CalcAngleDegree(moveVector, -FowrdVec);
+	inputVec.y = 0.0f;
+
+	radRot = MyVector3::CalcAngleDegree(moveVector, -fowrdVec);
+
+	DirectX3D::printDebug("rot%f\n", radRot);
+
 	D3DXQUATERNION quatanion;
 
 	if (radRot == 0.0f)
@@ -679,10 +686,14 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	if (rotCnt >= 1.0f)
 	{
 		rotCnt = 1.0f;
+	
 	}
+	
+	myTransform.velocity.x -= myTransform.velocity.x * 0.04f;
+	myTransform.velocity.z -= myTransform.velocity.z * 0.04f;
 
 	setWorldMtxPos(myTransform.pos);
-
+	
 #if 0
 
 	PrintDebugProc("LangingXXX::::%f\n", DestLanding.x);
@@ -840,7 +851,6 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updateSelect()
 {
-
 	changeModel();
 
 	if (idNumber == 0)
@@ -906,7 +916,7 @@ void Player::updateSelect()
 
 	D3DXVECTOR3 cameraPos = Collision::getCameraTransform("Camera", 1)->pos;
 
-	rideBall(idNumber);
+//	rideBall(idNumber);
 	setWorldMtxPos(myTransform.pos);
 }
 
@@ -1112,17 +1122,16 @@ void Player::fall(size_t checkIndex)
 {
 	if (!Collision::getRayHitData("Player", checkIndex)->isHit)
 	{
-		if (idNumber == checkIndex)
-		{
-			myTransform.velocity.y -= FallSpeed;
-		}
+		myTransform.velocity.y -= FallSpeed;
+		DirectX3D::printDebug("落下中");
 	}
 	else
 	{
-		if (idNumber == checkIndex)
-		{
-			myTransform.velocity.y = 0.0f;
-		}
+		const D3DXVECTOR3 cross = Collision::getCross();
+
+		myTransform.pos = cross;
+		//myTransform.velocity.y = 0.0f;
+		DirectX3D::printDebug("落下しません");
 	}
 }
 
@@ -1203,4 +1212,39 @@ void Player::input()
 		}
 	}
 	*/
+}
+
+void Player::rotation(D3DXVECTOR3 destVec)
+{
+
+	D3DXVECTOR3 FowrdVec = getForwardVec();
+	D3DXVECTOR3	RightVec = getRightVec();
+	D3DXVECTOR3 Upvec = getUpVec();
+
+	radRot = MyVector3::CalcAngleDegree(destVec, -FowrdVec);
+	D3DXQUATERNION quatanion;
+
+	if (radRot == 0.0f)
+	{
+		D3DXQuaternionRotationAxis(&quatanion, &Upvec, oldRadRot);
+		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
+
+		StartQuaternion = quatanion;
+		rotCnt = 0.0f;
+	}
+	else
+	{
+		D3DXQuaternionRotationAxis(&destQua, &Upvec, radRot);
+
+		D3DXQuaternionSlerp(&quatanion, &StartQuaternion, &destQua, rotCnt);
+		rotCnt += 0.1f;
+
+		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
+		oldRadRot = radRot;
+	}
+
+	if (rotCnt >= 1.0f)
+	{
+		rotCnt = 1.0f;
+	}
 }

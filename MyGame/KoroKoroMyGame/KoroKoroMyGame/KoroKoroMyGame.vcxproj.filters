@@ -118,9 +118,6 @@
     <Filter Include="ソース ファイル\Ball">
       <UniqueIdentifier>{7beb89ec-0581-456e-9b11-9a97521ddd23}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Factory">
-      <UniqueIdentifier>{9c66d529-4767-4938-a3b9-ce633682694f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Delete">
       <UniqueIdentifier>{b4ef6d1d-9274-48d9-b4bf-73b692f68b10}</UniqueIdentifier>
     </Filter>
@@ -129,9 +126,6 @@
     </Filter>
     <Filter Include="ソース ファイル\Particle">
       <UniqueIdentifier>{bee652ec-4eba-4f5f-aaa6-86429bed0f40}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Enemy">
-      <UniqueIdentifier>{d48e8ca2-384b-483c-9b26-d6466e9c820a}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\Random">
       <UniqueIdentifier>{ba5ae1a7-3a37-4469-94cd-6584ea367674}</UniqueIdentifier>
@@ -154,11 +148,17 @@
     <Filter Include="ソース ファイル\Scene\StageEdit">
       <UniqueIdentifier>{c7056d2a-2e2b-4d67-b792-32c7f566cfa9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Block">
-      <UniqueIdentifier>{e6e14a8b-56af-4b83-8eb2-27baba6de038}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\EditUI">
       <UniqueIdentifier>{24aa20c9-5140-42a5-905d-9a84bcb6eda2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene\CharacterSelect">
+      <UniqueIdentifier>{6677ddaf-05be-4594-af32-9f31e954d55c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Goal">
+      <UniqueIdentifier>{5607546f-296d-4104-b1c0-e421c798c8f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\MainObject">
+      <UniqueIdentifier>{e6e14a8b-56af-4b83-8eb2-27baba6de038}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -282,11 +282,14 @@
     <ClCompile Include="Source\Edit\Editor\StageEditor.cpp">
       <Filter>ソース ファイル\Edit</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Block\Block.cpp">
-      <Filter>ソース ファイル\Block</Filter>
-    </ClCompile>
     <ClCompile Include="Source\EditUI\WhatStageSaveUI.cpp">
       <Filter>ソース ファイル\EditUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Goal\Goal.cpp">
+      <Filter>ソース ファイル\Goal</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MainObject\MainObject.cpp">
+      <Filter>ソース ファイル\MainObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -419,11 +422,17 @@
     <ClInclude Include="Source\Edit\Editor\StageEditor.h">
       <Filter>ソース ファイル\Edit</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Block\Block.h">
-      <Filter>ソース ファイル\Block</Filter>
-    </ClInclude>
     <ClInclude Include="Source\EditUI\WhatStageSaveUI.h">
       <Filter>ソース ファイル\EditUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\CharacterSelect\SceneCharacterSelect.h">
+      <Filter>ソース ファイル\Scene\CharacterSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Goal\Goal.h">
+      <Filter>ソース ファイル\Goal</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MainObject\MainObject.h">
+      <Filter>ソース ファイル\MainObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

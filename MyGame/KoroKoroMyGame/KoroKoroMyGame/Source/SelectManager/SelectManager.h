@@ -23,16 +23,15 @@ public:
 	SelectManager();
 	~SelectManager();
 
-	static constexpr size_t MaxPlayer = 4;
+	static constexpr size_t MaxPlayer = 1;
 	static constexpr size_t MaxModel  = 3;
 
 	static std::string SelectManager::getModelPass(INT playerIndex);
 
-
+	
 	static INT getSelect();
 	static void addSelect();
 	static void subSelect();
-
 
 
 protected:

@@ -14,6 +14,8 @@
 #include "../../Ball/BallObj.h"
 #include "../../MyDelete/MyDelete.h"
 #include "../../Star/Star.h"
+#include "../../MainObject/MainObject.h"
+#include <fstream>
 
 /*
 #include "C_Board.h"
@@ -60,19 +62,17 @@ SceneMain::SceneMain()
 	lightPtr.reset(NEW Light());
 	cameraPtr.reset(NEW Camera());
 
-	for (UINT playerIndex = 0; playerIndex < SelectManager::MaxPlayer; playerIndex++)
-	{
+	//for (UINT playerIndex = 0; playerIndex < SelectManager::MaxPlayer; playerIndex++)
+	//{
 		playeresPtr.push_back(static_cast<std::unique_ptr<Player>>(NEW Player(D3DXVECTOR3(-2.0f, 0.0f, 0.0f), playeresPtr.size())));
-	}
+	//}
 
-	for (UINT ballCnt = 0; ballCnt < playeresPtr.size(); ballCnt++)
+	for (UINT gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
 	{
-		ballsPtr.push_back( NEW BallObj(ballCnt));
+		creteGameObj(gameObjTypeIndex);
 	}
 
-	gameObjectesPtr.push_back(  std::unique_ptr<Pawn>( NEW MainField()) );
-	gameObjectesPtr.push_back(  std::unique_ptr<Pawn>( NEW Skydome())   );
-
+	skyDomePtr.push_back(  std::unique_ptr<Skydome>( NEW Skydome())   );
 
 	boardObjectesPtr.push_back( std::unique_ptr<Board>(NEW Star() ));
 
@@ -82,7 +82,14 @@ SceneMain::SceneMain()
 	{
 		collisionPtr->registerPlayer(player.get());
 	}
-	collisionPtr->registerField(gameObjectesPtr.front().get());
+
+	for (size_t gameObjType = 0; gameObjType < GameObjectBase::MaxGameObjType; gameObjType++)
+	{
+		for (auto gameObj : gameObjPtr[gameObjType])
+		{
+			collisionPtr->registerField(gameObj);
+		}
+	}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -102,17 +109,27 @@ SceneMain::~SceneMain()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneMain::initialize()
 {
+	for (size_t gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
+	{
+		for (auto itr = gameObjPtr[gameObjTypeIndex].begin(); itr != gameObjPtr[gameObjTypeIndex].end(); itr++)
+		{
+			(*itr)->initialize();
+		}
+	}
+
+	loadStageData(1);
+
 	lightPtr->initialize();
 	cameraPtr->initializeMain(playeresPtr.back().get());
 
-	for (const auto &player : playeresPtr)
-	{
-		player->initialize();
-	}
+	//for (const auto &player : playeresPtr)
+	//{
+	playeresPtr.front()->initialize();
+	//}
 
-	for (const auto &gameObject : gameObjectesPtr)
+	for (const auto &skyDome : skyDomePtr)
 	{
-		gameObject->initialize();
+		skyDome->initialize();
 	}
 
 	for (const auto &boardObject : boardObjectesPtr)
@@ -120,10 +137,6 @@ void SceneMain::initialize()
 		boardObject->initialize();
 	}
 
-	for (const auto& ballPtr : ballsPtr)
-	{
-		ballPtr->initialize();
-	}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -136,9 +149,15 @@ void SceneMain::finalize()
 		player->finalize();
 	}
 
+	for (UINT gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
+	{
+		for (auto itr = gameObjPtr[gameObjTypeIndex].begin(); itr != gameObjPtr[gameObjTypeIndex].end(); itr++)
+		{
+			(*itr)->finalize();
+		}
+	}
+
 	collisionPtr->finalize("Player");
-
-
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -146,25 +165,30 @@ void SceneMain::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneMain::update()
 {
-	for (const auto &gameObject : gameObjectesPtr)
+	for (const auto &skyDome : skyDomePtr)
 	{
-		gameObject->update();
+		skyDome->update();
 	}
 
 	for (const auto &player : playeresPtr)
 	{
 		player->update(cameraPtr->getFowerd());
-	}	
-	
-	for (const auto& ballPtr : ballsPtr)
-	{
-		ballPtr->update(playeresPtr.back()->getPosition(), playeresPtr.back()->getPosition());
 	}
 
 	for (const auto &boardObject : boardObjectesPtr)
 	{
 		boardObject->update();
 	}
+
+	for (UINT gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
+	{
+		for (auto itr = gameObjPtr[gameObjTypeIndex].begin(); itr != gameObjPtr[gameObjTypeIndex].end(); itr++)
+		{
+			(*itr)->update();
+		}
+	}
+
+	cameraPtr->update(playeresPtr.front().get());
 	
 	if (Keyboard::getPress(DIK_1))
 	{
@@ -179,16 +203,9 @@ void SceneMain::update()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneMain::draw()
 {
-	for (const auto &gameObject : gameObjectesPtr)
+	for (const auto &gameObject : skyDomePtr)
 	{
-		if (gameObject->isUsedShader())
-		{
-			gameObject->draw(cameraPtr->getMtxView(), cameraPtr->getProjectionMtx());
-		}
-		else
-		{
-			gameObject->draw();
-		}
+		gameObject->draw();
 	}
 
 	for (const auto &boardObject : boardObjectesPtr)
@@ -196,14 +213,17 @@ void SceneMain::draw()
 		boardObject->draw();
 	}
 
-	for (const auto &player : playeresPtr)
-	{
-		player->draw();
-	}
+//	for (const auto &player : playeresPtr)
+//	{
+		playeresPtr.front()->draw();
+//	}
 
-	for (const auto& ballPtr : ballsPtr)
+	for (size_t gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
 	{
-		ballPtr->draw();
+		for (auto itr = gameObjPtr[gameObjTypeIndex].begin(); itr != gameObjPtr[gameObjTypeIndex].end(); itr++)
+		{
+			(*itr)->draw();
+		}
 	}
 
 	cameraPtr->setCamera();
@@ -221,7 +241,7 @@ void SceneMain::draw()
 	pPlayer->drawObject();
 
 	// ゲームオブジェクト描画
-	for (INT i = 0; i < MAX_GAME_OBJ_TYPE; i++)
+	for (INT i = 0; i < MAX_GameObjectType; i++)
 		for (INT j = 0; j < MAX_GAME_OBJ; j++)
 			pGameObj[i][j]->drawObject(pCamera->getMtxView(),pCamera->getProjectionMtx());
 
@@ -564,4 +584,73 @@ void SceneMain::checkUnProject(INT Indx)
 void SceneMain::setScore()
 {
 
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// データ読み込み
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void SceneMain::loadStageData(size_t stageNumber)
+{
+	std::ifstream loadtFile;
+
+	std::string stageString = std::to_string(stageNumber);
+	loadtFile.open(StageFilePass + stageString + ".bin", std::ios::binary);
+
+	if (!loadtFile)
+	{
+		MessageBox(nullptr, TEXT("Error"), TEXT("ステージデータ読み込みエラー"), MB_ICONERROR);
+		return;
+	}
+
+	for (size_t gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
+	{
+		for (auto itr = gameObjPtr[gameObjTypeIndex].begin(); itr != gameObjPtr[gameObjTypeIndex].end(); itr++)
+		{
+			loadtFile.read((CHAR*)(&exportWorkData), sizeof(ExportData));
+
+			if (exportWorkData.isUsed)
+			{
+				selectGameObjIndex++;
+			}
+
+			(*itr)->reflectionExportData(exportWorkData);
+		}
+	}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// ゲームオブジェクト生成
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void SceneMain::creteGameObj(size_t objType)
+{
+	switch (objType)
+	{
+	case static_cast<INT>(GameObjectType::NormalBlockObj) :
+		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
+		{
+			gameObjPtr[0].push_back(NEW MainObject("box.x","IceStone.png",objIndex,true));
+		}
+		break;
+	case static_cast<INT>(GameObjectType::MoveBlockOBj) :
+		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
+		{
+			gameObjPtr[1].push_back(NEW MainObject("flatAndHill.x","double_1.png",objIndex,true));
+		}
+
+		break;
+	case static_cast<INT>((GameObjectType::StarObj)) :
+		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
+		{
+			gameObjPtr[2].push_back(NEW MainObject("flat.x","double_1.png",objIndex,true));
+		}
+		break;
+	case static_cast<INT>((GameObjectType::GoalObj)) :
+		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
+		{
+			gameObjPtr[3].push_back(NEW MainObject("heart.x", "heart.png", objIndex,false));
+		}
+		break; 
+	default:
+		break;
+	}
 }

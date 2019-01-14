@@ -65,10 +65,10 @@ public:
 
 	void finalize(Player* pPlayer);
 	void finalize();
-	void update(Player *,Board *);
+	void update(Player *);
 	void updateTitle(Pawn*);
-	void updateStageEdit(UINT selectIndex);
-	void updateGameMain(Player*,Board*);
+	void updateStageEdit(std::string keyName, UINT selectIndex);
+	void updateGameMain(Player*);
 	void setState(MoceType setState);
 
 

@@ -60,7 +60,7 @@ class Collider;
 class Player;
 
 // ===== ƒNƒ‰ƒX’è‹` =====
-class Collision
+class Collision final
 {
 public:
 	static constexpr FLOAT HitLength = 1.5f;
@@ -75,7 +75,7 @@ public:
 	static void registerList(CameraTransform *setCamera, std::string keyName);
 
 	INT isHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXVECTOR3 Length);
-	INT Intersect(Pawn *pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXVECTOR3 pFLength);
+	INT Intersect(Pawn *pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXVECTOR3 &pFLength);
 
 	UINT checkCollisionField(Pawn *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec);
 
@@ -85,6 +85,7 @@ public:
 	static const CameraTransform* getCameraTransform(std::string keyName, INT index);
 	static const RayHit*    getRayHitData(std::string keyName, UINT index);
 	static const std::list<Transform*> getTransform(std::string keyName);
+	static const size_t			  getSize(std::string keyName);
 	static void setVelocity(std::string keyName, UINT index,D3DXVECTOR3 velocity);
 	static void release(std::string keyName);
 	void finalize(std::string keyName);
@@ -92,12 +93,15 @@ public:
 	void registerPlayer(Pawn* playerPtr);
 	void registerField(Pawn* fieldPtr);
 
+	static const D3DXVECTOR3 getCross();
 
 private:
 	bool IntersectA(Pawn* pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXMATRIX pWorld);
 
 	std::list<Pawn*> playersPtr;
-	Pawn* fieldPtr;
+	std::list<Pawn*> fieldPtres;
+
+	static D3DXVECTOR3 cross;
 
 	static std::unordered_map < std::string, std::list<Transform*>> collisionMapes;
 	static std::unordered_map < std::string, std::vector<RayHit* >> rayHitMapes;

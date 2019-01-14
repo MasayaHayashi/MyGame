@@ -1,47 +1,32 @@
-﻿  Application.cpp
-  MyAudiere.cpp
-  BackGround.cpp
-  BallObj.cpp
+﻿  BallObj.cpp
   Board.cpp
   Camera.cpp
-  Collider.cpp
   Collision.cpp
-  DirectX3D.cpp
-  Main.cpp
-  FadeUI.cpp
-  Figure.cpp
-  Fream.cpp
+  StageEditor.cpp
+  Goal.cpp
   HeartObj.cpp
-  Keyboard.cpp
   Light.cpp
   MyLoadIcon.cpp
   MainField.cpp
+  MainObject.cpp
   MeshFieldBase.cpp
-  MyDelete.cpp
-  コンパイル中...
-  MyHierarchy.cpp
-  MyVector3.cpp
-Source\MyVector3\MyVector3.cpp(69): warning C4244: '=': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
-Source\MyVector3\MyVector3.cpp(256): warning C4244: '=': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
-Source\MyVector3\MyVector3.cpp(278): warning C4244: '=': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
-Source\MyVector3\MyVector3.cpp(289): warning C4244: '初期化中': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
   Particle.cpp
   Pawn.cpp
   Player.cpp
-  MyRandom.cpp
   ResourceManager.cpp
-  sceneBase.cpp
   SceneManager.cpp
   SceneLoad.cpp
   SceneMain.cpp
   SceneSelect.cpp
+  コンパイル中...
+  SceneStageEdit.cpp
   SceneTitle.cpp
-  SelectManager.cpp
   Skydome.cpp
   Star.cpp
-  TitleUI.cpp
   コード生成しています。
-  All 3761 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  108 of 4258 functions ( 2.5%) were compiled, the rest were copied from previous compilation.
+    10 functions were new in current compilation
+    91 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Release\KoroKoroMyGame.exe
   KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Release\KoroKoroMyGame.pdb (Full PDB)

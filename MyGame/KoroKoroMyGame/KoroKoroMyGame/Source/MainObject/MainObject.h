@@ -11,7 +11,7 @@
 // ===== インクルード部 =====
 #include "../Pawn/Pawn.h"
 #include "../GameObjectBase/GameObjectBase.h"
-#include <vector>
+#include <map>
 
 // ===== 定数・マクロ定義 =====
 
@@ -23,12 +23,12 @@ class C_COLLIDER;
 // ===== 構造体定義 =====
 
 // ===== クラス定義 =====
-class Block final : public Pawn
+class MainObject final : public Pawn
 {
 public:
-	Block();
-	Block(UINT);
-	~Block();
+	MainObject();
+	MainObject(std::string, std::string,size_t,bool);
+	~MainObject();
 
 	void initialize();
 	void finalize();
@@ -36,23 +36,19 @@ public:
 	void draw();
 	void draw(D3DXMATRIX,D3DXMATRIX);
 
-	void SetSelectNum(UINT);	// 現在の選択番号
-//	EXPORT_BLOCK_DATA*	GetExportData();			// 書き出し用データ取得
-//	void SetExportData(EXPORT_BLOCK_DATA SetData);	// 出力用データセット
+	const std::string getKeyName();
 
 protected:
-	//void UpdateExportData();					// 出力用データ更新
-
-//	EXPORT_BLOCK_DATA	ExportData;				// 書き出す際の保存用データ
-//	BLOCK_TYPE			BlockType;
-//	C_COLLIDER		    *pCollider;
-	UINT				uCurrentSelect;
+	
 private:
 
+	std::map<std::string, std::string>	modelPasses;
+	std::map<std::string, std::string>	texturePasses;
 
-	const std::string ModelPass		= "Data/Model/Block/box.x";
-	const std::string TexturePass	= "Data/Texture/IceStone.png";
+	const std::string passName = "Data/Model/Block/";
 
+
+//	const std::string ModelPass		= "Data/Model/Block/flatAndHill.x";
 
 };
 

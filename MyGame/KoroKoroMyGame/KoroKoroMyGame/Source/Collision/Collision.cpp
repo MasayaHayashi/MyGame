@@ -21,6 +21,7 @@
 std::unordered_map<std::string, std::list<Transform*>> Collision::collisionMapes;
 std::unordered_map<std::string, std::vector<RayHit*>>  Collision::rayHitMapes;
 std::unordered_map<std::string, std::list<CameraTransform*>> Collision::cameraTransforms;
+D3DXVECTOR3 Collision::cross;
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -36,7 +37,7 @@ Collision::Collision()
 Collision::Collision(Pawn* setPlayerPtr,Pawn* setFieldPtr)
 {
 	playersPtr.push_back(setPlayerPtr);
-	fieldPtr  = setFieldPtr;
+	fieldPtres.push_back(setFieldPtr);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -52,28 +53,44 @@ Collision::~Collision()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Collision::update()
 {
-	D3DXVECTOR3 cross, normal, length;
+	D3DXVECTOR3 normal, length;
 
 	UINT playerIndex = 0;
 
-	for (auto player : playersPtr)
+//	for (auto player : playersPtr)
+//	{
+	for(auto  fieldPtr : fieldPtres)
 	{
-		if (checkCollisionField(player, player, fieldPtr, cross, normal, length, D3DXVECTOR3(0.0f, -0.1f, 0.0f)))
+		if (!fieldPtr->getUsedFlg())
 		{
-			if (MyVector3::getLength(length) < 1.02f)
+			continue;
+		}
+		if (!fieldPtr->getIsFieldObject())
+		{
+			continue;
+		}
+
+		if (checkCollisionField(playersPtr.front(), playersPtr.front(), fieldPtr, cross, normal, length, D3DXVECTOR3(0.0f, -0.1f, 0.0f)))
+		{
+			if (length.x < 1.02f)
 			{
 				DirectX3D::printDebug("あたっています%d",playerIndex);
+				rayHitMapes["Player"][playerIndex]->isHit = true;
+				return;
 			}
 
-			rayHitMapes["Player"][playerIndex]->isHit = true;
+		//	rayHitMapes["Player"][playerIndex]->isHit = true;
+			DirectX3D::printDebug("あたっています");
+		//	return;
 		}
 		else
 		{
 			rayHitMapes["Player"][playerIndex]->isHit = false;
 		}
-
-		playerIndex ++;
 	}
+
+
+	
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -171,7 +188,7 @@ void Collision::registerPlayer(Pawn* playerPtr)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Collision::registerField(Pawn* setFieldPtr)
 {
-	fieldPtr = setFieldPtr;
+	fieldPtres.push_back(setFieldPtr);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -226,7 +243,7 @@ INT Collision::isHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos,
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 線分の判定
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-INT Collision::Intersect(Pawn *pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXVECTOR3 pFLength)
+INT Collision::Intersect(Pawn *pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXVECTOR3 &pFLength)
 {
 	if (!pRayPos || !pRayDir)
 	{
@@ -396,8 +413,6 @@ bool Collision::IntersectA(Pawn* pField,LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRa
 		// tを求める
 		FLOAT t = D3DXVec3Dot(&N, &(*(P[0]) - W)) / base;
 
-	//	PrintDebugProc("aaaaaaa:%f\n", t);
-
 		// 交点がレイの後ろ
 		if (t < 0.0f)
 		{
@@ -526,4 +541,20 @@ void Collision::setVelocity(std::string keyName, UINT index, D3DXVECTOR3 setVelo
 void Collision::release(std::string keyName)
 {
 	collisionMapes[keyName].clear();
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// サイズ取得
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+const size_t Collision::getSize(std::string keyName)
+{
+	return collisionMapes[keyName].size();
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 交点取得
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+const D3DXVECTOR3 Collision::getCross()
+{
+	return cross;
 }

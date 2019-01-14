@@ -42,7 +42,7 @@ typedef struct
 typedef struct
 {
 	Transform		myTransform;
-	GAME_OBJ_TYPE	gameObjType;
+	GameObjectType	myGameObjType;
 	bool			isUsed = false;
 } ExportData;
 
@@ -103,7 +103,8 @@ public:
 	MESH_VTX*			getVtxAcess();			// 頂点情報アクセス用ポインタ取得		
 	WORD*				getIndxAcess();			// インデックスバッファアクセス用ポインタ取得
 	bool				getIsGround();			// 地面上状態取得
-	bool				isUsedShader();			// シェーダー使用
+	const bool			isUsedShader() const;	// シェーダー使用
+	bool			getIsFieldObject() const;
 
 	LPD3DXMESH	 getMesh();
 	LPD3DXBUFFER getMat();
@@ -142,7 +143,7 @@ public:
 	const ExportData& getExportData() const;
 	void reflectionExportData(const ExportData setExport);
 
-	bool isHit(std::string keyName);
+	bool isHit(std::string keyName1, std::string keyName2);
 
 #if _DEBUG
 	void debugMove();
@@ -194,6 +195,7 @@ protected:
 	FLOAT				oldRadRot;				// 前の回転角度
 	FLOAT				collisionRadus;			// あたり判定用サイズ
 	bool				isShader;				// シェーダー使用
+	bool				isFieldObject = false;	// フィールドオブジェクトか
 	bool				isGround;				// 地面の上か
 	bool				isUsed;					// 使用中か
 
@@ -220,7 +222,8 @@ protected:
 	DWORD						dwPrev;			// 直前の時刻
 	
 	MeshObjType					meshType;				// メッシュの種類
-	GAME_OBJ_TYPE				myGameObjType;
+	GameObjectType				myGameObjType;
+	ItemObjType					myItemObjType;
 	UINT						currentAnim;			// アニメーション
 private:
 

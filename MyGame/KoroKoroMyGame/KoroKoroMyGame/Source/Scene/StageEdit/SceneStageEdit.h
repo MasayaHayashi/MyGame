@@ -37,12 +37,10 @@ public:
 	// ゲッター関連
 	Camera* getCamera();
 
-
 private:
 
-	std::unique_ptr<Skydome> skydomePtr;
-	std::unique_ptr<StageEditor> stageEditorPtr;
-
+	std::unique_ptr<Skydome>		skydomePtr;
+	std::unique_ptr<StageEditor>	stageEditorPtr;
 };
 
 #endif

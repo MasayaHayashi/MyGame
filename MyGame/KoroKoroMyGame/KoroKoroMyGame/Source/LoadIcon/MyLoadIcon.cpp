@@ -53,7 +53,7 @@ MyLoadIcon::~MyLoadIcon()
 void MyLoadIcon::initialize()
 {
 	ResourceManager::makevertexBoard(vertexBoard, fileName);
-	ResourceManager::createTexture(texture, fileName);
+	ResourceManager::createFadeTexture(texture, fileName);
 
 	setVtx();
 	setTexture();

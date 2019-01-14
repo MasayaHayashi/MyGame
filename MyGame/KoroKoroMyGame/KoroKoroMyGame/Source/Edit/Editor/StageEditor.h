@@ -13,7 +13,7 @@
 #include "../../Board/Board.h"
 #include "../../SceneManager/SceneManager.h"
 #include "../../SceneInterface/sceneBase.h"
-#include "../../Block/Block.h"
+#include "../../MainObject/MainObject.h"
 #include <array>
 #include <fstream>
 
@@ -76,6 +76,8 @@ public:
 	void draw();
 
 	Camera* getCamera();		// カメラ取得
+
+	void updateSelectIndex();
 	
 private:
 	static constexpr UINT MaxGameObj = 1000;
@@ -89,6 +91,7 @@ private:
 
 	void move();
 	void move(INT input);
+	void move(INT input1, INT input2);
 	void place();
 
 	void deleteObj();		// オブジェクト削除
@@ -100,7 +103,7 @@ private:
 	std::unique_ptr<Player> playerPtr;
 
 	std::array<std::list<std::unique_ptr<Board>>,MaxBoardObj>						boardObjPtr;
-	std::array<std::vector<Pawn*>,GameObjectBase::MaxGameObjType>							gameObjPtr;
+	std::array<std::vector<MainObject*>,GameObjectBase::MaxGameObjType>				gameObjPtr;
 
 	void creteGameObj(size_t objType);
 	void createBoard(size_t setSize);

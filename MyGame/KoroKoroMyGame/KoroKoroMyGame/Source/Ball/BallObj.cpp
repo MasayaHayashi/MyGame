@@ -62,6 +62,8 @@ BallObj::BallObj(UINT setIndex)
 	D3DXMatrixIdentity(&translateMtx);
 
 	idNumber = setIndex;
+
+	isUsed = true;
 }
 
 
@@ -307,9 +309,6 @@ void BallObj::updateGameMain(D3DXVECTOR3 pos,D3DXVECTOR3 rotVec)
 	setWorldMtxPos(myTransform.pos);
 
 	myTransform.pos += myTransform.velocity;
-
-	DirectX3D::printDebug("\n%faaaa:\n", myTransform.pos.y);
-
 }
 
 //

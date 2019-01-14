@@ -22,7 +22,9 @@ MyAudiere::MyAudiere()
 
 	// —áŠOˆ—
 	if (!audioDeviceObj)
+	{
 		return;
+	}
 
 	// BGMƒpƒXİ’è
 	std::array<AUDIO_DATA, MaxSound> bgmFilePass =
@@ -36,8 +38,10 @@ MyAudiere::MyAudiere()
 	for (INT i = 0; i < MaxSound; i++)
 	{
 		if (!bgmFilePass[i].filePassPtr)
+		{
 			break;
-		
+		}
+
 		std::pair<UINT, audiere::OutputStreamPtr> setPair = std::make_pair(i, audiere::OpenSound(audioDeviceObj.get(), bgmFilePass[i].filePassPtr));
 		bgm.insert(setPair);
 	}
@@ -56,7 +60,9 @@ MyAudiere::MyAudiere()
 	for (INT i = 0; i < MaxSound; i++)
 	{
 		if (!seFilePass[i].filePassPtr)
+		{
 			break;
+		}
 
 		std::pair<UINT, audiere::SoundEffectPtr> setPair = std::make_pair(i, audiere::OpenSoundEffect(audioDeviceObj.get(), seFilePass[i].filePassPtr, audiere::SoundEffectType::MULTIPLE));
 		se.insert(setPair);

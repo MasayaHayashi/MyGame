@@ -1076,19 +1076,26 @@ void Pawn::setWorldMtxPos(const D3DXVECTOR3 setPos)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // シェーダー使用
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-bool Pawn::isUsedShader()
+const bool Pawn::isUsedShader() const
 {
 	return isShader;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// フィールド用か
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+bool Pawn::getIsFieldObject() const
+{
+	return isFieldObject;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 当たっているか
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-bool Pawn::isHit(std::string keyName)
+bool Pawn::isHit(std::string keyName1,std::string keyName2)
 {
-	
-	const Transform* ball1Transform = Collision::getTransform(keyName, 0);
-	const Transform* ball2Transform = Collision::getTransform(keyName, 1);
+	const Transform* ball1Transform = Collision::getTransform(keyName1, 0);
+	const Transform* ball2Transform = Collision::getTransform(keyName2, 0);
 
 	D3DXVECTOR3 ballToBallVector = ball1Transform->pos - ball2Transform->pos;
 	ballToBallVector.y = 0.0f;
@@ -1098,7 +1105,6 @@ bool Pawn::isHit(std::string keyName)
 	if (length < Collision::HitLength)
 	{
 		return true;
-
 	}
 	else
 	{
@@ -1153,7 +1159,7 @@ void Pawn::reflectionExportData(const ExportData setExport)
 {
 	myTransform = setExport.myTransform;
 	isUsed		= setExport.isUsed;
-	myGameObjType = setExport.gameObjType;
+	myGameObjType = setExport.myGameObjType;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -1161,6 +1167,6 @@ void Pawn::reflectionExportData(const ExportData setExport)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Pawn::updateExportData()
 {
-	myExportData.myTransform = myTransform;
-	myExportData.isUsed		= isUsed;
+	myExportData.myTransform	= myTransform;
+	myExportData.isUsed			= isUsed;
 }

@@ -36,7 +36,7 @@ SceneManager::SceneManager()
 	loadSettingFile();
 	makeStartScene();
 
-	fadePtr.reset(NEW FadeUI);
+	fadePtr.reset(NEW FadeUI());
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -128,7 +128,6 @@ void SceneManager::updateFade()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneManager::draw()
 {
-	// シーン描画
 	currentScenePtr->draw();
 }
 
@@ -139,7 +138,6 @@ void  SceneManager::drawFade()
 {
 	if (fadePtr->getFadeState() != FadeUI::FadeType::FadeNone)
 	{
-		// フェード描画
 		fadePtr->draw();
 	}
 }

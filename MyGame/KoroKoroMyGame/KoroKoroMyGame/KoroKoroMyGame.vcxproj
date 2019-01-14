@@ -121,7 +121,6 @@
     <ClCompile Include="Source\Audio\MyAudiere.cpp" />
     <ClCompile Include="Source\BackGround\BackGround.cpp" />
     <ClCompile Include="Source\Ball\BallObj.cpp" />
-    <ClCompile Include="Source\Block\Block.cpp" />
     <ClCompile Include="Source\Board\Board.cpp" />
     <ClCompile Include="Source\Camera\Camera.cpp" />
     <ClCompile Include="Source\Collider\Collider.cpp" />
@@ -134,11 +133,13 @@
     <ClCompile Include="Source\Figure\Figure.cpp" />
     <ClCompile Include="Source\Fream\Fream.cpp" />
     <ClCompile Include="Source\GameObjectBase\GameObjectBase.cpp" />
+    <ClCompile Include="Source\Goal\Goal.cpp" />
     <ClCompile Include="Source\HeartObj\HeartObj.cpp" />
     <ClCompile Include="Source\KeyBoard\Keyboard.cpp" />
     <ClCompile Include="Source\Light\Light.cpp" />
     <ClCompile Include="Source\LoadIcon\MyLoadIcon.cpp" />
     <ClCompile Include="Source\MainField\MainField.cpp" />
+    <ClCompile Include="Source\MainObject\MainObject.cpp" />
     <ClCompile Include="Source\MeshFieldBase\MeshFieldBase.cpp" />
     <ClCompile Include="Source\MyDelete\MyDelete.cpp" />
     <ClCompile Include="Source\MyHierarchy\MyHierarchy.cpp" />
@@ -167,7 +168,6 @@
     <ClInclude Include="Source\Audio\MyAudiere.h" />
     <ClInclude Include="Source\BackGround\BackGround.h" />
     <ClInclude Include="Source\Ball\BallObj.h" />
-    <ClInclude Include="Source\Block\Block.h" />
     <ClInclude Include="Source\Board\Board.h" />
     <ClInclude Include="Source\Camera\Camera.h" />
     <ClInclude Include="Source\Collider\Collider.h" />
@@ -179,12 +179,14 @@
     <ClInclude Include="Source\Figure\Figure.h" />
     <ClInclude Include="Source\Fream\Fream.h" />
     <ClInclude Include="Source\GameObjectBase\GameObjectBase.h" />
+    <ClInclude Include="Source\Goal\Goal.h" />
     <ClInclude Include="Source\HeartObj\HeartObj.h" />
     <ClInclude Include="Source\KeyBoard\Keyboard.h" />
     <ClInclude Include="Source\Light\Light.h" />
     <ClInclude Include="Source\Linklib.h" />
     <ClInclude Include="Source\LoadIcon\MyLoadIcon.h" />
     <ClInclude Include="Source\MainField\MainField.h" />
+    <ClInclude Include="Source\MainObject\MainObject.h" />
     <ClInclude Include="Source\MeshFieldBase\MeshFieldBase.h" />
     <ClInclude Include="Source\Mesh\Mesh.h" />
     <ClInclude Include="Source\MyDelete\MyDelete.h" />
@@ -197,6 +199,7 @@
     <ClInclude Include="Source\ResoueceManager\ResourceManager.h" />
     <ClInclude Include="Source\SceneInterface\sceneBase.h" />
     <ClInclude Include="Source\SceneManager\SceneManager.h" />
+    <ClInclude Include="Source\Scene\CharacterSelect\SceneCharacterSelect.h" />
     <ClInclude Include="Source\Scene\Load\SceneLoad.h" />
     <ClInclude Include="Source\Scene\Main\SceneMain.h" />
     <ClInclude Include="Source\Scene\Select\SceneSelect.h" />

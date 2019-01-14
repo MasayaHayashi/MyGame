@@ -30,14 +30,9 @@ SceneSelect::SceneSelect()
 
 	for (UINT playerIndex = 1; playerIndex < SelectManager::MaxPlayer + 1; playerIndex++)
 	{
-		playeresPtr.push_back(static_cast<std::unique_ptr<Player>> (NEW Player(D3DXVECTOR3( -2.0f * playerIndex, 0.0f, 0.0f), playeresPtr.size())));
+		playeresPtr.push_back(static_cast<std::unique_ptr<Player>> (NEW Player(D3DXVECTOR3( -2.0f * playerIndex, 0.0f, 0.0f), playeresPtr.size())) );
 	}
 
-	for (UINT ballIndex = 0; ballIndex < playeresPtr.size(); ballIndex++)
-	{
-		ballsPtr.push_back( NEW BallObj(ballIndex));
-	}
-	
 	boardObjectesPtr.push_back(std::unique_ptr<Board>( NEW BackGround()) );
 	gameObjectesPtr.push_back(  std::unique_ptr<Pawn>( NEW Skydome())    );
 }
@@ -47,11 +42,7 @@ SceneSelect::SceneSelect()
 //
 SceneSelect::~SceneSelect()
 {
-	for (auto& ballPtr : ballsPtr)
-	{
-		ballPtr->finalize();
-		Mydelete::safeDelete(ballPtr);
-	}
+
 }
 
 //
@@ -72,17 +63,11 @@ void SceneSelect::initialize()
 		gameObject->initialize();
 	}
 
-	for (const auto &ball : ballsPtr)
-	{
-		ball->initialize();
-	}
 
 	for (const auto& board : boardObjectesPtr)
 	{
 		board->initialize();
 	}
-
-
 }
 
 //
@@ -108,15 +93,10 @@ void SceneSelect::update()
 		gameObject->update();
 	}
 
-	for (const auto& ballPtr : ballsPtr)
-	{
-		ballPtr->update(playeresPtr.back()->getPosition(), playeresPtr.back()->getPosition());
-	}
-
 	for (const auto &player : playeresPtr)
 	{
 		player->update(cameraPtr->getFowerd());
-	}	
+	}
 
 	for (const auto& board : boardObjectesPtr)
 	{
@@ -151,16 +131,10 @@ void SceneSelect::draw()
 		player->draw();
 	}
 
-	for (const auto& ballPtr : ballsPtr)
-	{
-		ballPtr->draw();
-	}
-
 	for (const auto& board : boardObjectesPtr)
 	{
 		board->draw();
 	}
-
 
 	cameraPtr->setCamera();
 

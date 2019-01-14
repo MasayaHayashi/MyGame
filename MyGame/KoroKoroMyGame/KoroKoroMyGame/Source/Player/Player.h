@@ -64,8 +64,12 @@ private:
 	static constexpr FLOAT VelocityForwardSpeed = 0.45f;
 	static constexpr FLOAT VelocitySideSpeed	= 0.3f;
 	static constexpr FLOAT ScaleSize			= 1.0f;
-	static constexpr FLOAT MoveSpeed			= 0.0004f;
+	static constexpr FLOAT MoveSpeed			= 0.00004f;
 	static constexpr FLOAT MaxSpeed				= 0.02f;
+
+	bool isKeyInput;
+
+	D3DXVECTOR3 inputVec = D3DXVECTOR3(0.0f,0.0f,0.0f);
 
 	void initializeTitle();
 	void initializeSceneEdit();
@@ -77,6 +81,7 @@ private:
 	void move();
 	void rideBall(size_t setIndex);
 	void fall(size_t checkIndex);
+	void rotation(D3DXVECTOR3 destVec);
 
 	void rebound(size_t index);
 

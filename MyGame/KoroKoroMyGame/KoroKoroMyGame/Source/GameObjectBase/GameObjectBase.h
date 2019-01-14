@@ -10,7 +10,7 @@
 // ===== インクルード部 =====
 #include "GameObjectBase.h"
 
-enum class GAME_OBJ_TYPE
+enum class GameObjectType
 {
 	NormalBlockObj = 0,
 	MoveBlockOBj,
@@ -18,11 +18,16 @@ enum class GAME_OBJ_TYPE
 	GoalObj,
 };
 
+enum class ItemObjType
+{
+};
+
 // ===== クラス定義 =====
 class GameObjectBase
 {
 	public:
-		static constexpr size_t MaxGameObjType = static_cast<size_t>( GAME_OBJ_TYPE::GoalObj) + 1;
+		static constexpr size_t MaxGameObjType = static_cast<size_t>(GameObjectType::GoalObj) + 1;
+
 
 		GameObjectBase();
 		virtual ~GameObjectBase();

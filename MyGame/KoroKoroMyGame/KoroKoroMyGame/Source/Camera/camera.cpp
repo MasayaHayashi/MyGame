@@ -199,11 +199,11 @@ void Camera::initializeMain(Player *pPlayer)
 {
 	D3DXVECTOR3 PlayerPos = pPlayer->getPosition();
 
-	fadePos[2]  = PlayerPos + D3DXVECTOR3(10.0f, PlayerPos.y  + 4.3f, 5.0f);
-	fadePos[1]  = PlayerPos + D3DXVECTOR3(-4.0f, PlayerPos.y  + 4.3f, 5.0f);
+	fadePos[2]  = PlayerPos + D3DXVECTOR3(10.0f, PlayerPos.y  + 4.3f, 3.0f);
+	fadePos[1]  = PlayerPos + D3DXVECTOR3(-4.0f, PlayerPos.y  + 4.3f, 3.0f);
 	fadePos[0]  = D3DXVECTOR3(0.0f, 10.0f, -19.0f);
 
-	myTransform.pos		= D3DXVECTOR3(0.0f, 10.0f, -25.0f);			// カメラの視点
+	myTransform.pos		= D3DXVECTOR3(0.0f, 30.0f, -20.0f);			// カメラの視点
 	myTransform.look	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// カメラの注視点
 	cameraUp			= D3DXVECTOR3(0.0f, 1.0f, 0.0f);			// カメラの上方向
 
@@ -233,7 +233,7 @@ void Camera::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ更新処理
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::update(Player *pPlayer,Board *pReadyUI)
+void Camera::update(Player *pPlayer)
 {
 	// 現在のシーン取得
 	currentScene = SceneManager::getCurrentSceneType();
@@ -245,7 +245,7 @@ void Camera::update(Player *pPlayer,Board *pReadyUI)
 		updateTitle(pPlayer);
 		break;
 	case SceneManager::SceneState::SceneMain:
-	//	updateGameMain(pPlayer, pReadyUI);
+		updateGameMain(pPlayer);
 		break;
 	case SceneManager::SceneState::SceneResult:
 		break;
@@ -270,7 +270,7 @@ void Camera::updateTitle(Pawn *pPlayer)
 	D3DXVec3Normalize(&ForwardVec, &ForwardVec);
 
 	myTransform.look = PlayerPos;
-	myTransform.look.y += 2.2f;
+	myTransform.look.y += 10.2f;
 	myTransform.fowerd = myTransform.look - myTransform.pos;
 	
 #if 1 // 線形補間処理
@@ -428,11 +428,11 @@ void Camera::updateTitle(Pawn *pPlayer)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ更新(ステージエディットシーン)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::updateStageEdit(UINT selectIndex)
+void Camera::updateStageEdit(std::string keyName,UINT selectIndex)
 {
-	D3DXVECTOR3 BlockPos = Collision::getTransform("Block", selectIndex)->pos;
+	D3DXVECTOR3 BlockPos = Collision::getTransform(keyName, selectIndex)->pos;
 
-	myTransform.posDest = D3DXVECTOR3(BlockPos.x, BlockPos.y + 20.0f, BlockPos.z - 20.0f);
+	myTransform.posDest = D3DXVECTOR3(BlockPos.x, BlockPos.y + 40.0f, BlockPos.z - 30.0f);
 
 	myTransform.lookDest = BlockPos;
 
@@ -620,7 +620,7 @@ void Camera::updateStageEdit(UINT selectIndex)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ更新(ゲームメイン)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::updateGameMain(Player *pPlayer,Board *pReadyUI)
+void Camera::updateGameMain(Player *pPlayer)
 {
 	D3DXVECTOR3 PlayerPos = pPlayer->getOffset();
 	D3DXVECTOR3 ForwardVec = pPlayer->getForwardVec();
@@ -628,84 +628,11 @@ void Camera::updateGameMain(Player *pPlayer,Board *pReadyUI)
 	D3DXVec3Normalize(&UpVec, &UpVec);
 	D3DXVec3Normalize(&ForwardVec, &ForwardVec);
 
+	myTransform.pos = pPlayer->getPosition();
+	myTransform.pos.y += 10.0f;
+	myTransform.pos.z -=10.0f;
 
-	switch (cameravelocityFade)
-	{
-	case MoceType::Tutorial:
-			{
-
-			myTransform.pos = D3DXVECTOR3(0.0f, 10.0f, -19.0f);		// カメラの視点
-			myTransform.look = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// カメラの注視点
-
-
-			}
-			break;
-
-	case MoceType::Start:
-			{
-				UINT Indx = pReadyUI->getCurrentAnim();
-
-				myTransform.pos = fadePos[Indx - 1];
-				myTransform.look = pPlayer->getOffset();
-
-				if (Indx == 0)
-				{
-					cameravelocityFade = MoceType::Normal;
-					myTransform.pos = D3DXVECTOR3(0.0f, 10.0f, -19.0f);		// カメラの視点
-					myTransform.look = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// カメラの注視点
-				}
-			}
-		break;
-	case MoceType::Normal:
-			{
-				D3DXVECTOR3 PlayerPos = pPlayer->getOffset();
-
-				myTransform.posDest = D3DXVECTOR3(PlayerPos.x, PlayerPos.y + 4.3f, PlayerPos.z - 9.0f);
-				myTransform.lookDest = PlayerPos + D3DXVECTOR3(0.0f, 0.0f, 30.0f);
-
-				static float fcnt = 0.0f;
-				fcnt += 0.001f;
-				D3DXVec3Lerp(&myTransform.pos, &myTransform.pos, &myTransform.posDest, fcnt);
-				D3DXVec3Lerp(&myTransform.look, &myTransform.look, &myTransform.lookDest, fcnt);
-
-				if (fcnt > 1.0f)
-					fcnt = 1.0f;
-
-			}
-
-			break;
-	case MoceType::Goal:
-		{
-
-			D3DXVECTOR3 PlayerPos = pPlayer->getOffset();
-
-			D3DXVECTOR3 VecLength = myTransform.pos - PlayerPos;
-			FLOAT Length = sqrtf(PlayerPos.x * PlayerPos.x + PlayerPos.z * PlayerPos.z);
-
-			rotCnt += RotSpeed;
-			Rotvelocity(&PlayerPos, 10.0f);
-
-			myTransform.pos.y = 10.0f;
-			myTransform.look = PlayerPos;
-			myTransform.look.y = 0.0f;
-
-		}
-		break;
-	default:
-		break;
-	}
-
-
-	myTransform.look = PlayerPos;
-	myTransform.look.y += 3.0f;
-
-	cameraFowerd = myTransform.look - myTransform.pos;
-
-#if _DEBUG
-	debugMove();
-#endif
-
-//	rotationcamera(pPlayer->getOffset());
+	myTransform.look = pPlayer->getPosition();
 
 }
 
@@ -742,8 +669,8 @@ void Camera::setCamera()
 	
 	// ビューマトリックスの作成
 	D3DXMatrixLookAtLH(&mtxView,
-		&myTransform.pos	,		// カメラの視点
-		&myTransform.look,		// カメラの注視点
+		&myTransform.pos,			// カメラの視点
+		&myTransform.look,			// カメラの注視点
 		&myTransform.up);			// カメラの上方向
 
 	// ビューマトリックスの設定

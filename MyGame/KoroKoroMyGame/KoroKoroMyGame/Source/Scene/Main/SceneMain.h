@@ -7,8 +7,10 @@
 // ===== インクルード部 =====
 #include "../../SceneInterface/sceneBase.h"
 #include "../../DirectX3D/DirectX3D.h"
+#include "../../Pawn/Pawn.h"
 #include <memory>
 #include <list>
+#include <array>
 
 /*
 #include "Block.h"
@@ -41,10 +43,10 @@ enum UI_OBJ_TYPE
 class Light;
 class Camera;
 class Player;
-class Pawn;
 class Collision;
 class BallObj;
 class Board;
+class Skydome;
 
 // ===== クラス定義 =====
 class SceneMain : public SceneBase
@@ -59,6 +61,7 @@ public:
 	void draw();
 
 	void initializeStatus();
+	void loadStageData(size_t stageNumber);
 
 	Camera* getCamera();
 
@@ -74,9 +77,16 @@ private:
 		Miss,
 	};
 
+	const std::string StageFilePass = "Stage";
+
+	static constexpr UINT	MaxGameObj = 1000;
+	ExportData				exportWorkData;
+	size_t					selectGameObjIndex;
+
 	void checkUnProject(INT);
 	void checkCollision();
 	void setScore();
+	void creteGameObj(size_t objType);
 
 	static constexpr INT ReStartTime = 120;
 
@@ -89,10 +99,11 @@ private:
 	std::unique_ptr<Camera>		cameraPtr;
 	std::unique_ptr<Collision>	collisionPtr;
 
-	std::list<BallObj*>  ballsPtr;
-	std::list<std::unique_ptr<Player>>	 playeresPtr;
-	std::list<std::unique_ptr<Pawn>>	 gameObjectesPtr;
-	std::list<std::unique_ptr<Board>>	 boardObjectesPtr;
+	std::list<BallObj*>														ballsPtr;
+	std::list<std::unique_ptr<Player>>										playeresPtr;
+	std::list<std::unique_ptr<Skydome>>										skyDomePtr;
+	std::list<std::unique_ptr<Board>>										boardObjectesPtr;
+	std::array<std::list<Pawn*>, GameObjectBase::MaxGameObjType>			gameObjPtr;
 
 	GameState				currentGameState;
 	static UINT				currentStage;

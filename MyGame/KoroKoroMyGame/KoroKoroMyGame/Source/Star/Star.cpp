@@ -69,15 +69,6 @@ void Star::finalize()
 //
 void Star::update()
 {
-	if (isHit("Ball"))
-	{
-		D3DXVECTOR3 ballPos = Collision::getTransform("Ball",0)->pos;
-		vertexBoard.pos = ballPos;
-		moveVec = D3DXVECTOR3(MyRandom::get(-1.0f, 1.0f), MyRandom::get(0.3f, 0.5f), 0.0f);
-
-		isUsed = true;
-	}
-
 	if (vertexBoard.pos.y < -5.0f)
 	{
 		destroy();

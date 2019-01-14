@@ -17,6 +17,7 @@
 #include "../DirectX3D/DirectX3D.h"
 #include "../Pawn/Pawn.h"
 #include "../Player/Player.h"
+#include "../Collision/Collision.h"
 
 // ===== 静的メンバ変数 =====
 std::unique_ptr<ResourceManager>								   ResourceManager::instancePtr = nullptr;
@@ -1226,21 +1227,21 @@ bool ResourceManager::destroyAllHierarchymesh()
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// 
+// リソース解放
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 bool ResourceManager::destroyAllResouce(size_t index)
 {
 	destroyResouceMesh(ModelChick,index);
 	destroyResouceMesh(ModelPenchanPass, index);
 	destroyResouceMesh(ModelPenNoHahaPass,index);
+	
+	size_t maxPlayer =Collision::getSize("Player");
 
-//	resoueceMesh.clear();
-	if (index == SelectManager::MaxPlayer - 1)
+	if (index == maxPlayer - 1)
 	{
 		resoueceMesh[ModelChick].clear();
 		resoueceMesh[ModelPenchanPass].clear();
 		resoueceMesh[ModelPenNoHahaPass].clear();
-
 
 		resoueceMesh.clear();
 	}
@@ -1280,7 +1281,7 @@ void ResourceManager::destroyResouceMesh(std::string keyName,UINT index)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 bool ResourceManager::destroyAllTexture()
 {
-	/*
+	
 	// 例外処理
 	if (texture.size() <= 0)
 		return false;
@@ -1293,7 +1294,7 @@ bool ResourceManager::destroyAllTexture()
 
 	texture.clear();
 
-	*/
+	
 	return true;
 }
 
@@ -1359,7 +1360,9 @@ void  ResourceManager::createNormalTexture(TEXTURE_DATA& TextureData, CHAR *pszF
 
 	// 既に生成されているか
 	if (checkExisting(pszFilename, TextureData))
+	{
 		return;
+	}
 
 	// ファイル名セット
 	strcpy_s(TextureData.texFileName, pszFilename);
@@ -1398,8 +1401,6 @@ void ResourceManager::changeHierarchy(HIERARCHY_MESH_DATA &changeHierarchy,CHAR*
 {
 
 	changeHierarchy = *resoueceMesh[keyName][index];
-			
-	
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -1411,7 +1412,7 @@ HRESULT ResourceManager::makeHierarchyResouce(HIERARCHY_MESH_DATA& meshData,std:
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// セット
+// 階層構造セット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void ResourceManager::setHierarchy(HIERARCHY_MESH_DATA *meshData,std::string keyName,UINT index)
 {
