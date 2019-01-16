@@ -49,7 +49,7 @@ class Board;
 class Skydome;
 
 // ===== ƒNƒ‰ƒX’è‹` =====
-class SceneMain : public SceneBase
+class SceneMain final : public SceneBase
 {
 public:
 	SceneMain();

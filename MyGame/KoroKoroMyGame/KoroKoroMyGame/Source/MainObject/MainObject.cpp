@@ -32,7 +32,6 @@ MainObject::MainObject(std::string modelPass,std::string texturePass, size_t set
 	myGameObjType		 = GameObjectType::NormalBlockObj;
 	isFieldObject = setFieldModel;
 
-	Collision::registerList(&myTransform, tagName);
 	
 	isUsed = false;
 }
@@ -57,6 +56,9 @@ void MainObject::initialize()
 	// モデル生成
 	ResourceManager::makeModel(meshDataObj, fileName, meshType);
 	ResourceManager::createTexture(textureData, texFileName);
+
+	myTransform.collisionBox = meshDataObj.collitionBox;
+	Collision::registerList(&myTransform, tagName);
 
 	// 位置、移動量、拡大率初期化
 	myTransform.scale	= D3DXVECTOR3(1.0f, 1.0f, 1.0f);

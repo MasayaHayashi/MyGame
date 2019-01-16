@@ -46,12 +46,14 @@ typedef struct
 	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 look = D3DXVECTOR3(0.0f, 0.0f, 10.0f);
 	D3DXVECTOR3 up = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-	
+	D3DXVECTOR3 size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
 	D3DXVECTOR3 posDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 lookDest = D3DXVECTOR3(0.0f,0.0f,10.0f);
 
 	D3DXVECTOR3 rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 fowerd = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
+
 } CameraTransform;
 
 // ===== ÉNÉâÉXÇÃëOï˚êÈåæ =====
@@ -92,6 +94,8 @@ public:
 
 	void registerPlayer(Pawn* playerPtr);
 	void registerField(Pawn* fieldPtr);
+
+	const bool isHitAABB(Transform pPawnA, Transform pPawnB);
 
 	static const D3DXVECTOR3 getCross();
 

@@ -72,9 +72,9 @@ SceneMain::SceneMain()
 		creteGameObj(gameObjTypeIndex);
 	}
 
-	skyDomePtr.push_back(  std::unique_ptr<Skydome>( NEW Skydome())   );
+	skyDomePtr.push_back(  std::unique_ptr<Skydome>( NEW Skydome()) );
 
-	boardObjectesPtr.push_back( std::unique_ptr<Board>(NEW Star() ));
+	boardObjectesPtr.push_back( std::unique_ptr<Board>(NEW Star()  ));
 
 	collisionPtr.reset(NEW Collision());
 
@@ -118,7 +118,7 @@ void SceneMain::initialize()
 	}
 
 	loadStageData(1);
-
+	
 	lightPtr->initialize();
 	cameraPtr->initializeMain(playeresPtr.back().get());
 
@@ -174,7 +174,7 @@ void SceneMain::update()
 	{
 		player->update(cameraPtr->getFowerd());
 	}
-
+	
 	for (const auto &boardObject : boardObjectesPtr)
 	{
 		boardObject->update();

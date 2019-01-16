@@ -56,6 +56,13 @@ void Collision::update()
 	D3DXVECTOR3 normal, length;
 
 	UINT playerIndex = 0;
+	D3DXVECTOR3 test = collisionMapes["heart.x"].front()->pos;
+	DirectX3D::printDebug("XX%f", collisionMapes["heart.x"].front()->pos.y);
+	
+	if (isHitAABB(*collisionMapes["Player"].front(), *collisionMapes["heart.x"].front()))
+	{
+		DirectX3D::printDebug("‚ ‚ ‚ ‚ ");
+	}
 
 //	for (auto player : playersPtr)
 //	{
@@ -238,6 +245,28 @@ INT Collision::isHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos,
 		}
 	}
 	return nIndex;
+}
+
+//
+// AABB‚Ì‚ ‚½‚è”»’è
+//
+const bool Collision::isHitAABB(Transform pPawnA, Transform pPawnB)
+{
+	DirectX3D::printDebug("aaaa%f\n", pPawnA.pos.x);
+	DirectX3D::printDebug("qwwwww%f\n", pPawnA.pos.y);
+	DirectX3D::printDebug("ffffff%f\n", pPawnA.pos.z);
+
+	if (pPawnA.pos.x + pPawnA.collisionBox.x > pPawnB.pos.x				 &&
+		pPawnA.pos.x						 < pPawnB.pos.x + pPawnB.collisionBox.x * 2  &&
+		pPawnA.pos.y + pPawnA.collisionBox.y > pPawnB.pos.y				 &&
+		pPawnA.pos.y						 < pPawnB.pos.y + pPawnB.collisionBox.y * 2  &&
+		pPawnA.pos.z + pPawnA.collisionBox.z > pPawnB.pos.z				 &&
+		pPawnA.pos.z						 < pPawnB.pos.z + pPawnB.collisionBox.z * 2)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 //

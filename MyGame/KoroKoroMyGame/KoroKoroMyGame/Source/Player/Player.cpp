@@ -111,6 +111,7 @@ void Player::initialize()
 void Player::finalize()
 {
 	ResourceManager::destroyAllResouce(idNumber);
+	Collision::release("Player");
 }
 
 //
