@@ -24,13 +24,11 @@ Camera::Camera()
 	numvelocityPitch	= 0.0f;
 	rotPitchRadian = 0.0f;
 	cameraUpDest	= D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-	currentState	= cameraState::Type1Person;
 
 	cameraFowerd	= D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 	changeCamera	= true;
 	lerpCnt		= 0.0f;
 
-	cameravelocityFade = MoceType::Start;
 
 	rot = 0;
 	rotCnt = 0;
@@ -129,9 +127,15 @@ void Camera::initialize()
 //	heightcameraP = CHASE_HEIGHT_P;	// 追跡時の視点の高さ
 //	heightcameraL = CHASE_HEIGHT_L;	// 追跡時の注視点の高さ
 
-										// 行列初期化
+	// 行列初期化
 	D3DXMatrixIdentity(&mtxView);
 
+
+	const Transform playerTransform = *Collision::getTransform("Player").front();
+
+	fadePos[2] = playerTransform.pos + D3DXVECTOR3(10.0f, playerTransform.pos.y + 4.3f, 5.0f);
+	fadePos[1] = playerTransform.pos + D3DXVECTOR3(-4.0f, playerTransform.pos.y + 4.3f, 5.0f);
+	fadePos[0] = D3DXVECTOR3(0.0f, 10.0f, -19.0f);
 
 
 }
@@ -176,7 +180,7 @@ void Camera::initializeStageEdit()
 	myTransform.posDest = D3DXVECTOR3(0.0f, -0.0f, -9.0f);								// カメラの視点の目的位置
 	myTransform.lookDest = D3DXVECTOR3(0.0f,0.0f,0.0f);		// カメラの注視点の目的位置
 
-	cameraRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// カメラの回転量
+	cameraRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	float fVecX, fVecZ;			// カメラから注視点までの距離
 	fVecX = myTransform.posDest.x - myTransform.look.x;
@@ -440,6 +444,7 @@ void Camera::updateStageEdit(std::string keyName,UINT selectIndex)
 	fcnt += 0.0001f;
 	D3DXVec3Lerp(&myTransform.pos,  &myTransform.pos,		  &myTransform.posDest,  fcnt);
 	D3DXVec3Lerp(&myTransform.look, &myTransform.look,		  &myTransform.lookDest, fcnt);
+
 	if (fcnt > 0.2f)
 	{
 		fcnt = 0.0f;
@@ -629,11 +634,19 @@ void Camera::updateGameMain(Player *pPlayer)
 	D3DXVec3Normalize(&ForwardVec, &ForwardVec);
 
 	myTransform.pos = pPlayer->getPosition();
-	myTransform.pos.y += 10.0f;
+	myTransform.pos.y += 7.0f;
 	myTransform.pos.z -=10.0f;
 
 	myTransform.look = pPlayer->getPosition();
+	myTransform.look.z += 6.0f;
 
+//	UINT Indx = pReadyUI->GetCurrentAnim();
+
+
+	myTransform.pos = fadePos[currentFadeType];
+	myTransform.look = Collision::getTransform("Player", 0)->pos;
+
+	myMoveType = MoveStateType::StartFade;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -814,8 +827,7 @@ D3DXVECTOR3 Camera::getFowerd()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラステートセット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::setState(MoceType setState)
+void Camera::setState(MoveStateType setState)
 {
-	cameravelocityFade = setState;
+	myMoveType = setState;
 }
-

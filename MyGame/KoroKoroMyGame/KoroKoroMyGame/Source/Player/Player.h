@@ -63,9 +63,10 @@ private:
 	static constexpr FLOAT FallSpeed			= 0.01f;
 	static constexpr FLOAT VelocityForwardSpeed = 0.45f;
 	static constexpr FLOAT VelocitySideSpeed	= 0.3f;
-	static constexpr FLOAT ScaleSize			= 1.0f;
-	static constexpr FLOAT MoveSpeed			= 0.00004f;
-	static constexpr FLOAT MaxSpeed				= 0.02f;
+	static constexpr FLOAT  ScaleSize			= 1.0f;
+	static constexpr FLOAT  MoveSpeed			= 0.03f;
+	static constexpr FLOAT  SideSpeed			= 0.02f;
+	static constexpr FLOAT  MaxSpeed			= 0.02f;
 
 	bool isKeyInput;
 

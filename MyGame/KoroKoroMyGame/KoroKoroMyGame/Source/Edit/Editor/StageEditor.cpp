@@ -105,8 +105,8 @@ StageEditor::~StageEditor()
 void StageEditor::initialize()
 {
 	lightPtr->initialize();
-	cameraPtr->initialize();
 	playerPtr->initialize();
+	cameraPtr->initialize();
 
 	for (UINT gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
 	{
@@ -199,6 +199,8 @@ void StageEditor::finalize()
 	lightPtr->finalize();
 
 	playerPtr->finalize();
+
+
 
 	for (UINT gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
 	{
@@ -569,9 +571,9 @@ void StageEditor::move()
 		(*currentGameObject)->setUsedFlg(true);
 	}
 
-	if (Keyboard::getTrigger(DIK_A))
+	if (Keyboard::getPress(DIK_A))
 	{
-		D3DXVECTOR3 Pos = D3DXVECTOR3(blockPos.x - blockSize.x, blockPos.y, blockPos.z);
+		D3DXVECTOR3 Pos = D3DXVECTOR3(blockPos - D3DXVECTOR3(0.2f, 0.0f, 0.0f));
 		(*currentGameObject)->setPosition(Pos);
 		(*currentGameObject)->setUsedFlg(true);
 	}
@@ -583,9 +585,9 @@ void StageEditor::move()
 		(*currentGameObject)->setUsedFlg(true);
 	}
 
-	if (Keyboard::getTrigger(DIK_D))
+	if (Keyboard::getPress(DIK_D))
 	{
-		D3DXVECTOR3 Pos = D3DXVECTOR3(blockPos.x + blockSize.x, blockPos.y, blockPos.z);
+		D3DXVECTOR3 Pos = D3DXVECTOR3(blockPos + D3DXVECTOR3(0.2f, 0.0f, 0.0f));
 		(*currentGameObject)->setPosition(Pos);
 		(*currentGameObject)->setUsedFlg(true);
 	}
@@ -775,18 +777,17 @@ void StageEditor::creteGameObj(size_t objType)
 {
 	switch (objType)
 	{
-	case static_cast<INT>( GameObjectType::NormalBlockObj ):
+	case static_cast<INT>( GameObjectType::NormalBlockObj ) :
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
 		{
 			gameObjPtr[0].push_back(NEW MainObject("box.x","IceStone.png",objIndex,true));
 		}
 		break;
-	case static_cast<INT>(GameObjectType::MoveBlockOBj):
+	case static_cast<INT>(GameObjectType::MoveBlockOBj) :
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
 		{
 			gameObjPtr[1].push_back(NEW MainObject("flatAndHill.x", "double_1.png",objIndex,true));
 		}
-
 		break;
 	case static_cast<INT>((GameObjectType::StarObj)):
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)

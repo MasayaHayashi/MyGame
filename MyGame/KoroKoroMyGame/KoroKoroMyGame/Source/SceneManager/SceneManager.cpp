@@ -70,7 +70,6 @@ void SceneManager::initialize()
 {
 	fadePtr->initialize();
 
-	// ƒV[ƒ“‰Šú‰»
 	currentScenePtr->initialize();
 }
 
@@ -271,12 +270,4 @@ void SceneManager::makeStartScene()
 
 	currentSceneType = sceneTypeMap[StartScene];
 	nextSceneType = sceneTypeMap[StartScene];
-}
-
-//
-// •¶š—ñ‚©‚çUINT‚Ö‚Ì•ÏŠ·
-//
-void SceneManager::changeStringToUint()
-{
-	
 }

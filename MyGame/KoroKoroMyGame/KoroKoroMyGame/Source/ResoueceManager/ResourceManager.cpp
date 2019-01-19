@@ -956,6 +956,8 @@ void ResourceManager::calcCollision(LPD3DXFRAME pFrame,CHAR *pszFilename,std::st
 	resoueceMesh[keyName][index]->CollitionBox = vBBox;
 	resoueceMesh[keyName][index]->CenterPos = vCenter;
 	resoueceMesh[keyName][index]->fCollisionRadus = 0.0f;
+
+
 	calcCollisionFrame(pFrame,pszFilename,keyName,index);
 }
 
@@ -1417,5 +1419,6 @@ HRESULT ResourceManager::makeHierarchyResouce(HIERARCHY_MESH_DATA& meshData,std:
 void ResourceManager::setHierarchy(HIERARCHY_MESH_DATA *meshData,std::string keyName,UINT index)
 {
 	std::memcpy(meshData, resoueceMesh[keyName][index], sizeof(HIERARCHY_MESH_DATA));
+	meshData->CollitionBox = resoueceMesh[keyName][index]->CollitionBox;
 
 }

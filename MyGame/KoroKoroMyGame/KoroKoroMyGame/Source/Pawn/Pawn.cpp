@@ -492,23 +492,6 @@ void Pawn::updateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX pParentMatri
 	}
 }
 
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// アニメーション開始時間設定
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Pawn::setTime(DOUBLE dTime)
-{
-	if (animCtrlPtr == nullptr) 
-		return;
-
-	for (DWORD i = 0; i < animCtrlPtr->GetMaxNumTracks(); ++i) 
-	{
-		animCtrlPtr->SetTrackPosition(i, 0);
-	}
-
-	animCtrlPtr->ResetTime();
-	animCtrlPtr->AdvanceTime(dTime, nullptr);
-}
-
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ボーン用ワールド・マトリックス領域確保
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -1061,6 +1044,27 @@ void Pawn::updateAnimation()
 		hierarchyMeshData.dwPrev = nowTime;
 		hierarchyMeshData.pAnimCtrl->AdvanceTime(deltaTime, nullptr);
 	}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// アニメーション切替
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Pawn::switchAnimSet(UINT animSet)
+{
+	hierarchyMeshData.pAnimCtrl->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[animSet]);
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// アニメーション開始時間設定
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Pawn::setTime(DOUBLE dTime)
+{
+	for (DWORD i = 0; i < hierarchyMeshData.pAnimCtrl->GetMaxNumTracks(); i++)
+	{
+		hierarchyMeshData.pAnimCtrl->SetTrackPosition(i, 0);
+	}
+	hierarchyMeshData.pAnimCtrl->ResetTime();
+	hierarchyMeshData.pAnimCtrl->AdvanceTime(dTime, nullptr);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

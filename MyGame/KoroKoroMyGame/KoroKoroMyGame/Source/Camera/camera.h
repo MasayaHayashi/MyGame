@@ -14,28 +14,10 @@
 #include "../SceneManager/SceneManager.h"
 #include "../Camera/Camera.h"
 #include "../Collision/Collision.h"
-#include <vector>
+#include <array>
 
 // ===== 定数・マクロ定義 =====
-/*
-#define	VIEW_ANGLE			(D3DXToRadian(55.0f))	// 視野角
-#define	VIEW_ASPECT			((float)SCREEN_WIDTH / (float)SCREEN_HEIGHT)	// ビュー平面のアスペクト比	
-#define	VIEW_NEAR_Z			(1.0f)					// ビュー平面のNearZ値
-#define	VIEW_FAR_Z			(70000.0f)				// ビュー平面のFarZ値
-#define	VALUE_velocity_camera	(2.0f)					// カメラの移動量
-#define	VALUE_ROTATE_camera	(D3DX_PI * 0.003809f)		// カメラの回転量
 
-#define	INTERVAL_camera_L			(12.5f)			// モデルの視線の先までの距離
-#define	INTERVAL_camera_L_velocity		(20.5f)			// モデルの視線の先までの移動量
-
-#define	CHASE_HEIGHT_P		(100.0f)				// 追跡時の視点の高さ
-#define	CHASE_HEIGHT_L		(10.0f)					// 追跡時の注視点の高さ
-
-#define RATE_CHASE_camera_P	(0.3f)					// カメラ視点への補正係数
-#define RATE_CHASE_camera_L	(0.2f)					// カメラ注視点への補正係数
-
-#define MAX_camera_FADE_POS (3)
-*/
 
 // ===== クラスの前方宣言 =====
 class SceneManager;
@@ -50,13 +32,12 @@ class Camera final
 public:
 	Camera();
 	~Camera();
-
-	enum class MoceType
+	
+	enum class MoveStateType
 	{
-		Tutorial,
-		Start,
+		StartFade = 0,
 		Normal,
-		Goal,
+		GoalFade,
 	};
 
 	void initialize();
@@ -69,8 +50,7 @@ public:
 	void updateTitle(Pawn*);
 	void updateStageEdit(std::string keyName, UINT selectIndex);
 	void updateGameMain(Player*);
-	void setState(MoceType setState);
-
+	void setState(MoveStateType setState);
 
 	void setCamera();
 
@@ -98,25 +78,24 @@ private:
 	
 	static constexpr INT RotSpeed = 10;
 
+	static constexpr size_t MaxFade = 3;
+
+	MoveStateType myMoveType;
+
 	CameraTransform myTransform;
 
-	enum class cameraState
-	{
-		Type3Person,
-		Type1Person,
-		TypePoint
-	};
+	std::array<D3DXVECTOR3, MaxFade> fadePos;
+	std::array<D3DXVECTOR3, MaxFade> fadeLook;
+
+	size_t currentFadeType = 0;
+
+
 
 	void initializeStageEdit();					
 
 	void rotationCamera(D3DXVECTOR3 Center);
 
-	D3DXVECTOR3 fadePos[3];
-	D3DXVECTOR3 fadeLook[3];
-
 	void Rotvelocity(D3DXVECTOR3* pVecCenter, FLOAT fRadius);
-
-	MoceType cameravelocityFade;
 
 	SceneManager::SceneState currentScene;  // シーン識別用
 	D3DXVECTOR3		cameraPos;				// カメラの視点
@@ -164,8 +143,7 @@ private:
 	D3DXMATRIX rotcameraZ;
 
 	D3DVIEWPORT9 viewPort;
-
-	cameraState currentState;
+	
 	bool changeCamera;
 	FLOAT lerpCnt;	// 線形補間用カウンタ
 

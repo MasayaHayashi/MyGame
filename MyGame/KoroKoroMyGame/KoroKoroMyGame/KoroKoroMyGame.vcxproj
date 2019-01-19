@@ -132,6 +132,7 @@
     <ClCompile Include="Source\Fade\FadeUI.cpp" />
     <ClCompile Include="Source\Figure\Figure.cpp" />
     <ClCompile Include="Source\Fream\Fream.cpp" />
+    <ClCompile Include="Source\GameManager\GameManager.cpp" />
     <ClCompile Include="Source\GameObjectBase\GameObjectBase.cpp" />
     <ClCompile Include="Source\Goal\Goal.cpp" />
     <ClCompile Include="Source\HeartObj\HeartObj.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="Source\Fade\FadeUI.h" />
     <ClInclude Include="Source\Figure\Figure.h" />
     <ClInclude Include="Source\Fream\Fream.h" />
+    <ClInclude Include="Source\GameManager\GameManager.h" />
     <ClInclude Include="Source\GameObjectBase\GameObjectBase.h" />
     <ClInclude Include="Source\Goal\Goal.h" />
     <ClInclude Include="Source\HeartObj\HeartObj.h" />

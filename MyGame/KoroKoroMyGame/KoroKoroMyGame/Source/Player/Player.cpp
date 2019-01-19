@@ -13,6 +13,7 @@
 #include "../Collision/Collision.h"
 #include "../Ball/BallObj.h"
 #include "../Random/MyRandom.h"
+#include "../GameManager/GameManager.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -223,6 +224,7 @@ void Player::initializeTitle()
 
 	ResourceManager::setHierarchy(&hierarchyMeshData, SelectManager::getModelPass(idNumber), idNumber);
 
+	myTransform.collisionBox = hierarchyMeshData.CollitionBox;
 	Collision::registerList(&myTransform, "Player");
 
 	//// 現在のアニメーションセットの設定値を取得
@@ -275,7 +277,6 @@ void Player::initializeGameMain()
 		break;
 	}
 
-	Collision::registerList(&myTransform, "Player");
 
 	setDefaultValue();
 
@@ -294,7 +295,10 @@ void Player::initializeGameMain()
 	meshType = MeshObjType::HierarchyModel;
 
 	ResourceManager::setHierarchy(&hierarchyMeshData, SelectManager::getModelPass(idNumber), idNumber);
+	myTransform.collisionBox = hierarchyMeshData.CollitionBox;
 
+	Collision::registerList(&myTransform, "Player");
+	
 	// 拡大
 	D3DXMATRIX mScale;
 	D3DXMatrixScaling(&mScale, myTransform.scale.x, myTransform.scale.y, myTransform.scale.z);
@@ -347,7 +351,7 @@ void Player::initializeSceneEdit()
 	ResourceManager::makeModelHierarchyResouce(hierarchyMeshData, ResourceManager::ModelPenNoHahaPass,	ResourceManager::ModelPenNoHahaPass,	meshType, idNumber);
 
 	meshType = MeshObjType::HierarchyModel;
-
+	 
 	ResourceManager::setHierarchy(&hierarchyMeshData, SelectManager::getModelPass(idNumber), idNumber);
 
 	Collision::registerList(&myTransform, "Player");
@@ -380,15 +384,19 @@ void Player::initializeSceneEdit()
 
 	// 現在のアニメーションセットの設定値を取得
 	D3DXTRACK_DESC TD;   // トラックの能力
-	hierarchyMeshData.pAnimCtrl->GetTrackDesc(0, &TD);
+	hierarchyMeshData.pAnimCtrl->GetTrackDesc(1, &TD);
 
 	// 今のアニメーションをトラック1に移行し
 	// トラックの設定値も移行
-//	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(1, hierarchyMeshData.ppAnimSet[0]);
-	hierarchyMeshData.pAnimCtrl->SetTrackDesc(2, &TD);
+//	hierarchyMeshData.pAnimCtrl->SetTrackAnimationSet(1, hierarchyMeshData.ppAnimSet[0]);
+//	hierarchyMeshData.pAnimCtrl->SetTrackDesc(1, &TD);
 
 	// 新しいアニメーションセットをトラック0に設定
-//	hierarchyMeshData.animCtrlPtr->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[0]);
+	hierarchyMeshData.pAnimCtrl->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[0]);
+
+
+//	setAnimChange(0, 1);
+//	setTime(00);
 
 
 }
@@ -553,6 +561,12 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 		inputVec.y = 0.0f;
 		inputVec.z = 0.0f;
 	}
+
+	if (GameManager::isGameType(GameManager::GameType::Pause))
+	{
+		return;
+	}
+
 	
 	D3DXVECTOR3 vv;
 
@@ -564,7 +578,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	{
 		if (Keyboard::getPress(DIK_D))
 		{
-			inputVec.x = MoveSpeed;
+			inputVec.x = SideSpeed;
 			isKeyInput = true;
 		}
 		else
@@ -574,7 +588,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 
 		if (Keyboard::getPress(DIK_A))
 		{
-			inputVec.x = -MoveSpeed;
+			inputVec.x = -SideSpeed;
 			isKeyInput = true;
 		}
 		else
@@ -584,7 +598,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 
 		if (Keyboard::getPress(DIK_S))
 		{
-			inputVec.z = -MoveSpeed;
+			inputVec.z = -SideSpeed;
 			isKeyInput = true;
 		}
 		else
@@ -621,7 +635,9 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 			Ynum += MoveSpeed;
 		}
 	}
-	
+
+	inputVec.z = MoveSpeed * 0.02;
+
 	D3DXVECTOR3 CameraRight = D3DXVECTOR3(CameraForward.z, 0.0f, -CameraForward.x);
 	moveVector = CameraRight * inputVec.x + CameraForward * inputVec.z;
 
@@ -634,7 +650,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	
 	moveVector.y = 0.0f;
 
-	myTransform.velocity += (moveVector * 0.1f);
+	myTransform.velocity += (moveVector * 0.01f);
 	
 	D3DXVec3Normalize(&vv, &inputVec);
 	vv *= 0.1f;
@@ -687,9 +703,11 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	if (rotCnt >= 1.0f)
 	{
 		rotCnt = 1.0f;
-	
 	}
 	
+	
+	myTransform.velocity.z = MoveSpeed;
+
 	myTransform.velocity.x -= myTransform.velocity.x * 0.04f;
 	myTransform.velocity.z -= myTransform.velocity.z * 0.04f;
 

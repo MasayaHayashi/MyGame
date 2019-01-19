@@ -63,7 +63,6 @@ void SceneSelect::initialize()
 		gameObject->initialize();
 	}
 
-
 	for (const auto& board : boardObjectesPtr)
 	{
 		board->initialize();

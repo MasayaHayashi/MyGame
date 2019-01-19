@@ -57,8 +57,8 @@ void SceneStageEdit::update()
 //
 void SceneStageEdit::draw()
 {
-	skydomePtr->draw();
 	stageEditorPtr->draw();
+	skydomePtr->draw();
 }
 
 

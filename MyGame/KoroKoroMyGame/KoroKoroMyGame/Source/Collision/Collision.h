@@ -76,6 +76,8 @@ public:
 	static void registerList(Transform *setPawn,std::string keyName);
 	static void registerList(CameraTransform *setCamera, std::string keyName);
 
+	static void release(std::string keyName);
+
 	INT isHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXVECTOR3 Length);
 	INT Intersect(Pawn *pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXVECTOR3 &pFLength);
 
@@ -89,7 +91,6 @@ public:
 	static const std::list<Transform*> getTransform(std::string keyName);
 	static const size_t			  getSize(std::string keyName);
 	static void setVelocity(std::string keyName, UINT index,D3DXVECTOR3 velocity);
-	static void release(std::string keyName);
 	void finalize(std::string keyName);
 
 	void registerPlayer(Pawn* playerPtr);

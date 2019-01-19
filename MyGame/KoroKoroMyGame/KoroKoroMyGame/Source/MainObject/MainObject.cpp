@@ -8,6 +8,7 @@
 #include "MainObject.h"
 #include "../ResoueceManager/ResourceManager.h"
 #include "../Collision/Collision.h"
+#include "../SceneManager/SceneManager.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -58,7 +59,10 @@ void MainObject::initialize()
 	ResourceManager::createTexture(textureData, texFileName);
 
 	myTransform.collisionBox = meshDataObj.collitionBox;
+
+	
 	Collision::registerList(&myTransform, tagName);
+
 
 	// 位置、移動量、拡大率初期化
 	myTransform.scale	= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
@@ -76,6 +80,8 @@ void MainObject::finalize()
 	modelPasses.clear();
 	texturePasses.clear();
 	ResourceManager::destroyAllTexture();
+
+	Collision::release(tagName);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

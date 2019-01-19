@@ -38,7 +38,6 @@ public:
 
 	void setcolor(D3DCOLOR col);
 	void setFade(FadeType Fade);
-//	void setWorkScene(SceneManager::SceneState);
 	
 	FadeType getFadeState();
 
@@ -46,7 +45,6 @@ public:
 protected:
 private:
 	std::string TextureName = "data/TEXTURE/test.png";
-
 
 	SceneManager::SceneState CurrentScene;
 	FadeType  CurentFadeType;		// 現在のフェード状態

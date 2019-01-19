@@ -51,7 +51,7 @@
 
 // ===== 静的メンバ変数 =====
 UINT	SceneMain::currentStage = 0;
-UINT	SceneMain::prevScore = 0;
+UINT	SceneMain::prevScore	= 0;
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -117,15 +117,17 @@ void SceneMain::initialize()
 		}
 	}
 
+	
+
 	loadStageData(1);
 	
 	lightPtr->initialize();
-	cameraPtr->initializeMain(playeresPtr.back().get());
 
 	//for (const auto &player : playeresPtr)
 	//{
 	playeresPtr.front()->initialize();
 	//}
+	cameraPtr->initializeMain(playeresPtr.back().get());
 
 	for (const auto &skyDome : skyDomePtr)
 	{
@@ -636,7 +638,6 @@ void SceneMain::creteGameObj(size_t objType)
 		{
 			gameObjPtr[1].push_back(NEW MainObject("flatAndHill.x","double_1.png",objIndex,true));
 		}
-
 		break;
 	case static_cast<INT>((GameObjectType::StarObj)) :
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)

@@ -91,7 +91,6 @@ private:
 
 	void move();
 	void move(INT input);
-	void move(INT input1, INT input2);
 	void place();
 
 	void deleteObj();		// オブジェクト削除

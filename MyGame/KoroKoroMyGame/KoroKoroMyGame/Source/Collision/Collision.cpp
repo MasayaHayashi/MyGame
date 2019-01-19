@@ -118,6 +118,19 @@ void Collision::registerList(CameraTransform *setCamera, std::string keyName)
 	cameraTransforms[keyName].push_back(setCamera);
 }
 
+//
+// ‰ð•ú
+//
+void Collision::release(std::string keyName)
+{
+	if (collisionMapes[keyName].empty())
+	{
+		return;
+	}
+
+	collisionMapes[keyName].clear();
+}
+
 //
 // Œãˆ—
 //
@@ -259,7 +272,7 @@ const bool Collision::isHitAABB(Transform pPawnA, Transform pPawnB)
 	if (pPawnA.pos.x + pPawnA.collisionBox.x > pPawnB.pos.x				 &&
 		pPawnA.pos.x						 < pPawnB.pos.x + pPawnB.collisionBox.x * 2  &&
 		pPawnA.pos.y + pPawnA.collisionBox.y > pPawnB.pos.y				 &&
-		pPawnA.pos.y						 < pPawnB.pos.y + pPawnB.collisionBox.y * 2  &&
+		pPawnA.pos.y						 < pPawnB.pos.y + pPawnB.collisionBox.y * 2 &&
 		pPawnA.pos.z + pPawnA.collisionBox.z > pPawnB.pos.z				 &&
 		pPawnA.pos.z						 < pPawnB.pos.z + pPawnB.collisionBox.z * 2)
 	{
@@ -562,14 +575,6 @@ void Collision::setVelocity(std::string keyName, UINT index, D3DXVECTOR3 setVelo
 
 		indexCnt++;
 	}
-}
-
-//
-// ‰ð•ú
-//
-void Collision::release(std::string keyName)
-{
-	collisionMapes[keyName].clear();
 }
 
 //

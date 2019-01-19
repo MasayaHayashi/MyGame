@@ -118,7 +118,6 @@ public:
 	HRESULT AllocBoneMatrix(LPD3DXMESHCONTAINER);
 	HRESULT AllocAllBoneMatrix(LPD3DXFRAME);
 
-	void setTime(DOUBLE);
 	void drawFrame(LPD3DXFRAME);
 	void RenderMeshContainer(LPD3DXMESHCONTAINER, LPD3DXFRAME );
 
@@ -145,6 +144,9 @@ public:
 	void reflectionExportData(const ExportData setExport);
 
 	bool isHit(std::string keyName1, std::string keyName2);
+
+	void switchAnimSet(UINT animSet);
+	void setTime(DOUBLE dTime);
 
 #if _DEBUG
 	void debugMove();

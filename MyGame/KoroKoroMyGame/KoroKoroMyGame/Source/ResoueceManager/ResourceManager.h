@@ -89,9 +89,9 @@ public:
 	ResourceManager();
 	~ResourceManager();
 
-	static constexpr CHAR* ModelPenchanPass = "Data/Model/Character/PenChan/PenguinC.x";
-	static constexpr CHAR* ModelPenNoHahaPass = "Data/Model/Character/PenNoHaha/PenguinA.x";
-	static constexpr CHAR* ModelChick = "Data/Model/Character/Chick/Chick.x";
+	static constexpr CHAR* ModelPenchanPass		= "Data/Model/Character/PenChan/PenguinC.x";
+	static constexpr CHAR* ModelPenNoHahaPass	= "Data/Model/Character/PenNoHaha/PenguinA.x";
+	static constexpr CHAR* ModelChick			= "Data/Model/Character/Chick/Chick.x";
 
 	static constexpr UINT MaxModelType = 3;
 

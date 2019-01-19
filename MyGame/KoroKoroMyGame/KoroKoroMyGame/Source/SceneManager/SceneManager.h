@@ -21,7 +21,6 @@ class FadeUI;
 class SceneManager final
 {
 public:
-
 	SceneManager();
 	~SceneManager();
 
@@ -64,11 +63,10 @@ private:
 
 	void loadSettingFile();
 	void makeStartScene();
-	void changeStringToUint();
 
 	static constexpr INT DebugvelocityOnFream = 10;
 	static SceneState currentSceneType;
-	static SceneState nextSceneType;
+	static SceneState nextSceneType; 
 
 	static std::unique_ptr<SceneManager> SceneManagerInstancePtr;
 	static std::unique_ptr<SceneBase>	 currentScenePtr;

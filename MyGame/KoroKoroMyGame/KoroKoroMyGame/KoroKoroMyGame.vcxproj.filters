@@ -160,6 +160,9 @@
     <Filter Include="ソース ファイル\MainObject">
       <UniqueIdentifier>{e6e14a8b-56af-4b83-8eb2-27baba6de038}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameManager">
+      <UniqueIdentifier>{d9226aa4-3417-4d5d-ad4d-42e6c84d4e32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Audio\MyAudiere.cpp">
@@ -290,6 +293,9 @@
     </ClCompile>
     <ClCompile Include="Source\MainObject\MainObject.cpp">
       <Filter>ソース ファイル\MainObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameManager\GameManager.cpp">
+      <Filter>ソース ファイル\GameManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -433,6 +439,9 @@
     </ClInclude>
     <ClInclude Include="Source\MainObject\MainObject.h">
       <Filter>ソース ファイル\MainObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameManager\GameManager.h">
+      <Filter>ソース ファイル\GameManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

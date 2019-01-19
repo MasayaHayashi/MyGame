@@ -1,3 +1,11 @@
-﻿  Collision.cpp
-  KoroKoroMyGame.vcxproj -> D:\git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.exe
-  KoroKoroMyGame.vcxproj -> D:\git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.pdb (Partial PDB)
+﻿  Player.cpp
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\player\player.cpp(565): error C2039: 'getGameType': 'GameManager' のメンバーではありません。
+  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\gamemanager\gamemanager.h(17): note: 'GameManager' の宣言を確認してください
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\player\player.cpp(565): error C3861: 'getGameType': 識別子が見つかりませんでした
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\player\player.cpp(565): error C2059: 構文エラー: ')'
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\player\player.cpp(636): warning C4305: '=': 'double' から 'float' へ切り詰めます。
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\player\player.cpp(652): error C2065: 'vv': 定義されていない識別子です。
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\player\player.cpp(653): error C2065: 'vv': 定義されていない識別子です。
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\player\player.cpp(655): error C2065: 'vv': 定義されていない識別子です。
+  GameManager.cpp
+  コードを生成中...
