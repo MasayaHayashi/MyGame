@@ -203,9 +203,9 @@ void Camera::initializeMain(Player *pPlayer)
 {
 	D3DXVECTOR3 PlayerPos = pPlayer->getPosition();
 
-	fadePos[2]  = PlayerPos + D3DXVECTOR3(10.0f, PlayerPos.y  + 4.3f, 3.0f);
-	fadePos[1]  = PlayerPos + D3DXVECTOR3(-4.0f, PlayerPos.y  + 4.3f, 3.0f);
-	fadePos[0]  = D3DXVECTOR3(0.0f, 10.0f, -19.0f);
+	fadePos[0]  = PlayerPos + D3DXVECTOR3(0.0f, 3.0f, -20.0f);
+	fadePos[1]  = PlayerPos + D3DXVECTOR3(-10.0f, -1.0f, 1.0f);
+	fadePos[2]  = PlayerPos + D3DXVECTOR3(10.0f, -1.0f, 3.0f);
 
 	myTransform.pos		= D3DXVECTOR3(0.0f, 30.0f, -20.0f);			// カメラの視点
 	myTransform.look	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// カメラの注視点
@@ -237,7 +237,7 @@ void Camera::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ更新処理
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::update(Player *pPlayer)
+void Camera::update(Player *pPlayer,Board &countdown)
 {
 	// 現在のシーン取得
 	currentScene = SceneManager::getCurrentSceneType();
@@ -249,7 +249,7 @@ void Camera::update(Player *pPlayer)
 		updateTitle(pPlayer);
 		break;
 	case SceneManager::SceneState::SceneMain:
-		updateGameMain(pPlayer);
+		updateGameMain(pPlayer,countdown);
 		break;
 	case SceneManager::SceneState::SceneResult:
 		break;
@@ -625,11 +625,12 @@ void Camera::updateStageEdit(std::string keyName,UINT selectIndex)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ更新(ゲームメイン)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::updateGameMain(Player *pPlayer)
+void Camera::updateGameMain(Player *pPlayer,Board &countDown)
 {
 	D3DXVECTOR3 PlayerPos = pPlayer->getOffset();
 	D3DXVECTOR3 ForwardVec = pPlayer->getForwardVec();
 	D3DXVECTOR3 UpVec = pPlayer->getUpVec();
+
 	D3DXVec3Normalize(&UpVec, &UpVec);
 	D3DXVec3Normalize(&ForwardVec, &ForwardVec);
 
@@ -640,11 +641,16 @@ void Camera::updateGameMain(Player *pPlayer)
 	myTransform.look = pPlayer->getPosition();
 	myTransform.look.z += 6.0f;
 
-//	UINT Indx = pReadyUI->GetCurrentAnim();
+	currentFadeType = countDown.getCurrentAnim() - 1;
 
-
+	DirectX3D::printDebug("ddddddddddddddddddddddddddddddd%d", currentFadeType);
+	if (currentFadeType <= 0)
+	{
+		currentFadeType = 0;
+	}
 	myTransform.pos = fadePos[currentFadeType];
 	myTransform.look = Collision::getTransform("Player", 0)->pos;
+
 
 	myMoveType = MoveStateType::StartFade;
 }

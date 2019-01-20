@@ -10,7 +10,8 @@
 #include "../SceneManager/SceneManager.h"
 
 // ===== 静的メンバ =====
-GameManager GameManager::instance;
+GameManager				GameManager::instance;
+GameManager::GameType	GameManager::currentGameType;
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -39,7 +40,7 @@ void GameManager::initialize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ゲーム状態取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-const bool GameManager::isGameType(GameType setGameType) const
+const bool GameManager::isGameType(GameType setGameType)
 {
 	if (currentGameType == setGameType)
 	{
@@ -49,7 +50,14 @@ const bool GameManager::isGameType(GameType setGameType) const
 	{
 		return false;
 	}
+}
 
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// ゲーム状態取得
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+const GameManager::GameType GameManager::getGameType()
+{
+	return currentGameType;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

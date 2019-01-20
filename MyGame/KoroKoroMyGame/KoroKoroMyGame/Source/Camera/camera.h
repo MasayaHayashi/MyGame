@@ -46,10 +46,10 @@ public:
 
 	void finalize(Player* pPlayer);
 	void finalize();
-	void update(Player *);
+	void update(Player *,Board&);
 	void updateTitle(Pawn*);
 	void updateStageEdit(std::string keyName, UINT selectIndex);
-	void updateGameMain(Player*);
+	void updateGameMain(Player*,Board&);
 	void setState(MoveStateType setState);
 
 	void setCamera();
@@ -71,10 +71,10 @@ public:
 
 private:
 
-	static constexpr FLOAT ViewAngle	 = D3DXToRadian(55.0f);
-	static constexpr FLOAT ViewAspect	 = Application::ScreenWidth / Application::ScreenHeight;
-	static constexpr FLOAT ViewNearZ	 = 1.0f;
-	static constexpr FLOAT ViewFarZ		 = 20000.0f;
+	static constexpr FLOAT ViewAngle		= D3DXToRadian(55.0f);
+	static constexpr FLOAT ViewAspect		= Application::ScreenWidth / Application::ScreenHeight;
+	static constexpr FLOAT ViewNearZ		= 1.0f;
+	static constexpr FLOAT ViewFarZ			= 20000.0f;
 	
 	static constexpr INT RotSpeed = 10;
 
@@ -87,9 +87,7 @@ private:
 	std::array<D3DXVECTOR3, MaxFade> fadePos;
 	std::array<D3DXVECTOR3, MaxFade> fadeLook;
 
-	size_t currentFadeType = 0;
-
-
+	INT currentFadeType = 0;
 
 	void initializeStageEdit();					
 

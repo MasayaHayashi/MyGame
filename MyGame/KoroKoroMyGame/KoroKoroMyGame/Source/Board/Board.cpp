@@ -888,7 +888,7 @@ void Board::setStartCurvePos(D3DXVECTOR3 SetStart)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // アニメパターン取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-UINT Board::getCurrentAnim()
+INT Board::getCurrentAnim()
 {
 	return currentAnimPattern;
 }

@@ -11,7 +11,6 @@
 #include <stdio.h>	// ファイル入出力用
 
 // ===== 定数・マクロ定義 =====
-#define TEX_FILENAME "Data/Texture/Loadeffect.png"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -19,7 +18,7 @@
 MyLoadIcon::MyLoadIcon()
 {
 	vertexBoard.fade = true;
-	strcpy_s(fileName, TEX_FILENAME);
+	strcpy_s(fileName, TexturePass.c_str());
 	vertexBoard.pos = D3DXVECTOR3( Application::ScreenCenterX,Application::ScreenCenterY, 0.0f);
 	vertexBoard.rotDeg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	vertexBoard.scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);

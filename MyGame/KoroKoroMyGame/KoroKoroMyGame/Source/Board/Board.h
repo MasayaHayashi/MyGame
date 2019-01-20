@@ -55,7 +55,7 @@ public:
 	BOOL					getUsedFlg();		// 使用フラグ取得 
 	D3DXVECTOR3				getPosition();		// 座標取得
 	D3DXVECTOR3				getSize();			// 大きさ取得
-	UINT					getCurrentAnim();	// アニメパターン取得
+	INT					getCurrentAnim();	// アニメパターン取得
 
 protected:
 	static constexpr INT MaxLerp = 4;

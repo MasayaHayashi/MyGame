@@ -76,6 +76,7 @@ private:
 	void initializeSceneEdit();
 	void initializeGameMain();
 	void initializeResult();
+	void updateMainReady();
 	void updateTitle(D3DXVECTOR3);
 	void updateResult();
 	void input();

@@ -163,6 +163,9 @@
     <Filter Include="ソース ファイル\GameManager">
       <UniqueIdentifier>{d9226aa4-3417-4d5d-ad4d-42e6c84d4e32}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Countdown">
+      <UniqueIdentifier>{40860703-a47d-4b39-9e4f-2ac67429e5aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Audio\MyAudiere.cpp">
@@ -296,6 +299,9 @@
     </ClCompile>
     <ClCompile Include="Source\GameManager\GameManager.cpp">
       <Filter>ソース ファイル\GameManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Countdown\Countdown.cpp">
+      <Filter>ソース ファイル\Countdown</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -442,6 +448,9 @@
     </ClInclude>
     <ClInclude Include="Source\GameManager\GameManager.h">
       <Filter>ソース ファイル\GameManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Countdown\Countdown.h">
+      <Filter>ソース ファイル\Countdown</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

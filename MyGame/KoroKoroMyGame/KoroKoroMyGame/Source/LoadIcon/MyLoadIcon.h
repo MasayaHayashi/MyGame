@@ -11,7 +11,7 @@
 #include "../Board/Board.h"
 
 // ===== ƒNƒ‰ƒX’è‹` =====
-class MyLoadIcon : public Board
+class MyLoadIcon final : public Board
 {
 public:
 	MyLoadIcon();
@@ -23,6 +23,10 @@ public:
 	void draw();
 
 private:
+	const std::string TexturePass = "Data/Texture/Loadeffect.png";
+	
+	static constexpr size_t FadeFream = 100;
+	INT fadeCnt = FadeFream;
 
 };
 

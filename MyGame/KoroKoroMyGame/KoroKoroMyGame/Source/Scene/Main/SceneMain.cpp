@@ -15,6 +15,7 @@
 #include "../../MyDelete/MyDelete.h"
 #include "../../Star/Star.h"
 #include "../../MainObject/MainObject.h"
+#include "../../Countdown/Countdown.h"
 #include <fstream>
 
 /*
@@ -74,7 +75,8 @@ SceneMain::SceneMain()
 
 	skyDomePtr.push_back(  std::unique_ptr<Skydome>( NEW Skydome()) );
 
-	boardObjectesPtr.push_back( std::unique_ptr<Board>(NEW Star()  ));
+	boardObjectesPtr.push_back( std::unique_ptr<Board>( NEW Star() ));
+	boardObjectesPtr.push_back( std::unique_ptr<Board>( NEW Countdown() ));
 
 	collisionPtr.reset(NEW Collision());
 
@@ -190,7 +192,7 @@ void SceneMain::update()
 		}
 	}
 
-	cameraPtr->update(playeresPtr.front().get());
+	cameraPtr->update(playeresPtr.front().get(), *boardObjectesPtr.back());
 	
 	if (Keyboard::getPress(DIK_1))
 	{

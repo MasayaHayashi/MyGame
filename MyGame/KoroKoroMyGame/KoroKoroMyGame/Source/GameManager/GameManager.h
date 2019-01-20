@@ -27,6 +27,7 @@ public:
 
 	static const bool isGameType(GameType setGameType);
 	static void changeGameType(GameType setGameType);
+	static const GameType getGameType();
 protected:
 	
 private:
