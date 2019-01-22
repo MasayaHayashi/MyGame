@@ -151,7 +151,6 @@ void SceneManager::changeScene(SceneState Scene)
 	case SceneState::SceneTitle:
 		currentScenePtr.reset(NEW SceneTitle());
 		break;
-		
 	case SceneState::SceneMain:
 		currentScenePtr.reset(NEW SceneMain());
 		break;

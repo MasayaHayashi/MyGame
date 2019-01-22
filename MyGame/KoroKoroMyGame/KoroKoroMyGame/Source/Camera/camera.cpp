@@ -13,6 +13,7 @@
 #include "../Board/Board.h"
 #include "../Application/Application.h"
 #include "../Collision/Collision.h"
+#include "../GameManager/GameManager.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -204,8 +205,9 @@ void Camera::initializeMain(Player *pPlayer)
 	D3DXVECTOR3 PlayerPos = pPlayer->getPosition();
 
 	fadePos[0]  = PlayerPos + D3DXVECTOR3(0.0f, 3.0f, -20.0f);
-	fadePos[1]  = PlayerPos + D3DXVECTOR3(-10.0f, -1.0f, 1.0f);
-	fadePos[2]  = PlayerPos + D3DXVECTOR3(10.0f, -1.0f, 3.0f);
+	fadePos[1]  = Collision::getTransform("Player", 0)->pos + D3DXVECTOR3(-0.5f, 4.0f, -12.0f);
+	fadePos[2]  = Collision::getTransform("Player", 0)->pos + D3DXVECTOR3(0.0f,4.0f,-7.0f);
+
 
 	myTransform.pos		= D3DXVECTOR3(0.0f, 30.0f, -20.0f);			// カメラの視点
 	myTransform.look	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// カメラの注視点
@@ -294,7 +296,6 @@ void Camera::updateTitle(Pawn *pPlayer)
 	
 	// 移動量の補正
 	rotvelocityCamera += velocityCameraDest;
-	
 
 	FLOAT vecX, vecZ;
 	vecX = myTransform.pos.x - myTransform.look.x;
@@ -634,24 +635,58 @@ void Camera::updateGameMain(Player *pPlayer,Board &countDown)
 	D3DXVec3Normalize(&UpVec, &UpVec);
 	D3DXVec3Normalize(&ForwardVec, &ForwardVec);
 
-	myTransform.pos = pPlayer->getPosition();
-	myTransform.pos.y += 7.0f;
-	myTransform.pos.z -=10.0f;
-
-	myTransform.look = pPlayer->getPosition();
-	myTransform.look.z += 6.0f;
-
+	if (GameManager::isGameType(GameManager::GameType::Ready))
+	{
+		myTransform.pos = pPlayer->getPosition();
+		myTransform.pos.y += 7.0f;
+		myTransform.pos.z -= 10.0f;
+		myTransform.look = pPlayer->getPosition();
+	}
 	currentFadeType = countDown.getCurrentAnim() - 1;
 
-	DirectX3D::printDebug("ddddddddddddddddddddddddddddddd%d", currentFadeType);
 	if (currentFadeType <= 0)
 	{
 		currentFadeType = 0;
 	}
-	myTransform.pos = fadePos[currentFadeType];
-	myTransform.look = Collision::getTransform("Player", 0)->pos;
+
+	if (GameManager::isGameType(GameManager::GameType::Ready))
+	{
+		myTransform.pos = fadePos[currentFadeType];
+		myTransform.look = Collision::getTransform("Player", 0)->pos;
+	}
+
+	if (GameManager::isGameType(GameManager::GameType::Playing))
+	{
+		myTransform.posDest = Collision::getTransform("Player", 0)->pos;
+		myTransform.posDest -= cameraFowerd * 60.0f;
+		myTransform.lookDest = Collision::getTransform("Player", 0)->pos;
+		//myTransform.pos -= cameraFowerd;
+
+		static float fcnt = 0.0f;
+		fcnt += 0.0002f;
+		D3DXVec3Lerp(&myTransform.pos, &myTransform.pos, &myTransform.posDest, fcnt);
+		D3DXVec3Lerp(&myTransform.pos, &myTransform.pos, &myTransform.lookDest, fcnt);
+
+		if (fcnt >= 0.5f)
+		{
+			fcnt = 0.5f;
+		}
+	}
+
+	/*
+		else
+	{
 
 
+		cameraPosDest = D3DXVECTOR3(0.0f,4.3f,  9.0f);
+		cameraLookDest =  D3DXVECTOR3(0.0f, 0.0f, 30.0f);
+
+		static float fcnt = 0.0f;
+		fcnt += 0.001f;
+		D3DXVec3Lerp(&cameraPos, &cameraPos, &cameraPosDest, fcnt);
+		D3DXVec3Lerp(&cameraLook, &cameraLook, &cameraLookDest, fcnt);
+	}
+	*/
 	myMoveType = MoveStateType::StartFade;
 }
 

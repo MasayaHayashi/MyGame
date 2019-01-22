@@ -277,6 +277,7 @@ void Player::initializeGameMain()
 		break;
 	}
 
+	oldPos = myTransform.pos;
 
 	setDefaultValue();
 
@@ -298,13 +299,12 @@ void Player::initializeGameMain()
 	myTransform.collisionBox = hierarchyMeshData.CollitionBox;
 
 	Collision::registerList(&myTransform, "Player");
-	
+	D3DXMatrixRotationY(&worldMtx, D3DXToRadian(myTransform.rotDeg.y));
+
 	// Šg‘å
 	D3DXMATRIX mScale;
 	D3DXMatrixScaling(&mScale, myTransform.scale.x, myTransform.scale.y, myTransform.scale.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mScale);
-
-	D3DXMatrixRotationY(&worldMtx, D3DXToRadian(myTransform.rotDeg.y));
 
 	// ˆÚ“®
 	D3DXMATRIX translate;
@@ -360,13 +360,15 @@ void Player::initializeSceneEdit()
 	// ‰ñ“]
 	D3DXMATRIX mRotX, mRotY, mRotZ;
 
-	D3DXMatrixRotationY(&mRotX, D3DXToRadian(0));
-	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mRotX);
+
 
 	// Šg‘å
 	D3DXMATRIX mScale;
 	D3DXMatrixScaling(&mScale, myTransform.scale.x, myTransform.scale.y, myTransform.scale.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mScale);
+
+	D3DXMatrixRotationY(&mRotX, D3DXToRadian(90.0f));
+	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mRotX);
 
 	// ˆÚ“®
 	D3DXMATRIX translate;
@@ -444,6 +446,7 @@ void Player::updateTitle(D3DXVECTOR3 CameraForward)
 	{
 		SceneManager::setNextScene(SceneManager::SceneState::SceneMain);
 	}
+
 /*
 	if (Keyboard::getRelease(DIK_2))
 	{
@@ -553,32 +556,24 @@ void Player::updateTitle(D3DXVECTOR3 CameraForward)
 //
 void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 {
+	oldPos = myTransform.pos;
+
 	if (!isKeyInput)
 	{
 		inputVec.x = 0.0f;
 		inputVec.y = 0.0f;
 		inputVec.z = 0.0f;
 	}
-
-	switch (GameManager::getGameType())
-	{
-	case GameManager::GameType::Ready:
-		updateMainReady();
-		break;
-	default:
-		break;
-	}
-
-	fall(0);
-	updateAnimation();
-
+	
+//	fall(0);
+//	updateAnimation();
 	
 	D3DXVECTOR3 vv;
-
+	
 	fall(0);
 
 	updateAnimation();
-
+	
 	if (idNumber == 0)
 	{
 		if (Keyboard::getPress(DIK_D))
@@ -645,19 +640,30 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	{
 		inputVec.z = MoveSpeed * 0.02;
 	}
-
+	
 	D3DXVECTOR3 CameraRight = D3DXVECTOR3(CameraForward.z, 0.0f, -CameraForward.x);
+
+	if (GameManager::isGameType(GameManager::GameType::Ready))
+	{
+		CameraRight = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
+	}
+
 	moveVector = CameraRight * inputVec.x + CameraForward * inputVec.z;
 
 	D3DXVECTOR3 UpVec = getUpVec();
 	D3DXVec3Normalize(&UpVec, &UpVec);
 
-	if (!GameManager::isGameType(GameManager::GameType::Ready))
+	if (GameManager::isGameType(GameManager::GameType::Ready))
 	{
-		D3DXQuaternionRotationAxis(&quatanion, &UpVec, 0);
-		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
-		D3DXVec3Normalize(&moveVector, &moveVector);
+		D3DXQuaternionRotationAxis(&quatanion, &UpVec, D3DXToRadian(180.0f));
 	}
+	else
+	{
+		D3DXQuaternionRotationAxis(&quatanion, &UpVec, D3DXToRadian(0.0f));
+
+	}
+	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
+	D3DXVec3Normalize(&moveVector, &moveVector);
 
 	moveVector.y = 0.0f;
 
@@ -665,7 +671,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	
 	D3DXVec3Normalize(&vv, &inputVec);
 	vv *= 0.1f;
-
+	
 	myTransform.velocity += vv;
 	myTransform.pos += myTransform.velocity;
 
@@ -686,37 +692,34 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	inputVec.y = 0.0f;
 
 
-	if (!GameManager::isGameType(GameManager::GameType::Ready))
+	radRot = MyVector3::CalcAngleDegree(moveVector, -fowrdVec);
+
+
+	D3DXQUATERNION quatanion;
+
+	if (radRot == 0.0f)
 	{
-		radRot = MyVector3::CalcAngleDegree(moveVector, -fowrdVec);
+		D3DXQuaternionRotationAxis(&quatanion, &Upvec, oldRadRot);
+		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
 
+		StartQuaternion = quatanion;
+		rotCnt = 0.0f;
+	}
+	else
+	{
+		D3DXQuaternionRotationAxis(&destQua, &Upvec, radRot);
 
-		D3DXQUATERNION quatanion;
+		D3DXQuaternionSlerp(&quatanion, &StartQuaternion, &destQua, rotCnt);
+		rotCnt += 0.1f;
 
-		if (radRot == 0.0f)
-		{
-			D3DXQuaternionRotationAxis(&quatanion, &Upvec, oldRadRot);
-			D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
-
-			StartQuaternion = quatanion;
-			rotCnt = 0.0f;
-		}
-		else
-		{
-			D3DXQuaternionRotationAxis(&destQua, &Upvec, radRot);
-
-			D3DXQuaternionSlerp(&quatanion, &StartQuaternion, &destQua, rotCnt);
-			rotCnt += 0.1f;
-
-			D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
-			oldRadRot = radRot;
-		}
+		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
+		oldRadRot = radRot;
+	}
 
 		if (rotCnt >= 1.0f)
 		{
 			rotCnt = 1.0f;
 		}
-	}
 
 	if (GameManager::isGameType(GameManager::GameType::Ready))
 	{
@@ -729,11 +732,8 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 		myTransform.velocity.z -= myTransform.velocity.z * 0.04f;
 	}
 
-
-
 	setWorldMtxPos(myTransform.pos);
 
-	
 #if 0
 
 	PrintDebugProc("LangingXXX::::%f\n", DestLanding.x);
@@ -921,9 +921,6 @@ void Player::updateSelect()
 			ResourceManager::setHierarchy(&hierarchyMeshData, ModelPenNoHahaPass, idNumber);
 		}
 	}*/
-
-	
-
 
 	if (Keyboard::getTrigger(DIK_2))
 	{
@@ -1168,11 +1165,19 @@ void Player::fall(size_t checkIndex)
 	else
 	{
 		const D3DXVECTOR3 cross = Collision::getCross();
+		FLOAT ads = std::abs(std::abs(oldPos.y - cross.y));
+		DirectX3D::printDebug("aaaaaaaaaaaa%f", ads);
 
-		myTransform.pos = cross;
-		myTransform.pos.y += myTransform.collisionBox.y;
-		DirectX3D::printDebug("—‰º‚µ‚Ü‚¹‚ñ");
+	
+	myTransform.pos = cross;
+	//myTransform.pos.y += myTransform.collisionBox.y;
+	
+	oldPos = myTransform.pos;
+
+
+
 	}
+
 }
 
 //
@@ -1295,5 +1300,5 @@ void Player::rotation(D3DXVECTOR3 destVec)
 void Player::updateMainReady()
 {
 	updateAnimation();
-	fall(0);
+	//fall(0);
 }

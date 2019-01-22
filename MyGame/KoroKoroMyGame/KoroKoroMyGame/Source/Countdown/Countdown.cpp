@@ -7,6 +7,7 @@
 #include "Countdown.h"
 #include "../Application/Application.h"
 #include "../ResoueceManager/ResourceManager.h"
+#include "../GameManager/GameManager.h"
 #include <stdio.h>	// ファイル入出力用
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -16,7 +17,7 @@ Countdown::Countdown()
 {
 	vertexBoard.fade = true;
 	strcpy_s(fileName, TexturePass.c_str());
-	vertexBoard.pos = D3DXVECTOR3( Application::ScreenCenterX,Application::ScreenCenterY, 0.0f);
+	vertexBoard.pos = D3DXVECTOR3( Application::ScreenCenterX ,Application::ScreenCenterY + Application::ScreenCenterY * 0.5f, 0.0f);
 	vertexBoard.rotDeg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	vertexBoard.scale = D3DXVECTOR3(0.2f, 0.2f, 1.0f);
 	vertexBoard.size = D3DXVECTOR3(621.0f, 606.0f, 0.0f);
@@ -85,10 +86,9 @@ void Countdown::update()
 		}
 	}
 
-
-
 	if (currentAnimPattern <= 0)
 	{
+		GameManager::changeGameType(GameManager::GameType::Playing);
 		isUsed = false;
 	}
 

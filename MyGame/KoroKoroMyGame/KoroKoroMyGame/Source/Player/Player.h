@@ -103,6 +103,8 @@ private:
 	D3DXVECTOR3		oldPos;
 	D3DXQUATERNION	StartQuaternion;
 
+	D3DXVECTOR3 oldPosition = D3DXVECTOR3(0.0f,0.0f,0.0f);
+
 	UINT currentModelType = 0;
 
 };

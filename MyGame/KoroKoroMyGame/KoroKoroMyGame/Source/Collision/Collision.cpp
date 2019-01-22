@@ -79,7 +79,8 @@ void Collision::update()
 
 		if (checkCollisionField(playersPtr.front(), playersPtr.front(), fieldPtr, cross, normal, length, D3DXVECTOR3(0.0f, -0.1f, 0.0f)))
 		{
-			if (length.x < 1.02f)
+			float a = std::abs(length.x);
+			if (std::abs(length.x) < 10.0f)
 			{
 				DirectX3D::printDebug("‚ ‚½‚Á‚Ä‚¢‚Ü‚·%d",playerIndex);
 				rayHitMapes["Player"][playerIndex]->isHit = true;

@@ -189,8 +189,8 @@ protected:
 	D3DXVECTOR3			defrot;					// 初期値の向き
 	D3DXVECTOR3			defScale;				// 初期値の拡大率
 
-	D3DXQUATERNION		quatanion;				// 任意軸の回転用クォータニオン
-	D3DXQUATERNION		destQua;				// 目的クオータニオン
+	D3DXQUATERNION		quatanion = D3DXQUATERNION(0.0f,0.0f,0.0f,1.0f);				// 任意軸の回転用クォータニオン
+	D3DXQUATERNION		destQua	  = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);				// 目的クオータニオン
 
 	CHAR				fileName[256];			// モデルのファイル名
 	FLOAT				speed;					// 速度
