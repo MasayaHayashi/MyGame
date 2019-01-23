@@ -79,7 +79,7 @@ private:
 
 	const std::string StageFilePass = "Stage";
 
-	static constexpr UINT	MaxGameObj = 1000;
+	static constexpr UINT	MaxGameObj = 512;
 	ExportData				exportWorkData;
 	size_t					selectGameObjIndex;
 

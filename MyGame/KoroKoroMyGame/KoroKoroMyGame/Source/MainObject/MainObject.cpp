@@ -25,14 +25,12 @@ MainObject::MainObject()
 //
 MainObject::MainObject(std::string modelPass,std::string texturePass, size_t setNumber,bool setFieldModel)
 {
-
 	tagName						= modelPass;
 	idNumber					= setNumber;
 	modelPasses[tagName]		= passName + modelPass;
 	texturePasses[tagName]		= passName + texturePass;
-	myGameObjType		 = GameObjectType::NormalBlockObj;
-	isFieldObject = setFieldModel;
-
+	myGameObjType				= GameObjectType::NormalBlockObj;
+	isFieldObject				= setFieldModel;
 	
 	isUsed = false;
 }
@@ -60,9 +58,7 @@ void MainObject::initialize()
 
 	myTransform.collisionBox = meshDataObj.collitionBox;
 
-	
 	Collision::registerList(&myTransform, tagName);
-
 
 	// ˆÊ’uAˆÚ“®—ÊAŠg‘å—¦‰Šú‰»
 	myTransform.scale	= D3DXVECTOR3(1.0f, 1.0f, 1.0f);

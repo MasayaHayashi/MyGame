@@ -61,7 +61,7 @@ void Collision::update()
 	
 	if (isHitAABB(*collisionMapes["Player"].front(), *collisionMapes["heart.x"].front()))
 	{
-		DirectX3D::printDebug("‚ ‚ ‚ ‚ ");
+		collisionMapes["heart.x"].front()->isHitAABB = true;
 	}
 
 //	for (auto player : playersPtr)
@@ -593,3 +593,4 @@ const D3DXVECTOR3 Collision::getCross()
 {
 	return cross;
 }
+

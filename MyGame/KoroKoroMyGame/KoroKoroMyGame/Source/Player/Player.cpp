@@ -556,6 +556,22 @@ void Player::updateTitle(D3DXVECTOR3 CameraForward)
 //
 void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 {
+	switch (GameManager::getGameType())
+	{
+	case GameManager::GameType::Ready:
+		break;
+	case GameManager::GameType::Playing:
+		break;
+	case GameManager::GameType::Goal:
+		updateGoal();
+		break;
+	case GameManager::GameType::Pause:
+		break;
+	default:
+		break;
+	}
+
+
 	oldPos = myTransform.pos;
 
 	if (!isKeyInput)
@@ -564,7 +580,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 		inputVec.y = 0.0f;
 		inputVec.z = 0.0f;
 	}
-	
+
 //	fall(0);
 //	updateAnimation();
 	
@@ -1300,5 +1316,19 @@ void Player::rotation(D3DXVECTOR3 destVec)
 void Player::updateMainReady()
 {
 	updateAnimation();
-	//fall(0);
+	fall(0);
+}
+
+//
+// 
+//
+void Player::updateGoal()
+{
+	updateAnimation();
+
+	if (Collision::getRayHitData(tagName, 0))
+	{
+		myTransform.velocity.y += 10.0f;
+	}
+	setWorldMtxPos(myTransform.pos);
 }

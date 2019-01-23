@@ -23,11 +23,11 @@ class C_COLLIDER;
 // ===== 構造体定義 =====
 
 // ===== クラス定義 =====
-class MainObject final : public Pawn
+class MainObject : public Pawn
 {
 public:
 	MainObject();
-	MainObject(std::string, std::string,size_t,bool);
+	MainObject(std::string, std::string, size_t, bool);
 	~MainObject();
 
 	void initialize();
@@ -39,13 +39,14 @@ public:
 	const std::string getKeyName();
 
 protected:
+	std::map<std::string, std::string>	texturePasses;
+	std::map<std::string, std::string>	modelPasses;
 	
+	const std::string passName = "Data/Model/Block/";
+
 private:
 
-	std::map<std::string, std::string>	modelPasses;
-	std::map<std::string, std::string>	texturePasses;
 
-	const std::string passName = "Data/Model/Block/";
 
 
 //	const std::string ModelPass		= "Data/Model/Block/flatAndHill.x";

@@ -657,20 +657,27 @@ void Camera::updateGameMain(Player *pPlayer,Board &countDown)
 
 	if (GameManager::isGameType(GameManager::GameType::Playing))
 	{
-		myTransform.posDest = Collision::getTransform("Player", 0)->pos;
-		myTransform.posDest -= cameraFowerd * 60.0f;
-		myTransform.lookDest = Collision::getTransform("Player", 0)->pos;
+		myTransform.posDest = Collision::getTransform("Player", 0)->pos - *D3DXVec3Normalize(&cameraFowerd, &cameraFowerd) * 6.0f;
+		myTransform.posDest.y += 4.0f;
+		myTransform.lookDest = Collision::getTransform("Player", 0)->pos + *D3DXVec3Normalize(&cameraFowerd, &cameraFowerd) * 10.0f;
 		//myTransform.pos -= cameraFowerd;
 
 		static float fcnt = 0.0f;
-		fcnt += 0.0002f;
-		D3DXVec3Lerp(&myTransform.pos, &myTransform.pos, &myTransform.posDest, fcnt);
-		D3DXVec3Lerp(&myTransform.pos, &myTransform.pos, &myTransform.lookDest, fcnt);
+		fcnt += 0.02f;
 
-		if (fcnt >= 0.5f)
+		if (fcnt > 1.0f)
 		{
-			fcnt = 0.5f;
+			fcnt = 1.0f;
 		}
+
+		D3DXVec3Lerp(&myTransform.pos, &myTransform.pos, &myTransform.posDest, fcnt);
+		D3DXVec3Lerp(&myTransform.look, &myTransform.look, &myTransform.lookDest, fcnt);
+
+		DirectX3D::printDebug("プレイヤー位置%f\n", Collision::getTransform("Player", 0)->pos.z);
+
+		DirectX3D::printDebug("カメラ位置Z:%f\n", myTransform.pos.z);
+		DirectX3D::printDebug("カメラ注視点Z:%f\n", myTransform.lookDest.z);
+
 	}
 
 	/*

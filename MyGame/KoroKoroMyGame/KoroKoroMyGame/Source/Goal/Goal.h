@@ -11,6 +11,7 @@
 // ===== インクルード部 =====
 #include "../Pawn/Pawn.h"
 #include "../GameObjectBase/GameObjectBase.h"
+#include "../MainObject/MainObject.h"
 #include <map>
 
 // ===== 定数・マクロ定義 =====
@@ -22,11 +23,11 @@
 // ===== 構造体定義 =====
 
 // ===== クラス定義 =====
-class Goal final : public Pawn
+class Goal final : public MainObject
 {
 public:
 	Goal();
-	Goal(std::string ,size_t);
+	Goal(std::string keyName, std::string textureName, size_t setNumber);
 	~Goal();
 
 	void initialize();
@@ -42,8 +43,6 @@ protected:
 private:
 
 	std::map<std::string, std::string> modelPasses;
-
-	const std::string passName = "Data/Model/Goal/";
 
 //	const std::string ModelPass		= "Data/Model/Goal/flatAndHill.x";
 	const std::string TexturePass	= "Data/Texture/double_1.png";

@@ -16,6 +16,7 @@
 #include "../../Star/Star.h"
 #include "../../MainObject/MainObject.h"
 #include "../../Countdown/Countdown.h"
+#include "../../Goal/Goal.h"
 #include <fstream>
 
 /*
@@ -73,11 +74,9 @@ SceneMain::SceneMain()
 		creteGameObj(gameObjTypeIndex);
 	}
 
-	skyDomePtr.push_back(  std::unique_ptr<Skydome>( NEW Skydome()) );
-
-	boardObjectesPtr.push_back( std::unique_ptr<Board>( NEW Star() ));
-	boardObjectesPtr.push_back( std::unique_ptr<Board>( NEW Countdown() ));
-
+	skyDomePtr.push_back(		std::unique_ptr<Skydome>(	NEW Skydome()) );
+	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW Star() ));
+	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW Countdown() ));
 	collisionPtr.reset(NEW Collision());
 
 	for (auto& player : playeresPtr)
@@ -118,8 +117,6 @@ void SceneMain::initialize()
 			(*itr)->initialize();
 		}
 	}
-
-	
 
 	loadStageData(1);
 	
@@ -650,7 +647,7 @@ void SceneMain::creteGameObj(size_t objType)
 	case static_cast<INT>((GameObjectType::GoalObj)) :
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
 		{
-			gameObjPtr[3].push_back(NEW MainObject("heart.x", "heart.png", objIndex,false));
+			gameObjPtr[3].push_back(NEW Goal("heart.x", "heart.png", objIndex));
 		}
 		break; 
 	default:

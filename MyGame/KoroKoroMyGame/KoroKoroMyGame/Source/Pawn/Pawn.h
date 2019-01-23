@@ -38,6 +38,7 @@ typedef struct
 	D3DXVECTOR3			cross		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3			normal		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3			collisionBox = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	bool				isHitAABB	= false;
 } Transform;
 
 typedef struct

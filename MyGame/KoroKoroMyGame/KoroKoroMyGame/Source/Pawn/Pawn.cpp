@@ -131,14 +131,14 @@ void Pawn::update()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Pawn::draw()
 {
-	// デバイス取得
-	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
-
 	// 例外処理
 	if (!isUsed)
 	{
 		return;
 	}
+
+	// デバイス取得
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	// 移動、回転、拡大縮小用行列
 	D3DXMATRIX		mtxRot, translateMtx, mtxScale;

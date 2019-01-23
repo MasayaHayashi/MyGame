@@ -46,6 +46,7 @@ public:
 
 	void updateStageEdit();
 	void updateGameMain(D3DXVECTOR3);
+	void updateGoal();
 	void updateSelect();
 
 	void setStatus(Player::PlayerState setStatus);

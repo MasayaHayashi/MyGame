@@ -6,6 +6,7 @@
 // ===== インクルード部 =====
 #include "../Goal/Goal.h"
 #include "../ResoueceManager/ResourceManager.h"
+#include "../GameManager/GameManager.h"
 #include "../Collision/Collision.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -19,13 +20,15 @@ Goal::Goal()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-Goal::Goal(std::string keyName, size_t setNumber)
+Goal::Goal(std::string keyName, std::string textureName,size_t setNumber)
 {
-	tagName				 = keyName;
-	idNumber			 = setNumber;
-	modelPasses[keyName] = passName + keyName;
+	tagName					= keyName;
+	idNumber				= setNumber;
+	modelPasses[keyName]	= passName + keyName;
+	texturePasses[keyName]	= passName + textureName;
+	isFieldObject			= false;
+	myGameObjType			= GameObjectType::GoalObj;
 
-	Collision::registerList(&myTransform, keyName);
 	
 	isUsed = false;
 }
@@ -44,17 +47,23 @@ Goal::~Goal()
 void Goal::initialize()
 {
 	// ファイルパス設定
-	strcpy_s(fileName, modelPasses[tagName].c_str());
-	strcpy_s(texFileName, TexturePass.c_str());
+	strcpy_s(fileName, modelPasses[tagName].c_str() );
+	strcpy_s(texFileName, texturePasses[tagName].c_str() );
 
 	// モデル生成
 	ResourceManager::makeModel(meshDataObj, fileName, meshType);
 	ResourceManager::createTexture(textureData, texFileName);
 
+	Collision::registerList(&myTransform, tagName);
+
 	// 位置、移動量、拡大率初期化
 	myTransform.scale	= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 	myTransform.rotDeg	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.pos		= D3DXVECTOR3(0.0f, -meshDataObj.collitionBox.y * 2, 0.0f);
+
+	isFieldObject = true;
+
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -63,7 +72,12 @@ void Goal::initialize()
 void Goal::finalize()
 {
 	ResourceManager::destroyAllMesh();
+
+	modelPasses.clear();
+	texturePasses.clear();
 	ResourceManager::destroyAllTexture();
+
+	Collision::release(tagName);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -71,11 +85,21 @@ void Goal::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Goal::update()
 {
+	updateExportData();
+
+	if (!isUsed)
+	{
+		return;
+	}
+
+	if (Collision::getTransform(tagName).front()->isHitAABB)
+	{
+		GameManager::changeGameType(GameManager::GameType::Goal);
+	}
+
 	// コライダー更新
 //	pCollider->UpdateCollider(mtxWorldPawn, FIELD_BOX_COLOR );
-
-	// 書き出し用データ更新
-	updateExportData();
+	int a = 0;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -89,7 +113,6 @@ void Goal::draw()
 	}
 
 	Pawn::draw();
-
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

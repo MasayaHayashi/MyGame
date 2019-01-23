@@ -11,6 +11,7 @@
 #include "../../MainField/MainField.h"
 #include "../../MyDelete/MyDelete.h"
 #include "../../EditUI/WhatStageSaveUI.h"
+#include "../../Goal/Goal.h"
 #include <fstream>
 
 //
@@ -798,7 +799,7 @@ void StageEditor::creteGameObj(size_t objType)
 	case static_cast<INT>((GameObjectType::GoalObj)) :
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
 		{
-			gameObjPtr[3].push_back(NEW MainObject("heart.x", "heart.png", objIndex,false));
+			gameObjPtr[3].push_back(NEW Goal("heart.x", "heart.png", objIndex));
 		}
 		break;
 	default:
