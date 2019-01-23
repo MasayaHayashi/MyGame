@@ -80,7 +80,7 @@ public:
 	void updateSelectIndex();
 	
 private:
-	static constexpr UINT MaxGameObj = 1000;
+	static constexpr UINT MaxGameObj = 512;
 	static constexpr size_t MaxBoardObj = static_cast<size_t>(BoardObjType::WhatSave) + 1;
 
 	const std::string StagePassName = "Stage";

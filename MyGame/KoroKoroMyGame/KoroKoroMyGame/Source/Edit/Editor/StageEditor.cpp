@@ -431,7 +431,6 @@ void StageEditor::saveStageData(size_t stageNumber)
 
 	boardObjPtr[0].back()->setUsedFlg(true);
 
-	exportFile.close();
 }
 
 //

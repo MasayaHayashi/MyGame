@@ -564,6 +564,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 		break;
 	case GameManager::GameType::Goal:
 		updateGoal();
+		return;
 		break;
 	case GameManager::GameType::Pause:
 		break;
@@ -707,9 +708,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 
 	inputVec.y = 0.0f;
 
-
 	radRot = MyVector3::CalcAngleDegree(moveVector, -fowrdVec);
-
 
 	D3DXQUATERNION quatanion;
 
@@ -1325,10 +1324,22 @@ void Player::updateMainReady()
 void Player::updateGoal()
 {
 	updateAnimation();
+	myTransform.velocity.x = 0.0f;
+	myTransform.velocity.z = 0.0f;
 
 	if (Collision::getRayHitData(tagName, 0))
 	{
-		myTransform.velocity.y += 10.0f;
+		myTransform.velocity.y = 5.0f;
+		DirectX3D::printDebug("aaa");
 	}
+	else
+	{
+		DirectX3D::printDebug("www");
+	}
+
+	myTransform.velocity.y *= 0.05f;
+
+	myTransform.pos += myTransform.pos;
+
 	setWorldMtxPos(myTransform.pos);
 }

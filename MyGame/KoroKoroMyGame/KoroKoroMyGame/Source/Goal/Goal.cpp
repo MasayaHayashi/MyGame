@@ -28,7 +28,6 @@ Goal::Goal(std::string keyName, std::string textureName,size_t setNumber)
 	texturePasses[keyName]	= passName + textureName;
 	isFieldObject			= false;
 	myGameObjType			= GameObjectType::GoalObj;
-
 	
 	isUsed = false;
 }
@@ -59,11 +58,9 @@ void Goal::initialize()
 	// 位置、移動量、拡大率初期化
 	myTransform.scale	= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 	myTransform.rotDeg	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.pos		= D3DXVECTOR3(0.0f, -meshDataObj.collitionBox.y * 2, 0.0f);
-
+	myTransform.pos		= D3DXVECTOR3(0.0f, -meshDataObj.collitionBox.y * 2.0f, 0.0f);
+	myTransform.collisionBox = meshDataObj.collitionBox;
 	isFieldObject = true;
-
-
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -99,7 +96,6 @@ void Goal::update()
 
 	// コライダー更新
 //	pCollider->UpdateCollider(mtxWorldPawn, FIELD_BOX_COLOR );
-	int a = 0;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
