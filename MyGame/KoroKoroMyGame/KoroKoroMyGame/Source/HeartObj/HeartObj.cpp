@@ -43,6 +43,8 @@ HeartObj::HeartObj()
 	// s—ñ‰Šú‰»
 	D3DXMatrixIdentity(&worldMtx);
 	D3DXMatrixIdentity(&translateMtx);
+
+	isFieldObject = false;
 }
 
 //
@@ -96,7 +98,6 @@ void HeartObj::finalize()
 //
 void HeartObj::update()
 {
-
 	// Œ»İ‚ÌƒV[ƒ“æ“¾
 	currentScene = SceneManager::getCurrentSceneType();
 

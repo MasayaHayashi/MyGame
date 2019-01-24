@@ -262,7 +262,7 @@ void Player::initializeGameMain()
 	switch (idNumber)
 	{
 	case 0:
-		myTransform.pos = D3DXVECTOR3(0.0f, 5.0f, 5.0f);
+		myTransform.pos = D3DXVECTOR3(0.0f, 2.0f, 5.0f);
 		break;
 	case 1:
 		myTransform.pos = D3DXVECTOR3(-10.0f, 5.0f, -5.0f);
@@ -582,8 +582,6 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 		inputVec.z = 0.0f;
 	}
 
-//	fall(0);
-//	updateAnimation();
 	
 	D3DXVECTOR3 vv;
 	
@@ -655,7 +653,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 
 	if (!GameManager::isGameType(GameManager::GameType::Ready))
 	{
-		inputVec.z = MoveSpeed * 0.02;
+		inputVec.z = MoveSpeed;
 	}
 	
 	D3DXVECTOR3 CameraRight = D3DXVECTOR3(CameraForward.z, 0.0f, -CameraForward.x);
@@ -680,14 +678,14 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 
 	}
 	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
-	D3DXVec3Normalize(&moveVector, &moveVector);
+	//D3DXVec3Normalize(&moveVector, &moveVector);
 
 	moveVector.y = 0.0f;
 
-	myTransform.velocity += (moveVector * 0.01f);
+	myTransform.velocity += (moveVector);
 	
 	D3DXVec3Normalize(&vv, &inputVec);
-	vv *= 0.1f;
+	vv *= 0.001f;
 	
 	myTransform.velocity += vv;
 	myTransform.pos += myTransform.velocity;
@@ -743,8 +741,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	else
 	{
 		myTransform.velocity.z = MoveSpeed;
-		myTransform.velocity.x -= myTransform.velocity.x * 0.04f;
-		myTransform.velocity.z -= myTransform.velocity.z * 0.04f;
+		myTransform.velocity.x = 0.0f;
 	}
 
 	setWorldMtxPos(myTransform.pos);
@@ -1079,7 +1076,7 @@ void Player::changeStatus()
 		
 		if (myTransform.velocity.y < 0.0f)
 			playerStateType = PlayerState::JumpDown;
-
+		
 		isGround = false;
 	
 		break;
@@ -1174,15 +1171,16 @@ void Player::fall(size_t checkIndex)
 {
 	if (!Collision::getRayHitData("Player", checkIndex)->isHit)
 	{
-		myTransform.velocity.y -= FallSpeed;
-		DirectX3D::printDebug("—Ž‰º’†");
+		if (Collision::getRayHitData("Player", checkIndex)->length < 10.0f)
+		{
+			myTransform.velocity.y -= FallSpeed;
+			DirectX3D::printDebug("—Ž‰º’†");
+		}
 	}
 	else
 	{
 		const D3DXVECTOR3 cross = Collision::getCross();
 		FLOAT ads = std::abs(std::abs(oldPos.y - cross.y));
-		DirectX3D::printDebug("aaaaaaaaaaaa%f", ads);
-
 	
 	myTransform.pos = cross;
 	//myTransform.pos.y += myTransform.collisionBox.y;
@@ -1192,6 +1190,8 @@ void Player::fall(size_t checkIndex)
 
 
 	}
+
+	DirectX3D::printDebug("‚­‚»‚¨‚¨‚¨‚¨‚¨‚¨‚¨‚¨‚¨‚¨‚¨‚¨‚¨‚¨‚¨‚¨‚¨%f", Collision::getRayHitData("Player", checkIndex)->length);
 
 }
 
@@ -1210,7 +1210,6 @@ void Player::changeModel()
 		currentModelType ++;
 		currentModelType %= ResourceManager::MaxModelType;
 
-		auto a = SelectManager::getModelPass(currentModelType);
 		ResourceManager::setHierarchy(&hierarchyMeshData, SelectManager::getModelPass(currentModelType), idNumber);
 
 	}
@@ -1327,19 +1326,28 @@ void Player::updateGoal()
 	myTransform.velocity.x = 0.0f;
 	myTransform.velocity.z = 0.0f;
 
-	if (Collision::getRayHitData(tagName, 0))
+	DirectX3D::printDebug("gggggggggggggggggg%d", Collision::getRayHitData(tagName, 0)->isHit);
+
+	if (Collision::getRayHitData(tagName, 0)->isHit)
 	{
-		myTransform.velocity.y = 5.0f;
-		DirectX3D::printDebug("aaa");
+		if (Collision::getRayHitData("Player", 0)->length < 0.0f)
+		{
+			myTransform.velocity.y = JumpSpeed;
+			DirectX3D::printDebug("aaaaaaaaaa");
+		}
 	}
 	else
 	{
-		DirectX3D::printDebug("www");
+		DirectX3D::printDebug("wwwwwwwwwwww");
 	}
 
-	myTransform.velocity.y *= 0.05f;
+	DirectX3D::printDebug("VelocityY%f", myTransform.velocity.y);
 
-	myTransform.pos += myTransform.pos;
+
+	myTransform.pos += myTransform.velocity;
+	myTransform.velocity.y -= 0.005f;
+
+	DirectX3D::printDebug("myTransformY%f", myTransform.pos.y);
 
 	setWorldMtxPos(myTransform.pos);
 }

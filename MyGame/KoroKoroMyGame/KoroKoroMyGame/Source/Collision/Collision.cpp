@@ -63,8 +63,6 @@ void Collision::update()
 		collisionMapes["heart.x"].front()->isHitAABB = true;
 	}
 
-//	for (auto player : playersPtr)
-//	{
 	for(auto  fieldPtr : fieldPtres)
 	{
 		if (!fieldPtr->getUsedFlg())
@@ -76,19 +74,17 @@ void Collision::update()
 			continue;
 		}
 
-		if (checkCollisionField(playersPtr.front(), playersPtr.front(), fieldPtr, cross, normal, length, D3DXVECTOR3(0.0f, -0.1f, 0.0f)))
+		if (checkCollisionField(playersPtr.front(), playersPtr.front(), fieldPtr, cross, normal, rayHitMapes["Player"].front()->length, D3DXVECTOR3(0.0f, -1.0f, 0.0f)))
 		{
-			float a = std::abs(length.x);
-			if (std::abs(length.x) < 10.0f)
+			if (std::abs(rayHitMapes["Player"].front()->length) < 1.0f)
 			{
-				DirectX3D::printDebug("あたっています%d",playerIndex);
 				rayHitMapes["Player"][playerIndex]->isHit = true;
 				return;
 			}
-
-		//	rayHitMapes["Player"][playerIndex]->isHit = true;
-			DirectX3D::printDebug("あたっています");
-		//	return;
+			else
+			{
+				rayHitMapes["Player"][playerIndex]->isHit = false;
+			}
 		}
 		else
 		{
@@ -155,12 +151,12 @@ void Collision::finalize(std::string keyName)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 地面とプレイヤーの衝突処理更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-UINT Collision::checkCollisionField(Pawn *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, D3DXVECTOR3 &fLength, D3DXVECTOR3 DestVec)
+UINT Collision::checkCollisionField(Pawn *pPlayer, Pawn *pPawnB, Pawn *pField, D3DXVECTOR3 &Cross, D3DXVECTOR3 &Normal, FLOAT &length, D3DXVECTOR3 DestVec)
 {
 	INT	nIndx;
 
 	// 線分と三角形の判定
-	nIndx = isHitRayToMesh(pField, pPlayer, &pPlayer->getPosition(), &(pPlayer->getPosition() + DestVec), true, &Cross, &Normal, &fLength);
+	nIndx = isHitRayToMesh(pField, pPlayer, &pPlayer->getPosition(), &(pPlayer->getPosition() + DestVec), true, &Cross, &Normal, length);
 
 	if (nIndx >= 0)
 	{
@@ -223,7 +219,7 @@ void Collision::registerField(Pawn* setFieldPtr)
 //		  当たっている		⇒ 当たっている三角形の添え字
 //		  当たっていない	⇒ -1
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-INT Collision::isHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXVECTOR3 Length)
+INT Collision::isHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, FLOAT &length)
 {
 	// ワールドマトリックスの逆マトリックスを生成
 	D3DXMATRIX mInvWorld;
@@ -243,7 +239,7 @@ INT Collision::isHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos,
 	}
 
 	// レイとメッシュの交差判定
-	INT nIndex = Intersect(pPawnA, &vRayPos, &vRayDir, bSegment, pCross, pNormal, Length);
+	INT nIndex = Intersect(pPawnA, &vRayPos, &vRayDir, bSegment, pCross, pNormal, length);
 
 	if (nIndex >= 0) // 交差している場合
 	{
@@ -282,7 +278,7 @@ const bool Collision::isHitAABB(Transform pPawnA, Transform pPawnB)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 線分の判定
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-INT Collision::Intersect(Pawn *pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXVECTOR3 &pFLength)
+INT Collision::Intersect(Pawn *pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, FLOAT &length)
 {
 	if (!pRayPos || !pRayDir)
 	{
@@ -324,13 +320,15 @@ INT Collision::Intersect(Pawn *pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRay
 		// 法線ベクトルを取得
 		D3DXVECTOR3 N;
 		D3DXVec3Normalize(&N, D3DXVec3Cross(&N, &V1, &V2));
+		
 		// 分母を算出
 		FLOAT deno = D3DXVec3Dot(&N, &W);
 		if (deno >= 0.0f)
 		{
 			continue;	// 平行(==0)か裏から表(>0)
 		}
-						// 内外判定
+
+		// 内外判定
 		D3DXVECTOR3 N1;
 		D3DXVec3Cross(&N1, &V1, &W);
 		if (D3DXVec3Dot(&N1, &(P0 - P1)) < 0.0f)
@@ -356,7 +354,7 @@ INT Collision::Intersect(Pawn *pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRay
 		// 媒介変数算出
 		float T = D3DXVec3Dot(&N, &(P1 - P0)) / deno;
 
-		pFLength->x = T;
+		length = T;
 
 		// 交点を算出
 		D3DXVECTOR3 X = P0 + T * W;
@@ -549,7 +547,7 @@ const RayHit* Collision::getRayHitData(std::string keyName,UINT index)
 {
 	if (index < 0)
 	{
-		throw std::underflow_error("引数の値が小さすぎます");
+		throw std::underflow_error("引数の値がマイナスです");
 		return nullptr;
 	}
 

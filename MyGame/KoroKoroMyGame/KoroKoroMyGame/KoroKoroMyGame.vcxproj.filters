@@ -166,6 +166,9 @@
     <Filter Include="ソース ファイル\Countdown">
       <UniqueIdentifier>{40860703-a47d-4b39-9e4f-2ac67429e5aa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\StageClearUi">
+      <UniqueIdentifier>{cab97525-4e0a-4e49-8a58-2c83b35d5b52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Audio\MyAudiere.cpp">
@@ -302,6 +305,9 @@
     </ClCompile>
     <ClCompile Include="Source\Countdown\Countdown.cpp">
       <Filter>ソース ファイル\Countdown</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\StageClearUI\StageClearUI.cpp">
+      <Filter>ソース ファイル\StageClearUi</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -451,6 +457,9 @@
     </ClInclude>
     <ClInclude Include="Source\Countdown\Countdown.h">
       <Filter>ソース ファイル\Countdown</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StageClearUI\StageClearUI.h">
+      <Filter>ソース ファイル\StageClearUi</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

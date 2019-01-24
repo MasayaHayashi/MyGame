@@ -61,13 +61,14 @@ public:
 
 private:
 	
-	static constexpr FLOAT FallSpeed			= 0.01f;
-	static constexpr FLOAT VelocityForwardSpeed = 0.45f;
-	static constexpr FLOAT VelocitySideSpeed	= 0.3f;
-	static constexpr FLOAT  ScaleSize			= 1.0f;
-	static constexpr FLOAT  MoveSpeed			= 0.03f;
-	static constexpr FLOAT  SideSpeed			= 0.02f;
-	static constexpr FLOAT  MaxSpeed			= 0.02f;
+	static constexpr FLOAT  FallSpeed				= 0.01f;
+	static constexpr FLOAT  VelocityForwardSpeed	= 0.45f;
+	static constexpr FLOAT  VelocitySideSpeed		= 0.3f;
+	static constexpr FLOAT  ScaleSize				= 1.0f;
+	static constexpr FLOAT  MoveSpeed				= 0.2f;
+	static constexpr FLOAT  SideSpeed				= 0.3f;
+	static constexpr FLOAT  MaxSpeed				= 0.02f;
+	static constexpr FLOAT  JumpSpeed				= 0.14f;
 
 	bool isKeyInput;
 
@@ -88,8 +89,8 @@ private:
 
 	void rebound(size_t index);
 
-	void changeStatus();	// ステータス変更処理
-	void changeState();		// 状態変更処理
+	void changeStatus();
+	void changeState();
 
 	FLOAT rotCnt = 0.0f;
 
@@ -104,7 +105,7 @@ private:
 	D3DXVECTOR3		oldPos;
 	D3DXQUATERNION	StartQuaternion;
 
-	D3DXVECTOR3 oldPosition = D3DXVECTOR3(0.0f,0.0f,0.0f);
+	D3DXVECTOR3 oldPosition = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	UINT currentModelType = 0;
 

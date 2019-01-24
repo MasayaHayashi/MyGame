@@ -17,6 +17,7 @@
 #include "../../MainObject/MainObject.h"
 #include "../../Countdown/Countdown.h"
 #include "../../Goal/Goal.h"
+#include "../../StageClearUI/StageClearUI.h"
 #include <fstream>
 
 /*
@@ -64,19 +65,17 @@ SceneMain::SceneMain()
 	lightPtr.reset(NEW Light());
 	cameraPtr.reset(NEW Camera());
 
-	//for (UINT playerIndex = 0; playerIndex < SelectManager::MaxPlayer; playerIndex++)
-	//{
-		playeresPtr.push_back(static_cast<std::unique_ptr<Player>>(NEW Player(D3DXVECTOR3(-2.0f, 0.0f, 0.0f), playeresPtr.size())));
-	//}
+	playeresPtr.push_back(static_cast<std::unique_ptr<Player>>(NEW Player(D3DXVECTOR3(-2.0f, 0.0f, 0.0f), playeresPtr.size())));
 
 	for (UINT gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
 	{
 		creteGameObj(gameObjTypeIndex);
 	}
 
-	skyDomePtr.push_back(		std::unique_ptr<Skydome>(	NEW Skydome()) );
-	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW Star() ));
+	skyDomePtr.push_back(		std::unique_ptr<Skydome>(	NEW Skydome())	);
+	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW Star()		));
 	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW Countdown() ));
+	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW StageClearUI() ));
 	collisionPtr.reset(NEW Collision());
 
 	for (auto& player : playeresPtr)
@@ -84,11 +83,14 @@ SceneMain::SceneMain()
 		collisionPtr->registerPlayer(player.get());
 	}
 
-	for (size_t gameObjType = 0; gameObjType < GameObjectBase::MaxGameObjType; gameObjType++)
+	for (size_t gameObjType = 0; gameObjType < GameObjectBase::MaxGameObjType; gameObjType ++)
 	{
 		for (auto gameObj : gameObjPtr[gameObjType])
 		{
-			collisionPtr->registerField(gameObj);
+			if (gameObj->getIsFieldObject())
+			{
+				collisionPtr->registerField(gameObj);
+			}
 		}
 	}
 }
@@ -122,10 +124,8 @@ void SceneMain::initialize()
 	
 	lightPtr->initialize();
 
-	//for (const auto &player : playeresPtr)
-	//{
 	playeresPtr.front()->initialize();
-	//}
+	
 	cameraPtr->initializeMain(playeresPtr.back().get());
 
 	for (const auto &skyDome : skyDomePtr)
@@ -137,7 +137,6 @@ void SceneMain::initialize()
 	{
 		boardObject->initialize();
 	}
-
 }
 
 //
@@ -214,10 +213,7 @@ void SceneMain::draw()
 		boardObject->draw();
 	}
 
-//	for (const auto &player : playeresPtr)
-//	{
-		playeresPtr.front()->draw();
-//	}
+	playeresPtr.front()->draw();
 
 	for (size_t gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
 	{

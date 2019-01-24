@@ -96,7 +96,7 @@ public:
 	D3DXVECTOR3			getOffset();			// ワールド行列からオフセット値を取得
 	D3DXVECTOR3			getCenterPos();			// 中心座標取得
 	D3DXVECTOR3			getCollisionBox();		// あたり判定用サイズ取得
-	D3DXVECTOR3			getColliderPos();		// あたり判定用位置取得		
+	D3DXVECTOR3			getColliderPos();		// あたり判定用位置取得
 	FLOAT				getCollisionRadius();	// あたり判定用半径取得
 	std::string			getTag();				// タグ取得
 	DWORD				getVertexNum();			// 頂点の数取得

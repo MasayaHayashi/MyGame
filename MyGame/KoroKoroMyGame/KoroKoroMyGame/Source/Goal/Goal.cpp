@@ -94,6 +94,8 @@ void Goal::update()
 		GameManager::changeGameType(GameManager::GameType::Goal);
 	}
 
+	myTransform.rotDeg.y += D3DXToRadian(2);
+
 	// コライダー更新
 //	pCollider->UpdateCollider(mtxWorldPawn, FIELD_BOX_COLOR );
 }

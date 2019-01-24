@@ -17,12 +17,13 @@ class MainField : public Pawn
 {
 public:
 	static constexpr FLOAT Size = 5300.0f;
-	static constexpr FLOAT Radius = Size *0.5f;
+	static constexpr FLOAT Radius = Size * 0.5f;
+
 	const std::string ModelFilePass   = "Data/Model/MainField/Island_Land_Base.x";
 	const std::string TextureFilePass = "Data/Model/MainField/land.tga";
 
 	MainField();
-	~MainField();
+	virtual ~MainField();
 	void initialize();
 	void finalize();
 	void update();
