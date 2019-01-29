@@ -7,18 +7,16 @@
 // ===== インクルード部 =====
 #include "TitleUI.h"
 #include "../Application/Application.h"
-#include <stdio.h>	// ファイル入出力用
+#include <stdio.h>
 
 // ===== 定数・マクロ定義 =====
-#define TEX_FILENAME "data/TEXTURE/Title.png"
-#define TITLE_LOGO_velocitySPEED (2.3f)	// タイトルロゴ移動量
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 TitleUI::TitleUI()
 {
-	strcpy_s(fileName, TEX_FILENAME);
+	strcpy_s(fileName, TextureFilePass.c_str());
 	vertexBoard.pos					 = D3DXVECTOR3(Application::ScreenCenterX * 0.5f, 0.0f, 0.0f);
 	vertexBoard.rotDeg					 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	vertexBoard.scale					 = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
@@ -73,18 +71,18 @@ void TitleUI::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void TitleUI::update()
 {
-	static FLOAT fCnt = 0;
+	static FLOAT cnt = 0;
 	
 	// ロゴ移動処理
-	vertexBoard.pos.y += TITLE_LOGO_velocitySPEED;
+	vertexBoard.pos.y += MoveSpeed;
 
 	// 終了判定
 	if (vertexBoard.pos.y > posDestBoard.y)
 		vertexBoard.pos.y = posDestBoard.y;
 
 	// 横移動
-	fCnt += 0.03f;
-	vertexBoard.pos.x = sinf(fCnt) * 11.0f + Application::ScreenCenterX;
+	cnt += 0.03f;
+	vertexBoard.pos.x = sinf(cnt) * 11.0f + Application::ScreenCenterX;
 	
 	setVtx();
 	setTexture();

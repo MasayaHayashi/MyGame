@@ -12,6 +12,8 @@
 #include "../../MainField/MainField.h"
 #include "../../TitleUI/TitleUI.h"
 #include "../../HeartObj/HeartObj.h"
+#include "../../TitleUI/TitleUI.h"
+#include "../../TitleSelectUI/TitleSelectUI.h"
 
 /*
 #include "C_MainField.h"
@@ -38,10 +40,13 @@ SceneTitle::SceneTitle()
 	nChangeSceneWaitCnt = 0;
 	uSelectScene = 0;
 
+	boardPtres.push_back(std::unique_ptr<Board>(NEW TitleUI()));
+	boardPtres.push_back(std::unique_ptr<Board>(NEW TitleSelectUI()));
+
 	lightPtr.reset(NEW Light());
 	cameraPtr.reset(NEW Camera());
 	skydomePtr.reset(NEW Skydome());
-	playerPtr.reset(NEW Player());
+	playerPtr.reset(NEW Player(D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0));
 	fieldPtr.reset(NEW MainField());
 	titleUiPtr.reset(NEW TitleUI());
 	heartObjPtr.reset(NEW HeartObj());
@@ -67,6 +72,12 @@ void SceneTitle::initialize()
 	fieldPtr->initialize();
 	titleUiPtr->initialize();
 	heartObjPtr->initialize();
+
+
+	for (const auto &boardPtr : boardPtres)
+	{
+		boardPtr->initialize();
+	}
 
 	/*
 	// パーティクル初期化
@@ -110,6 +121,14 @@ void SceneTitle::finalize()
 {
 	cameraPtr->finalize();
 	playerPtr->finalize();
+
+	skydomePtr->finalize();
+	heartObjPtr->finalize();
+
+	for (const auto &boardPtr : boardPtres)
+	{
+		boardPtr->finalize();
+	}
 
 	/*
 	// カメラ後処理
@@ -171,6 +190,20 @@ void SceneTitle::update()
 	if (Keyboard::getPress(DIK_1))
 	{
 		SceneManager::setNextScene(SceneManager::SceneState::SceneMain);
+	}
+
+	if (Keyboard::getPress(DIK_2))
+	{
+		SceneManager::setNextScene(SceneManager::SceneState::SceneSelect);
+	}
+
+	if (Keyboard::getPress(DIK_3))
+	{
+		SceneManager::setNextScene(SceneManager::SceneState::SceneStageEdit);
+	}
+	for (const auto &boardPtr : boardPtres)
+	{
+		boardPtr->update();
 	}
 
 	/*
@@ -257,6 +290,11 @@ void SceneTitle::draw()
 	heartObjPtr->draw();
 	skydomePtr->draw();
 	fieldPtr->draw();
+
+	for (const auto &boardPtr : boardPtres)
+	{
+		boardPtr->draw();
+	}
 
 	// スカイドーム描画
 //	pSkydome->draw();

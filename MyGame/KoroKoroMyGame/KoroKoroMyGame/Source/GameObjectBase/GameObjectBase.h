@@ -14,19 +14,15 @@ enum class GameObjectType
 {
 	NormalBlockObj = 0,
 	MoveBlockOBj,
-	StarObj,
+	FieldObj,
 	GoalObj,
-};
-
-enum class ItemObjType
-{
 };
 
 // ===== ƒNƒ‰ƒX’è‹` =====
 class GameObjectBase
 {
 	public:
-		static constexpr size_t MaxGameObjType = static_cast<size_t>(GameObjectType::GoalObj) + 1;
+		static constexpr size_t MaxGameObjType = static_cast<int>(GameObjectType::GoalObj) + 1;
 
 
 		GameObjectBase();

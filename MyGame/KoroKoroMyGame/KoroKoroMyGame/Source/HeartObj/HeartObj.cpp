@@ -90,7 +90,7 @@ void HeartObj::initialize()
 //
 void HeartObj::finalize()
 {
-
+	ResourceManager::destroyAllMesh();
 }
 
 //

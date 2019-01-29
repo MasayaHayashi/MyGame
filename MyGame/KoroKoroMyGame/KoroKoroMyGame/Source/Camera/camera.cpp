@@ -30,8 +30,6 @@ Camera::Camera()
 	changeCamera	= true;
 	lerpCnt		= 0.0f;
 
-
-	rot = 0;
 	rotCnt = 0;
 
 	Collision::registerList(&myTransform, "Camera");
@@ -209,7 +207,7 @@ void Camera::initializeMain(Player *pPlayer)
 	fadePos[2]  = Collision::getTransform("Player", 0)->pos + D3DXVECTOR3(0.0f,4.0f,-7.0f);
 
 
-	myTransform.pos		= D3DXVECTOR3(0.0f, 30.0f, -20.0f);			// カメラの視点
+	myTransform.pos		= D3DXVECTOR3(0.0f, 10.0f, -20.0f);			// カメラの視点
 	myTransform.look	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// カメラの注視点
 	cameraUp			= D3DXVECTOR3(0.0f, 1.0f, 0.0f);			// カメラの上方向
 
@@ -239,7 +237,7 @@ void Camera::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ更新処理
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::update(Player *pPlayer,Board &countdown)
+void Camera::update(Player &pPlayer,Board &countdown)
 {
 	// 現在のシーン取得
 	currentScene = SceneManager::getCurrentSceneType();
@@ -248,7 +246,7 @@ void Camera::update(Player *pPlayer,Board &countdown)
 	switch (currentScene)
 	{
 	case SceneManager::SceneState::SceneTitle:
-		updateTitle(pPlayer);
+		updateGameMain(pPlayer, countdown);
 		break;
 	case SceneManager::SceneState::SceneMain:
 		updateGameMain(pPlayer,countdown);
@@ -276,8 +274,9 @@ void Camera::updateTitle(Pawn *pPlayer)
 	D3DXVec3Normalize(&ForwardVec, &ForwardVec);
 
 	myTransform.look = PlayerPos;
-	myTransform.look.y += 10.2f;
 	myTransform.fowerd = myTransform.look - myTransform.pos;
+
+	myTransform.posDest = PlayerPos - ForwardVec * 10;
 	
 #if 1 // 線形補間処理
 	// 共通処理
@@ -626,21 +625,42 @@ void Camera::updateStageEdit(std::string keyName,UINT selectIndex)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // カメラ更新(ゲームメイン)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::updateGameMain(Player *pPlayer,Board &countDown)
+void Camera::updateGameMain(Player &pPlayer,Board &countDown)
 {
-	D3DXVECTOR3 PlayerPos = pPlayer->getOffset();
-	D3DXVECTOR3 ForwardVec = pPlayer->getForwardVec();
-	D3DXVECTOR3 UpVec = pPlayer->getUpVec();
+	GameManager::GameType currentGameType = GameManager::getGameType();
+
+	switch (currentGameType)
+	{
+		case GameManager::GameType::Miss:
+			updateGameMainMiss();
+		case GameManager::GameType::Playing:
+			updateGameMainPlay(pPlayer,countDown);
+		default:
+			break;
+	}
+
+}
+
+void Camera::updateGameMainMiss()
+{
+	rotation(Collision::getTransform("Player",0)->pos,10.0f);
+}
+
+void Camera::updateGameMainPlay(Player &pPlayer,Board countDown)
+{
+	D3DXVECTOR3 PlayerPos = pPlayer.getOffset();
+	D3DXVECTOR3 ForwardVec = pPlayer.getForwardVec();
+	D3DXVECTOR3 UpVec = pPlayer.getUpVec();
 
 	D3DXVec3Normalize(&UpVec, &UpVec);
 	D3DXVec3Normalize(&ForwardVec, &ForwardVec);
 
 	if (GameManager::isGameType(GameManager::GameType::Ready))
 	{
-		myTransform.pos = pPlayer->getPosition();
-		myTransform.pos.y += 7.0f;
+		myTransform.pos = pPlayer.getPosition();
+		myTransform.pos.y += 2.0f;
 		myTransform.pos.z -= 10.0f;
-		myTransform.look = pPlayer->getPosition();
+		myTransform.look = pPlayer.getPosition();
 	}
 	currentFadeType = countDown.getCurrentAnim() - 1;
 
@@ -681,17 +701,17 @@ void Camera::updateGameMain(Player *pPlayer,Board &countDown)
 	}
 
 	/*
-		else
+	else
 	{
 
 
-		cameraPosDest = D3DXVECTOR3(0.0f,4.3f,  9.0f);
-		cameraLookDest =  D3DXVECTOR3(0.0f, 0.0f, 30.0f);
+	cameraPosDest = D3DXVECTOR3(0.0f,4.3f,  9.0f);
+	cameraLookDest =  D3DXVECTOR3(0.0f, 0.0f, 30.0f);
 
-		static float fcnt = 0.0f;
-		fcnt += 0.001f;
-		D3DXVec3Lerp(&cameraPos, &cameraPos, &cameraPosDest, fcnt);
-		D3DXVec3Lerp(&cameraLook, &cameraLook, &cameraLookDest, fcnt);
+	static float fcnt = 0.0f;
+	fcnt += 0.001f;
+	D3DXVec3Lerp(&cameraPos, &cameraPos, &cameraPosDest, fcnt);
+	D3DXVec3Lerp(&cameraLook, &cameraLook, &cameraLookDest, fcnt);
 	}
 	*/
 	myMoveType = MoveStateType::StartFade;
@@ -700,10 +720,10 @@ void Camera::updateGameMain(Player *pPlayer,Board &countDown)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Camera::Rotvelocity(D3DXVECTOR3* pVecCenter, FLOAT fRadius)
+void Camera::rotation(D3DXVECTOR3* pVecCenter, FLOAT fRadius)
 {
 	D3DXMATRIX matRotation;	// 掛け合わせ用回転行列
-	rot = rotCnt / 1000.0f;
+	INT rot = rotCnt / 1000.0f;
 
 	//原点に半径を足しただけの座標を用意
 	D3DXVECTOR3 vecTarget(-fRadius, 0.0f, -fRadius);
@@ -759,46 +779,7 @@ void Camera::setCamera()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Camera::rotationCamera(D3DXVECTOR3 Center)
 {
-	/*
-	C_XINPUT *pXinput = C_XINPUT::getInstance();
 
-	short RightStickX = pXinput->getThumbRX();
-	short RightStickY = pXinput->getThumbRY();
-
-	RightStickX /= (32767 * 0.5f);
-	
-	if (getKeyboardPress(DIK_L))
-		RightStickX ++;
-	if (getKeyboardPress(DIK_J))
-		RightStickX --;
-	if (getKeyboardPress(DIK_K))
-		RightStickY --;
-	if (getKeyboardPress(DIK_I))
-		RightStickY ++;
-
-	*/
-//	D3DXVECTOR3 cameraForwrd = GetCameraFowerd();
-
-	Rotvelocity(&Center, 5.0f);
-
-	// 回転処理
-//	rotCnt += camera_ROT_SPEED * RightStickX;
-
-
-//	D3DXVec3Normalize(&cameraForwrd, &cameraForwrd);
-
-
-//	myTransform.pos.y += RightStickY;
-	/*
-	if (RightStickY > 0.0f)
-	{
-		myTransform.pos.y -= 0.1f;
-	}
-	else if (RightStickY < 0.0f)
-	{
-		myTransform.pos.y += 0.1f;
-	}
-	*/
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -878,4 +859,27 @@ D3DXVECTOR3 Camera::getFowerd()
 void Camera::setState(MoveStateType setState)
 {
 	myMoveType = setState;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 回転
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Camera::rotation(D3DXVECTOR3 center, FLOAT radius)
+{
+	D3DXMATRIX matRotation;	// 掛け合わせ用回転行列
+	FLOAT rot = rotCnt / 1000.0f;
+
+	//原点に半径を足しただけの座標を用意
+	D3DXVECTOR3 vecTarget(-radius, 0.0f, -radius);
+
+	//原点を中心とした回転（オイラー回転）の行列を作る
+	D3DXMatrixRotationY(&matRotation, rot);
+	D3DXVec3TransformCoord(&vecTarget, &vecTarget, &matRotation);
+
+	//最後に本来の座標（回転対象の座標）を足し合わせ
+	D3DXVec3Add(&vecTarget, &vecTarget, &center);
+	myTransform.pos.x = vecTarget.x;
+	myTransform.pos.z = vecTarget.z;
+
+	rotCnt++;
 }

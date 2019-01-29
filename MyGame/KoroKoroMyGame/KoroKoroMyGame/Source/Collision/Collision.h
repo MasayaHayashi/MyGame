@@ -87,7 +87,7 @@ public:
 
 	static const Transform*		  getTransform(std::string keyName, INT index);
 	static const CameraTransform* getCameraTransform(std::string keyName, INT index);
-	static const RayHit*    getRayHitData(std::string keyName, UINT index);
+	static const RayHit*		  getRayHitData(std::string keyName, UINT index);
 	static const std::list<Transform*> getTransform(std::string keyName);
 	static const size_t			  getSize(std::string keyName);
 	static void setVelocity(std::string keyName, UINT index,D3DXVECTOR3 velocity);
@@ -95,8 +95,10 @@ public:
 
 	void registerPlayer(Pawn* playerPtr);
 	void registerField(Pawn* fieldPtr);
+	void registerBlock(Pawn &blockPtr);
 
 	const bool isHitAABB(Transform pPawnA, Transform pPawnB);
+	const bool isHitAABB(Transform pPawnA, Pawn &pPawnB);
 
 	static const D3DXVECTOR3 getCross();
 
@@ -105,6 +107,7 @@ private:
 
 	std::list<Pawn*> playersPtr;
 	std::list<Pawn*> fieldPtres;
+	std::list<Pawn*> blockPtres;
 
 	static D3DXVECTOR3 cross;
 

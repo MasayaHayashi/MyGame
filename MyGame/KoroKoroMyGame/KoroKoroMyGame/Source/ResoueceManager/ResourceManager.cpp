@@ -199,7 +199,7 @@ HRESULT ResourceManager::makeModel(MeshData &meshData, CHAR *pszFilename, MeshOb
 		dx = meshes.back()->vertexPtr[i].VtxPos.x - meshes.back()->centerPos.x;
 		dy = meshes.back()->vertexPtr[i].VtxPos.y - meshes.back()->centerPos.y;
 		dz = meshes.back()->vertexPtr[i].VtxPos.z - meshes.back()->centerPos.z;
-		float fRadius = sqrtf(dx * dx + dy * dy + dz * dz);
+		FLOAT fRadius = sqrtf(dx * dx + dy * dy + dz * dz);
 		if (meshes.back()->collisionRadus < fRadius)
 		{
 			meshes.back()->collisionRadus = fRadius;
@@ -1126,17 +1126,20 @@ bool ResourceManager::destroyAllMesh()
 {
 	
 	// —áŠOˆ—
-	if (meshes.size() == 0)
+	if (meshes.empty())
+	{
 		return true;
+	}
 
 	for (INT i = 0; i < static_cast<INT>(meshes.size()); i++)
 	{
 		delete meshes[i]->attrPtr;
-		delete meshes[i]->indexPtr;
-		delete meshes[i]->vertexPtr;
+		meshes[i]->attrPtr = nullptr;
 
-		meshes[i]->attrPtr  = nullptr;
+		delete meshes[i]->indexPtr;
 		meshes[i]->indexPtr = nullptr;
+
+		delete meshes[i]->vertexPtr;
 		meshes[i]->vertexPtr = nullptr;
 	}
 

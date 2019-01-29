@@ -780,19 +780,19 @@ void StageEditor::creteGameObj(size_t objType)
 	case static_cast<INT>( GameObjectType::NormalBlockObj ) :
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
 		{
-			gameObjPtr[0].push_back(NEW MainObject("box.x","IceStone.png",objIndex,true));
+			gameObjPtr[0].push_back(NEW MainObject("box.x","IceStone.png",objIndex, GameObjectType::NormalBlockObj,false));
 		}
 		break;
 	case static_cast<INT>(GameObjectType::MoveBlockOBj) :
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
 		{
-			gameObjPtr[1].push_back(NEW MainObject("flatAndHill.x", "double_1.png",objIndex,true));
+			gameObjPtr[1].push_back(NEW MainObject("flatAndHill.x", "double_1.png",objIndex, GameObjectType::MoveBlockOBj,true));
 		}
 		break;
-	case static_cast<INT>((GameObjectType::StarObj)):
+	case static_cast<INT>((GameObjectType::FieldObj)):
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
 		{
-			gameObjPtr[2].push_back(NEW MainObject("flat.x","double_1.png",objIndex,true));
+			gameObjPtr[2].push_back(NEW MainObject("flat.x","double_1.png",objIndex, GameObjectType::FieldObj,true));
 		}
 		break;
 	case static_cast<INT>((GameObjectType::GoalObj)) :

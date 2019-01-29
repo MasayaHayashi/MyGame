@@ -71,15 +71,16 @@ typedef struct
 
 typedef struct
 {
-	CHAR					name[256];				// 識別名
+	CHAR					name[256];			// 識別名
 	LPDIRECT3DVERTEXBUFFER9 pD3DVtxBuff;		// 頂点バッファインターフェースへのポインタ
-	boardType				boardType;				// ボードの種類
-	D3DXVECTOR3				pos;					// 位置
-	D3DXVECTOR3				size;					// 大きさ
+	boardType				boardType;			// ボードの種類
+	D3DXVECTOR3				pos;				// 位置
+	D3DXVECTOR3				size;				// 大きさ
 	D3DXVECTOR3				scale;				// 拡大率
 	D3DXVECTOR3				rotDeg;				// 回転角度
+	D3DXVECTOR3				velocity;			// 移動量
 	FLOAT					radAngle;			// 2D用回転角度
-	bool					fade;					// フェード用
+	bool					fade;				// フェード用
 } VERTEX_BOARD_DATA;
 
 // ===== クラス定義 =====

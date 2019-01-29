@@ -29,29 +29,26 @@ enum class BGM_TYPE
 };
 enum class SE_TYPE
 {
-	SE_Star = 0,			// スターアイテム
-	SE_JUMP,  				// ジャンプ
-	SE_STAGE_CLEAR,			// ステージクリア
-	SE_LANDING,				// 着地
-	SE_HOKOU,				// 歩行
+	SE_HOKOU = 0,				// 歩行
+	JUMP,
 	MAX_SE_TYPE,
 };
 
 // ===== クラス定義 =====
-class MyAudiere
+class MyAudiere final
 {
 public:
-	MyAudiere();		// コンストラクタ
-	~MyAudiere();		// デストラクタ
+	MyAudiere();
+	~MyAudiere();
 
 	// ゲッター
 	static audiere::OutputStreamPtr  getBgm(UINT);
 	static audiere::SoundEffectPtr   getSe(UINT);
 
 private:
-	static const INT MaxSound = 128;
+	static constexpr INT MaxSound = 128;
 
-	audiere::AudioDevicePtr	audioDeviceObj;		// デバイス
+	audiere::AudioDevicePtr	audioDeviceObj;
 
 	static std::unordered_map <UINT, audiere::OutputStreamPtr>	bgm;
 	static std::unordered_map <UINT, audiere::SoundEffectPtr>	se;

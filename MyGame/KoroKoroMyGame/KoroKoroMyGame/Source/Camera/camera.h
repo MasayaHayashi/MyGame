@@ -46,11 +46,15 @@ public:
 
 	void finalize(Player* pPlayer);
 	void finalize();
-	void update(Player *,Board&);
+	void update(Player &,Board&);
 	void updateTitle(Pawn*);
 	void updateStageEdit(std::string keyName, UINT selectIndex);
-	void updateGameMain(Player*,Board&);
+	void updateGameMain(Player &,Board&);
+	void updateGameMainPlay(Player &,Board);
+	void updateGameMainMiss();
 	void setState(MoveStateType setState);
+	void rotation(D3DXVECTOR3 center, FLOAT radius);
+
 
 	void setCamera();
 
@@ -80,6 +84,8 @@ private:
 
 	static constexpr size_t MaxFade = 3;
 
+	INT rotCnt = 0;
+
 	MoveStateType myMoveType;
 
 	CameraTransform myTransform;
@@ -92,8 +98,7 @@ private:
 	void initializeStageEdit();					
 
 	void rotationCamera(D3DXVECTOR3 Center);
-
-	void Rotvelocity(D3DXVECTOR3* pVecCenter, FLOAT fRadius);
+	void rotation(D3DXVECTOR3* pVecCenter, FLOAT fRadius);
 
 	SceneManager::SceneState currentScene;  // シーン識別用
 	D3DXVECTOR3		cameraPos;				// カメラの視点
@@ -145,8 +150,6 @@ private:
 	bool changeCamera;
 	FLOAT lerpCnt;	// 線形補間用カウンタ
 
-	INT   rotCnt;
-	FLOAT rot;
 };
 
 #endif

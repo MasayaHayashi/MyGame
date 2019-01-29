@@ -22,6 +22,7 @@ public:
 	{
 		Ready,
 		Playing,
+		Miss,
 		Goal,
 		Pause,
 	};

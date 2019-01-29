@@ -1167,5 +1167,14 @@ void Pawn::reflectionExportData(const ExportData setExport)
 void Pawn::updateExportData()
 {
 	myExportData.myTransform	= myTransform;
+	myExportData.myGameObjType  = myGameObjType;
 	myExportData.isUsed			= isUsed;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// ゲームオブジェクトタイプ取得
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+GameObjectType Pawn::getGameObjectType() const
+{
+	return myGameObjType;
 }

@@ -26,7 +26,8 @@ public:
 	void draw();
 
 private:
-
+	const std::string TextureFilePass = "Data/Texture/Title.png";
+	const FLOAT MoveSpeed = 1.5f;
 };
 
 #endif

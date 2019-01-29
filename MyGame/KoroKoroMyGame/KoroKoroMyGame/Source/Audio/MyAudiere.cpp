@@ -19,7 +19,7 @@ std::unordered_map <UINT, audiere::SoundEffectPtr>  MyAudiere::se;
 MyAudiere::MyAudiere()
 {
 	audioDeviceObj = audiere::OpenDevice();
-
+	
 	// 例外処理
 	if (!audioDeviceObj)
 	{
@@ -49,11 +49,8 @@ MyAudiere::MyAudiere()
 	// SEパス設定
 	std::array<AUDIO_DATA, MaxSound> seFilePass =
 	{
-		"data/SE/Star.wav"		,	// スターアイテム
-		"data/SE/Jump.wav"		,	// ジャンプ
-		"data/SE/StageClear.wav",	// ステージクリア
-		"data/SE/landing.wav"	,	// 着地
 		"data/SE/Hokou.wav"		,	// 歩行
+		"data/SE/Jump.wav"		,	// ジャンプ
 	};
 
 	// SE初期化

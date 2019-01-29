@@ -36,7 +36,6 @@ public:
 		Dead
 	};
 
-
 	void initialize();
 	void finalize();
 	void update(D3DXVECTOR3);
@@ -55,6 +54,8 @@ public:
 	void addScore();
 
 	void changeModel();
+	void updatePlayng(D3DXVECTOR3 CameraForward);
+
 
 	PlayerState getState()   const;
 	INT  getScore() const;
@@ -70,9 +71,10 @@ private:
 	static constexpr FLOAT  MaxSpeed				= 0.02f;
 	static constexpr FLOAT  JumpSpeed				= 0.14f;
 
-	bool isKeyInput;
+	bool isKeyInput = false;
+	bool fallFlg	= true;
 
-	D3DXVECTOR3 inputVec = D3DXVECTOR3(0.0f,0.0f,0.0f);
+	D3DXVECTOR3 inputVec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	void initializeTitle();
 	void initializeSceneEdit();

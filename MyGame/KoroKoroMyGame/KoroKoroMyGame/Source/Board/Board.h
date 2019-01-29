@@ -55,7 +55,7 @@ public:
 	BOOL					getUsedFlg();		// 使用フラグ取得 
 	D3DXVECTOR3				getPosition();		// 座標取得
 	D3DXVECTOR3				getSize();			// 大きさ取得
-	INT					getCurrentAnim();	// アニメパターン取得
+	INT						getCurrentAnim();	// アニメパターン取得
 
 protected:
 	static constexpr INT MaxLerp = 4;
@@ -75,7 +75,6 @@ protected:
 	D3DXVECTOR3				rot;			// 回転
 	D3DXVECTOR3				scale;			// 拡大率
 	D3DXVECTOR3				posDestBoard;		// 目的位置
-	D3DXVECTOR3				velocityBoard;			// 移動量
 	D3DXVECTOR3				curvePos[MaxLerp];	// ベジェ曲線、エルミート曲線用ベクトル(三次元)
 	D3DXMATRIX				worldMtx;		// ワールド行列
 	D3DXCOLOR				color;				// 色

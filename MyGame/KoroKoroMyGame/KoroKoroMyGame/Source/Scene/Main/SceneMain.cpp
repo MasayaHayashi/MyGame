@@ -13,11 +13,12 @@
 #include "../../Collision/Collision.h"
 #include "../../Ball/BallObj.h"
 #include "../../MyDelete/MyDelete.h"
-#include "../../Star/Star.h"
+#include "../../StarParticle/StarParticle.h"
 #include "../../MainObject/MainObject.h"
 #include "../../Countdown/Countdown.h"
 #include "../../Goal/Goal.h"
 #include "../../StageClearUI/StageClearUI.h"
+#include "../../Audio/MyAudiere.h"
 #include <fstream>
 
 /*
@@ -73,15 +74,32 @@ SceneMain::SceneMain()
 	}
 
 	skyDomePtr.push_back(		std::unique_ptr<Skydome>(	NEW Skydome())	);
-	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW Star()		));
+
+	for (int i = 0; i < StarParticle::MaxParticle; i++)
+	{
+		boardObjectesPtr.push_back(std::unique_ptr<Board>(NEW StarParticle()));
+	}
+
 	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW Countdown() ));
 	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW StageClearUI() ));
-	collisionPtr.reset(NEW Collision());
+	collisionPtr.reset( NEW Collision() );
 
 	for (auto& player : playeresPtr)
 	{
 		collisionPtr->registerPlayer(player.get());
 	}
+
+	for (size_t gameObjType = 0; gameObjType < GameObjectBase::MaxGameObjType; gameObjType++)
+	{
+		for (auto gameObj : gameObjPtr[gameObjType])
+		{
+			if (gameObj->getGameObjectType() == GameObjectType::NormalBlockObj)
+			{
+				collisionPtr->registerBlock(*gameObj);
+			}
+		}
+	}
+
 
 	for (size_t gameObjType = 0; gameObjType < GameObjectBase::MaxGameObjType; gameObjType ++)
 	{
@@ -93,6 +111,8 @@ SceneMain::SceneMain()
 			}
 		}
 	}
+	
+
 }
 
 //
@@ -137,6 +157,9 @@ void SceneMain::initialize()
 	{
 		boardObject->initialize();
 	}
+
+	MyAudiere::getBgm(0)->setVolume(0.1f);
+	MyAudiere::getBgm(0)->play();
 }
 
 //
@@ -188,7 +211,7 @@ void SceneMain::update()
 		}
 	}
 
-	cameraPtr->update(playeresPtr.front().get(), *boardObjectesPtr.back());
+	cameraPtr->update(*playeresPtr.front().get(), *boardObjectesPtr.back());
 	
 	if (Keyboard::getPress(DIK_1))
 	{
@@ -625,19 +648,19 @@ void SceneMain::creteGameObj(size_t objType)
 	case static_cast<INT>(GameObjectType::NormalBlockObj) :
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
 		{
-			gameObjPtr[0].push_back(NEW MainObject("box.x","IceStone.png",objIndex,true));
+			gameObjPtr[0].push_back(NEW MainObject("box.x","IceStone.png",objIndex,GameObjectType::NormalBlockObj,false));
 		}
 		break;
 	case static_cast<INT>(GameObjectType::MoveBlockOBj) :
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
 		{
-			gameObjPtr[1].push_back(NEW MainObject("flatAndHill.x","double_1.png",objIndex,true));
+			gameObjPtr[1].push_back(NEW MainObject("flatAndHill.x","double_1.png", objIndex, GameObjectType::MoveBlockOBj,true));
 		}
 		break;
-	case static_cast<INT>((GameObjectType::StarObj)) :
+	case static_cast<INT>((GameObjectType::FieldObj)) :
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
 		{
-			gameObjPtr[2].push_back(NEW MainObject("flat.x","double_1.png",objIndex,true));
+			gameObjPtr[2].push_back(NEW MainObject("flat.x","double_1.png", objIndex, GameObjectType::FieldObj,true));
 		}
 		break;
 	case static_cast<INT>((GameObjectType::GoalObj)) :

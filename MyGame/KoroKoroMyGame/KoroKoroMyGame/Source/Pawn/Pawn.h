@@ -23,6 +23,14 @@ enum class MeshObjType
 	HierarchyModel,	
 };
 
+enum class GameObjType
+{
+	NormalBlock,
+	Field,
+	Goal,
+	Item,
+};
+
 // ===== クラスの前方宣言 =====
 class Collider;
 
@@ -104,6 +112,7 @@ public:
 	DWORD				getTriangleNum();		// 三角形の数取得
 	MESH_VTX*			getVtxAcess();			// 頂点情報アクセス用ポインタ取得		
 	WORD*				getIndxAcess();			// インデックスバッファアクセス用ポインタ取得
+	GameObjectType		getGameObjectType() const;
 	bool				getIsGround();			// 地面上状態取得
 	const bool			isUsedShader() const;	// シェーダー使用
 	bool			getIsFieldObject() const;
@@ -227,7 +236,6 @@ protected:
 	
 	MeshObjType					meshType;				// メッシュの種類
 	GameObjectType				myGameObjType;
-	ItemObjType					myItemObjType;
 	UINT						currentAnim;			// アニメーション
 private:
 

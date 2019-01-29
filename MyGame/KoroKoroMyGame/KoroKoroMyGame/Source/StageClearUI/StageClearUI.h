@@ -32,13 +32,16 @@ public:
 	void draw();
 
 private:
-
 	const std::string TextureFilePass = "Data/Texture/stageClear.png";
+	static constexpr FLOAT TextureSizeX  = 732.0f;
+	static constexpr FLOAT TextureSizeY  = 113.0f;
 	static constexpr FLOAT TitleRotSpeed = 0.06f;
 
 	FLOAT rotCnt = 0;
 
+	bool drawFlg = false;
 	SceneManager::SceneState currentScene;
+
 };
 
 #endif 

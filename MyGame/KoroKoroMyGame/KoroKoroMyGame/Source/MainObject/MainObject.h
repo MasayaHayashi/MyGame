@@ -27,7 +27,7 @@ class MainObject : public Pawn
 {
 public:
 	MainObject();
-	MainObject(std::string, std::string, size_t, bool);
+	MainObject(std::string, std::string, size_t,GameObjectType, bool);
 	~MainObject();
 
 	void initialize();

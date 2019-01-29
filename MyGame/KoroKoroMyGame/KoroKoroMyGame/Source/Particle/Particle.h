@@ -25,7 +25,7 @@ class Particle : public Board
 {
 public:
 	Particle();
-	~Particle();
+	virtual ~Particle();
 
 	void initialize();
 	void finalize();
@@ -38,7 +38,9 @@ protected:
 	void make(D3DXVECTOR3 pos,D3DXVECTOR3 move);
 	void destroy();
 	void move();
+	bool orBelow(FLOAT yPos);
 	D3DXVECTOR3 moveVec = D3DXVECTOR3(0.0f,0.0f,0.0f);
+	bool awake = false;
 
 private:
 

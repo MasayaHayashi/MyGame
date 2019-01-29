@@ -51,11 +51,8 @@ void MainField::initialize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void MainField::finalize()
 {
-	// メッシュ解放
-//	ResourceManager::destroyAllMesh();
-
-	// テクスチャ解放
-//	ResourceManager::destroyAllTexture();
+	ResourceManager::destroyAllMesh();
+	ResourceManager::destroyAllTexture();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

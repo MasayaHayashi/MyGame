@@ -161,7 +161,8 @@
     <ClCompile Include="Source\SelectManager\SelectManager.cpp" />
     <ClCompile Include="Source\Skydome\Skydome.cpp" />
     <ClCompile Include="Source\StageClearUI\StageClearUI.cpp" />
-    <ClCompile Include="Source\Star\Star.cpp" />
+    <ClCompile Include="Source\StarParticle\StarParticle.cpp" />
+    <ClCompile Include="Source\TitleSelectUI\TitleSelectUI.cpp" />
     <ClCompile Include="Source\TitleUI\TitleUI.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -213,7 +214,8 @@
     <ClInclude Include="Source\SelectManager\SelectManager.h" />
     <ClInclude Include="Source\Skydome\Skydome.h" />
     <ClInclude Include="Source\StageClearUI\StageClearUI.h" />
-    <ClInclude Include="Source\Star\Star.h" />
+    <ClInclude Include="Source\StarParticle\StarParticle.h" />
+    <ClInclude Include="Source\TitleSelectUI\TitleSelectUI.h" />
     <ClInclude Include="Source\TitleUI\TitleUI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

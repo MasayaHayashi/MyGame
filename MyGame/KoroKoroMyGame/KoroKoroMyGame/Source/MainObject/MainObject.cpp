@@ -9,6 +9,9 @@
 #include "../ResoueceManager/ResourceManager.h"
 #include "../Collision/Collision.h"
 #include "../SceneManager/SceneManager.h"
+#include "../GameManager/GameManager.h"
+#include "../MyVector3/MyVector3.h"
+#include "../KeyBoard/Keyboard.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -23,13 +26,13 @@ MainObject::MainObject()
 // modelPass:	 モデルパス入力
 // texturePass : テクスチャパス入力
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-MainObject::MainObject(std::string modelPass,std::string texturePass, size_t setNumber,bool setFieldModel)
+MainObject::MainObject(std::string modelPass,std::string texturePass, size_t setNumber,GameObjectType setGameObj,bool setFieldModel)
 {
 	tagName						= modelPass;
 	idNumber					= setNumber;
 	modelPasses[tagName]		= passName + modelPass;
 	texturePasses[tagName]		= passName + texturePass;
-	myGameObjType				= GameObjectType::NormalBlockObj;
+	myGameObjType				= setGameObj;
 	isFieldObject				= setFieldModel;
 	
 	isUsed = false;
@@ -87,8 +90,41 @@ void MainObject::update()
 {
 	// コライダー更新
 //	pCollider->UpdateCollider(mtxWorldPawn, FIELD_BOX_COLOR );
-
 	updateExportData();
+
+	if (!isUsed)
+	{
+		return;
+	}
+
+	if (GameManager::getGameType() != GameManager::GameType::Playing)
+	{
+		return;
+	}
+
+	static bool mode = false;
+
+	if (Keyboard::getTrigger(DIK_U))
+	{
+		mode = !mode;
+	}
+
+	if (mode)
+	{
+		if (MyVector3::getLength(Collision::getTransform("Player", 0)->pos - myTransform.pos) < 15.0f)
+		{
+			if (myGameObjType == GameObjectType::NormalBlockObj)
+			{
+				myTransform.pos.y += 0.2f;
+			}
+		}
+	}
+
+	if (Collision::getTransform(tagName, idNumber)->isHitAABB)
+	{
+ 		GameManager::changeGameType(GameManager::GameType::Miss);
+	}
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

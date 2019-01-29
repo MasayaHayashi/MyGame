@@ -169,6 +169,12 @@
     <Filter Include="ソース ファイル\StageClearUi">
       <UniqueIdentifier>{cab97525-4e0a-4e49-8a58-2c83b35d5b52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\TitleSelectUI">
+      <UniqueIdentifier>{c461b54d-c4bd-4af2-848d-864e6fe5c85b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\StarParticle">
+      <UniqueIdentifier>{2c020196-ac7d-42fd-ae08-18fd82b12146}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Audio\MyAudiere.cpp">
@@ -264,9 +270,6 @@
     <ClCompile Include="Source\MyDelete\MyDelete.cpp">
       <Filter>ソース ファイル\Delete</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Star\Star.cpp">
-      <Filter>ソース ファイル\Star</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Particle\Particle.cpp">
       <Filter>ソース ファイル\Particle</Filter>
     </ClCompile>
@@ -308,6 +311,12 @@
     </ClCompile>
     <ClCompile Include="Source\StageClearUI\StageClearUI.cpp">
       <Filter>ソース ファイル\StageClearUi</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TitleSelectUI\TitleSelectUI.cpp">
+      <Filter>ソース ファイル\TitleSelectUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\StarParticle\StarParticle.cpp">
+      <Filter>ソース ファイル\Star</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -413,9 +422,6 @@
     <ClInclude Include="Source\MyDelete\MyDelete.h">
       <Filter>ソース ファイル\Delete</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Star\Star.h">
-      <Filter>ソース ファイル\Star</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Particle\Particle.h">
       <Filter>ソース ファイル\Particle</Filter>
     </ClInclude>
@@ -460,6 +466,12 @@
     </ClInclude>
     <ClInclude Include="Source\StageClearUI\StageClearUI.h">
       <Filter>ソース ファイル\StageClearUi</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TitleSelectUI\TitleSelectUI.h">
+      <Filter>ソース ファイル\TitleSelectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StarParticle\StarParticle.h">
+      <Filter>ソース ファイル\Star</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -63,12 +63,37 @@ void Collision::update()
 		collisionMapes["heart.x"].front()->isHitAABB = true;
 	}
 
+	size_t blockIndex = 0;
+
+	for (auto &blockPtr : blockPtres)
+	{
+		if (!blockPtr->getUsedFlg())
+		{
+			continue;
+			blockIndex++;
+		}
+
+		auto blockItr = std::next(collisionMapes[blockPtr->getTag()].begin(), blockIndex);
+
+		if (isHitAABB(*collisionMapes["Player"].front(), *blockPtr))
+		{
+			(*blockItr)->isHitAABB = true;
+		}
+		else
+		{
+			(*blockItr)->isHitAABB = false;
+		}
+
+		blockIndex++;
+	}
+
 	for(auto  fieldPtr : fieldPtres)
 	{
 		if (!fieldPtr->getUsedFlg())
 		{
 			continue;
 		}
+
 		if (!fieldPtr->getIsFieldObject())
 		{
 			continue;
@@ -261,13 +286,30 @@ INT Collision::isHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos,
 //
 const bool Collision::isHitAABB(Transform pPawnA, Transform pPawnB)
 {
-
-	if (pPawnA.pos.x + pPawnA.collisionBox.x > pPawnB.pos.x				 &&
-		pPawnA.pos.x						 < pPawnB.pos.x + pPawnB.collisionBox.x * 2  &&
+	if (pPawnA.pos.x - pPawnA.collisionBox.x < pPawnB.pos.x	+ pPawnB.collisionBox.x &&
+		pPawnA.pos.x + pPawnA.collisionBox.x > pPawnB.pos.x - pPawnB.collisionBox.x &&
 		pPawnA.pos.y + pPawnA.collisionBox.y > pPawnB.pos.y				 &&
-		pPawnA.pos.y						 < pPawnB.pos.y + pPawnB.collisionBox.y * 2 &&
+		pPawnA.pos.y < pPawnB.pos.y + pPawnB.collisionBox.y * 2 &&
 		pPawnA.pos.z + pPawnA.collisionBox.z > pPawnB.pos.z				 &&
-		pPawnA.pos.z						 < pPawnB.pos.z + pPawnB.collisionBox.z * 2)
+		pPawnA.pos.z  < pPawnB.pos.z + pPawnB.collisionBox.z * 2)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+//
+// AABB‚Ì‚ ‚½‚è”»’è
+//
+const bool Collision::isHitAABB(Transform pPawnA, Pawn &pPawnB)
+{
+	if (pPawnA.pos.x - pPawnA.collisionBox.x < pPawnB.getPosition().x + pPawnB.getCollisionBox().x &&
+		pPawnA.pos.x + pPawnA.collisionBox.x > pPawnB.getPosition().x - pPawnB.getCollisionBox().x &&
+		pPawnA.pos.y - pPawnA.collisionBox.y < pPawnB.getPosition().y + pPawnB.getCollisionBox().y &&
+		pPawnA.pos.y + pPawnA.collisionBox.y > pPawnB.getPosition().y - pPawnB.getCollisionBox().y &&
+		pPawnA.pos.z + pPawnA.collisionBox.z > pPawnB.getPosition().z				 &&
+		pPawnA.pos.z						 < pPawnB.getPosition().z + pPawnB.getCollisionBox().z * 2.0f)
 	{
 		return true;
 	}
@@ -588,3 +630,10 @@ const D3DXVECTOR3 Collision::getCross()
 	return cross;
 }
 
+//
+//
+//
+void Collision::registerBlock(Pawn &blockPtr)
+{
+	blockPtres.push_back(&blockPtr);
+}

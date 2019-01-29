@@ -18,12 +18,12 @@ StageClearUI::StageClearUI()
 	strcpy_s(fileName, TextureFilePass.c_str());
 
 	color					= D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f);
-	vertexBoard.pos			= D3DXVECTOR3(-10.0f, 0.0f, 0.0f);
+	vertexBoard.pos			= D3DXVECTOR3(Application::ScreenCenterX - 100.0f, Application::ScreenCenterY, 0.0f);
 	vertexBoard.rotDeg		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	vertexBoard.scale		= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-	vertexBoard.size		= D3DXVECTOR3(99.0f * 0.004f, 94.0f * 0.004f, 0.0f);
-	isAlphaBlend			= true;
-	vertexBoard.boardType	= boardType::Billboard;
+	vertexBoard.size		= D3DXVECTOR3(1.0f, TextureSizeY, 0.0f);
+	isAlphaBlend			= false;
+	vertexBoard.boardType	= boardType::Polygon2d;
 	vertexBoard.radAngle	= D3DXToRadian(0);
 
 	texPatternDivideX		= 1;
@@ -33,7 +33,7 @@ StageClearUI::StageClearUI()
 	animPattern				= texPatternDivideX * texPatternDivideY;
 	intervalChangePattern	= 1;
 
-	isUsed					= false;
+	isUsed					= true;
 }
 
 //
@@ -68,9 +68,25 @@ void StageClearUI::update()
 {
 	if (GameManager::isGameType(GameManager::GameType::Goal))
 	{
-		isUsed = true;
+		vertexBoard.pos.x += 2.0f;
+
+		if (vertexBoard.pos.x > Application::ScreenCenterX)
+		{
+			vertexBoard.pos.x = Application::ScreenCenterX;
+		}
+
+		vertexBoard.size.x += 10.0f;
+
+		if (vertexBoard.size.x > TextureSizeX)
+		{
+			vertexBoard.size.x = TextureSizeX;
+		}
+
+		drawFlg = true;
 	}
 
+	setTexture();
+	setVtx();
 }
 
 //
@@ -78,5 +94,9 @@ void StageClearUI::update()
 //
 void StageClearUI::draw()
 {
+	if (!drawFlg)
+	{
+		return;
+	}
 	Board::draw();
 }

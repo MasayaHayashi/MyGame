@@ -6,6 +6,7 @@
 // ===== インクルード部 =====
 #include "Skydome.h"
 #include "../Camera/camera.h"
+#include "../ResoueceManager/ResourceManager.h"
 #include "../DirectX3D/DirectX3D.h"
 #include <string>
 
@@ -45,7 +46,7 @@ void Skydome::initialize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Skydome::finalize()
 {
-
+	ResourceManager::destroyAllMesh();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

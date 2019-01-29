@@ -25,7 +25,6 @@ Board::Board()
 	scale				= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 	size				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot					= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	velocityBoard		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	posDestBoard		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	tempQuaternion		= D3DXQUATERNION(0, 0, 0, 1);
 	radAngle		= 0.0f;

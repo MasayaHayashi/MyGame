@@ -124,3 +124,18 @@ void Particle::move()
 	vertexBoard.pos += moveVec;
 	moveVec.y		-= Gravity;
 }
+
+//
+// w’èÀ•W‚æ‚è‰º‚É‚ ‚é‚©
+//
+bool Particle::orBelow(FLOAT yPos)
+{
+	if (vertexBoard.pos.y < yPos)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
