@@ -30,6 +30,7 @@ public:
 	void finalize();
 	void update();
 	void draw();
+	void initializeStatus();
 
 	static constexpr size_t MaxParticle = 100;
 private:

@@ -34,6 +34,8 @@ Countdown::Countdown()
 	currentAnimPattern = 3;
 	intervalChangePattern = 10;
 
+	changeNumberCnt = ChangeFrame;
+
 	isUsed = true;
 }
 
@@ -102,4 +104,19 @@ void Countdown::update()
 void Countdown::draw()
 {
 	Board::draw();
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// ステータス初期化
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Countdown::initializeStatus()
+{
+	vertexBoard.pos = D3DXVECTOR3(Application::ScreenCenterX, Application::ScreenCenterY + Application::ScreenCenterY * 0.5f, 0.0f);
+	vertexBoard.rotDeg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	vertexBoard.scale = D3DXVECTOR3(0.2f, 0.2f, 1.0f);
+	vertexBoard.size = D3DXVECTOR3(621.0f, 606.0f, 0.0f);
+	
+	changeNumberCnt = ChangeFrame;
+	currentAnimPattern = 3;
+	isUsed = true;
 }

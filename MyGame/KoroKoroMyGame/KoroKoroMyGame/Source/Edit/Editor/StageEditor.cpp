@@ -12,6 +12,7 @@
 #include "../../MyDelete/MyDelete.h"
 #include "../../EditUI/WhatStageSaveUI.h"
 #include "../../Goal/Goal.h"
+#include "../../SpikeBlock/SpikeBlock.h"
 #include <fstream>
 
 //
@@ -46,7 +47,7 @@ StageEditor::StageEditor()
 	uSelectMode			= static_cast<INT>(EDIT_MODE_TYPE::MODE_EDIT);
 	
 	for (UINT gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
-	{
+	{ 
 		creteGameObj(gameObjTypeIndex);
 	}
 
@@ -237,7 +238,7 @@ void StageEditor::finalize()
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// プレイヤー更新
+// 更新
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void StageEditor::update()
 {
@@ -343,7 +344,7 @@ void StageEditor::update()
 //	}
 //
 //	if (GetKeyboardTrigger(DIK_O))
-//		// モード切替
+//		// モード切替4
 //		uSelectMode = MODE_SAVE_CONF;
 //
 //	// 書き込みステージ確認
@@ -778,13 +779,13 @@ void StageEditor::creteGameObj(size_t objType)
 	switch (objType)
 	{
 	case static_cast<INT>( GameObjectType::NormalBlockObj ) :
-		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
+		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex ++)
 		{
-			gameObjPtr[0].push_back(NEW MainObject("box.x","IceStone.png",objIndex, GameObjectType::NormalBlockObj,false));
+			gameObjPtr[0].push_back(NEW MainObject("Spikes.x","IceStone.png",objIndex, GameObjectType::NormalBlockObj,false));
 		}
 		break;
 	case static_cast<INT>(GameObjectType::MoveBlockOBj) :
-		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
+		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex ++)
 		{
 			gameObjPtr[1].push_back(NEW MainObject("flatAndHill.x", "double_1.png",objIndex, GameObjectType::MoveBlockOBj,true));
 		}
@@ -799,6 +800,12 @@ void StageEditor::creteGameObj(size_t objType)
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
 		{
 			gameObjPtr[3].push_back(NEW Goal("heart.x", "heart.png", objIndex));
+		}
+		break;
+	case static_cast<INT>(GameObjectType::SpikeObj) :
+		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
+		{
+			gameObjPtr[4].push_back(NEW SpikeBlock("block_spike1.x", "cube_metal_unity.tga", objIndex, GameObjectType::SpikeObj, false));
 		}
 		break;
 	default:

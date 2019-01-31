@@ -15,6 +15,7 @@
 #include "../DirectX3D/DirectX3D.h"
 #include "../SceneManager/SceneManager.h"
 #include "../MyVector3/MyVector3.h"
+#include "../GameManager/GameManager.h"
 #include "../MyDelete/MyDelete.h"
 
 // ===== 静的メンバ =====
@@ -63,31 +64,14 @@ void Collision::update()
 		collisionMapes["heart.x"].front()->isHitAABB = true;
 	}
 
-	size_t blockIndex = 0;
+	checkCollisionBlock();
 
-	for (auto &blockPtr : blockPtres)
-	{
-		if (!blockPtr->getUsedFlg())
-		{
-			continue;
-			blockIndex++;
-		}
 
-		auto blockItr = std::next(collisionMapes[blockPtr->getTag()].begin(), blockIndex);
 
-		if (isHitAABB(*collisionMapes["Player"].front(), *blockPtr))
-		{
-			(*blockItr)->isHitAABB = true;
-		}
-		else
-		{
-			(*blockItr)->isHitAABB = false;
-		}
 
-		blockIndex++;
-	}
 
-	for(auto  fieldPtr : fieldPtres)
+
+	for (auto fieldPtr : fieldPtres)
 	{
 		if (!fieldPtr->getUsedFlg())
 		{
@@ -116,8 +100,6 @@ void Collision::update()
 			rayHitMapes["Player"][playerIndex]->isHit = false;
 		}
 	}
-
-
 	
 }
 
@@ -308,8 +290,8 @@ const bool Collision::isHitAABB(Transform pPawnA, Pawn &pPawnB)
 		pPawnA.pos.x + pPawnA.collisionBox.x > pPawnB.getPosition().x - pPawnB.getCollisionBox().x &&
 		pPawnA.pos.y - pPawnA.collisionBox.y < pPawnB.getPosition().y + pPawnB.getCollisionBox().y &&
 		pPawnA.pos.y + pPawnA.collisionBox.y > pPawnB.getPosition().y - pPawnB.getCollisionBox().y &&
-		pPawnA.pos.z + pPawnA.collisionBox.z > pPawnB.getPosition().z				 &&
-		pPawnA.pos.z						 < pPawnB.getPosition().z + pPawnB.getCollisionBox().z * 2.0f)
+		pPawnA.pos.z - pPawnA.collisionBox.z < pPawnB.getPosition().z + pPawnB.getCollisionBox().z &&
+		pPawnA.pos.z + pPawnA.collisionBox.z > pPawnB.getPosition().z - pPawnB.getCollisionBox().z)
 	{
 		return true;
 	}
@@ -631,9 +613,68 @@ const D3DXVECTOR3 Collision::getCross()
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-//
+// ブロック用
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Collision::registerBlock(Pawn &blockPtr)
 {
 	blockPtres.push_back(&blockPtr);
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+//　ブロック用あたり判定取得
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Collision::checkCollisionBlock()
+{
+	if (GameManager::getGameType() != GameManager::GameType::Playing)
+	{
+		return;
+	}
+
+	size_t blockIndex = 0;
+
+	for (auto &blockPtr : blockPtres)
+	{
+		if (!blockPtr->getUsedFlg())
+		{
+			continue;
+			blockIndex++;
+		}
+
+		auto blockItr = std::next(collisionMapes[blockPtr->getTag()].begin(), blockIndex);
+
+		if (isHitAABB(*collisionMapes["Player"].front(), *blockPtr))
+		{
+			(*blockItr)->isHitAABB = true;
+		}
+		else
+		{
+			(*blockItr)->isHitAABB = false;
+		}
+
+		blockIndex++;
+	}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// ステータス初期化
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Collision::initilize(std::string keyName,size_t index)
+{
+	const auto itr = std::next(rayHitMapes[keyName].begin(), index);
+	(*itr)->cross = D3DXVECTOR3(0.0f, 0.0f, 5.0f);
+	(*itr)->isHit = false;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// ステータス初期化
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Collision::initilize()
+{
+	for (auto &collisionMap : collisionMapes)
+	{
+		for (auto & second : collisionMap.second)
+		{
+			second->isHitAABB = false;
+		}
+	}
 }

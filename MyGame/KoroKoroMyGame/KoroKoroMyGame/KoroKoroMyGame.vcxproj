@@ -143,6 +143,7 @@
     <ClCompile Include="Source\MainField\MainField.cpp" />
     <ClCompile Include="Source\MainObject\MainObject.cpp" />
     <ClCompile Include="Source\MeshFieldBase\MeshFieldBase.cpp" />
+    <ClCompile Include="Source\MissUI\MissUI.cpp" />
     <ClCompile Include="Source\MyDelete\MyDelete.cpp" />
     <ClCompile Include="Source\MyHierarchy\MyHierarchy.cpp" />
     <ClCompile Include="Source\MyVector3\MyVector3.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="Source\Scene\Title\SceneTitle.cpp" />
     <ClCompile Include="Source\SelectManager\SelectManager.cpp" />
     <ClCompile Include="Source\Skydome\Skydome.cpp" />
+    <ClCompile Include="Source\SpikeBlock\SpikeBlock.cpp" />
     <ClCompile Include="Source\StageClearUI\StageClearUI.cpp" />
     <ClCompile Include="Source\StarParticle\StarParticle.cpp" />
     <ClCompile Include="Source\TitleSelectUI\TitleSelectUI.cpp" />
@@ -195,6 +197,7 @@
     <ClInclude Include="Source\MainObject\MainObject.h" />
     <ClInclude Include="Source\MeshFieldBase\MeshFieldBase.h" />
     <ClInclude Include="Source\Mesh\Mesh.h" />
+    <ClInclude Include="Source\MissUI\MissUI.h" />
     <ClInclude Include="Source\MyDelete\MyDelete.h" />
     <ClInclude Include="Source\MyHierarchy\MyHierarchy.h" />
     <ClInclude Include="Source\MyVector3\MyVector3.h" />
@@ -213,6 +216,7 @@
     <ClInclude Include="Source\Scene\Title\SceneTitle.h" />
     <ClInclude Include="Source\SelectManager\SelectManager.h" />
     <ClInclude Include="Source\Skydome\Skydome.h" />
+    <ClInclude Include="Source\SpikeBlock\SpikeBlock.h" />
     <ClInclude Include="Source\StageClearUI\StageClearUI.h" />
     <ClInclude Include="Source\StarParticle\StarParticle.h" />
     <ClInclude Include="Source\TitleSelectUI\TitleSelectUI.h" />

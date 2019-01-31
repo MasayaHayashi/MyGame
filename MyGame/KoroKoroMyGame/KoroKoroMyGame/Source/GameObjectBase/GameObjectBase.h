@@ -16,13 +16,14 @@ enum class GameObjectType
 	MoveBlockOBj,
 	FieldObj,
 	GoalObj,
+	SpikeObj,
 };
 
 // ===== ƒNƒ‰ƒX’è‹` =====
 class GameObjectBase
 {
 	public:
-		static constexpr size_t MaxGameObjType = static_cast<int>(GameObjectType::GoalObj) + 1;
+		static constexpr size_t MaxGameObjType = static_cast<int>(GameObjectType::SpikeObj) + 1;
 
 
 		GameObjectBase();

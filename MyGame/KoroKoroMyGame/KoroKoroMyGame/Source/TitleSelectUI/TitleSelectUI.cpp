@@ -17,13 +17,13 @@
 TitleSelectUI::TitleSelectUI()
 {
 	strcpy_s(fileName, TextureFilePass.c_str());
-	vertexBoard.pos					 = D3DXVECTOR3(Application::ScreenCenterX * 0.5f, Application::ScreenHeight, 0.0f);
-	vertexBoard.rotDeg					 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	vertexBoard.scale					 = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-	vertexBoard.size					 = D3DXVECTOR3(640.0f, 95.0f, 0.0f);
+	vertexBoard.pos				 = D3DXVECTOR3(Application::ScreenCenterX * 0.5f, Application::ScreenHeight, 0.0f);
+	vertexBoard.rotDeg			 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	vertexBoard.scale			 = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	vertexBoard.size			 = D3DXVECTOR3(640.0f, 95.0f, 0.0f);
 	vertexBoard.radAngle = 0.0f;
 	posDestBoard				 = D3DXVECTOR3(Application::ScreenCenterX * 0.5f, Application::ScreenCenterY * 1.25f, 0.0f);
-	isAlphaBlend			 = false;
+	isAlphaBlend				 = false;
 	vertexBoard.boardType		 = boardType::Polygon2d;
 
 	texPatternDivideX = 1;

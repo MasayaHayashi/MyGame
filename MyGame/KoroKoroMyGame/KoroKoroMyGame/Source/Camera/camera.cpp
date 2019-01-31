@@ -631,6 +631,8 @@ void Camera::updateGameMain(Player &pPlayer,Board &countDown)
 
 	switch (currentGameType)
 	{
+		case GameManager::GameType::Ready:
+			updateGameMainReady(pPlayer,countDown);
 		case GameManager::GameType::Miss:
 			updateGameMainMiss();
 		case GameManager::GameType::Playing:
@@ -639,6 +641,17 @@ void Camera::updateGameMain(Player &pPlayer,Board &countDown)
 			break;
 	}
 
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 準備
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Camera::updateGameMainReady(Player &pPlayer, Board &countDown)
+{
+	myTransform.look = pPlayer.getPosition();
+	D3DXVECTOR3 playerToCamera = myTransform.pos - pPlayer.getPosition();
+
+	myTransform.pos = myTransform.pos + playerToCamera;
 }
 
 void Camera::updateGameMainMiss()
@@ -682,16 +695,15 @@ void Camera::updateGameMainPlay(Player &pPlayer,Board countDown)
 		myTransform.lookDest = Collision::getTransform("Player", 0)->pos + *D3DXVec3Normalize(&cameraFowerd, &cameraFowerd) * 10.0f;
 		//myTransform.pos -= cameraFowerd;
 
-		static float fcnt = 0.0f;
-		fcnt += 0.02f;
+		lerpCnt += 0.02f;
 
-		if (fcnt > 1.0f)
+		if (lerpCnt > 1.0f)
 		{
-			fcnt = 1.0f;
+			lerpCnt = 1.0f;
 		}
 
-		D3DXVec3Lerp(&myTransform.pos, &myTransform.pos, &myTransform.posDest, fcnt);
-		D3DXVec3Lerp(&myTransform.look, &myTransform.look, &myTransform.lookDest, fcnt);
+		D3DXVec3Lerp(&myTransform.pos, &myTransform.pos, &myTransform.posDest, lerpCnt);
+		D3DXVec3Lerp(&myTransform.look, &myTransform.look, &myTransform.lookDest, lerpCnt);
 
 		DirectX3D::printDebug("プレイヤー位置%f\n", Collision::getTransform("Player", 0)->pos.z);
 
@@ -882,4 +894,9 @@ void Camera::rotation(D3DXVECTOR3 center, FLOAT radius)
 	myTransform.pos.z = vecTarget.z;
 
 	rotCnt++;
+}
+
+void Camera::initializeStatus()
+{
+	lerpCnt = 0;
 }

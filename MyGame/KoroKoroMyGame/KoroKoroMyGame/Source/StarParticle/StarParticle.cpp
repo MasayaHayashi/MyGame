@@ -89,12 +89,13 @@ void StarParticle::update()
 	
 	vertexBoard.pos += vertexBoard.velocity;
 
-	/*
-	if(orBelow(-6.0f))
+	
+	
+	if (checkLength(60.0f))
 	{
 		destroy();
 	}
-	*/
+	
 	
 }
 
@@ -104,4 +105,14 @@ void StarParticle::update()
 void StarParticle::draw()
 {
 	Board::draw();
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// ステータス初期化
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void StarParticle::initializeStatus()
+{
+	isUsed = false;
+	awake = false;
+	
 }

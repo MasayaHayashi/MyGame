@@ -80,6 +80,7 @@ private:
 	const std::string StageFilePass = "Stage";
 
 	static constexpr UINT	MaxGameObj = 512;
+	static constexpr INT    RestartFream = 160;
 	ExportData				exportWorkData;
 	size_t					selectGameObjIndex;
 
@@ -108,7 +109,7 @@ private:
 	GameState				currentGameState;
 	static UINT				currentStage;
 	static UINT				prevScore;
-
+	INT						restartCnt = 0;
 
 	/*
 	Light					*pLight;											  // ƒ‰ƒCƒg

@@ -72,6 +72,9 @@ public:
 	Collision(Pawn* setPlayerPtr, Pawn* setFieldPtr);
 
 	void update();
+	void checkCollisionBlock();
+	void initilize(std::string keyName, size_t index);
+	void initilize();
 
 	static void registerList(Transform *setPawn,std::string keyName);
 	static void registerList(CameraTransform *setCamera, std::string keyName);

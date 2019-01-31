@@ -1,6 +1,5 @@
-﻿  Skydome.cpp
-  MainField.cpp
-  HeartObj.cpp
-  コードを生成中...
+﻿  Camera.cpp
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\camera\camera.cpp(738): warning C4244: '初期化中': 'float' から 'INT' への変換です。データが失われる可能性があります。
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\camera\camera.cpp(744): warning C4244: '引数': 'INT' から 'FLOAT' への変換です。データが失われる可能性があります。
   KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.exe
   KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.pdb (Partial PDB)

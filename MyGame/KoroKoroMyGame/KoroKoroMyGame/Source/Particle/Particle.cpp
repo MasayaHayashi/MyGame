@@ -9,6 +9,7 @@
 #include "../Collision/Collision.h"
 #include "../DirectX3D/DirectX3D.h"
 #include "../Random/MyRandom.h"
+#include "../MyVector3/MyVector3.h"
 
 // ===== 定数・マクロ定義 =====
 
@@ -126,11 +127,11 @@ void Particle::move()
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// 指定座標より下にあるか
+// 指定座標より遠いか
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-bool Particle::orBelow(FLOAT yPos)
+bool Particle::checkLength(FLOAT length)
 {
-	if (vertexBoard.pos.y < yPos)
+	if (MyVector3::getLength(vertexBoard.pos) > length)
 	{
 		return true;
 	}

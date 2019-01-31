@@ -431,9 +431,7 @@ void Player::initializeResult()
 void Player::initializeStatus()
 {
 	Pawn::initializeStatus();
-	
-	playerStateType = PlayerState::Stop;
-	isGround = true;
+	setWorldMtxPos(myTransform.pos);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -555,8 +553,7 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	switch (GameManager::getGameType())
 	{
 	case GameManager::GameType::Ready:
-		updatePlayng(CameraForward);
-
+		updateReady(CameraForward);
 		break;
 	case GameManager::GameType::Playing:
 		updatePlayng(CameraForward);
@@ -640,7 +637,6 @@ void Player::updateSelect()
 
 	D3DXVECTOR3 cameraPos = Collision::getCameraTransform("Camera", 1)->pos;
 
-//	rideBall(idNumber);
 	setWorldMtxPos(myTransform.pos);
 }
 
@@ -864,17 +860,12 @@ void Player::fall(size_t checkIndex)
 		const D3DXVECTOR3 cross = Collision::getCross();
 		FLOAT ads = std::abs(std::abs(oldPos.y - cross.y));
 	
-	myTransform.pos = cross;
-	//myTransform.pos.y += myTransform.collisionBox.y;
+		myTransform.pos = cross;
+		//myTransform.pos.y += myTransform.collisionBox.y;
 	
-	oldPos = myTransform.pos;
-
-
+		oldPos = myTransform.pos;
 
 	}
-
-	DirectX3D::printDebug("くそおおおおおおおおおおおおおおおおお%f", Collision::getRayHitData("Player", checkIndex)->length);
-
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -903,9 +894,6 @@ void Player::changeModel()
 		ResourceManager::setHierarchy(&hierarchyMeshData, SelectManager::getModelPass(currentModelType), idNumber);
 
 	}
-
-
-
 }
 
 void Player::input()
@@ -991,15 +979,6 @@ void Player::rotation(D3DXVECTOR3 destVec)
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// 準備用メイン更新
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Player::updateMainReady()
-{
-	updateAnimation();
-	fall(0);
-}
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updateGoal()
@@ -1038,8 +1017,8 @@ void Player::updateGoal()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updatePlayng(D3DXVECTOR3 CameraForward)
 {
-	if (GameManager::getGameType() == GameManager::GameType::Playing)
-	{
+//	if (GameManager::getGameType() == GameManager::GameType::Playing)
+//	{
 		MyAudiere::getSe(0)->setVolume(0.09f);
 		static int repeatCnt = 35;
 
@@ -1049,7 +1028,7 @@ void Player::updatePlayng(D3DXVECTOR3 CameraForward)
 			repeatCnt = 0;
 		}
 		repeatCnt ++;
-	}
+//	}
 
 	oldPos = myTransform.pos;
 
@@ -1064,11 +1043,11 @@ void Player::updatePlayng(D3DXVECTOR3 CameraForward)
 	D3DXVECTOR3 vv;
 
 	fall(0);
-
+	
 	updateAnimation();
 
-	if (!GameManager::isGameType(GameManager::GameType::Ready))
-	{
+//	if (!GameManager::isGameType(GameManager::GameType::Ready))
+//	{
 		if (idNumber == 0)
 		{
 			if (Keyboard::getPress(DIK_D))
@@ -1133,7 +1112,7 @@ void Player::updatePlayng(D3DXVECTOR3 CameraForward)
 
 
 		inputVec.z = MoveSpeed;
-	}
+//	}
 
 	D3DXVECTOR3 CameraRight = D3DXVECTOR3(CameraForward.z, 0.0f, -CameraForward.x);
 
@@ -1147,21 +1126,20 @@ void Player::updatePlayng(D3DXVECTOR3 CameraForward)
 	D3DXVECTOR3 UpVec = getUpVec();
 	D3DXVec3Normalize(&UpVec, &UpVec);
 
-	if (GameManager::isGameType(GameManager::GameType::Ready))
-	{
+//	if (GameManager::isGameType(GameManager::GameType::Ready))
+//	{
+	//	D3DXQuaternionRotationAxis(&quatanion, &UpVec, D3DXToRadian(180.0f));
+//	}
+//	else
+//	{
 		D3DXQuaternionRotationAxis(&quatanion, &UpVec, D3DXToRadian(180.0f));
-	}
-	else
-	{
-		D3DXQuaternionRotationAxis(&quatanion, &UpVec, D3DXToRadian(0.0f));
 
-	}
+//	}
 	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
-	//D3DXVec3Normalize(&moveVector, &moveVector);
 
 	moveVector.y = 0.0f;
 
-	myTransform.velocity += (moveVector);
+	myTransform.velocity += moveVector;
 
 	D3DXVec3Normalize(&vv, &inputVec);
 	vv *= 0.001f;
@@ -1180,11 +1158,11 @@ void Player::updatePlayng(D3DXVECTOR3 CameraForward)
 	}
 
 	D3DXVECTOR3 fowrdVec = getForwardVec();
-	D3DXVECTOR3	RightVec = getRightVec();
 	D3DXVECTOR3 Upvec = getUpVec();
 
 	inputVec.y = 0.0f;
 
+	/*
 	radRot = MyVector3::CalcAngleDegree(moveVector, -fowrdVec);
 
 	D3DXQUATERNION quatanion;
@@ -1212,17 +1190,92 @@ void Player::updatePlayng(D3DXVECTOR3 CameraForward)
 	{
 		rotCnt = 1.0f;
 	}
+	*/
 
-	if (GameManager::isGameType(GameManager::GameType::Ready))
+//	if (GameManager::isGameType(GameManager::GameType::Ready))
+//	{
+//		myTransform.velocity.z = 0.0f;
+//	}
+//	else
+
+
+	radRot = MyVector3::CalcAngleDegree(moveVector, fowrdVec);
+	D3DXQUATERNION quatanion;
+
+	static float cnt;
+	if (radRot == 0.0f)
 	{
-		myTransform.velocity.z = 0.0f;
+		D3DXQuaternionRotationAxis(&quatanion, &Upvec, oldRadRot);
+		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
+
+		StartQuaternion = quatanion;
+		cnt = 0.0f;
 	}
 	else
 	{
-		myTransform.velocity.z = MoveSpeed;
-		myTransform.velocity.x = 0.0f;
+		D3DXQuaternionRotationAxis(&destQua, &Upvec, radRot);
+		StartQuaternion = destQua;
+		D3DXQuaternionSlerp(&quatanion, &StartQuaternion, &destQua, cnt);
+		cnt += 0.1f;
+
+		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
+		oldRadRot = radRot;
+
 	}
+
+	if (cnt >= 1.0f)
+	{
+		cnt = 1.0f;
+	}
+
+
+
+
+
+	myTransform.velocity.z = MoveSpeed;
+	myTransform.velocity.x = 0.0f;
 
 	setWorldMtxPos(myTransform.pos);
 
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 準備
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Player::updateReady(D3DXVECTOR3 CameraForward)
+{
+	oldPos = myTransform.pos;
+
+	inputVec.x = 0.0f;
+	inputVec.y = 0.0f;
+	inputVec.z = 0.0f;
+
+	D3DXVECTOR3 vv;
+
+	fall(0);
+
+	updateAnimation();
+
+
+	D3DXVECTOR3 CameraRight = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
+
+	moveVector = CameraRight * inputVec.x + CameraForward * inputVec.z;
+
+	D3DXVECTOR3 UpVec = getUpVec();
+	D3DXVec3Normalize(&UpVec, &UpVec);
+
+	D3DXQuaternionRotationAxis(&quatanion, &UpVec, D3DXToRadian(180.0f));
+
+	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
+
+
+	D3DXVECTOR3 fowrdVec = getForwardVec();
+	D3DXVECTOR3	RightVec = getRightVec();
+	D3DXVECTOR3 Upvec = getUpVec();
+
+	inputVec.y = 0.0f;
+
+	myTransform.pos += myTransform.velocity;
+
+	setWorldMtxPos(myTransform.pos);
 }

@@ -752,7 +752,7 @@ void Board::initializeStatus()
 {
 	vertexBoard.pos = D3DXVECTOR3(Application::ScreenCenterX, Application::ScreenCenterY, 0.0f);
 	vertexBoard.rotDeg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	vertexBoard.scale = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	vertexBoard.scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
 	setVtx();
 }

@@ -43,6 +43,7 @@ public:
 	void initialize();
 	void initializeTitle();
 	void initializeMain(Player *pPlayer);
+	void initializeStatus();
 
 	void finalize(Player* pPlayer);
 	void finalize();
@@ -52,6 +53,9 @@ public:
 	void updateGameMain(Player &,Board&);
 	void updateGameMainPlay(Player &,Board);
 	void updateGameMainMiss();
+	void updateGameMainReady(Player &pPlayer, Board &countDown);
+
+
 	void setState(MoveStateType setState);
 	void rotation(D3DXVECTOR3 center, FLOAT radius);
 
@@ -85,6 +89,8 @@ private:
 	static constexpr size_t MaxFade = 3;
 
 	INT rotCnt = 0;
+
+	FLOAT lerpCnt = 0;
 
 	MoveStateType myMoveType;
 
@@ -148,7 +154,6 @@ private:
 	D3DVIEWPORT9 viewPort;
 	
 	bool changeCamera;
-	FLOAT lerpCnt;	// 線形補間用カウンタ
 
 };
 

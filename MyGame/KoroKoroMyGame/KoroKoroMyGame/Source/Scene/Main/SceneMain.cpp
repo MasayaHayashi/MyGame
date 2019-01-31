@@ -18,7 +18,10 @@
 #include "../../Countdown/Countdown.h"
 #include "../../Goal/Goal.h"
 #include "../../StageClearUI/StageClearUI.h"
+#include "../../MissUI/MissUI.h"
 #include "../../Audio/MyAudiere.h"
+#include "../../GameManager/GameManager.h"
+#include "../../SpikeBlock/SpikeBlock.h"
 #include <fstream>
 
 /*
@@ -66,7 +69,7 @@ SceneMain::SceneMain()
 	lightPtr.reset(NEW Light());
 	cameraPtr.reset(NEW Camera());
 
-	playeresPtr.push_back(static_cast<std::unique_ptr<Player>>(NEW Player(D3DXVECTOR3(-2.0f, 0.0f, 0.0f), playeresPtr.size())));
+	playeresPtr.push_back(static_cast<std::unique_ptr<Player>>(NEW Player(D3DXVECTOR3(-2.0f, 0.0f, 0.0f), playeresPtr.size() )));
 
 	for (UINT gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
 	{
@@ -75,13 +78,16 @@ SceneMain::SceneMain()
 
 	skyDomePtr.push_back(		std::unique_ptr<Skydome>(	NEW Skydome())	);
 
+	
 	for (int i = 0; i < StarParticle::MaxParticle; i++)
 	{
 		boardObjectesPtr.push_back(std::unique_ptr<Board>(NEW StarParticle()));
 	}
+	
 
-	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW Countdown() ));
+	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW Countdown()	   ));
 	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW StageClearUI() ));
+	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW MissUI()	   ));
 	collisionPtr.reset( NEW Collision() );
 
 	for (auto& player : playeresPtr)
@@ -93,13 +99,13 @@ SceneMain::SceneMain()
 	{
 		for (auto gameObj : gameObjPtr[gameObjType])
 		{
-			if (gameObj->getGameObjectType() == GameObjectType::NormalBlockObj)
+			if (gameObj->getGameObjectType() == GameObjectType::NormalBlockObj || 
+				gameObj->getGameObjectType() == GameObjectType::SpikeObj)
 			{
 				collisionPtr->registerBlock(*gameObj);
 			}
 		}
 	}
-
 
 	for (size_t gameObjType = 0; gameObjType < GameObjectBase::MaxGameObjType; gameObjType ++)
 	{
@@ -158,6 +164,7 @@ void SceneMain::initialize()
 		boardObject->initialize();
 	}
 
+	MyAudiere::getBgm(0)->setRepeat(true);
 	MyAudiere::getBgm(0)->setVolume(0.1f);
 	MyAudiere::getBgm(0)->play();
 }
@@ -219,6 +226,18 @@ void SceneMain::update()
 	}
 
 	collisionPtr->update();
+
+	if (GameManager::isGameType(GameManager::GameType::Miss))
+	{
+		restartCnt ++;
+
+		if (restartCnt > RestartFream)
+		{
+			initializeStatus();
+			GameManager::changeGameType(GameManager::GameType::Ready);
+			restartCnt = 0;
+		}
+	}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -298,14 +317,35 @@ void SceneMain::draw()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneMain::initializeStatus()
 {
-#if 0
-
 	// BGM再生
 //	PlaySound(SOUND_BGM_MAIN);
 
 	// プレイヤーステータス初期化
-	pPlayer->initializeStatus();
+	playeresPtr.front()->initializeStatus();
 
+	for (const auto &boardObject : boardObjectesPtr)
+	{
+		boardObject->initializeStatus();
+	}
+
+	collisionPtr->initilize("Player", 0);
+	collisionPtr->initilize();
+
+	cameraPtr->initializeStatus();
+
+	for (const auto &gameObj : gameObjPtr)
+	{
+		for (const auto &list : gameObj)
+		{
+			if (list->getUsedFlg() && 
+				list->getGameObjectType() == GameObjectType::SpikeObj)
+			{
+				list->initializeStatus();
+			}
+		}
+	}
+
+	/*
 	// UI使用フラグ更新
 	pUIObj[OBJ_MISS]->setUsedFlg(false);
 	pUIObj[OBJ_BG]->setUsedFlg(false);
@@ -335,8 +375,7 @@ void SceneMain::initializeStatus()
 
 	// ステータス初期化
 	pUIObj[OBJ_MISS]->initializeStatus();
-
-#endif
+	*/
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -648,7 +687,7 @@ void SceneMain::creteGameObj(size_t objType)
 	case static_cast<INT>(GameObjectType::NormalBlockObj) :
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
 		{
-			gameObjPtr[0].push_back(NEW MainObject("box.x","IceStone.png",objIndex,GameObjectType::NormalBlockObj,false));
+			gameObjPtr[0].push_back(NEW MainObject("Spikes.x","IceStone.png",objIndex,GameObjectType::NormalBlockObj,false));
 		}
 		break;
 	case static_cast<INT>(GameObjectType::MoveBlockOBj) :
@@ -669,6 +708,12 @@ void SceneMain::creteGameObj(size_t objType)
 			gameObjPtr[3].push_back(NEW Goal("heart.x", "heart.png", objIndex));
 		}
 		break; 
+	case static_cast<INT>(GameObjectType::SpikeObj) :
+		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
+		{
+			gameObjPtr[4].push_back(NEW SpikeBlock("block_spike1.x", "cube_metal_unity.tga", objIndex, GameObjectType::SpikeObj, false));
+		}
+		break;
 	default:
 		break;
 	}

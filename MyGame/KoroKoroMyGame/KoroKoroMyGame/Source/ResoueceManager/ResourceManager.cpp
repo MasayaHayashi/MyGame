@@ -678,7 +678,6 @@ HRESULT ResourceManager::createTexture(TEXTURE_DATA &TextureData,  CHAR *pszFile
 	}
 	else
 	{
-	//	MessageBox(nullptr, TEXT("テクスチャ読み込みエラー"), TEXT("Error"), MB_ICONERROR);
 		return E_FAIL;
 	}
 }
@@ -1124,8 +1123,6 @@ bool ResourceManager::destroyMesh(CHAR *pszChakNeme)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 bool ResourceManager::destroyAllMesh()
 {
-	
-	// 例外処理
 	if (meshes.empty())
 	{
 		return true;
@@ -1289,7 +1286,9 @@ bool ResourceManager::destroyAllTexture()
 	
 	// 例外処理
 	if (texture.size() <= 0)
+	{
 		return false;
+	}
 
 	for (UINT i = 0; i < texture.size(); i++)
 	{

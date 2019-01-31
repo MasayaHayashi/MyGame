@@ -37,6 +37,7 @@ void GameManager::initialize()
 
 }
 
+
 //
 // ƒQ[ƒ€ó‘ÔŽæ“¾
 //

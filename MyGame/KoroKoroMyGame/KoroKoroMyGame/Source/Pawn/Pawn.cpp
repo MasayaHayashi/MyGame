@@ -958,7 +958,7 @@ void Pawn::setPawn(Pawn setData)
 void Pawn::setDefaultValue()
 {
 	defPos			= myTransform.pos;
-	defvelocity			= myTransform.velocity;
+	defvelocity		= myTransform.velocity;
 	defrot			= myTransform.rotDeg;
 	defScale		= myTransform.scale;
 }
@@ -968,10 +968,10 @@ void Pawn::setDefaultValue()
 //
 void Pawn::initializeStatus()
 {
-	myTransform.pos		= defPos;
+	myTransform.pos			= defPos;
 	myTransform.velocity	= defvelocity;
 	myTransform.rotDeg		= defrot;
-	myTransform.scale	= defScale;
+	myTransform.scale		= defScale;
 
 	myTransform.accele = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
@@ -1159,6 +1159,8 @@ void Pawn::reflectionExportData(const ExportData setExport)
 	myTransform = setExport.myTransform;
 	isUsed		= setExport.isUsed;
 	myGameObjType = setExport.myGameObjType;
+
+	setDefaultValue();
 }
 
 //

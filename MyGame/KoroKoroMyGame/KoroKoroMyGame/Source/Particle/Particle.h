@@ -38,7 +38,7 @@ protected:
 	void make(D3DXVECTOR3 pos,D3DXVECTOR3 move);
 	void destroy();
 	void move();
-	bool orBelow(FLOAT yPos);
+	bool checkLength(FLOAT yPos);
 	D3DXVECTOR3 moveVec = D3DXVECTOR3(0.0f,0.0f,0.0f);
 	bool awake = false;
 

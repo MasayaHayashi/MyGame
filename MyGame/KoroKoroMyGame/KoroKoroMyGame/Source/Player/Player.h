@@ -55,6 +55,7 @@ public:
 
 	void changeModel();
 	void updatePlayng(D3DXVECTOR3 CameraForward);
+	void updateReady(D3DXVECTOR3 CameraForward);
 
 
 	PlayerState getState()   const;

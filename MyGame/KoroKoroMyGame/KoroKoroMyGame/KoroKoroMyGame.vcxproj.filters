@@ -172,8 +172,11 @@
     <Filter Include="ソース ファイル\TitleSelectUI">
       <UniqueIdentifier>{c461b54d-c4bd-4af2-848d-864e6fe5c85b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\StarParticle">
-      <UniqueIdentifier>{2c020196-ac7d-42fd-ae08-18fd82b12146}</UniqueIdentifier>
+    <Filter Include="ソース ファイル\MissUI">
+      <UniqueIdentifier>{ce766b6f-3727-4c34-8f09-50d0edaf6887}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\SpikeBlock">
+      <UniqueIdentifier>{8db2f2ca-151c-40d0-80bc-3cafddca3bf4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -317,6 +320,12 @@
     </ClCompile>
     <ClCompile Include="Source\StarParticle\StarParticle.cpp">
       <Filter>ソース ファイル\Star</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MissUI\MissUI.cpp">
+      <Filter>ソース ファイル\MissUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SpikeBlock\SpikeBlock.cpp">
+      <Filter>ソース ファイル\SpikeBlock</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -472,6 +481,12 @@
     </ClInclude>
     <ClInclude Include="Source\StarParticle\StarParticle.h">
       <Filter>ソース ファイル\Star</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MissUI\MissUI.h">
+      <Filter>ソース ファイル\MissUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SpikeBlock\SpikeBlock.h">
+      <Filter>ソース ファイル\SpikeBlock</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

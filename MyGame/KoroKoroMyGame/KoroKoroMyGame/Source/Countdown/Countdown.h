@@ -22,11 +22,14 @@ public:
 	void update();
 	void draw();
 
+	void initializeStatus();
+
 private:
 	const std::string TexturePass = "Data/Texture/numbers.png";
 	static constexpr INT   ChangeFrame = 60;
 	
-	INT changeNumberCnt = ChangeFrame;
+	INT	changeNumberCnt = ChangeFrame;
+
 
 };
 

@@ -65,8 +65,8 @@ protected:
 	VERTEX_BOARD_DATA		vertexBoard;		// 頂点情報データ
 	TEXTURE_DATA			texture;			// テクスチャデータ
 
-	CHAR				fileName[256];		// 読み込むファイル名
-	CHAR				textureFileName[256];
+	CHAR					fileName[256];		// 読み込むファイル名
+	CHAR					textureFileName[256];
 	LPDIRECT3DTEXTURE9		pD3DTexture;	// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 pD3DVtxBuff;	// 頂点バッファインターフェースへのポインタ
 	LPDIRECT3DINDEXBUFFER9	pD3DIdxBuff;	// インデックスバッファへのポインタ
@@ -97,6 +97,7 @@ protected:
 	BYTE					idNumber;				// 識別番号
 	bool					isNarrow;				// 縮小処理
 	bool					isUsed;
+	bool					awake = false;
 private:
 
 	D3DXMATRIX				mtxTempView;			// 逆行列を求めるためのビュー行列
