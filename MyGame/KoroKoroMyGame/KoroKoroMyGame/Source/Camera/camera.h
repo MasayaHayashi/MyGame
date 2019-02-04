@@ -47,13 +47,14 @@ public:
 
 	void finalize(Player* pPlayer);
 	void finalize();
-	void update(Player &,Board&);
+	void update(Player &,INT);
 	void updateTitle(Pawn*);
 	void updateStageEdit(std::string keyName, UINT selectIndex);
-	void updateGameMain(Player &,Board&);
+	void updateGameMain(Player &,INT);
 	void updateGameMainPlay(Player &,Board);
 	void updateGameMainMiss();
-	void updateGameMainReady(Player &pPlayer, Board &countDown);
+	void updateGameMainReady(Player &pPlayer, INT countDown);
+	void editInput(D3DXVECTOR3 blockPos);
 
 
 	void setState(MoveStateType setState);

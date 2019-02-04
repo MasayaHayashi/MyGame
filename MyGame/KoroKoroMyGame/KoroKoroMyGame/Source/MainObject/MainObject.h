@@ -28,13 +28,13 @@ class MainObject : public Pawn
 public:
 	MainObject();
 	MainObject(std::string, std::string, size_t,GameObjectType, bool);
-	~MainObject();
+	virtual ~MainObject();
 
-	void initialize();
-	void finalize();
-	void update();
-	void draw();
-	void draw(D3DXMATRIX,D3DXMATRIX);
+	virtual void initialize();
+	virtual void finalize();
+	virtual void update();
+	virtual void draw();
+	virtual void draw(D3DXMATRIX,D3DXMATRIX);
 
 	const std::string getKeyName();
 

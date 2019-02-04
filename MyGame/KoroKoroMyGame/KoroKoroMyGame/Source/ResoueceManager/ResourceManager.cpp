@@ -312,39 +312,11 @@ bool ResourceManager::makeVtx(VERTEX_BOARD_DATA &vtxBoardData)
 		// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
 		vtxBoard.back()->pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-		/*
-		if (SizeBoard.z == 0.0f)
-		{
-		// 頂点座標の設定
-		pVtx[0].vtx = D3DXVECTOR3(-SizeBoard.x / 2.0f, -SizeBoard.y / 2.0f, 0.0f);
-		pVtx[1].vtx = D3DXVECTOR3(-SizeBoard.x / 2.0f, SizeBoard.y / 2.0f, 0.0f);
-		pVtx[2].vtx = D3DXVECTOR3(SizeBoard.x / 2.0f, -SizeBoard.y / 2.0f, 0.0f);
-		pVtx[3].vtx = D3DXVECTOR3(SizeBoard.x / 2.0f, SizeBoard.y / 2.0f, 0.0f);
-		}
-		else
-		{
-		// 頂点座標の設定
-		pVtx[0].vtx = D3DXVECTOR3(-SizeBoard.x / 2.0f, 0.0f, -SizeBoard.z);
-		pVtx[1].vtx = D3DXVECTOR3(-SizeBoard.x / 2.0f, 0.0f, SizeBoard.z);
-		pVtx[2].vtx = D3DXVECTOR3(SizeBoard.x / 2.0f, 0.0f, -SizeBoard.z);
-		pVtx[3].vtx = D3DXVECTOR3(SizeBoard.x / 2.0f, 0.0f, SizeBoard.z);
-		}
-		*/
-
-
 		pVtx[0].vtx = D3DXVECTOR3(-vtxBoardData.size.x, vtxBoardData.size.y, 0.0f);
 		pVtx[1].vtx = D3DXVECTOR3(vtxBoardData.size.x, vtxBoardData.size.y, 0.0f);
 		pVtx[2].vtx = D3DXVECTOR3(-vtxBoardData.size.x, -vtxBoardData.size.y, 0.0f);
 		pVtx[3].vtx = D3DXVECTOR3(vtxBoardData.size.x, -vtxBoardData.size.y, 0.0f);
-		/*
-		{
-		// 頂点座標の設定
-		pVtx[0].vtx = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		pVtx[1].vtx = D3DXVECTOR3(SizeBoard.x, 0.0f, 0.0f);
-		pVtx[2].vtx = D3DXVECTOR3(0.0f,SizeBoard.y, 0.0f);
-		pVtx[3].vtx = D3DXVECTOR3(SizeBoard.x,SizeBoard.y, 0.0f);
-		}
-		*/
+
 		// 法線の設定
 		if (vtxBoardData.size.z == 0.0f)
 		{
@@ -375,14 +347,6 @@ bool ResourceManager::makeVtx(VERTEX_BOARD_DATA &vtxBoardData)
 		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
 		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 
-
-		/*
-		pVtx[0].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVtx[1].tex = D3DXVECTOR2(0.0f, 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(1.0f, 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(1.0f, 0.0f);
-
-		*/
 		// 頂点データをアンロックする
 		vtxBoard.back()->pD3DVtxBuff->Unlock();
 		return true;
@@ -441,14 +405,6 @@ bool ResourceManager::makeVtx(VERTEX_BOARD_DATA &vtxBoardData)
 		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
 		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 
-
-		/*
-		pVtx[0].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVtx[1].tex = D3DXVECTOR2(0.0f, 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(1.0f, 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(1.0f, 0.0f);
-
-		*/
 		// 頂点データをアンロックする
 		vtxBoard.back()->pD3DVtxBuff->Unlock();
 
@@ -765,7 +721,6 @@ HRESULT ResourceManager::makeModelHierarchyResouce(HIERARCHY_MESH_DATA &setHiera
 
 	// メッシュの種類初期化
 	meshType = MeshObjType::HierarchyModel;
-
 
 	resoueceMesh[keyName].push_back(NEW HIERARCHY_MESH_DATA());
 	
@@ -1422,5 +1377,12 @@ void ResourceManager::setHierarchy(HIERARCHY_MESH_DATA *meshData,std::string key
 {
 	std::memcpy(meshData, resoueceMesh[keyName][index], sizeof(HIERARCHY_MESH_DATA));
 	meshData->CollitionBox = resoueceMesh[keyName][index]->CollitionBox;
+}
 
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 階層構造用アニメーションデータ取得
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+LPD3DXANIMATIONSET& ResourceManager::getAnimData(size_t index)
+{
+	return resoueceMesh["Data/Model/Character/PenChan/PenguinC.x"][0]->ppAnimSet[index];
 }

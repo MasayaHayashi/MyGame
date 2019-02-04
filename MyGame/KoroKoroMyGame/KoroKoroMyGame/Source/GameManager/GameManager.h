@@ -22,6 +22,7 @@ public:
 	{
 		Ready,
 		Playing,
+		FallMiss,
 		Miss,
 		Goal,
 		Pause,

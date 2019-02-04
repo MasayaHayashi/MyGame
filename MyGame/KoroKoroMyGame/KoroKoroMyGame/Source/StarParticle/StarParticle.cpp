@@ -41,6 +41,35 @@ StarParticle::StarParticle()
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// コンストラクタ
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+StarParticle::StarParticle(size_t index)
+{
+	strcpy_s(fileName, TextureFilePass.c_str());
+
+	color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f);
+	vertexBoard.pos = D3DXVECTOR3(-10.0f, 0.0f, 0.0f);
+	vertexBoard.rotDeg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	vertexBoard.scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	vertexBoard.size = D3DXVECTOR3(99.0f * 0.004f, 94.0f * 0.004f, 0.0f);
+	isAlphaBlend = true;
+	vertexBoard.boardType = boardType::Billboard;
+	vertexBoard.radAngle = D3DXToRadian(0);
+	moveVec = D3DXVECTOR3(MyRandom::get(-1.0f, 1.0f), MyRandom::get(0.3f, 0.5f), 0.0f);
+
+	texPatternDivideX = 1;
+	texPatternDivideY = 1;
+	texUV_SizeX = 1.0f / texPatternDivideX;
+	texUV_SizeY = 1.0f / texPatternDivideY;
+	animPattern = texPatternDivideX * texPatternDivideY;
+	intervalChangePattern = 1;
+
+	idNumber = index;
+
+	isUsed = false;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // デストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 StarParticle::~StarParticle()
@@ -70,15 +99,17 @@ void StarParticle::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void StarParticle::update()
 {
-
 	if (GameManager::getGameType() == GameManager::GameType::Miss)
 	{
 		if (!awake)
 		{
 			awake  = true;
 			isUsed = true;
+
+			D3DXVECTOR3 camera = Collision::getCameraTransform("Camera", 0)->pos;
+
 			vertexBoard.pos = Collision::getTransform("Player", 0)->pos;
-			vertexBoard.velocity = D3DXVECTOR3 (MyRandom::get(-1.0f,1.0f), MyRandom::get(0.2f, 2.0f), MyRandom::get(-1.0f, 1.0f));
+			vertexBoard.velocity = D3DXVECTOR3(MyRandom::get(-1.0f, 1.0f), MyRandom::get(0.2f, 2.0f), MyRandom::get(-0.4f, 0.4f));
 		}
 	}
 
@@ -87,16 +118,15 @@ void StarParticle::update()
 		return;
 	}
 	
-	vertexBoard.pos += vertexBoard.velocity;
+	vertexBoard.pos			+= vertexBoard.velocity;
+	vertexBoard.velocity.y  -= Gravity;
 
-	
-	
+	/*
 	if (checkLength(60.0f))
 	{
 		destroy();
 	}
-	
-	
+	*/
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

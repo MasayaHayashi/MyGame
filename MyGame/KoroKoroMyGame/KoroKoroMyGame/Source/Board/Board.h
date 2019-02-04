@@ -24,6 +24,7 @@ class Board : public GameObjectBase
 {
 public:
 	Board();
+	Board(size_t index);
 	virtual ~Board();
 	virtual void initialize();
 	virtual void update();
@@ -94,7 +95,7 @@ protected:
 	FLOAT					texUV_SizeX;			// テクスチャ切り替え用UV座標X
 	FLOAT					texUV_SizeY;			// テクスチャ切り替え用UV座標Y
 
-	BYTE					idNumber;				// 識別番号
+	size_t					idNumber;				// 識別番号
 	bool					isNarrow;				// 縮小処理
 	bool					isUsed;
 	bool					awake = false;

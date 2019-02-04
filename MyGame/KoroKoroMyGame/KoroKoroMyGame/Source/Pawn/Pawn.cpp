@@ -973,7 +973,7 @@ void Pawn::initializeStatus()
 	myTransform.rotDeg		= defrot;
 	myTransform.scale		= defScale;
 
-	myTransform.accele = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.accele = 1.0f;
 
 	// КgСе
 	D3DXMATRIX mScale;
@@ -1037,6 +1037,7 @@ void Pawn::updateAnimation()
 		DWORD nowTime = timeGetTime();
 		DOUBLE deltaTime = (nowTime - hierarchyMeshData.dwPrev) / 1000.0;
 		hierarchyMeshData.dwPrev = nowTime;
+
 		hierarchyMeshData.pAnimCtrl->AdvanceTime(deltaTime, nullptr);
 	}
 }

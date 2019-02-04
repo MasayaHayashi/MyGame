@@ -89,8 +89,6 @@ void SpikeBlock::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SpikeBlock::update()
 {
-	// コライダー更新
-	//	pCollider->UpdateCollider(mtxWorldPawn, FIELD_BOX_COLOR );
 	updateExportData();
 
 	if (!isUsed)

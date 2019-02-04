@@ -24,6 +24,7 @@ class StarParticle final : public Particle
 {
 public:
 	StarParticle();
+	StarParticle(size_t index);
 	~StarParticle();
 
 	void initialize();
@@ -37,6 +38,7 @@ private:
 
 	const std::string TextureFilePass = "Data/Texture/GoldStar.png";
 	static constexpr FLOAT TitleRotSpeed = 0.06f;
+	static constexpr FLOAT Gravity		 = 0.004f;
 
 	FLOAT rotCnt = 0;
 

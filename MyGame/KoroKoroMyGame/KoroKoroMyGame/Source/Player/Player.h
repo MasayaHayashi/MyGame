@@ -47,6 +47,7 @@ public:
 	void updateGameMain(D3DXVECTOR3);
 	void updateGoal();
 	void updateSelect();
+	void updateMiss();
 
 	void setStatus(Player::PlayerState setStatus);
 	void setScore(INT);
@@ -71,6 +72,9 @@ private:
 	static constexpr FLOAT  SideSpeed				= 0.3f;
 	static constexpr FLOAT  MaxSpeed				= 0.02f;
 	static constexpr FLOAT  JumpSpeed				= 0.14f;
+	static constexpr FLOAT  MissSpeed			    = 0.2f;
+	static constexpr FLOAT  FallMissPosY			= 11.0f;
+
 
 	bool isKeyInput = false;
 	bool fallFlg	= true;
@@ -81,7 +85,6 @@ private:
 	void initializeSceneEdit();
 	void initializeGameMain();
 	void initializeResult();
-	void updateMainReady();
 	void updateTitle(D3DXVECTOR3);
 	void updateResult();
 	void input();
@@ -89,6 +92,7 @@ private:
 	void rideBall(size_t setIndex);
 	void fall(size_t checkIndex);
 	void rotation(D3DXVECTOR3 destVec);
+	bool isFall();
 
 	void rebound(size_t index);
 
@@ -100,8 +104,10 @@ private:
 	D3DXVECTOR3	moveVector;
 
 	PlayerState	playerStateType;
-
+	bool missFlg = false;
 	INT score;
+	FLOAT radianRotCnt = 0;
+
 	FLOAT Xnum = 0.0f;
 	FLOAT Ynum = 0.0f;
 

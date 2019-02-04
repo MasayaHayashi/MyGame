@@ -8,7 +8,7 @@
 #include "../Application/Application.h"
 #include "../ResoueceManager/ResourceManager.h"
 #include "../GameManager/GameManager.h"
-#include <stdio.h>	// ファイル入出力用
+#include <stdio.h>
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ

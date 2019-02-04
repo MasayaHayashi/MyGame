@@ -178,6 +178,12 @@
     <Filter Include="ソース ファイル\SpikeBlock">
       <UniqueIdentifier>{8db2f2ca-151c-40d0-80bc-3cafddca3bf4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\StarItem">
+      <UniqueIdentifier>{4693ea61-5622-44fe-961c-906337b62b41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ItemBase">
+      <UniqueIdentifier>{4ddc9f35-90dc-4c20-bdac-7da8af2f8d9d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Audio\MyAudiere.cpp">
@@ -326,6 +332,12 @@
     </ClCompile>
     <ClCompile Include="Source\SpikeBlock\SpikeBlock.cpp">
       <Filter>ソース ファイル\SpikeBlock</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Item\ItemBase.cpp">
+      <Filter>ソース ファイル\ItemBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\StarItem\StarItem.cpp">
+      <Filter>ソース ファイル\StarItem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -487,6 +499,12 @@
     </ClInclude>
     <ClInclude Include="Source\SpikeBlock\SpikeBlock.h">
       <Filter>ソース ファイル\SpikeBlock</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Item\ItemBase.h">
+      <Filter>ソース ファイル\ItemBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StarItem\StarItem.h">
+      <Filter>ソース ファイル\StarItem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

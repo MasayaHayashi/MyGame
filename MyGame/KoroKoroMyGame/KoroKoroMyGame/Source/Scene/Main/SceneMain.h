@@ -100,7 +100,6 @@ private:
 	std::unique_ptr<Camera>		cameraPtr;
 	std::unique_ptr<Collision>	collisionPtr;
 
-	std::list<BallObj*>														ballsPtr;
 	std::list<std::unique_ptr<Player>>										playeresPtr;
 	std::list<std::unique_ptr<Skydome>>										skyDomePtr;
 	std::list<std::unique_ptr<Board>>										boardObjectesPtr;

@@ -102,22 +102,13 @@ void MainObject::update()
 		return;
 	}
 
-	static bool mode = false;
-
-	if (Keyboard::getTrigger(DIK_U))
+	if (myGameObjType == GameObjectType::NormalBlockObj)
 	{
-		mode = !mode;
-	}
+		myTransform.rotDeg.y += 0.1f;
 
-	if (mode)
-	{
-		if (MyVector3::getLength(Collision::getTransform("Player", 0)->pos - myTransform.pos) < 15.0f)
-		{
-			if (myGameObjType == GameObjectType::NormalBlockObj)
-			{
-				myTransform.pos.y += 0.2f;
-			}
-		}
+		D3DXMATRIX matrix;
+		D3DXMatrixRotationY(&matrix, D3DXToRadian(myTransform.rotDeg.y));
+		D3DXMatrixMultiply(&worldMtx, &worldMtx, &matrix);
 	}
 
 	if (Collision::getTransform(tagName, idNumber)->isHitAABB)

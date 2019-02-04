@@ -471,46 +471,7 @@ void StageEditor::loadStageData(size_t stageNumber)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void StageEditor::checkSaveData()
 {
-//{
-//	// UI表示
-//	pUIObj[UI_WTHAT_STAGE_SAVE]->SetUsedFlg(true);
-//	pUIObj[UI_STAGE]->SetUsedFlg(true);
-//	pUIObj[UI_NUMBERS]->SetUsedFlg(true);
-//
-//	if (GetKeyboardTrigger(DIK_D))
-//		uSaveStage ++;
-//	if (GetKeyboardTrigger(DIK_A))
-//		uSaveStage --;
-//
-//	
-//	uSaveStage %= MAX_STAGE - 1;	// チュートリアルは選択させない
-//
-//	// 数字表示切替え
-//	pUIObj[UI_NUMBERS]->SetCurrentAnimPattern(uSaveStage + 1);
-//
-//	// セーブ
-//	if (GetKeyboardTrigger(DIK_I))
-//	{
-//		bIsSelectSaveStage = true;
-//		uSelectMode = MODE_EDIT;
-//
-//		// UI非表示
-//		pUIObj[UI_WTHAT_STAGE_SAVE]->SetUsedFlg(false);
-//		pUIObj[UI_STAGE]->SetUsedFlg(false);
-//		pUIObj[UI_NUMBERS]->SetUsedFlg(false);
-//
-//		pUIObj[UI_SAVE_OK]->SetUsedFlg(true);
-//	}
-//	// 元の画面へ
-//	if (GetKeyboardTrigger(DIK_U))
-//	{
-//		// UI非表示
-//		pUIObj[UI_WTHAT_STAGE_SAVE]->SetUsedFlg(false);
-//		pUIObj[UI_STAGE]->SetUsedFlg(false);
-//		pUIObj[UI_NUMBERS]->SetUsedFlg(false);
-//
-//		uSelectMode = MODE_EDIT;
-//	}
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -518,22 +479,6 @@ void StageEditor::checkSaveData()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void StageEditor::deleteObj()
 {
-	/*
-	if (GetKeyboardPress(DIK_J))
-	{
-		if (GetKeyboardTrigger(DIK_K))
-		{
-			for (int i = 0; i < MAX_GAME_OBJ; i++)
-			{
-				// 例外処理
-				if (!pGameObj[CurrentSelectType][i]->GetUsedFlg() || uSelectObjNum[CurrentSelectType] == i)
-					continue;
-
-				pCollision->CheckCollisionBlock(pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]], pGameObj[CurrentSelectType][i]);
-			}
-		}
-	}
-	*/
 
 }
 
@@ -546,24 +491,52 @@ void StageEditor::move()
 
 	D3DXVECTOR3 blockPos = (*currentGameObject)->getPosition();
 	D3DXVECTOR3 blockRot = (*currentGameObject)->getRotation();
-	D3DXVECTOR3 blockSize = (*currentGameObject)->getCollisionBox();
+	D3DXVECTOR3 size = (*currentGameObject)->getCollisionBox();
+	D3DXVECTOR3 blockSize = D3DXVECTOR3(0.5f,0.5f,0.5f);
 
 	D3DXVECTOR3 pos = D3DXVECTOR3(blockPos.x, blockPos.y, blockPos.z);
+
+	if (Keyboard::getPress(DIK_LCONTROL))
+	{
+		if (Keyboard::getPress(DIK_W))
+		{
+			(*currentGameObject)->setPosition(pos + D3DXVECTOR3(0.0f, blockSize.y, 0.0f));
+			(*currentGameObject)->setUsedFlg(true);
+		}
+		if (Keyboard::getPress(DIK_S))
+		{
+			(*currentGameObject)->setPosition(pos + D3DXVECTOR3(0.0f, -blockSize.y, 0.0f));
+			(*currentGameObject)->setUsedFlg(true);
+		}
+
+		if (Keyboard::getPress(DIK_A))
+		{
+			(*currentGameObject)->setPosition(pos + D3DXVECTOR3(blockSize.x, 0.0f, 0.0f));
+			(*currentGameObject)->setUsedFlg(true);
+		}
+		if (Keyboard::getPress(DIK_D))
+		{
+			(*currentGameObject)->setPosition(pos + D3DXVECTOR3(-blockSize.x, 0.0f, 0.0f));
+			(*currentGameObject)->setUsedFlg(true);
+		}
+
+
+	}
 
 	if (Keyboard::getPress(DIK_LSHIFT))
 	{
 		if (Keyboard::getPress(DIK_W))
 		{
-			(*currentGameObject)->setPosition(pos + D3DXVECTOR3(0.0f, 0.5f, 0.0f));
+			(*currentGameObject)->setPosition(pos + D3DXVECTOR3(0.0f, 0.0f, blockSize.z));
 			(*currentGameObject)->setUsedFlg(true);
 		}
 		if (Keyboard::getPress(DIK_S))
 		{
-			(*currentGameObject)->setPosition(pos + D3DXVECTOR3(0.0f, -0.5f, 0.0f));
+			(*currentGameObject)->setPosition(pos - D3DXVECTOR3(0.0f, 0.0f, blockSize.z));
 			(*currentGameObject)->setUsedFlg(true);
 		}
-
 	}
+
 
 	if (Keyboard::getTrigger(DIK_W))
 	{
@@ -572,9 +545,9 @@ void StageEditor::move()
 		(*currentGameObject)->setUsedFlg(true);
 	}
 
-	if (Keyboard::getPress(DIK_A))
+	if (Keyboard::getTrigger(DIK_A))
 	{
-		D3DXVECTOR3 Pos = D3DXVECTOR3(blockPos - D3DXVECTOR3(0.2f, 0.0f, 0.0f));
+		D3DXVECTOR3 Pos = D3DXVECTOR3(blockPos.x - blockSize.x ,blockPos.y ,blockPos.z);
 		(*currentGameObject)->setPosition(Pos);
 		(*currentGameObject)->setUsedFlg(true);
 	}
@@ -586,9 +559,9 @@ void StageEditor::move()
 		(*currentGameObject)->setUsedFlg(true);
 	}
 
-	if (Keyboard::getPress(DIK_D))
+	if (Keyboard::getTrigger(DIK_D))
 	{
-		D3DXVECTOR3 Pos = D3DXVECTOR3(blockPos + D3DXVECTOR3(0.2f, 0.0f, 0.0f));
+		D3DXVECTOR3 Pos = D3DXVECTOR3(blockPos.x + blockSize.x,blockPos.y,blockPos.z);
 		(*currentGameObject)->setPosition(Pos);
 		(*currentGameObject)->setUsedFlg(true);
 	}

@@ -47,6 +47,41 @@ Board::Board()
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// コンストラクタ
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+Board::Board(size_t index)
+{
+	pD3DVtxBuff = nullptr;
+	pD3DTexture = nullptr;
+	vertexBoard.fade = false;
+	pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	posDestBoard = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	tempQuaternion = D3DXQUATERNION(0, 0, 0, 1);
+	radAngle = 0.0f;
+	rotSpeed = 0.0f;
+	isAlphaBlend = false;
+	isvelocityUV = false;
+	isNarrow = false;
+	boardType = boardType::Polygon2d;
+
+	// テクスチャ関連
+	texUV_SizeX = 0.0f;
+	texUV_SizeY = 0.0f;
+	velocityUV = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	texPatternDivideX, texPatternDivideY = 0;
+	animPattern = 0;
+	intervalChangePattern = 0;
+	animCnt = 0;
+	currentAnimPattern = 1;
+	color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+
+	idNumber = index;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // デストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 Board::~Board()

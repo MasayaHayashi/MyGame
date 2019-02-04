@@ -1,5 +1,64 @@
-﻿  Camera.cpp
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\camera\camera.cpp(738): warning C4244: '初期化中': 'float' から 'INT' への変換です。データが失われる可能性があります。
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\camera\camera.cpp(744): warning C4244: '引数': 'INT' から 'FLOAT' への変換です。データが失われる可能性があります。
-  KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.exe
-  KoroKoroMyGame.vcxproj -> D:\授業の内容、学校関連\Git\MyGame\KoroKoroMyGame\Debug\KoroKoroMyGame.pdb (Partial PDB)
+﻿  TitleUI.cpp
+  TitleSelectUI.cpp
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\titleselectui\titleselectui.cpp(20): warning C4244: '引数': 'const UINT' から 'FLOAT' への変換です。データが失われる可能性があります。
+  StarParticle.cpp
+  StarItem.cpp
+  StageClearUI.cpp
+  SpikeBlock.cpp
+  Skydome.cpp
+  SelectManager.cpp
+  SceneTitle.cpp
+  SceneStageEdit.cpp
+  SceneSelect.cpp
+  SceneMain.cpp
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\main\scenemain.cpp(445): error C2039: 'createItem': 'SceneMain' のメンバーではありません。
+  d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\scene\main\scenemain.h(52): note: 'SceneMain' の宣言を確認してください
+  SceneLoad.cpp
+  SceneManager.cpp
+  sceneBase.cpp
+  ResourceManager.cpp
+  MyRandom.cpp
+  Player.cpp
+  Pawn.cpp
+  Particle.cpp
+  コードを生成中...
+  コンパイル中...
+  MyVector3.cpp
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\myvector3\myvector3.cpp(69): warning C4244: '=': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\myvector3\myvector3.cpp(256): warning C4244: '=': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\myvector3\myvector3.cpp(278): warning C4244: '=': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\myvector3\myvector3.cpp(289): warning C4244: '初期化中': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
+  MyHierarchy.cpp
+  MyDelete.cpp
+  MissUI.cpp
+  MeshFieldBase.cpp
+  MainObject.cpp
+  MainField.cpp
+  MyLoadIcon.cpp
+  Light.cpp
+  Keyboard.cpp
+  ItemBase.cpp
+  HeartObj.cpp
+  Goal.cpp
+  GameObjectBase.cpp
+  GameManager.cpp
+  Fream.cpp
+  Figure.cpp
+  FadeUI.cpp
+  Main.cpp
+  StageEditor.cpp
+  コードを生成中...
+  コンパイル中...
+  WhatStageSaveUI.cpp
+  DirectX3D.cpp
+  Countdown.cpp
+  Collision.cpp
+  Collider.cpp
+  Camera.cpp
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\source\camera\camera.cpp(446): warning C4244: '引数': 'INT' から 'FLOAT' への変換です。データが失われる可能性があります。
+  Board.cpp
+  BallObj.cpp
+  BackGround.cpp
+  MyAudiere.cpp
+  Application.cpp
+  コードを生成中...

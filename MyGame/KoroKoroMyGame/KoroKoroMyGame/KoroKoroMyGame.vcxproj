@@ -137,6 +137,7 @@
     <ClCompile Include="Source\GameObjectBase\GameObjectBase.cpp" />
     <ClCompile Include="Source\Goal\Goal.cpp" />
     <ClCompile Include="Source\HeartObj\HeartObj.cpp" />
+    <ClCompile Include="Source\Item\ItemBase.cpp" />
     <ClCompile Include="Source\KeyBoard\Keyboard.cpp" />
     <ClCompile Include="Source\Light\Light.cpp" />
     <ClCompile Include="Source\LoadIcon\MyLoadIcon.cpp" />
@@ -163,6 +164,7 @@
     <ClCompile Include="Source\Skydome\Skydome.cpp" />
     <ClCompile Include="Source\SpikeBlock\SpikeBlock.cpp" />
     <ClCompile Include="Source\StageClearUI\StageClearUI.cpp" />
+    <ClCompile Include="Source\StarItem\StarItem.cpp" />
     <ClCompile Include="Source\StarParticle\StarParticle.cpp" />
     <ClCompile Include="Source\TitleSelectUI\TitleSelectUI.cpp" />
     <ClCompile Include="Source\TitleUI\TitleUI.cpp" />
@@ -189,6 +191,7 @@
     <ClInclude Include="Source\GameObjectBase\GameObjectBase.h" />
     <ClInclude Include="Source\Goal\Goal.h" />
     <ClInclude Include="Source\HeartObj\HeartObj.h" />
+    <ClInclude Include="Source\Item\ItemBase.h" />
     <ClInclude Include="Source\KeyBoard\Keyboard.h" />
     <ClInclude Include="Source\Light\Light.h" />
     <ClInclude Include="Source\Linklib.h" />
@@ -218,6 +221,7 @@
     <ClInclude Include="Source\Skydome\Skydome.h" />
     <ClInclude Include="Source\SpikeBlock\SpikeBlock.h" />
     <ClInclude Include="Source\StageClearUI\StageClearUI.h" />
+    <ClInclude Include="Source\StarItem\StarItem.h" />
     <ClInclude Include="Source\StarParticle\StarParticle.h" />
     <ClInclude Include="Source\TitleSelectUI\TitleSelectUI.h" />
     <ClInclude Include="Source\TitleUI\TitleUI.h" />

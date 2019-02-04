@@ -1,0 +1,44 @@
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// ItemBase.h
+// アイテム用基底クラス
+// Author : Masaya Hayashi
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+// ===== 多重インクルード防止 =====
+#ifndef ITEM_BASE_H
+#define ITEM_BASE_H
+
+// ===== インクルード部 =====
+#include "../MainObject/MainObject.h"
+#include <map>
+
+// ===== 定数・マクロ定義 =====
+
+// ===== クラスの前方定義 =====
+
+// ===== 列挙体定義 =====
+
+// ===== 構造体定義 =====
+
+// ===== クラス定義 =====
+class ItemBase : public MainObject
+{
+public:
+	ItemBase();
+	ItemBase(std::string, std::string, size_t,GameObjectType, bool);
+	virtual ~ItemBase();
+
+	virtual void initialize();
+	virtual void finalize();
+	virtual void update();
+	virtual void draw();
+	virtual void draw(D3DXMATRIX,D3DXMATRIX);
+
+protected:
+
+
+private:
+
+};
+
+#endif

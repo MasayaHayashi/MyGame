@@ -286,12 +286,12 @@ const bool Collision::isHitAABB(Transform pPawnA, Transform pPawnB)
 //
 const bool Collision::isHitAABB(Transform pPawnA, Pawn &pPawnB)
 {
-	if (pPawnA.pos.x - pPawnA.collisionBox.x < pPawnB.getPosition().x + pPawnB.getCollisionBox().x &&
-		pPawnA.pos.x + pPawnA.collisionBox.x > pPawnB.getPosition().x - pPawnB.getCollisionBox().x &&
-		pPawnA.pos.y - pPawnA.collisionBox.y < pPawnB.getPosition().y + pPawnB.getCollisionBox().y &&
-		pPawnA.pos.y + pPawnA.collisionBox.y > pPawnB.getPosition().y - pPawnB.getCollisionBox().y &&
-		pPawnA.pos.z - pPawnA.collisionBox.z < pPawnB.getPosition().z + pPawnB.getCollisionBox().z &&
-		pPawnA.pos.z + pPawnA.collisionBox.z > pPawnB.getPosition().z - pPawnB.getCollisionBox().z)
+	if (pPawnA.pos.x - pPawnA.collisionBox.x < pPawnB.getPosition().x + pPawnB.getCollisionBox().x * 0.75f &&
+		pPawnA.pos.x + pPawnA.collisionBox.x > pPawnB.getPosition().x - pPawnB.getCollisionBox().x * 0.75f &&
+		pPawnA.pos.y - pPawnA.collisionBox.y < pPawnB.getPosition().y + pPawnB.getCollisionBox().y * 2.5f &&
+		pPawnA.pos.y + pPawnA.collisionBox.y > pPawnB.getPosition().y - pPawnB.getCollisionBox().y * 2.5f &&
+		pPawnA.pos.z - pPawnA.collisionBox.z < pPawnB.getPosition().z + pPawnB.getCollisionBox().z * 0.9f  &&
+		pPawnA.pos.z + pPawnA.collisionBox.z > pPawnB.getPosition().z - pPawnB.getCollisionBox().z * 0.9f)
 	{
 		return true;
 	}

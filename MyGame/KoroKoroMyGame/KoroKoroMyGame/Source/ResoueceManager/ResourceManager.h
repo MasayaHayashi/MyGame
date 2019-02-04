@@ -90,11 +90,13 @@ public:
 	ResourceManager();
 	~ResourceManager();
 
-	static constexpr CHAR* ModelPenchanPass		= "Data/Model/Character/PenChan/PenguinC.x";
+	static constexpr CHAR* ModelPenchanPass		= "Data/Model/Character/PenChan/please.x";
 	static constexpr CHAR* ModelPenNoHahaPass	= "Data/Model/Character/PenNoHaha/PenguinA.x";
 	static constexpr CHAR* ModelChick			= "Data/Model/Character/Chick/Chick.x";
 
 	static constexpr UINT MaxModelType = 3;
+
+	static LPD3DXANIMATIONSET& getAnimData(size_t index);
 
 	// ê∂ê¨
 	static HRESULT makeModel(MeshData &MeshData, CHAR *pszFilename, MeshObjType &uMeshType);
@@ -129,8 +131,8 @@ private:
 #define	FVF_VERTEX_2D	(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1)
 #define	FVF_VERTEX_3D	(D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1)
 
-	static std::vector<MeshData*>											meshes;
-	static std::vector<HIERARCHY_MESH_DATA*>								hierarchyMesh;
+	static std::vector<MeshData*>												meshes;
+	static std::vector<HIERARCHY_MESH_DATA*>									hierarchyMesh;
 	static std::unordered_map<std::string ,std::vector<HIERARCHY_MESH_DATA*>>	resoueceMesh;
 
 	static std::vector<TEXTURE_DATA*>			texture;
