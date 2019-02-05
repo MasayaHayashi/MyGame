@@ -13,34 +13,14 @@
 #include "../../EditUI/WhatStageSaveUI.h"
 #include "../../Goal/Goal.h"
 #include "../../SpikeBlock/SpikeBlock.h"
+#include "../../StarItem/StarItem.h"
 #include <fstream>
-
-//
-//#include "C_MoveBlock.h"
-//#include "C_ItemStar.h"
-//#include "C_GoalObj.h"
-//#include "C_Pause.h"
-//#include "C_Enemy.h"
-//#include "C_WhatStageLoadUI.h"
-//#include "C_WhatStageSaveUI.h"
-//#include "C_StageUI.h"
-//#include "C_NumbersUIBase.h"
-//#include "C_SaveOkUI.h"
-//#include "C_StageEditUI.h"
-//#include "C_EditDescrUI.h"
-//#include "input.h"
-//#include "collision.h"
-
-// ===== 定数・マクロ定義 =====
-
-//#define TEXTURE_NAME "data/TEXTURE/penguin1.png"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 StageEditor::StageEditor()
 {
-	// フラグ初期化
 	nErrorFopen			= false;
 	isSelectSaveStage	= false;
 	uSaveStage			= static_cast<INT>(STAGE_SELECT_TYPE::STAGE_SELECT1);
@@ -88,7 +68,7 @@ StageEditor::StageEditor()
 	}
 	*/
 
-	lightPtr.reset(NEW Light());
+	lightPtr.reset( NEW Light());
 	cameraPtr.reset(NEW Camera());
 	playerPtr.reset(NEW Player(D3DXVECTOR3(0.0f,5.0f,0.0f),0));
 }
@@ -130,65 +110,8 @@ void StageEditor::initialize()
 
 	(*currentGameObject)->setUsedFlg(true);
 
+	loadStageData(1);
 
-//	loadStageData(1);
-
-	/*
-	// UI初期化
-	for (INT UiCnt = 0; UiCnt < MAX_EDITOR_UI_TYPE; UiCnt++)
-	{
-		switch (UiCnt)
-		{
-			case UI_WTHAT_STAGE_SAVE:
-				pUIObj[UiCnt] = NEW C_WHAT_STAGE_SAVE_UI;
-				break;
-			case UI_WTHAT_STAGE_LOAD:
-				pUIObj[UiCnt] = NEW C_WHAT_STAGE_LOAD_UI;
-				break;
-			case UI_STAGE:
-				pUIObj[UiCnt] = NEW C_STAGE_UI;
-				break;
-			case UI_NUMBERS:
-				pUIObj[UiCnt] = NEW C_NUMBERS_UI_BASE;
-				break;
-			case UI_SAVE_OK:
-				pUIObj[UiCnt] = NEW C_SAVE_OK_UI;
-				break;
-			case UI_STAGE_EDIT:
-				pUIObj[UiCnt] = NEW C_STAGE_EDIT_UI;
-				break;
-			case UI_DESCR:
-				pUIObj[UiCnt] = NEW C_EDIT_DESCR_UI;
-				break;
-			default:
-				break;
-		}
-		pUIObj[UiCnt]->InitObject();
-	}
-	*/
-
-
-	//// 衝突用クラス生成
-	//pCollision = NEW C_COLLISION;
-
-	//// ポーズ用オブジェクト初期化
-	//pPause = NEW C_PAUSE;
-	//pPause->InitObject();
-	//bPause = false;
-
-	//// 現在の選択ブロック初期化
-	//CurrentSelectType = NORMAL_BLOCK_OBJ;
-	//for (INT i = 0; i < MAX_GameObjectType; i++)
-	//	uSelectObjNum[i] = 0;
-
-	//// 使用フラグセット
-	//pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
-
-	//// ステージ読み込み
-	//LoadStageData(0);
-
-	// BGM再生
-//	PlaySound(SOUND_BGM_EDIT);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -202,8 +125,6 @@ void StageEditor::finalize()
 
 	playerPtr->finalize();
 
-
-
 	for (UINT gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
 	{
 		for (auto itr = gameObjPtr[gameObjTypeIndex].begin(); itr != gameObjPtr[gameObjTypeIndex].end(); itr++)
@@ -212,29 +133,6 @@ void StageEditor::finalize()
 			Mydelete::safeDelete(*itr);
 		}
 	}
-
-	//// UI関連後処理
-	//for (INT i = 0; i < MAX_EDITOR_UI_TYPE; i++)
-	//{
-	//	pUIObj[i]->UninitObject();
-	//	SAFE_DELETE(pUIObj[i]);
-	//}
-
-
-	//// ブロック後処理
-	//for (INT i = 0; i < MAX_GameObjectType; i++)
-	//{
-	//	for (INT j = 0; j < MAX_GAME_OBJ; j++)
-	//	{
-	//		pGameObj[i][j]->UninitObject();
-	//		SAFE_DELETE(pGameObj[i][j]);
-	//	}
-	//}
-
-	//// ポーズ後処理
-	//pPause->UninitObject();
-	//SAFE_DELETE(pPause);
-
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -276,9 +174,6 @@ void StageEditor::update()
 		gameObjPtr[selectGameObjType][selectGameObjIndex]->setUsedFlg(true);
 	}
 
-	DirectX3D::printDebug("ゲームオブジェクトの種類%d", selectGameObjType);
-	DirectX3D::printDebug("ゲームオブジェクトのインデックス%d", selectGameObjIndex);
-
 	saveStageData(1);
 
 	if (Keyboard::getPress(DIK_1))
@@ -287,76 +182,6 @@ void StageEditor::update()
 	}
 	
 	cameraPtr->updateStageEdit(gameObjPtr[selectGameObjType][selectGameObjIndex]->getKeyName(),selectGameObjIndex);
-
-//	cameraPtr->update();
-//{
-//	// ポーズ解除処理
-//	if (GetKeyboardTrigger(DIK_P))
-//		bPause = !bPause;
-//
-//	// ポーズ更新
-//	if (bPause)
-//	{
-//		pPause->UpdateObject();
-//		return;
-//	}
-//
-//	// プレイヤー更新
-//	pPlayer->UpdatePlayer_SceneEdit();
-//
-//	// カメラ更新
-//	pCamera->UpdateCamera_StageEdit(pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->GetPosition());
-//
-//	// UI関連更新
-//	for (INT i = 0; i < MAX_EDITOR_UI_TYPE; i++)
-//		pUIObj[i]->UpdateObject();
-//
-//	// ブロック更新
-//	for (int j = 0; j < MAX_GameObjectType; j++)
-//		for (int i = 0; i < MAX_GAME_OBJ; i++)
-//			pGameObj[j][i]->UpdateObject();
-//
-//	if (uSelectMode == MODE_EDIT)
-//	{
-//		// 判定処理
-//		D3DXVECTOR3 Cross, Normal;
-//		D3DXVECTOR3 fLength;
-//
-//		for (INT i = 0; i < MAX_GameObjectType; i++)
-//			for (INT j = 0; j < MAX_GAME_OBJ; j++)
-//			{
-//				// 例外処理
-//				if (!pGameObj[i][j]->GetUsedFlg())
-//					continue;
-//
-//				// プレイヤーとブロックとの判定
-//				pCollision->CheckCollisionField(pPlayer, NULL, pGameObj[i][j], Cross, Normal, fLength,D3DXVECTOR3(0.0f,-1.0f,0.0f));
-//			}
-//
-//		// 選択オブジェクト切り替え
-//		ChangeSelectObj();
-//
-//		// 移動
-//		MoveObj();
-//
-//		// 削除
-//		DeleteObj();
-//	}
-//
-//	if (GetKeyboardTrigger(DIK_O))
-//		// モード切替4
-//		uSelectMode = MODE_SAVE_CONF;
-//
-//	// 書き込みステージ確認
-//	if (uSelectMode == MODE_SAVE_CONF)
-//	{
-//		// セーブするかの確認
-//		CheckSaveData();
-//
-//		// 書き込み
-//		if (bIsSelectSaveStage)
-//			SaveStageData();
-//	}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -383,27 +208,6 @@ void StageEditor::draw()
 	}
 
 	cameraPtr->setCamera();
-
-
-	//// ポーズ処理
-	//if (bPause)
-	//{
-	//	// ポーズ描画
-	//	pPause->DrawObject();
-	//}
-
-	//// ブロック描画
-	//for (int i = 0; i < MAX_GameObjectType; i++)
-	//	for (int j = 0; j < MAX_GAME_OBJ; j++)
-	//		pGameObj[i][j]->DrawObject();
-
-	//// UI関連描画
-	//for (INT i = 0; i < MAX_EDITOR_UI_TYPE; i++)
-	//	pUIObj[i]->DrawObject();
-
-	//// カメラセット
-	//pCamera->SetCamera();
-
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -535,6 +339,18 @@ void StageEditor::move()
 			(*currentGameObject)->setPosition(pos - D3DXVECTOR3(0.0f, 0.0f, blockSize.z));
 			(*currentGameObject)->setUsedFlg(true);
 		}
+
+		if (Keyboard::getPress(DIK_A))
+		{
+			(*currentGameObject)->setPosition(pos - D3DXVECTOR3(blockSize.x, 0.0f, 0.0f));
+			(*currentGameObject)->setUsedFlg(true);
+		}
+		if (Keyboard::getPress(DIK_D))
+		{
+			(*currentGameObject)->setPosition(pos + D3DXVECTOR3(blockSize.x, 0.0f, 0.0f));
+			(*currentGameObject)->setUsedFlg(true);
+		}
+
 	}
 
 
@@ -565,127 +381,6 @@ void StageEditor::move()
 		(*currentGameObject)->setPosition(Pos);
 		(*currentGameObject)->setUsedFlg(true);
 	}
-
-
-	/*
-	if (GetKeyboardTrigger(DIKA))
-	{
-		D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x - BlockSize.x, BlockPos.y, BlockPos.z);
-		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
-		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
-	}
-	*/
-	//// キーボード操作
-	//D3DXVECTOR3 BlockPos = gameObjPtr[selectGameObjType] [selectGameObjIndex]->GetPosition();
-	//D3DXVECTOR3 BlockRot = pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->GetRotation();
-	//D3DXVECTOR3 BlockSize = pGameObj[0][0]->GetCollisionBox() * 0.5f;
-
-	//// 左移動
-	//if (GetKeyboardTrigger(DIK_A))
-	//{
-	//	D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x - BlockSize.x, BlockPos.y, BlockPos.z);
-	//	pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
-	//	pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
-	//}
-	//if (GetKeyboardTrigger(DIK_D))
-	//{
-	//	D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x + BlockSize.x, BlockPos.y, BlockPos.z);
-	//	pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
-	//	pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
-
-	//}
-	//if (GetKeyboardTrigger(DIK_S))
-	//{
-	//	D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x, BlockPos.y, BlockPos.z - BlockSize.z);
-	//	pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
-	//	pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
-
-	//}
-	//if (GetKeyboardTrigger(DIK_W))
-	//{
-	//	D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x, BlockPos.y, BlockPos.z + BlockSize.z);
-	//	pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
-	//	pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
-	//}
-
-	//// 高速移動
-	//if (GetKeyboardPress(DIK_J))
-	//{
-
-	//	if (GetKeyboardPress(DIK_A))
-	//	{
-	//		D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x - BlockSize.x * 0.25f, BlockPos.y, BlockPos.z);
-	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
-	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
-	//	}
-	//	if (GetKeyboardPress(DIK_D))
-	//	{
-	//		D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x + BlockSize.x * 0.25f, BlockPos.y, BlockPos.z);
-	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
-	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
-
-	//	}
-	//	if (GetKeyboardPress(DIK_S))
-	//	{
-	//		D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x, BlockPos.y, BlockPos.z - BlockSize.z * 0.25f);
-	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
-	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
-
-	//	}
-	//	if (GetKeyboardPress(DIK_W))
-	//	{
-	//		D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x, BlockPos.y, BlockPos.z + BlockSize.z * 0.25f);
-	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
-	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
-	//	}
-
-
-	//}
-	//// 上下移動、回転
-
-	//// 設置
-	//if (GetKeyboardTrigger(DIK_SPACE))
-	//{
-	//	// 例外処理
-	//	if (uSelectObjNum[CurrentSelectType] < MaxGameObj - 1)
-	//	{
-	//		uSelectObjNum[CurrentSelectType] ++;
-	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType] - 1]->GetPosition());
-	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
-	//	}
-	//}
-
-	//// 上下移動
-	//if (GetKeyboardPress(DIK_RCONTROL))
-	//{
-	//	if (GetKeyboardTrigger(DIK_UP))
-	//	{
-	//		D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x, BlockPos.y + BlockSize.y, BlockPos.z);
-	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
-	//	}
-
-	//	if (GetKeyboardTrigger(DIK_DOWN))
-	//	{
-	//		D3DXVECTOR3 Pos = D3DXVECTOR3(BlockPos.x, BlockPos.y - BlockSize.y * 2.0f, BlockPos.z);
-	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetPosition(Pos);
-	//	}
-
-	//}
-
-	//if (GetKeyboardPress(DIK_U))
-	//{
-	//	// 回転
-	//	if (GetKeyboardTrigger(DIK_A))
-	//	{
-	//		D3DXVECTOR3 Rot = D3DXVECTOR3(BlockRot.x, BlockRot.y + D3DXToRadian(90), BlockRot.z);
-	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetRotation(Rot);
-	//	}
-	//	if (GetKeyboardTrigger(DIK_D))
-	//	{
-	//		D3DXVECTOR3 Rot = D3DXVECTOR3(BlockRot.x, BlockRot.y - D3DXToRadian(90), BlockRot.z);
-	//		pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetRotation(Rot);
-	//	}
-	//}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -725,23 +420,7 @@ void StageEditor::rotObj()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void StageEditor::changeSelectObj()
 {
-	//if (GetKeyboardTrigger(DIK_L))
-	//{
-	//	// 現在のブロックを未使用へ
-	//	pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(false);
 
-	//	CurrentSelectType++;
-	//	CurrentSelectType = CurrentSelectType % MAX_GameObjectType;
-	//	pGameObj[CurrentSelectType][uSelectObjNum[CurrentSelectType]]->SetUsedFlg(true);
-	//}
-}
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// カメラ取得
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-Camera* StageEditor::getCamera()
-{
-	return cameraPtr.get();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -775,12 +454,19 @@ void StageEditor::creteGameObj(size_t objType)
 			gameObjPtr[3].push_back(NEW Goal("heart.x", "heart.png", objIndex));
 		}
 		break;
-	case static_cast<INT>(GameObjectType::SpikeObj) :
+	case static_cast<INT>((GameObjectType::SpikeObj)) :
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
 		{
 			gameObjPtr[4].push_back(NEW SpikeBlock("block_spike1.x", "cube_metal_unity.tga", objIndex, GameObjectType::SpikeObj, false));
 		}
 		break;
+	case static_cast<INT>((GameObjectType::StarObj)) :
+		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
+		{
+			gameObjPtr[5].push_back(NEW StarItem("star.x", "star.png", objIndex, GameObjectType::StarObj , false));
+		}
+		break;
+
 	default:
 		break;
 	}
@@ -869,15 +555,3 @@ void StageEditor::updateSelectIndex()
 		}
 	}
 }
-
-/*
-template <class T>
-void StageEditor::creteGamesObj(T dataType,size_t size)
-{
-	for (INT objIndex = 0; objIndex < size; objIndex ++)
-	{
-		gameObjPtr[objIndex].push_back(NEW T);
-	}
-	break;
-}
-*/

@@ -16,7 +16,6 @@
 // ===== 定数・マクロ定義 =====
 
 // ===== クラスの前方定義 =====
-class C_COLLIDER;
 
 // ===== 列挙体定義 =====
 
@@ -45,12 +44,6 @@ protected:
 	const std::string passName = "Data/Model/Block/";
 
 private:
-
-
-
-
-//	const std::string ModelPass		= "Data/Model/Block/flatAndHill.x";
-
 };
 
 #endif

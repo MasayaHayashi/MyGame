@@ -28,7 +28,6 @@ Particle::Particle()
 	isAlphaBlend = true;
 	vertexBoard.boardType = boardType::Billboard;
 	vertexBoard.radAngle = D3DXToRadian(0);
-//	moveVec = D3DXVECTOR3())
 
 	texPatternDivideX		= 1;
 	texPatternDivideY		= 1;
@@ -55,8 +54,6 @@ void Particle::initialize()
 {
 	ResourceManager::makevertexBoard(vertexBoard, fileName);
 	ResourceManager::createTexture(texture, fileName);
-	
-
 }
 
 //
@@ -72,14 +69,6 @@ void Particle::finalize()
 //
 void Particle::update()
 {
-	if (isHit("Ball"))
-	{
-		vertexBoard.pos = Collision::getTransform("Ball",0)->pos;
-		
-		D3DXVECTOR3 cameraToBallVec = Collision::getCameraTransform("Camera",0)->pos - vertexBoard.pos;
-		D3DXVec3Normalize(&cameraToBallVec,&cameraToBallVec);
-		vertexBoard.pos += cameraToBallVec * 5;
-	}
 
 }
 

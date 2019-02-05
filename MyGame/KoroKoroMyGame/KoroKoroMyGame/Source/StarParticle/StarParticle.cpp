@@ -106,7 +106,7 @@ void StarParticle::update()
 			awake  = true;
 			isUsed = true;
 
-			D3DXVECTOR3 camera = Collision::getCameraTransform("Camera", 0)->pos;
+			D3DXVECTOR3 camera = Collision::getCameraTransform("Camera", 0).pos;
 
 			vertexBoard.pos = Collision::getTransform("Player", 0)->pos;
 			vertexBoard.velocity = D3DXVECTOR3(MyRandom::get(-1.0f, 1.0f), MyRandom::get(0.2f, 2.0f), MyRandom::get(-0.4f, 0.4f));
@@ -120,13 +120,6 @@ void StarParticle::update()
 	
 	vertexBoard.pos			+= vertexBoard.velocity;
 	vertexBoard.velocity.y  -= Gravity;
-
-	/*
-	if (checkLength(60.0f))
-	{
-		destroy();
-	}
-	*/
 }
 
 //
@@ -143,6 +136,6 @@ void StarParticle::draw()
 void StarParticle::initializeStatus()
 {
 	isUsed = false;
-	awake = false;
+	awake  = false;
 	
 }

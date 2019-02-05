@@ -14,22 +14,18 @@ enum class GameObjectType
 {
 	NormalBlockObj = 0,
 	MoveBlockOBj,
-	HeartObj,
+//	HeartObj,
 	FieldObj,
 	GoalObj,
 	SpikeObj,
-};
-
-enum class ItamObjectType
-{
-	StarObj = 0,
+	StarObj,
 };
 
 // ===== ƒNƒ‰ƒX’è‹` =====
 class GameObjectBase
 {
 	public:
-		static constexpr size_t MaxGameObjType = static_cast<int>(GameObjectType::SpikeObj) + 1;
+		static constexpr size_t MaxGameObjType = static_cast<int>(GameObjectType::StarObj) + 1;
 
 		GameObjectBase();
 		virtual ~GameObjectBase();

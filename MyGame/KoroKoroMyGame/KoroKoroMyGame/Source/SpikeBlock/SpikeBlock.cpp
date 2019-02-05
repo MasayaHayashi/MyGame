@@ -68,6 +68,9 @@ void SpikeBlock::initialize()
 	myTransform.pos = D3DXVECTOR3(0.0f, -meshDataObj.collitionBox.y * 2, 0.0f);
 
 	setDefaultValue();
+
+	destPos = myTransform.pos;
+	destPos.y += 2.5f;
 }
 
 //
@@ -105,7 +108,7 @@ void SpikeBlock::update()
 	{
 		if (myGameObjType == GameObjectType::SpikeObj)
 		{
-			if (myTransform.pos.y < -7.0f)
+			if (myTransform.pos.y < destPos.y)
 			{
 				myTransform.pos.y += 0.2f;
 			}

@@ -32,6 +32,7 @@ class FadeUI;
 class Board;
 
 // ===== ƒNƒ‰ƒX’è‹` =====
+
 class SceneCharacterSelect final : public SceneBase
 {
 public:
@@ -44,8 +45,6 @@ public:
 	void finalize();
 
 	void initializeStatus();
-
-	Camera* getCamera();
 
 private:
 	static constexpr UINT MaxUIType = static_cast<UINT>(UIType::DescUI) + 1;

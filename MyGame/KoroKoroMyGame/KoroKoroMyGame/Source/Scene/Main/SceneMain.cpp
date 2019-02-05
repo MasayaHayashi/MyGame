@@ -1,5 +1,5 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// C_SceneTitle.cpp
+// SceneMain.cpp
 // Author    : MasayaHayashi
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
@@ -24,39 +24,8 @@
 #include "../../SpikeBlock/SpikeBlock.h"
 #include "../../HeartObj/HeartObj.h"
 #include "../../StarItem/StarItem.h"
+#include "../../StarUI/StarUI.h"
 #include <fstream>
-
-/*
-#include "C_Board.h"
-#include "C_Pause.h"
-#include "C_Player.h"
-#include "C_Enemy.h"
-#include "C_Light.h"
-#include "C_Camera.h"
-#include "C_Skydome.h"
-#include "C_velocityBlock.h"
-#include "C_GoalObj.h"
-#include "C_Pause.h"
-#include "C_ItemStar.h"
-#include "input.h"
-#include "C_Ready.h"
-#include "C_StarStar.h"
-#include "C_MissUI.h"
-#include "C_GoalUI.h"
-#include "C_StageLoader.h"
-#include "C_BgEffect.h"
-#include "C_ScoreUi.h"
-#include "C_StarUI.h"
-#include "C_Goal.h"
-#include "C_TutorialUI.h"
-#include "C_HeartBoard.h"
-#include "C_NextUI.h"
-#include "C_Audio.h"
-
-#if _DEBUG
-	#include "debugproc.h"
-#endif
-*/
 
 // ===== 静的メンバ変数 =====
 UINT	SceneMain::currentStage = 0;
@@ -71,7 +40,7 @@ SceneMain::SceneMain()
 	lightPtr.reset( NEW Light());
 	cameraPtr.reset(NEW Camera());
 
-	playeresPtr.push_back(static_cast<std::unique_ptr<Player>>(NEW Player(D3DXVECTOR3(-2.0f, 0.0f, 0.0f), playeresPtr.size() )));
+	playeresPtr.push_back(static_cast<std::unique_ptr<Player>>( NEW Player(D3DXVECTOR3(-2.0f, 0.0f, 0.0f), playeresPtr.size() )));
 
 	for (UINT gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
 	{
@@ -87,7 +56,8 @@ SceneMain::SceneMain()
 
 	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW StageClearUI()  ));
 	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW MissUI()	    ));
-	boardObjectesPtr.push_back(std::unique_ptr<Board>(		NEW Countdown()));
+	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW StarUI()));
+	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW Countdown())	);
 
 	collisionPtr.reset( NEW Collision() );
 
@@ -98,7 +68,7 @@ SceneMain::SceneMain()
 
 	for (size_t gameObjType = 0; gameObjType < GameObjectBase::MaxGameObjType; gameObjType++)
 	{
-		for (auto gameObj : gameObjPtr[gameObjType])
+		for (auto &gameObj : gameObjPtr[gameObjType])
 		{
 			if (gameObj->getGameObjectType() == GameObjectType::NormalBlockObj || 
 				gameObj->getGameObjectType() == GameObjectType::SpikeObj)
@@ -110,14 +80,15 @@ SceneMain::SceneMain()
 
 	for (size_t gameObjType = 0; gameObjType < GameObjectBase::MaxGameObjType; gameObjType ++)
 	{
-		for (auto gameObj : gameObjPtr[gameObjType])
+		for (auto &gameObj : gameObjPtr[gameObjType])
 		{
 			if (gameObj->getIsFieldObject())
 			{
-				collisionPtr->registerField(gameObj);
+				collisionPtr->registerField(gameObj.get());
 			}
 		}
 	}
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -273,9 +244,6 @@ void SceneMain::draw()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneMain::initializeStatus()
 {
-	// BGM再生
-//	PlaySound(SOUND_BGM_MAIN);
-
 	// プレイヤーステータス初期化
 	playeresPtr.front()->initializeStatus();
 
@@ -301,14 +269,6 @@ void SceneMain::initializeStatus()
 		}
 	}
 
-}
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// カメラ取得
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-Camera* SceneMain::getCamera()
-{
-	return cameraPtr.get();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -361,14 +321,6 @@ void SceneMain::checkUnProject(INT Indx)
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// スコアセット
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void SceneMain::setScore()
-{
-
-}
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // データ読み込み
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneMain::loadStageData(size_t stageNumber)
@@ -410,31 +362,37 @@ void SceneMain::creteGameObj(size_t objType)
 	case static_cast<INT>(GameObjectType::NormalBlockObj) :
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
 		{
-			gameObjPtr[0].push_back(NEW MainObject("Spikes.x","IceStone.png",objIndex,GameObjectType::NormalBlockObj,false));
+			gameObjPtr[0].push_back(static_cast<std::unique_ptr<MainObject>>( NEW MainObject("Spikes.x","IceStone.png",objIndex,GameObjectType::NormalBlockObj,false)));
 		}
 		break;
 	case static_cast<INT>(GameObjectType::MoveBlockOBj) :
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
 		{
-			gameObjPtr[1].push_back(NEW MainObject("flatAndHill.x","double_1.png", objIndex, GameObjectType::MoveBlockOBj,true));
+			gameObjPtr[1].push_back(static_cast<std::unique_ptr<MainObject>>( NEW MainObject("flatAndHill.x","double_1.png", objIndex, GameObjectType::MoveBlockOBj,true)));
 		}
 		break;
 	case static_cast<INT>((GameObjectType::FieldObj)) :
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
 		{
-			gameObjPtr[2].push_back(NEW MainObject("flat.x","double_1.png", objIndex, GameObjectType::FieldObj,true));
+			gameObjPtr[2].push_back(static_cast<std::unique_ptr<MainObject>>( NEW MainObject("flat.x","double_1.png", objIndex, GameObjectType::FieldObj,true)));
 		}
 		break;
 	case static_cast<INT>((GameObjectType::GoalObj)) :
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
 		{
-			gameObjPtr[3].push_back(NEW Goal("heart.x", "heart.png", objIndex));
+			gameObjPtr[3].push_back(static_cast<std::unique_ptr<MainObject>>( NEW Goal("heart.x", "heart.png", objIndex)));
 		}
 		break; 
 	case static_cast<INT>(GameObjectType::SpikeObj) :
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
 		{
-			gameObjPtr[4].push_back(NEW SpikeBlock("block_spike1.x", "cube_metal_unity.tga", objIndex, GameObjectType::SpikeObj, false));
+			gameObjPtr[4].push_back(static_cast<std::unique_ptr<MainObject>>( NEW SpikeBlock("block_spike1.x", "cube_metal_unity.tga", objIndex, GameObjectType::SpikeObj, false)));
+		}
+		break;
+	case static_cast<INT>(GameObjectType::StarObj) :
+		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
+		{
+			gameObjPtr[5].push_back(static_cast<std::unique_ptr<MainObject>>(NEW StarItem("star.x", "star.png", objIndex, GameObjectType::StarObj, false)));
 		}
 		break;
 	default:
@@ -442,7 +400,10 @@ void SceneMain::creteGameObj(size_t objType)
 	}
 }
 
-void SceneMain::createItem(size_t index)
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// アイテム生成
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void SceneMain::createItem(size_t objType)
 {
 
 }

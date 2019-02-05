@@ -54,10 +54,10 @@ Board::Board(size_t index)
 	pD3DVtxBuff = nullptr;
 	pD3DTexture = nullptr;
 	vertexBoard.fade = false;
-	pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-	size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	pos			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	scale		= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	size		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	rot			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	posDestBoard = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	tempQuaternion = D3DXQUATERNION(0, 0, 0, 1);
 	radAngle = 0.0f;
@@ -135,8 +135,6 @@ void Board::draw()
 
 	D3DXMATRIX mtxScale, mtxTranslate, mtxRoll,mtxRot;
 
-	Camera *pCamera = nullptr;
-
 	// 描画
 	switch (vertexBoard.boardType)
 	{
@@ -172,8 +170,6 @@ void Board::draw()
 		break;
 	case boardType::Billboard:
 
-			pCamera = SceneManager::getInstanse()->getCamera();
-			
 			// αテストを有効に
 			devicePtr->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 			devicePtr->SetRenderState(D3DRS_ALPHAREF, 5);
@@ -183,12 +179,10 @@ void Board::draw()
 			devicePtr->SetRenderState(D3DRS_LIGHTING, FALSE);
 
 			// ビューマトリックスを取得
-			mtxTempView = pCamera->getMtxView();
+			mtxTempView = Collision::getCameraTransform("Camera",0).viewMtx;
 
 			// ワールドマトリックスの初期化
 			D3DXMatrixIdentity(&worldMtx);
-
-			// ポリゴンを正面に向ける
 
 			// 逆行列をもとめる
 			D3DXMatrixInverse(&worldMtx, nullptr, &mtxTempView);

@@ -1,5 +1,6 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // StarItem.cpp
+// スターアイテム
 // Author : Masaya Hayashi
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
@@ -63,9 +64,10 @@ void StarItem::initialize()
 	Collision::registerList(&myTransform, tagName);
 
 	// 位置、移動量、拡大率初期化
-	myTransform.scale	= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-	myTransform.rotDeg	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	myTransform.pos		= D3DXVECTOR3(0.0f, -meshDataObj.collitionBox.y * 2, 0.0f);
+	myTransform.scale	 = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	myTransform.rotDeg	 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	myTransform.pos		 = D3DXVECTOR3(0.0f, -meshDataObj.collitionBox.y * 2, 0.0f);
+	myTransform.rotDeg.y = 90.0f;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -108,10 +110,12 @@ void StarItem::update()
 		D3DXMatrixMultiply(&worldMtx, &worldMtx, &matrix);
 	}
 
+	/*
 	if (Collision::getTransform(tagName, idNumber)->isHitAABB)
 	{
  		GameManager::changeGameType(GameManager::GameType::Miss);
 	}
+	*/
 
 }
 
@@ -133,7 +137,6 @@ void StarItem::draw()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void StarItem::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 {
-	// 例外処理
 	if (!isUsed)
 	{
 		return;

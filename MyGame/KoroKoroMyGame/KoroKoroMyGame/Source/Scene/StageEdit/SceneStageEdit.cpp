@@ -61,15 +61,6 @@ void SceneStageEdit::draw()
 	skydomePtr->draw();
 }
 
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// カメラ取得
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-Camera* SceneStageEdit::getCamera()
-{
-	return stageEditorPtr->getCamera();
-}
-
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ステータス初期化
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

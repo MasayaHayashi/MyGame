@@ -93,8 +93,7 @@ public:
 	static constexpr CHAR* ModelPenchanPass		= "Data/Model/Character/PenChan/please.x";
 	static constexpr CHAR* ModelPenNoHahaPass	= "Data/Model/Character/PenNoHaha/PenguinA.x";
 	static constexpr CHAR* ModelChick			= "Data/Model/Character/Chick/Chick.x";
-
-	static constexpr UINT MaxModelType = 3;
+	static constexpr UINT MaxModelType			= 3;
 
 	static LPD3DXANIMATIONSET& getAnimData(size_t index);
 

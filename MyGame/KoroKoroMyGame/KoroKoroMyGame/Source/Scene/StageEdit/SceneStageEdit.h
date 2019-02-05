@@ -33,9 +33,6 @@ public:
 	void draw();
 
 	void initializeStatus();
-	
-	// ゲッター関連
-	Camera* getCamera();
 
 private:
 

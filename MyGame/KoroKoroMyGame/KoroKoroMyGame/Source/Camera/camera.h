@@ -18,7 +18,6 @@
 
 // ===== 定数・マクロ定義 =====
 
-
 // ===== クラスの前方宣言 =====
 class SceneManager;
 class Pawn;
@@ -84,10 +83,8 @@ private:
 	static constexpr FLOAT ViewAspect		= Application::ScreenWidth / Application::ScreenHeight;
 	static constexpr FLOAT ViewNearZ		= 1.0f;
 	static constexpr FLOAT ViewFarZ			= 20000.0f;
-	
-	static constexpr INT RotSpeed = 10;
-
-	static constexpr size_t MaxFade = 3;
+	static constexpr INT RotSpeed			= 10;
+	static constexpr size_t MaxFade			= 3;
 
 	INT rotCnt = 0;
 
@@ -121,7 +118,6 @@ private:
 	FLOAT			heightcameraP;			// カメラの視点の高さ
 	FLOAT			heightcameraL;			// カメラの注視点の高さ
 	D3DXVECTOR3		cameraFowerd;			// カメラの前方向ベクトル
-	D3DXMATRIX		mtxView;				// ビューマトリックス
 	D3DXMATRIX		mtxProjection;			// プロジェクションマトリックス
 	D3DXMATRIX		mtxRot;					// カメラ回転行列
 	D3DXMATRIX		mtxvelocity;				// カメラ移動行列

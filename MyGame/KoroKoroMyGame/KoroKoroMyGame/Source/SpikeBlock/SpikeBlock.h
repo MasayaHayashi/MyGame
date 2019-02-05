@@ -28,6 +28,8 @@ public:
 	void initializeStatus();
 private:
 
+	D3DXVECTOR3 destPos = D3DXVECTOR3(0.0f,0.0f,0.0f);
+
 	const std::string ModelFilePass		= "Data/Model/Block/block_spike1.x.x";
 	const std::string TextureFilePass	= "Data/Texture/cube_tex.png";
 	static constexpr FLOAT TitleRotSpeed = 0.06f;

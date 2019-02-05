@@ -8,16 +8,6 @@
 #include "../KeyBoard/Keyboard.h"
 #include "../Collider/Collider.h"
 #include "../DirectX3D/DirectX3D.h"
-/*
-#include "C_MyVector3.h"
-#include "collision.h"
-
-#if _DEBUG
-#include "debugproc.h"
-#endif
-*/
-// ===== 定数・マクロ定義 =====
-
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ

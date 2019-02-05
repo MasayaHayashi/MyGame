@@ -23,14 +23,11 @@ public:
 	virtual ~SceneBase();
 
 	virtual void initialize()   = 0;
-	virtual void finalize() = 0;
-	virtual void update() = 0;
-	virtual void draw()   = 0;
+	virtual void finalize()		= 0;
+	virtual void update()		= 0;
+	virtual void draw()			= 0;
 
-	virtual void initializeStatus()  = 0;		// 各種ステータスリセット
-
-	// ゲッター関連
-	virtual Camera* getCamera() = 0;
+	virtual void initializeStatus()  = 0;
 
 protected:
 	audiere::OutputStreamPtr bgmPtr;

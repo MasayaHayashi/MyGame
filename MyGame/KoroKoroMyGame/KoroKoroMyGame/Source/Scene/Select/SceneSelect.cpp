@@ -229,14 +229,6 @@ void SceneSelect::initializeStatus()
 }
 
 //
-// ƒJƒƒ‰æ“¾
-//
-Camera* SceneSelect::getCamera()
-{
-	return cameraPtr.get();
-}
-
-//
 // ”»’èŠÖ˜A
 //
 void SceneSelect::checkCollision()

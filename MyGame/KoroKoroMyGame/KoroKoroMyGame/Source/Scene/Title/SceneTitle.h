@@ -45,8 +45,6 @@ public:
 
 	void initializeStatus();
 
-	Camera* getCamera();
-
 private:
 	static constexpr UINT MaxUIType = static_cast<UINT>(UIType::DescUI) + 1;
 

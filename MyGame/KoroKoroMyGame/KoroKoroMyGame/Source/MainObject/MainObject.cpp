@@ -88,8 +88,6 @@ void MainObject::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void MainObject::update()
 {
-	// コライダー更新
-//	pCollider->UpdateCollider(mtxWorldPawn, FIELD_BOX_COLOR );
 	updateExportData();
 
 	if (!isUsed)

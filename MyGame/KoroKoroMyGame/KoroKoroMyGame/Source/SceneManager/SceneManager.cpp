@@ -1,5 +1,6 @@
 //
 // SceneManager.cpp
+// ƒV[ƒ“ŠÇ—
 // Author : Masaya Hayashi
 //
 

@@ -26,6 +26,7 @@ public:
 		Miss,
 		Goal,
 		Pause,
+		GetItem,
 	};
 
 	static const bool isGameType(GameType setGameType);

@@ -1311,7 +1311,9 @@ void ResourceManager::createFadeTexture(TEXTURE_DATA& TextureData, CHAR *pszFile
 
 	// テクスチャの読み込み
 	if (D3DXCreateTextureFromFile(devicePtr, fadeTexture.back()->texFileName, &fadeTexture.back()->pD3DTexture))
+	{
 		return;
+	}
 }
 
 void  ResourceManager::createNormalTexture(TEXTURE_DATA& TextureData, CHAR *pszFilename)
@@ -1333,7 +1335,9 @@ void  ResourceManager::createNormalTexture(TEXTURE_DATA& TextureData, CHAR *pszF
 
 	// テクスチャの読み込み
 	if (D3DXCreateTextureFromFile(devicePtr, texture.back()->texFileName, &texture.back()->pD3DTexture))
-		return ;
+	{
+		return;
+	}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

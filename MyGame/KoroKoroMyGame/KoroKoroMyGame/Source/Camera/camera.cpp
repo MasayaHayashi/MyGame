@@ -20,17 +20,18 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 Camera::Camera()
 {
-	rotvelocityCamera  = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	velocityCameraDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	rotvelocityCamera	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	velocityCameraDest	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	numvelocityPitch	= 0.0f;
-	rotPitchRadian = 0.0f;
-	cameraUpDest	= D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-
-	cameraFowerd	= D3DXVECTOR3(0.0f, 0.0f, 1.0f);
-	changeCamera	= true;
-	lerpCnt		= 0.0f;
+	rotPitchRadian		= 0.0f;
+	cameraUpDest		= D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	cameraFowerd		= D3DXVECTOR3(0.0f, 0.0f, 1.0f);
+	changeCamera		= true;
+	lerpCnt				= 0.0f;
 
 	rotCnt = 0;
+
+	D3DXMatrixIdentity(&myTransform.viewMtx);
 
 	Collision::registerList(&myTransform, "Camera");
 }
@@ -123,10 +124,6 @@ void Camera::initialize()
 
 	lengthIntervalcamera = sqrt(fVecX * fVecX + fVecZ * fVecZ);		// カメラの視点と注視点の距離
 
-	// 行列初期化
-	D3DXMatrixIdentity(&mtxView);
-
-
 	const Transform playerTransform = *Collision::getTransform("Player").front();
 
 	fadePos[2] = playerTransform.pos + D3DXVECTOR3( 4.0f, playerTransform.pos.y + 0.3f, -20.0f);
@@ -155,8 +152,6 @@ void Camera::initializeTitle()
 	fVecZ = myTransform.posDest.z - myTransform.look.z;
 
 	lengthIntervalcamera = sqrt(fVecX * fVecX + fVecZ * fVecZ);
-
-	D3DXMatrixIdentity(&mtxView);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -180,9 +175,6 @@ void Camera::initializeStageEdit()
 	fVecZ = myTransform.posDest.z - myTransform.look.z;
 
 	lengthIntervalcamera = sqrt(fVecX * fVecX + fVecZ * fVecZ);		// カメラの視点と注視点の距離
-
-	// 行列初期化
-	D3DXMatrixIdentity(&mtxView);
 
 }
 
@@ -211,8 +203,6 @@ void Camera::initializeMain(Player *pPlayer)
 	fVecZ = myTransform.posDest.z - myTransform.look.z;
 
 	lengthIntervalcamera = sqrt(fVecX * fVecX + fVecZ * fVecZ);		// カメラの視点と注視点の距離
-
-	D3DXMatrixIdentity(&mtxView);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -368,8 +358,6 @@ void Camera::updateGameMainReady(Player &pPlayer, INT countDown)
 		countDown = 0;
 	}
 
-	DirectX3D::printDebug("TYPEEEEEEEEEEEEEEEEEEEEE%d\n", countDown);
-
 	DirectX3D::printDebug("XXX%f\n", myTransform.pos.x);
 	DirectX3D::printDebug("YYY%f\n", myTransform.pos.y);
 	DirectX3D::printDebug("ZZZ%f\n", myTransform.pos.z);
@@ -460,16 +448,16 @@ void Camera::setCamera()
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	// ビューマトリックスの初期化
-	D3DXMatrixIdentity(&mtxView);
+	D3DXMatrixIdentity(&myTransform.viewMtx);
 	
 	// ビューマトリックスの作成
-	D3DXMatrixLookAtLH(&mtxView,
+	D3DXMatrixLookAtLH(&myTransform.viewMtx,
 		&myTransform.pos,			// カメラの視点
 		&myTransform.look,			// カメラの注視点
 		&myTransform.up);			// カメラの上方向
 
 	// ビューマトリックスの設定
-	devicePtr->SetTransform(D3DTS_VIEW, &mtxView);
+	devicePtr->SetTransform(D3DTS_VIEW, &myTransform.viewMtx);
 
 	// プロジェクションマトリックスの初期化
 	D3DXMatrixIdentity(&mtxProjection);
@@ -506,7 +494,7 @@ D3DXVECTOR3 Camera::getRot()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 D3DXMATRIX Camera::getMtxView()
 {
-	return mtxView;
+	return myTransform.viewMtx;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

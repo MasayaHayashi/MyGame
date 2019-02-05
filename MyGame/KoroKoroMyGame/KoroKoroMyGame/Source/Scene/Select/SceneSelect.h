@@ -35,8 +35,6 @@ public:
 
 	void initializeStatus();
 
-	Camera* getCamera();
-
 private:
 
 	enum class GameState

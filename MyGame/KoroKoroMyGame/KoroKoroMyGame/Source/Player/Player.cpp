@@ -1,5 +1,5 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// C_Player.cpp
+// Player.cpp
 // Author : Masaya Hayashi
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
@@ -230,16 +230,6 @@ void Player::initializeTitle()
 
 	myTransform.pos.y -= hierarchyMeshData.CollitionBox.y * 2;
 
-	//// 現在のアニメーションセットの設定値を取得
-	//D3DXTRACK_DESC TD;   // トラックの能力
-	//hierarchyMeshData.pAnimCtrl->GetTrackDesc(0, &TD);
-
-	//// 今のアニメーションをトラック1に移行し
-	//// トラックの設定値も移行
-	//hierarchyMeshData.pAnimCtrl->SetTrackAnimationSet(1, hierarchyMeshData.ppAnimSet[0]);
-	//hierarchyMeshData.pAnimCtrl->SetTrackDesc(1, &TD);
-
-	//// 新しいアニメーションセットをトラック0に設定
 	hierarchyMeshData.pAnimCtrl->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[2]);
 
 	isUsed = true;
@@ -310,17 +300,6 @@ void Player::initializeGameMain()
 	D3DXMatrixTranslation(&translate, myTransform.pos.x, myTransform.pos.y, myTransform.pos.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &translate);
 
-	// 現在のアニメーションセットの設定値を取得
-//	D3DXTRACK_DESC TD;
-//	hierarchyMeshData.pAnimCtrl->GetTrackDesc(2, &TD);
-//	hierarchyMeshData.pAnimCtrl->SetTrackDesc(1, &TD);
-
-//	for (DWORD i = 0; i < hierarchyMeshData.pAnimCtrl->GetMaxNumTracks(); ++i) 
-//	{
-	//	hierarchyMeshData.pAnimCtrl->SetTrackPosition(i, 0);
-//	}
-
-
 // 現在のアニメーションセットの設定値を取得
 	D3DXTRACK_DESC TD;   // トラックの能力
 	hierarchyMeshData.pAnimCtrl->GetTrackDesc(1, &TD);
@@ -334,11 +313,6 @@ void Player::initializeGameMain()
 	playerStateType = PlayerState::Stop;
 	isGround		= true;
 	isUsed			= true;
-
-	FLOAT LoopTime = 30.0f;   // 3秒ループ
-//	FLOAT AdjustSpeed = hierarchyMeshData.pAnimCtrl->GetTrackDesc(0,) * LoopTime;
-//	hierarchyMeshData.pAnimCtrl->SetTrackSpeed(0,AdjustSpeed);
-
 }
 
 
@@ -469,104 +443,11 @@ void Player::updateTitle(D3DXVECTOR3 CameraForward)
 		SceneManager::setNextScene(SceneManager::SceneState::SceneMain);
 	}
 
-/*
-	if (Keyboard::getRelease(DIK_2))
-	{
-		int a = 0;
-	}
-	*/
-
-//	C_XINPUT *pXinput = C_XINPUT::GetInstance();
-
-//	short Xnum = pXinput->GetThumbLX();
-//	short Ynum = pXinput->GetThumbLY();
-
 	D3DXVECTOR3 CameraRight = D3DXVECTOR3(CameraForward.z,0.0f,-CameraForward.x);
-
-//	PrintDebugProc("xxxxxxxxxxxxxxxxxxxxx:%d\n", Xnum);
-//	PrintDebugProc("YYYYYYYYYYYYYYYYYYYYY:%d\n", Ynum);
-
-//	D3DXVec3Normalize(&TestVec, &TestVec);
-
-//	TestVec.x = CameraRight.x * CameraForward.x +Xnum;
-//	TestVec.z = CameraForward.z * CameraRight.z + Ynum;
-
-//	testVec = CameraRight * Xnum + CameraForward * Ynum;
 	
-	/*
-	D3DXVECTOR3 UpVec = getUpVec();
-	D3DXVec3Normalize(&UpVec,&UpVec);
-
-	D3DXQuaternionRotationAxis(&quatanion, &UpVec, 0);			// クォータニオンでの任意軸回転
-	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);	// クォータニオンから回転行列掛け合わせ
-	D3DXVec3Normalize(&testVec, &testVec);
-
-	testVec.y = 0.0f;
-	pos += testVec * 0.3f;
-	
-	D3DXVECTOR3 FowrdVec = getForwardVec();
-	D3DXVECTOR3	RightVec = getRightVec();
-	D3DXVECTOR3 Upvec	 = getUpVec();	
-	
-	radRot = MyVector3::CalcAngleDegree(testVec, -FowrdVec);
-	D3DXQUATERNION quatanion;
-	*/
-	/*
-	if (radRot == 0.0f)
-	{
-		D3DXQuaternionRotationAxis(&quatanion, &Upvec, oldRadRot);
-		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
-
-		StartQuaternion = quatanion;
-		fCnt = 0.0f;
-
-		PrintDebugProc("ああああああああああああ");
-	}
-	else
-	{
-		D3DXQuaternionRotationAxis(&destQua, &Upvec, radRot);
-
-
-		D3DXQuaternionSlerp(&quatanion, &StartQuaternion, &destQua, 1.0f);
-		fCnt += 0.1f;
-
-		D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
-		oldRadRot = radRot;
-
-	}
-
-	
-	if (fCnt >= 1.0f)
-		fCnt = 1.0f;
-	
-	PrintDebugProc("xxx%f\n", testVec.x);
-	PrintDebugProc("yyy%f\n", testVec.y);
-	PrintDebugProc("zzz%f\n", testVec.z);
-	PrintDebugProc("ddddddddddd%f",fCnt);
-	*/
-
 	setWorldMtxPos(myTransform.pos);
 
 	updateAnimation();
-
-
-
-	// コライダー更新
-//	pCollider->UpdateCollider(worldMtx,DEFAULT_BOXcolor);
-
-#if _DEBUG
-//	PrintDebugProc("ぷれいや～～～X%f\n", pos.x);
-//	PrintDebugProc("ぷれいや～～～Y%f\n", pos.y);
-//	PrintDebugProc("ぷれいや～～～Z%f\n", pos.z);
-#endif
-
-	/*
-	// マテリアル色設定
-	if (bHit)
-		pCollider->figurePtr->SetMatcolor(HIT_BOX_color);
-	else
-		pCollider->figurePtr->SetMatcolor(DEFAULT_BOXcolor);
-	*/
 
 }
 
@@ -621,20 +502,6 @@ void Player::updateSelect()
 
 	DirectX3D::printDebug("%d", (INT)SelectManager::getSelect());
 
-
-	/*
-	if (idNumber == 1)
-	{
-		if (Keyboard::getTrigger(DIK_RIGHTARROW))
-		{
-			ResourceManager::setHierarchy(&hierarchyMeshData, ModelPenchanPass, idNumber);
-		}
-		if (Keyboard::getTrigger(DIK_LEFTARROW))
-		{
-			ResourceManager::setHierarchy(&hierarchyMeshData, ModelPenNoHahaPass, idNumber);
-		}
-	}*/
-
 	if (Keyboard::getTrigger(DIK_2))
 	{
 		SceneManager::setNextScene(SceneManager::SceneState::SceneMain);
@@ -642,29 +509,10 @@ void Player::updateSelect()
 
 	updateAnimation();
 
-	/*
-	static bool testFlg = true;
-	static bool testFlg2 = true;
-	if (idNumber == 2)
-	{
-		if(testFlg)
-			ResourceManager::changeHierarchy(hierarchyMeshData, ModelChick,idNumber); 
-
-		testFlg = false;
-	}
-	if (idNumber == 2)
-	{
-		if (testFlg2)
-			ResourceManager::changeHierarchy(hierarchyMeshData, ModelChick,idNumber);
-
-		testFlg2 = false;
-	}
-	*/
-
 	D3DXMatrixRotationY(&worldMtx, D3DXToRadian(myTransform.rotDeg.y));
 	myTransform.rotDeg.y += 1;
 
-	D3DXVECTOR3 cameraPos = Collision::getCameraTransform("Camera", 1)->pos;
+	D3DXVECTOR3 cameraPos = Collision::getCameraTransform("Camera", 1).pos;
 
 	setWorldMtxPos(myTransform.pos);
 }
@@ -676,46 +524,6 @@ void Player::updateStageEdit()
 {
 	updateAnimation();
 	setWorldMtxPos(myTransform.pos);
-
-
-#if 0
-
-
-#if _DEBUG
-
-
-	D3DXMatrixRotationY(&worldMtx, D3DXToRadian(rot.y));
-
-	// フレーム更新
-	UpdateFrameMatrices(hierarchyMeshData.frameRoot, &worldMtx);
-
-	// アニメーション更新
-	if (hierarchyMeshData.animCtrlPtrPtr)
-	{
-		DWORD dwNow = timeGetTime();
-		DOUBLE d = (dwNow - hierarchyMeshData.dwPrev) / 1000.0;
-		hierarchyMeshData.dwPrev = dwNow;
-		hierarchyMeshData.animCtrlPtrPtr->AdvanceTime(d, nullptr);
-	}
-
-#endif
-	// コライダー更新
-	pCollider->UpdateCollider(worldMtx, DEFAULT_BOXcolor);
-
-#if _DEBUG
-	PrintDebugProc("ぷれいや～～～X%f\n", worldMtx._41);
-	PrintDebugProc("ぷれいや～～～Y%f\n", worldMtx._42);
-	PrintDebugProc("ぷれいや～～～Z%f\n", worldMtx._43);
-#endif
-
-	// マテリアル色設定
-	if (bHit)
-		pCollider->figurePtr->SetMatcolor(HIT_BOX_color);
-	else
-		pCollider->figurePtr->SetMatcolor(DEFAULT_BOXcolor);
-
-#endif
-
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -775,8 +583,9 @@ void Player::changeStatus()
 	case PlayerState::JumpUp:
 		
 		if (myTransform.velocity.y < 0.0f)
+		{
 			playerStateType = PlayerState::JumpDown;
-		
+		}
 		isGround = false;
 	
 		break;
@@ -869,9 +678,9 @@ void Player::rideBall(size_t setIndex)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::fall(size_t checkIndex)
 {
-	if (!Collision::getRayHitData("Player", checkIndex)->isHit)
+	if (!Collision::getRayHitData("Player", checkIndex).isHit)
 	{
-		if (Collision::getRayHitData("Player", checkIndex)->length < 10.0f)
+		if (Collision::getRayHitData("Player", checkIndex).length < 10.0f)
 		{
 			myTransform.velocity.y -= FallSpeed;
 			DirectX3D::printDebug("落下中");
@@ -974,7 +783,6 @@ void Player::input()
 
 void Player::rotation(D3DXVECTOR3 destVec)
 {
-
 	D3DXVECTOR3 FowrdVec = getForwardVec();
 	D3DXVECTOR3	RightVec = getRightVec();
 	D3DXVECTOR3 Upvec = getUpVec();
@@ -1012,15 +820,14 @@ void Player::rotation(D3DXVECTOR3 destVec)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::updateGoal()
 {
-
 	updateAnimation();
 
 	myTransform.velocity.x = 0.0f;
 	myTransform.velocity.z = 0.0f;
 
-	if (Collision::getRayHitData(tagName, 0)->isHit)
+	if (Collision::getRayHitData(tagName, 0).isHit)
 	{
-		if (Collision::getRayHitData("Player", 0)->length < 0.0f)
+		if (Collision::getRayHitData("Player", 0).length < 0.0f)
 		{
 			myTransform.velocity.y = JumpSpeed;
 			MyAudiere::getSe(1)->setVolume(0.1f);
@@ -1053,12 +860,10 @@ void Player::updatePlayng(D3DXVECTOR3 CameraForward)
 
 	repeatCnt ++;
 
-
 	if (isFall())
 	{
 		GameManager::changeGameType(GameManager::GameType::FallMiss);
 	}
-
 
 	oldPos = myTransform.pos;
 
@@ -1266,6 +1071,7 @@ void Player::updateMiss()
 	if (!missFlg)
 	{
 		hierarchyMeshData.pAnimCtrl->ResetTime();
+		hierarchyMeshData.pAnimCtrl->SetTrackPosition(0, 0);
 		missFlg = true;
 
 		myTransform.velocity = D3DXVECTOR3(0.0f, 0.0f, -MissSpeed);
@@ -1284,6 +1090,7 @@ void Player::updateMiss()
 
 	hierarchyMeshData.pAnimCtrl->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[1]);
 	
+	hierarchyMeshData.pAnimCtrl->KeyTrackEnable(0, true, hierarchyMeshData.ppAnimSet[1]->GetPeriod());
 
 //	hierarchyMeshData.pAnimCtrl->KeyTrackSpeed(0, 1.0f, 180.0f, 240.0f, D3DXTRANSITION_LINEAR);
 //	hierarchyMeshData.pAnimCtrl->KeyTrackWeight(0, 1.0f, 180.0f, 240.0f, D3DXTRANSITION_LINEAR);

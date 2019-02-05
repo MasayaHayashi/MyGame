@@ -181,7 +181,7 @@ void SceneTitle::finalize()
 //
 void SceneTitle::update()
 {
-	playerPtr->update(SceneManager::getInstanse()->getCamera()->getFowerd());
+	playerPtr->update(Collision::getCameraTransform("Camera", 0).fowerd);
 	heartObjPtr->update();
 	skydomePtr->update();
 	fieldPtr->update();
@@ -331,13 +331,4 @@ void SceneTitle::draw()
 void SceneTitle::initializeStatus()
 {
 
-}
-
-
-//
-// ƒJƒƒ‰æ“¾
-//
-Camera* SceneTitle::getCamera()
-{
-	return cameraPtr.get();
 }
