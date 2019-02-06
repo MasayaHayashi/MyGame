@@ -166,6 +166,7 @@
     <ClCompile Include="Source\StageClearUI\StageClearUI.cpp" />
     <ClCompile Include="Source\StarItem\StarItem.cpp" />
     <ClCompile Include="Source\StarParticle\StarParticle.cpp" />
+    <ClCompile Include="Source\StarUI\StarUI.cpp" />
     <ClCompile Include="Source\TitleSelectUI\TitleSelectUI.cpp" />
     <ClCompile Include="Source\TitleUI\TitleUI.cpp" />
   </ItemGroup>
@@ -223,6 +224,7 @@
     <ClInclude Include="Source\StageClearUI\StageClearUI.h" />
     <ClInclude Include="Source\StarItem\StarItem.h" />
     <ClInclude Include="Source\StarParticle\StarParticle.h" />
+    <ClInclude Include="Source\StarUI\StarUI.h" />
     <ClInclude Include="Source\TitleSelectUI\TitleSelectUI.h" />
     <ClInclude Include="Source\TitleUI\TitleUI.h" />
   </ItemGroup>

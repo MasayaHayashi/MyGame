@@ -110,7 +110,7 @@ void StageEditor::initialize()
 
 	(*currentGameObject)->setUsedFlg(true);
 
-	loadStageData(1);
+//	loadStageData(1);
 
 }
 

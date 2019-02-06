@@ -119,6 +119,8 @@ void SceneTitle::initialize()
 //
 void SceneTitle::finalize()
 {
+	_ASSERT(_CrtCheckMemory());
+
 	cameraPtr->finalize();
 	playerPtr->finalize();
 
@@ -129,6 +131,7 @@ void SceneTitle::finalize()
 	{
 		boardPtr->finalize();
 	}
+	_ASSERT(_CrtCheckMemory());
 
 	/*
 	// ƒJƒƒ‰Œãˆ—

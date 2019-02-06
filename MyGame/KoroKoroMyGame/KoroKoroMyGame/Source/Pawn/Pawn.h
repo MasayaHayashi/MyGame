@@ -39,13 +39,13 @@ typedef struct
 {
 	D3DXVECTOR3			pos			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3			velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	FLOAT				accele		= 1.0f;
 	D3DXVECTOR3			rotDeg		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3			rotDegDest	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3			scale		= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 	D3DXVECTOR3			cross		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3			normal		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3			collisionBox = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	FLOAT				accele = 1.0f;
 	bool				isHitAABB	= false;
 } Transform;
 

@@ -1,6 +1,6 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // StarUI.cpp
-// スターUI
+// スターUI(オブジェクトではなくボード用)
 // Author : MasayaHayashi
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
@@ -9,6 +9,7 @@
 #include "../Application/Application.h"
 #include "../Collision/Collision.h"
 #include "../GameManager/GameManager.h"
+#include "../MyVector3/MyVector3.h"
 #include <stdio.h>
 
 // ===== 定数・マクロ定義 =====
@@ -35,7 +36,12 @@ StarUI::StarUI()
 	animPattern = texPatternDivideX * texPatternDivideY;
 	intervalChangePattern = 1;
 
-	isUsed = true;
+	curvePos[0] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	curvePos[1] = D3DXVECTOR3(Application::ScreenCenterX * 0.25f, Application::ScreenCenterY, 0.0f);
+	curvePos[2] = D3DXVECTOR3(Application::ScreenWidth - vertexBoard.size.x, vertexBoard.size.y, 0.0f);
+	curvePos[3] = D3DXVECTOR3(Application::ScreenWidth - (vertexBoard.size.x * idNumber), vertexBoard.size.y, 0.0f);
+
+	isUsed = false;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -51,8 +57,6 @@ StarUI::~StarUI()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void StarUI::initialize()
 {
-//	ResourceManager *pResourceMgr = GetResourceManager();
-
 	ResourceManager::makevertexBoard(vertexBoard, fileName);
 	ResourceManager::createTexture(texture, fileName);
 
@@ -73,28 +77,25 @@ void StarUI::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void StarUI::update()
 {
-
-	static FLOAT cnt = 0;
-	
-	// ロゴ移動処理
-	vertexBoard.pos.y += MoveSpeed;
-
-	// 終了判定
-	if (vertexBoard.pos.y > posDestBoard.y)
+	if (!isUsed)
 	{
-		vertexBoard.pos.y = posDestBoard.y;
+		return;
 	}
+
+	size_t hitIndex = Collision::getHitIndex("star.x");
 
 	if (Collision::getTransform("star.x", 0)->isHitAABB)
 	{
-		//GameManager::changeGameType(GameManager::GameType::GetItem);
-		vertexBoard.pos.x =- 5.0f;
+		checkUnProject(Collision::getTransform("star.x",hitIndex)->pos);
 	}
 
-	// 横移動
-	cnt += 0.03f;
-//	vertexBoard.pos.x = sinf(cnt) * 11.0f + Application::ScreenCenterX;
-	
+	curveCnt += 0.004f;
+
+	if (curveCnt < 1.0f)
+	{
+		MyVector3::CalcBezierCurve(vertexBoard.pos, curvePos[0], curvePos[1], curvePos[2], curvePos[3], 1.0f, curveCnt);
+	}
+
 	setVtx();
 	setTexture();
 }

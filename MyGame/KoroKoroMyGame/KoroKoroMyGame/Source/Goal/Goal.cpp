@@ -89,7 +89,7 @@ void Goal::update()
 		return;
 	}
 
-	if (Collision::getTransform(tagName).front()->isHitAABB)
+	if (Collision::getTransform(tagName,0)->isHitAABB)
 	{
 		GameManager::changeGameType(GameManager::GameType::Goal);
 	}

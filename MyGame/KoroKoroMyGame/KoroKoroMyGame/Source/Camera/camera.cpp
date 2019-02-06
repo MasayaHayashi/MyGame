@@ -33,7 +33,7 @@ Camera::Camera()
 
 	D3DXMatrixIdentity(&myTransform.viewMtx);
 
-	Collision::registerList(&myTransform, "Camera");
+	Collision::registerList(myTransform, "Camera");
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -124,7 +124,7 @@ void Camera::initialize()
 
 	lengthIntervalcamera = sqrt(fVecX * fVecX + fVecZ * fVecZ);		// カメラの視点と注視点の距離
 
-	const Transform playerTransform = *Collision::getTransform("Player").front();
+	const Transform playerTransform = *Collision::getTransform("Player",0);
 
 	fadePos[2] = playerTransform.pos + D3DXVECTOR3( 4.0f, playerTransform.pos.y + 0.3f, -20.0f);
 	fadePos[1] = playerTransform.pos + D3DXVECTOR3(-4.0f, playerTransform.pos.y + 0.3f, -20.0f);
@@ -159,8 +159,6 @@ void Camera::initializeTitle()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Camera::initializeStageEdit()
 {
-	// プレイヤー情報取得
-
 	myTransform.pos = D3DXVECTOR3(0.0f, 10.0f, -19.0f);							// カメラの視点
 	myTransform.look = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// カメラの注視点
 	cameraUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);								// カメラの上方向
@@ -431,7 +429,7 @@ void Camera::rotation(D3DXVECTOR3* pVecCenter, FLOAT fRadius)
 	D3DXVECTOR3 vecTarget(-fRadius, 0.0f, -fRadius);
 
 	//原点を中心とした回転（オイラー回転）の行列を作る
-	D3DXMatrixRotationY(&matRotation, rot);
+	D3DXMatrixRotationY(&matRotation, static_cast<FLOAT>(rot));
 	D3DXVec3TransformCoord(&vecTarget, &vecTarget, &matRotation);
 
 	//最後に本来の座標（回転対象の座標）を足し合わせ
@@ -460,17 +458,17 @@ void Camera::setCamera()
 	devicePtr->SetTransform(D3DTS_VIEW, &myTransform.viewMtx);
 
 	// プロジェクションマトリックスの初期化
-	D3DXMatrixIdentity(&mtxProjection);
+	D3DXMatrixIdentity(&myTransform.projectionMtx);
 
 	// プロジェクションマトリックスの作成
-	D3DXMatrixPerspectiveFovLH(&mtxProjection,
+	D3DXMatrixPerspectiveFovLH(&myTransform.projectionMtx,
 		ViewAngle,			// 視野角
 		static_cast<FLOAT> (Application::ScreenWidth) / static_cast<FLOAT>(Application::ScreenHeight),		// アスペクト比
 		ViewNearZ,		// ビュー平面のNearZ値
 		ViewFarZ);		// ビュー平面のFarZ値
 
 	// プロジェクションマトリックスの設定
-	devicePtr->SetTransform(D3DTS_PROJECTION, &mtxProjection);
+	devicePtr->SetTransform(D3DTS_PROJECTION, &myTransform.projectionMtx);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -502,7 +500,7 @@ D3DXMATRIX Camera::getMtxView()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 D3DXMATRIX Camera::getProjectionMtx()
 {
-	return mtxProjection;
+	return myTransform.projectionMtx;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

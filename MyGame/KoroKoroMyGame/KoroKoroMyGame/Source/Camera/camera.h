@@ -118,7 +118,6 @@ private:
 	FLOAT			heightcameraP;			// カメラの視点の高さ
 	FLOAT			heightcameraL;			// カメラの注視点の高さ
 	D3DXVECTOR3		cameraFowerd;			// カメラの前方向ベクトル
-	D3DXMATRIX		mtxProjection;			// プロジェクションマトリックス
 	D3DXMATRIX		mtxRot;					// カメラ回転行列
 	D3DXMATRIX		mtxvelocity;				// カメラ移動行列
 

@@ -89,6 +89,11 @@ void StarItem::finalize()
 //
 void StarItem::update()
 {
+	if (!isUsed)
+	{
+		return;
+	}
+
 	updateExportData();
 
 	if (!isUsed)

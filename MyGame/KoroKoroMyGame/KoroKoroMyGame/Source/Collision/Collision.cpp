@@ -19,9 +19,9 @@
 #include "../MyDelete/MyDelete.h"
 
 // ===== 静的メンバ =====
-std::unordered_map<std::string, std::list<Transform*>>							Collision::collisionMapes;
-std::unordered_map<std::string, std::vector<std::unique_ptr<RayHit>>>			Collision::rayHitMapes;
-std::unordered_map<std::string, std::list<  std::unique_ptr<CameraTransform>>>	Collision::cameraTransforms;
+std::unordered_map<std::string, std::list<		std::unique_ptr<Transform>		 >>	Collision::collisionMapes;
+std::unordered_map<std::string, std::vector<	std::unique_ptr<RayHit>			 >>	Collision::rayHitMapes;
+std::unordered_map<std::string, std::list<		std::unique_ptr<CameraTransform> >>	Collision::cameraTransforms;
 D3DXVECTOR3 Collision::cross;
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -58,14 +58,11 @@ void Collision::update()
 
 	UINT playerIndex = 0;
 	
-	if (isHitAABB(*collisionMapes["Player"].front(), *collisionMapes["heart.x"].front()))
-	{
-		collisionMapes["heart.x"].front()->isHitAABB = true;
-	}
+//	checkCollision("Player", "heart.x");
 
-	checkCollisionBlock();
+//	checkCollisionBlock();
 
-	checkCollision("star.x");
+	checkCollision("Player","star.x");
 
 	for (auto fieldPtr : fieldPtres)
 	{
@@ -104,7 +101,7 @@ void Collision::update()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Collision::registerList(Transform *setPawn,std::string keyName)
 {
-	collisionMapes[keyName].push_back(setPawn);
+	collisionMapes[keyName].push_back( std::unique_ptr<Transform>(setPawn));
 
 	rayHitMapes[keyName].push_back(static_cast<std::unique_ptr<RayHit>>(NEW RayHit));
 }
@@ -112,9 +109,9 @@ void Collision::registerList(Transform *setPawn,std::string keyName)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 登録
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Collision::registerList(CameraTransform *setCamera, std::string keyName)
+void Collision::registerList(CameraTransform &setCamera, std::string keyName)
 {
-	cameraTransforms[keyName].push_back( std::unique_ptr<CameraTransform> (setCamera));
+	cameraTransforms[keyName].push_back( std::unique_ptr<CameraTransform> (&setCamera));
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -127,7 +124,9 @@ void Collision::release(std::string keyName)
 		return;
 	}
 
-	collisionMapes[keyName].clear();
+
+
+//	collisionMapes[keyName].clear();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -397,124 +396,6 @@ INT Collision::Intersect(Pawn *pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRay
 	return -1;
 }
 
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// 線分の判定
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-bool Collision::IntersectA(Pawn* pField,LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXMATRIX pWorld)
-{
-	bool ans = false;
-
-	D3DXVECTOR3 W;
-	D3DXVECTOR3 H;
-	D3DXMATRIX matInv;
-	if (pWorld) 
-	{
-		D3DXMatrixInverse(&matInv, nullptr, pWorld);
-		D3DXVec3TransformCoord(&W, pRayPos, &matInv);
-		D3DXVec3TransformNormal(&H, pRayDir, &matInv);
-	}
-	else 
-	{
-		W = *pRayPos;
-		H = *pRayDir;
-	}
-
-	LPDIRECT3DVERTEXBUFFER9	lpVertexBuffer;	// 頂点バッファ
-	pField->getMesh()->GetVertexBuffer(&lpVertexBuffer);	// 頂点バッファオブジェクトへのポインタをゲット
-	LPDIRECT3DINDEXBUFFER9	lpIndexBuffer;	// インデックスバッファ
-	pField->getMesh()->GetIndexBuffer(&lpIndexBuffer);		// インデックスバッファオブジェクトへのポインタをゲット
-	DWORD dwIdx = pField->getMesh()->GetNumFaces() * 3;		// 面数からインデックス数をゲット
-
-	MESH_VTX* pVtx;
-	WORD* pIdx;
-	lpVertexBuffer->Lock(0, 0, (void**)&pVtx, 0);	// 頂点バッファをロック
-	lpIndexBuffer->Lock(0, 0, (void**)&pIdx, 0);	// インデックスバッファをロック
-
-	D3DXVECTOR3* P[4];
-	D3DXVECTOR3 N;
-	for (DWORD i = 0; i < dwIdx; ) 
-	{
-		// 三角形の頂点を抽出
-		P[0] = &pVtx[pIdx[i++]].VtxPos;
-		P[1] = &pVtx[pIdx[i++]].VtxPos;
-		P[2] = &pVtx[pIdx[i++]].VtxPos;
-		P[3] = P[0];
-		INT j = 0;
-		for (; j < 3; j++) {
-			// 三角形を囲む平面の法線ベクトルを求める
-			D3DXVec3Cross(&N, &H, &(*(P[j + 1]) - *(P[j])));
-			// 始点が平面の表なら当たっていない
-			FLOAT dot = D3DXVec3Dot(&N, &(W - *(P[j])));
-
-			if (dot > 0.0f) 
-			{
-				break;
-			}
-		}
-		if (j < 3) 
-		{
-			continue;
-		}
-
-		// 三角形の法線ベクトルを求める
-		D3DXVec3Cross(&N, &(*(P[1]) - *(P[0])), &(*(P[2]) - *(P[1])));
-		D3DXVec3Normalize(&N, &N);
-
-		// 媒介変数tの分母を求める
-		float base = D3DXVec3Dot(&N, &H);
-		if (base == 0.0f)
-		{
-			continue;		// 平面と平行
-		}
-
-		// tを求める
-		FLOAT t = D3DXVec3Dot(&N, &(*(P[0]) - W)) / base;
-
-		// 交点がレイの後ろ
-		if (t < 0.0f)
-		{
-			continue;
-		}
-		// 交点がレイの前
-		if (t > 1.0f)
-		{
-			continue;
-		}
-
-		// 交点を求める
-		D3DXVECTOR3 X = W + t * H;
-		if (pCross) 
-		{
-			if (pWorld)
-			{
-				D3DXVec3TransformCoord(pCross, &X, pWorld);
-			}
-			else 
-			{
-				*pCross = X;
-			}
-		}
-		if (pNormal)
-		{
-			if (pWorld) 
-			{
-				D3DXVec3TransformNormal(pNormal, &N, pWorld);
-			}
-			else
-			{
-				*pNormal = N;
-			}
-		}
-		ans = true;
-		break;
-	}
-
-	lpVertexBuffer->Unlock();		// 頂点バッファをアンロック
-	lpIndexBuffer->Unlock();			// インデックスバッファをアンロック
-
-	return ans;
-}
-
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -527,20 +408,7 @@ const Transform* Collision::getTransform(std::string keyName,INT index)
 		return nullptr;
 	}
 
-	return *std::next(collisionMapes[keyName].begin(), index);
-}
-
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// 取得
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-const std::list<Transform*> Collision::getTransform(std::string keyName)
-{
-	if (collisionMapes[keyName].empty())
-	{
-		throw std::invalid_argument("不正な引数です");
-
-	}
-	return collisionMapes[keyName];
+	return std::next(collisionMapes[keyName].begin(), index)->get();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -576,7 +444,7 @@ void Collision::setVelocity(std::string keyName, UINT index, D3DXVECTOR3 setVelo
 {
 	UINT indexCnt = 0;
 
-	for (auto collisionMap : collisionMapes[keyName])
+	for (auto &collisionMap : collisionMapes[keyName])
 	{
 		if (indexCnt == index)
 		{
@@ -647,18 +515,44 @@ void Collision::checkCollisionBlock()
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// アイテム判定
+// AABB判定
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Collision::checkCollision(std::string keyName)
+void Collision::checkCollision(std::string keyNameA,std::string keyNameB)
 {
-	if(isHitAABB(*collisionMapes["Player"].front(), *collisionMapes[keyName].front()))
+	for (auto &collisionMap : collisionMapes[keyNameB])
 	{
-		collisionMapes[keyName].front()->isHitAABB = true;
+
+		if (isHitAABB(*collisionMapes[keyNameA].front(), *collisionMap))
+		{
+			collisionMapes[keyNameA].front()->isHitAABB = true;
+		}
+		else
+		{
+			collisionMapes[keyNameA].front()->isHitAABB = false;
+		}
 	}
-	else
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 当たっているオブジェクトのインデックス取得
+// 現在は複数の判定には未対応
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+const size_t Collision::getHitIndex(std::string keyName)
+{
+	size_t index = 0;
+	for (auto & collisionMap : collisionMapes[keyName])
 	{
-		collisionMapes[keyName].front()->isHitAABB = false;
+		if (collisionMap->isHitAABB)
+		{
+			return index;
+		}
+		else
+		{
+			index ++;
+		}
 	}
+
+	return -1;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

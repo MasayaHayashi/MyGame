@@ -113,7 +113,7 @@ void BallObj::finalize()
 {
 	ResourceManager::destroyAllMesh();
 
-	Collision::release("Ball");
+//	Collision::release("Ball");
 
 }
 

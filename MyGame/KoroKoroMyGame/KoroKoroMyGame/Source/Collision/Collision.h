@@ -55,6 +55,7 @@ typedef struct
 	D3DXVECTOR3 fowerd = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 
 	D3DXMATRIX viewMtx;
+	D3DXMATRIX projectionMtx;
 } CameraTransform;
 
 // ===== ÉNÉâÉXÇÃëOï˚êÈåæ =====
@@ -77,7 +78,7 @@ public:
 	void initilize();
 
 	static void registerList(Transform *setPawn,std::string keyName);
-	static void registerList(CameraTransform *setCamera, std::string keyName);
+	static void registerList(CameraTransform &setCamera, std::string keyName);
 	static void release(std::string keyName);
 
 	INT isHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, FLOAT& length);
@@ -86,12 +87,14 @@ public:
 
 	bool IsHitSphereToSphere(Pawn *, Pawn*);
 
-	static const Transform*		  getTransform(std::string keyName, INT index);
-	static const CameraTransform& getCameraTransform(std::string keyName, INT index);
-	static const RayHit&		  getRayHitData(std::string keyName, UINT index);
-	static const std::list<Transform*> getTransform(std::string keyName);
-	static const size_t			  getSize(std::string keyName);
+	static const Transform*				getTransform(std::string keyName, INT index);
+	static const CameraTransform&		getCameraTransform(std::string keyName, INT index);
+	static const RayHit&				getRayHitData(std::string keyName, UINT index);
+	static const size_t					getSize(std::string keyName);
+	static const size_t					getHitIndex(std::string keyName);
+
 	static void setVelocity(std::string keyName, UINT index,D3DXVECTOR3 velocity);
+
 	void finalize(std::string keyName);
 
 	void registerPlayer(Pawn* playerPtr);
@@ -102,12 +105,11 @@ public:
 	const bool isHitAABB(Transform pPawnA, Pawn &pPawnB);
 
 	void checkCollisionBlock();
-	void checkCollision(std::string keyName);
+	void checkCollision(std::string KeyNameA, std::string KeyNameB);
 
 	static const D3DXVECTOR3 getCross();
 
 private:
-	bool IntersectA(Pawn* pField, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, LPD3DXMATRIX pWorld);
 
 	std::list<Pawn*> playersPtr;
 	std::list<Pawn*> fieldPtres;
@@ -115,9 +117,9 @@ private:
 
 	static D3DXVECTOR3 cross;
 
-	static std::unordered_map < std::string, std::list<Transform*>>										collisionMapes;
-	static std::unordered_map < std::string, std::vector<std::unique_ptr<RayHit> >>						rayHitMapes;
-	static std::unordered_map < std::string, std::list<	 std::unique_ptr<CameraTransform> >>			cameraTransforms;
+	static std::unordered_map < std::string, std::list<   std::unique_ptr<Transform> >>					collisionMapes;
+	static std::unordered_map < std::string, std::vector< std::unique_ptr<RayHit>	>>					rayHitMapes;
+	static std::unordered_map < std::string, std::list<	  std::unique_ptr<CameraTransform> >>			cameraTransforms;
 
 };
 

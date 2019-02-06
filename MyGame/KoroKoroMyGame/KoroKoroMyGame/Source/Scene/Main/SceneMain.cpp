@@ -271,55 +271,6 @@ void SceneMain::initializeStatus()
 
 }
 
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// 3Dから2Dへの変換計算用
-//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void SceneMain::checkUnProject(INT Indx)
-{
-#if 0
-
-	D3DXVECTOR3 StarObj = pGameObj[Star_OBJ][Indx]->getPosition();
-	D3DXMATRIX  ViewMtx = pCamera->getMtxView();
-	D3DXMATRIX  ProjectionMtx = pCamera->getProjectionMtx();
-
-	D3DXVECTOR3 OutVec;
-	D3DXVECTOR3 OutVec2;
-
-	D3DXVec3TransformCoord(&OutVec, &StarObj, &ViewMtx);
-	D3DXVec3TransformCoord(&OutVec2, &OutVec, &ProjectionMtx);
-
-	OutVec2.y *= -1;
-
-	OutVec2.x *= 0.5f;
-	OutVec2.y *= 0.5f;
-
-	OutVec2.x += 0.5f;
-	OutVec2.y += 0.5f;
-
-	OutVec2.x *= SCREEN_WIDTH;
-	OutVec2.y *= SCREEN_HEIGHT;
-
-	INT UseStarCnt = 0;
-
-	for (INT StarCnt = 0; StarCnt < MAX_Star; StarCnt++)
-	{
-		// 例外処理
-		if (pStarObj[OBJ_2D_Star_Star][StarCnt]->getUsedFlg())
-			continue;
-
-		UseStarCnt ++;
-
-		pStarObj[OBJ_2D_Star_Star][StarCnt]->setUsedFlg(true);
-		pStarObj[OBJ_2D_Star_Star][StarCnt]->setPosition(D3DXVECTOR3(OutVec2.x, OutVec2.y, 0.0f));
-		pStarObj[OBJ_2D_Star_Star][StarCnt]->setStartCurvePos(D3DXVECTOR3(OutVec2.x, OutVec2.y, 0.0f));
-
-		if (UseStarCnt > ONE_USE_PARTICLLE)
-			break;
-	}
-
-#endif
-}
-
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // データ読み込み
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -392,7 +343,7 @@ void SceneMain::creteGameObj(size_t objType)
 	case static_cast<INT>(GameObjectType::StarObj) :
 		for (INT objIndex = 0; objIndex < MaxGameObj; objIndex++)
 		{
-			gameObjPtr[5].push_back(static_cast<std::unique_ptr<MainObject>>(NEW StarItem("star.x", "star.png", objIndex, GameObjectType::StarObj, false)));
+			gameObjPtr[5].push_back(static_cast<std::unique_ptr<MainObject>>( NEW StarItem("star.x", "star.png", objIndex, GameObjectType::StarObj, false)));
 		}
 		break;
 	default:

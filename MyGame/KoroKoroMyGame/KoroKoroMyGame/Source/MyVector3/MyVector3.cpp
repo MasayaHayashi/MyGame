@@ -85,7 +85,7 @@ void MyVector3::Slerp(D3DXQUATERNION *out, const D3DXQUATERNION &Start, const D3
 //		開始点(制御点1)X座標
 //		開始点(制御点1)Y座標
 //		制御点2 X座標
-//		制御点2 Y座標 ゲーム制作学科
+//		制御点2 Y座標
 //		制御点3 X座標
 //		制御点3 Y座標
 //		終了点(制御点4) X座標
@@ -93,13 +93,13 @@ void MyVector3::Slerp(D3DXQUATERNION *out, const D3DXQUATERNION &Start, const D3
 //		最大時間
 //		現在時間
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void MyVector3::CalcBezierCurve(D3DXVECTOR3* pOut,const D3DXVECTOR3& Pos1, const D3DXVECTOR3& Pos2, const D3DXVECTOR3& Pos3, const D3DXVECTOR3& Pos4, const FLOAT& fMax, const FLOAT& fCurrent)
+void MyVector3::CalcBezierCurve(D3DXVECTOR3& pOut,const D3DXVECTOR3& Pos1, const D3DXVECTOR3& Pos2, const D3DXVECTOR3& Pos3, const D3DXVECTOR3& Pos4, const FLOAT& fMax, const FLOAT& fCurrent)
 {
 	float fRate = fCurrent / fMax;
 
-	pOut->x = ((1 - fRate) * (1 - fRate) * (1 - fRate)) * Pos1.x + 3 * ((1 - fRate) * (1 - fRate)) * fRate * Pos2.x + 3 * (1 - fRate) * (fRate * fRate) * Pos3.x + (fRate * fRate * fRate) * Pos4.x;
-	pOut->y = ((1 - fRate) * (1 - fRate) * (1 - fRate)) * Pos1.y + 3 * ((1 - fRate) * (1 - fRate)) * fRate * Pos2.y + 3 * (1 - fRate) * (fRate * fRate) * Pos3.y + (fRate * fRate * fRate) * Pos4.y;
-	pOut->z = ((1 - fRate) * (1 - fRate) * (1 - fRate)) * Pos1.z + 3 * ((1 - fRate) * (1 - fRate)) * fRate * Pos2.z + 3 * (1 - fRate) * (fRate * fRate) * Pos3.z + (fRate * fRate * fRate) * Pos4.z;
+	pOut.x = ((1 - fRate) * (1 - fRate) * (1 - fRate)) * Pos1.x + 3 * ((1 - fRate) * (1 - fRate)) * fRate * Pos2.x + 3 * (1 - fRate) * (fRate * fRate) * Pos3.x + (fRate * fRate * fRate) * Pos4.x;
+	pOut.y = ((1 - fRate) * (1 - fRate) * (1 - fRate)) * Pos1.y + 3 * ((1 - fRate) * (1 - fRate)) * fRate * Pos2.y + 3 * (1 - fRate) * (fRate * fRate) * Pos3.y + (fRate * fRate * fRate) * Pos4.y;
+	pOut.z = ((1 - fRate) * (1 - fRate) * (1 - fRate)) * Pos1.z + 3 * ((1 - fRate) * (1 - fRate)) * fRate * Pos2.z + 3 * (1 - fRate) * (fRate * fRate) * Pos3.z + (fRate * fRate * fRate) * Pos4.z;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

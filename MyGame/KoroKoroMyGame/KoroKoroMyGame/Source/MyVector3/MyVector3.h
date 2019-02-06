@@ -21,7 +21,7 @@ public:
 	MyVector3 operator+(const MyVector3 &Vector);
 	
 	static bool CalcHermiteCurve(D3DXVECTOR3 *pOut, const D3DXVECTOR3& Pos1, const D3DXVECTOR3& Pos2, const D3DXVECTOR3& Vec1, const D3DXVECTOR3& Vec2, const FLOAT& fMax, const FLOAT& fCurrent);	// エルミート曲線
-	static void CalcBezierCurve(D3DXVECTOR3* pOut, const D3DXVECTOR3& Pos1, const D3DXVECTOR3& Pos2, const D3DXVECTOR3& Pos3, const D3DXVECTOR3& Pos4, const FLOAT& fMax, const FLOAT& fCurrent);
+	static void CalcBezierCurve(D3DXVECTOR3& pOut, const D3DXVECTOR3& Pos1, const D3DXVECTOR3& Pos2, const D3DXVECTOR3& Pos3, const D3DXVECTOR3& Pos4, const FLOAT& fMax, const FLOAT& fCurrent);
 	
 	// 3×3 2D用
 	static D3DXMATRIX* Mtx2DIdentity(D3DXMATRIX* pOut);
@@ -36,9 +36,8 @@ public:
 
 
 	static FLOAT		Vec3Dot(D3DXVECTOR3 VecA, D3DXVECTOR3 VecB);	// 内積
-	static D3DXVECTOR3 Vec3Cross(D3DXVECTOR3 VecA, D3DXVECTOR3 VecB);	// 外積
+	static D3DXVECTOR3  Vec3Cross(D3DXVECTOR3 VecA, D3DXVECTOR3 VecB);	// 外積
 
-//	bool CalcAngle3(const CNhVector2d& vectorA, const CNhVector2d& vectorB, double& dAngle_rad);
 	static FLOAT CalcAngle(D3DXVECTOR3 vectorA, D3DXVECTOR3 vectorB);
 	static FLOAT CalcAngleDegree(D3DXVECTOR3 vectorA, D3DXVECTOR3 vectorB);
 	static FLOAT Product2Vec(D3DXVECTOR3 VecA, D3DXVECTOR3 VecB);

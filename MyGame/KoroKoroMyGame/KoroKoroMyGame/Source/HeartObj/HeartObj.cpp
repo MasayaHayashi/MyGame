@@ -42,8 +42,7 @@ HeartObj::HeartObj()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 HeartObj::~HeartObj()
 {
-	// 各種クラス解放
-//	SAFE_DELETE(pCollider);
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -248,12 +247,12 @@ void HeartObj::initializeTitleObj_Result()
 void HeartObj::UpdateTitleObj_Title()
 {
 	// 回転軸設定
-	D3DXVECTOR3 RotAxis = D3DXVECTOR3(1.0f,5.0f,2.0f);
+	D3DXVECTOR3 rotAxis = D3DXVECTOR3(1.0f,5.0f,2.0f);
 	
 	// クォータニオンによる回転
 	rotCnt += TitleRotSpeed;
-	D3DXQuaternionRotationAxis(&quatanion, &RotAxis, rotCnt);		// クォータニオンでの任意軸回転
-	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);	// クォータニオンから回転行列掛け合わせ
+	D3DXQuaternionRotationAxis(&quatanion, &rotAxis, rotCnt);		// クォータニオンでの任意軸回転
+	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);			// クォータニオンから回転行列掛け合わせ
 
 	// コライダー更新
 //	pCollider->UpdateCollider(worldMtx, DEFAULT_BOXcolor);
@@ -264,5 +263,11 @@ void HeartObj::UpdateTitleObj_Title()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void HeartObj::UpdateTitleObj_GameMain()
 {
+	// 回転軸設定
+	D3DXVECTOR3 rotAxis = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 
+	// クォータニオンによる回転
+	rotCnt += TitleRotSpeed;
+	D3DXQuaternionRotationAxis(&quatanion, &rotAxis, rotCnt);		// クォータニオンでの任意軸回転
+	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);			// クォータニオンから回転行列掛け合わせ
 }

@@ -10,6 +10,7 @@
 // ===== インクルード部 =====
 #include "../GameObjectBase/GameObjectBase.h"
 #include "../ResoueceManager/ResourceManager.h"
+#include <array>
 
 // ===== 列挙体定義 =====
 enum class  boardType
@@ -49,6 +50,7 @@ public:
 	void setNarrowFlg(bool bset);
 	void destroyBoard();					// 板ポリゴン解放
 
+	void checkUnProject(D3DXVECTOR3 worldPos);
 	bool isHit(std::string keyName);
 	// ゲッター
 	LPDIRECT3DTEXTURE9		getTexture();		// テクスチャ情報生成
@@ -76,7 +78,7 @@ protected:
 	D3DXVECTOR3				rot;			// 回転
 	D3DXVECTOR3				scale;			// 拡大率
 	D3DXVECTOR3				posDestBoard;		// 目的位置
-	D3DXVECTOR3				curvePos[MaxLerp];	// ベジェ曲線、エルミート曲線用ベクトル(三次元)
+	std::array<D3DXVECTOR3,MaxLerp> curvePos;	// ベジェ曲線、エルミート曲線用ベクトル(三次元)
 	D3DXMATRIX				worldMtx;		// ワールド行列
 	D3DXCOLOR				color;				// 色
 	D3DMATERIAL9			mat;				// マテリアル
@@ -94,6 +96,8 @@ protected:
 	INT						currentAnimPattern;		// アニメーションパターン番号
 	FLOAT					texUV_SizeX;			// テクスチャ切り替え用UV座標X
 	FLOAT					texUV_SizeY;			// テクスチャ切り替え用UV座標Y
+
+	FLOAT					curveCnt = 0;			// 線形補間用カウンタ
 
 	size_t					idNumber;				// 識別番号
 	bool					isNarrow;				// 縮小処理

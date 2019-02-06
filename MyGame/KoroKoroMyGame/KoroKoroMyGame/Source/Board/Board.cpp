@@ -944,3 +944,34 @@ bool Board::isHit(std::string keyName)
 		return false;
 	}
 }
+
+
+//
+// 3D‚©‚ç2D‚Ö‚ÌÀ•W•ÏŠ·
+//
+void Board::checkUnProject(D3DXVECTOR3 worldPos)
+{
+	D3DXMATRIX  viewMtx =		 Collision::getCameraTransform("Camera", 0).viewMtx;
+	D3DXMATRIX  projectionMtx =	 Collision::getCameraTransform("Camera", 0).projectionMtx;
+
+	D3DXVECTOR3 outVec;
+	D3DXVECTOR3 outVec2;
+
+	D3DXVec3TransformCoord(&outVec, &outVec, &viewMtx);
+	D3DXVec3TransformCoord(&outVec2, &outVec, &projectionMtx);
+
+	outVec2.y *= -1;
+
+	outVec2.x *= 0.5f;
+	outVec2.y *= 0.5f;
+
+	outVec2.x += 0.5f;
+	outVec2.y += 0.5f;
+
+	outVec2.x *= Application::ScreenWidth;
+	outVec2.y *= Application::ScreenHeight;
+
+	isUsed = true;
+	setPosition(D3DXVECTOR3(outVec2.x, outVec2.y, 0.0f));
+	setStartCurvePos(D3DXVECTOR3(outVec2.x, outVec2.y, 0.0f));
+}
