@@ -1,6 +1,5 @@
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\vc140.pdb
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\vc140.idb
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\particle.obj
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\pawn.obj
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\player.obj
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\myrandom.obj
@@ -18,9 +17,9 @@ d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\stageclearui.obj
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\staritem.obj
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\starparticle.obj
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\starui.obj
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\titleselectui.obj
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\titleui.obj
-d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\stageeditor.obj
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\main.obj
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\fadeui.obj
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\figure.obj
@@ -40,6 +39,7 @@ d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\mydelete.obj
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\myhierarchy.obj
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\myvector3.obj
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\particle.obj
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\application.obj
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\myaudiere.obj
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\background.obj
@@ -51,6 +51,7 @@ d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\countdown.obj
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\directx3d.obj
 d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\whatstagesaveui.obj
+d:\授業の内容、学校関連\git\mygame\korokoromygame\korokoromygame\debug\stageeditor.obj
 d:\授業の内容、学校関連\git\mygame\korokoromygame\debug\korokoromygame.ilk
 d:\授業の内容、学校関連\git\mygame\korokoromygame\debug\korokoromygame.exe
 d:\授業の内容、学校関連\git\mygame\korokoromygame\debug\korokoromygame.pdb

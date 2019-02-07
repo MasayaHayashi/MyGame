@@ -179,7 +179,7 @@ void Board::draw()
 			devicePtr->SetRenderState(D3DRS_LIGHTING, FALSE);
 
 			// ビューマトリックスを取得
-			mtxTempView = Collision::getCameraTransform("Camera",0).viewMtx;
+			mtxTempView = Collision::getCameraTransform("Camera",0)->viewMtx;
 
 			// ワールドマトリックスの初期化
 			D3DXMatrixIdentity(&worldMtx);
@@ -908,9 +908,9 @@ void Board::setCurrentAnimPattern(INT nSetNum)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 補間用開始位置セット
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Board::setStartCurvePos(D3DXVECTOR3 SetStart)
+void Board::setStartCurvePos(D3DXVECTOR3 SetStart,size_t index)
 {
-	curvePos[0] = SetStart;
+	curvePos[index] = SetStart;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -949,15 +949,15 @@ bool Board::isHit(std::string keyName)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 3Dから2Dへの座標変換
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Board::checkUnProject(D3DXVECTOR3 worldPos)
+const D3DXVECTOR3 Board::checkUnProject(D3DXVECTOR3 worldPos,size_t index)
 {
-	D3DXMATRIX  viewMtx =		 Collision::getCameraTransform("Camera", 0).viewMtx;
-	D3DXMATRIX  projectionMtx =	 Collision::getCameraTransform("Camera", 0).projectionMtx;
+	D3DXMATRIX  viewMtx =		 Collision::getCameraTransform("Camera", 0)->viewMtx;
+	D3DXMATRIX  projectionMtx =	 Collision::getCameraTransform("Camera", 0)->projectionMtx;
 
 	D3DXVECTOR3 outVec;
 	D3DXVECTOR3 outVec2;
 
-	D3DXVec3TransformCoord(&outVec, &outVec, &viewMtx);
+	D3DXVec3TransformCoord(&outVec, &worldPos, &viewMtx);
 	D3DXVec3TransformCoord(&outVec2, &outVec, &projectionMtx);
 
 	outVec2.y *= -1;
@@ -971,7 +971,5 @@ void Board::checkUnProject(D3DXVECTOR3 worldPos)
 	outVec2.x *= Application::ScreenWidth;
 	outVec2.y *= Application::ScreenHeight;
 
-	isUsed = true;
-	setPosition(D3DXVECTOR3(outVec2.x, outVec2.y, 0.0f));
-	setStartCurvePos(D3DXVECTOR3(outVec2.x, outVec2.y, 0.0f));
+	return outVec2;
 }

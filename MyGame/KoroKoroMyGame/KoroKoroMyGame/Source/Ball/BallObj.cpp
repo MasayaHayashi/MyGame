@@ -63,7 +63,7 @@ BallObj::BallObj(UINT setIndex)
 
 	idNumber = setIndex;
 
-	isUsed = true;
+	myTransform.isUsed = true;
 }
 
 
@@ -211,7 +211,7 @@ void BallObj::initializeTitleObj_Title()
 	D3DXMatrixTranslation(&mtxTranslate, myTransform.pos.x, myTransform.pos.y, myTransform.pos.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mtxTranslate);
 
-	isUsed = true;
+	myTransform.isUsed = true;
 
 	Collision::registerList(&myTransform, "Ball");
 }
@@ -364,7 +364,7 @@ void BallObj::initializeScelect()
 	D3DXMatrixTranslation(&mtxTranslate, myTransform.pos.x, myTransform.pos.y, myTransform.pos.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mtxTranslate);
 
-	isUsed = true;
+	myTransform.isUsed = true;
 
 	Collision::registerList(&myTransform, "Ball");
 }

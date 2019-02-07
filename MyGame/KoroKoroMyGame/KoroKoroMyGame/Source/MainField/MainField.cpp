@@ -19,7 +19,7 @@ MainField::MainField()
 	myTransform.scale	= D3DXVECTOR3(0.7f, 0.1f, 0.5f);
 
 	meshPtr = nullptr;
-	isUsed  = false;
+	myTransform.isUsed  = false;
 
 	tagName = "field";
 

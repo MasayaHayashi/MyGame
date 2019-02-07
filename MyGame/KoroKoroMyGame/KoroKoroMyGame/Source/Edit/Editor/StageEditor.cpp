@@ -133,6 +133,8 @@ void StageEditor::finalize()
 			Mydelete::safeDelete(*itr);
 		}
 	}
+
+	collisionPtr->finalize("Player");
 }
 
 //
@@ -260,7 +262,7 @@ void StageEditor::loadStageData(size_t stageNumber)
 		{
 			loadtFile.read((CHAR*) (&exportWorkData), sizeof(ExportData));
 
-			if (exportWorkData.isUsed)
+			if (exportWorkData.myTransform.isUsed)
 			{
 				selectGameObjIndex ++;
 			}

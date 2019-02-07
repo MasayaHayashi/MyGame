@@ -33,7 +33,7 @@ Camera::Camera()
 
 	D3DXMatrixIdentity(&myTransform.viewMtx);
 
-	Collision::registerList(myTransform, "Camera");
+	Collision::registerList(&myTransform, "Camera");
 }
 
 //
@@ -333,6 +333,8 @@ void Camera::updateGameMain(Player &pPlayer,INT countDown)
 		case GameManager::GameType::Playing:
 			updateGameMainPlay(pPlayer,countDown);
 			break;
+		case GameManager::GameType::FallMiss:
+			updateFallMiss();
 		default:
 			break;
 	}
@@ -606,5 +608,14 @@ void Camera::editInput(D3DXVECTOR3 blockPos)
 	{
 		myTransform.look -= forwd;
 	}
+
+}
+
+//
+// —Ž‰º
+//
+void Camera::updateFallMiss()
+{
+	myTransform.look = Collision::getTransform("Player", 0)->pos;
 
 }

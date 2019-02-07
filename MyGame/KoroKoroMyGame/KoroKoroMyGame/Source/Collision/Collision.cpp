@@ -19,9 +19,9 @@
 #include "../MyDelete/MyDelete.h"
 
 // ===== 静的メンバ =====
-std::unordered_map<std::string, std::list<		std::unique_ptr<Transform>		 >>	Collision::collisionMapes;
-std::unordered_map<std::string, std::vector<	std::unique_ptr<RayHit>			 >>	Collision::rayHitMapes;
-std::unordered_map<std::string, std::list<		std::unique_ptr<CameraTransform> >>	Collision::cameraTransforms;
+std::unordered_map<std::string, std::list<		Transform*		 >>	Collision::collisionMapes;
+std::unordered_map<std::string, std::vector<	RayHit*>		 >	Collision::rayHitMapes;
+std::unordered_map<std::string, std::list<		CameraTransform* >>	Collision::cameraTransforms;
 D3DXVECTOR3 Collision::cross;
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -58,9 +58,9 @@ void Collision::update()
 
 	UINT playerIndex = 0;
 	
-//	checkCollision("Player", "heart.x");
+	checkCollision("Player", "heart.x");
 
-//	checkCollisionBlock();
+	checkCollisionBlock();
 
 	checkCollision("Player","star.x");
 
@@ -101,17 +101,17 @@ void Collision::update()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Collision::registerList(Transform *setPawn,std::string keyName)
 {
-	collisionMapes[keyName].push_back( std::unique_ptr<Transform>(setPawn));
+	collisionMapes[keyName].push_back( setPawn);
 
-	rayHitMapes[keyName].push_back(static_cast<std::unique_ptr<RayHit>>(NEW RayHit));
+	rayHitMapes[keyName].push_back(NEW RayHit());
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 登録
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void Collision::registerList(CameraTransform &setCamera, std::string keyName)
+void Collision::registerList(CameraTransform *setCamera, std::string keyName)
 {
-	cameraTransforms[keyName].push_back( std::unique_ptr<CameraTransform> (&setCamera));
+	cameraTransforms[keyName].push_back( setCamera);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -124,8 +124,10 @@ void Collision::release(std::string keyName)
 		return;
 	}
 
-
-
+	for (size_t playerIndex = 0; playerIndex < collisionMapes[keyName].size(); playerIndex)
+	{
+		collisionMapes[keyName].pop_back();
+	}
 //	collisionMapes[keyName].clear();
 }
 
@@ -134,6 +136,28 @@ void Collision::release(std::string keyName)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Collision::finalize(std::string keyName)
 {
+	for (auto & rayHitMap : rayHitMapes)
+	{
+		for (auto &vector : rayHitMap.second)
+		{
+			Mydelete::safeDelete(vector);
+		}
+	}
+
+	for (UINT playerIndex = 0; playerIndex < collisionMapes[keyName].size(); playerIndex++)
+	{
+		Mydelete::safeDelete(collisionMapes[keyName].back());
+		collisionMapes[keyName].pop_back();
+	}
+
+	collisionMapes[keyName].clear();
+
+	for (UINT playerIndex = 0; playerIndex < rayHitMapes[keyName].size(); playerIndex++)
+	{
+		Mydelete::safeDelete(rayHitMapes[keyName].back());
+		rayHitMapes[keyName].pop_back();
+	}
+
 	/*
 	for (UINT playerCnt = 0; playerCnt < rayHitMapes["Player"].size(); playerCnt++)
 	{
@@ -408,33 +432,33 @@ const Transform* Collision::getTransform(std::string keyName,INT index)
 		return nullptr;
 	}
 
-	return std::next(collisionMapes[keyName].begin(), index)->get();
+	return *std::next(collisionMapes[keyName].begin(), index);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-const CameraTransform& Collision::getCameraTransform(std::string keyName, INT index)
+const CameraTransform* Collision::getCameraTransform(std::string keyName, INT index)
 {
 	if (index < 0)
 	{
 		throw std::invalid_argument("不正な引数です");
 	}
 	
-	return *std::next(cameraTransforms[keyName].begin(), index)->get();
+	return *std::next(cameraTransforms[keyName].begin(), index);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // レイの判定取得
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-const RayHit& Collision::getRayHitData(std::string keyName,UINT index)
+const RayHit* Collision::getRayHitData(std::string keyName,UINT index)
 {
 	if (index < 0)
 	{
 		throw std::underflow_error("引数の値がマイナスです");
 	}
 
-	return *std::next(rayHitMapes[keyName].begin(), index)->get();
+	return *std::next(rayHitMapes[keyName].begin(), index);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -521,14 +545,18 @@ void Collision::checkCollision(std::string keyNameA,std::string keyNameB)
 {
 	for (auto &collisionMap : collisionMapes[keyNameB])
 	{
+		if (!collisionMap->isUsed)
+		{
+			continue;
+		}
 
 		if (isHitAABB(*collisionMapes[keyNameA].front(), *collisionMap))
 		{
-			collisionMapes[keyNameA].front()->isHitAABB = true;
+			collisionMap->isHitAABB = true;
 		}
 		else
 		{
-			collisionMapes[keyNameA].front()->isHitAABB = false;
+			collisionMap->isHitAABB = false;
 		}
 	}
 }
@@ -537,9 +565,9 @@ void Collision::checkCollision(std::string keyNameA,std::string keyNameB)
 // 当たっているオブジェクトのインデックス取得
 // 現在は複数の判定には未対応
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-const size_t Collision::getHitIndex(std::string keyName)
+const INT Collision::getHitIndex(std::string keyName)
 {
-	size_t index = 0;
+	INT index = 0;
 	for (auto & collisionMap : collisionMapes[keyName])
 	{
 		if (collisionMap->isHitAABB)

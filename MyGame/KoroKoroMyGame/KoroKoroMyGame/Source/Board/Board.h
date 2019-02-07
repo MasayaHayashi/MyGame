@@ -46,11 +46,11 @@ public:
 	void setUsedFlg(bool setflg);			// 使用フラグセット
 	void setvelocity(D3DXVECTOR3 velocityNum);		// 移動量セット
 	void setCurrentAnimPattern(INT nAnim);	// アニメーションセット
-	void setStartCurvePos(D3DXVECTOR3 );	// ベジェ曲線、エルミート曲線用スタート位置セット
+	void setStartCurvePos(D3DXVECTOR3 ,size_t index);	// ベジェ曲線、エルミート曲線用スタート位置セット
 	void setNarrowFlg(bool bset);
 	void destroyBoard();					// 板ポリゴン解放
 
-	void checkUnProject(D3DXVECTOR3 worldPos);
+	const D3DXVECTOR3 checkUnProject(D3DXVECTOR3 worldPos,size_t index);
 	bool isHit(std::string keyName);
 	// ゲッター
 	LPDIRECT3DTEXTURE9		getTexture();		// テクスチャ情報生成

@@ -35,7 +35,7 @@ ItemBase::ItemBase(std::string modelPass,std::string texturePass, size_t setNumb
 	myGameObjType				= setGameObj;
 	isFieldObject				= setFieldModel;
 	
-	isUsed = false;
+	myTransform.isUsed = false;
 }
 
 //
@@ -92,7 +92,7 @@ void ItemBase::update()
 //	pCollider->UpdateCollider(mtxWorldPawn, FIELD_BOX_COLOR );
 	updateExportData();
 
-	if (!isUsed)
+	if (!myTransform.isUsed)
 	{
 		return;
 	}
@@ -123,7 +123,7 @@ void ItemBase::update()
 //
 void ItemBase::draw()
 {
-	if (!isUsed)
+	if (!myTransform.isUsed)
 	{
 		return;
 	}
@@ -137,7 +137,7 @@ void ItemBase::draw()
 void ItemBase::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 {
 	// —áŠOˆ—
-	if (!isUsed)
+	if (!myTransform.isUsed)
 	{
 		return;
 	}

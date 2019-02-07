@@ -186,7 +186,6 @@ void Player::initializeTitle()
 	materialBufferPtr	 = nullptr;
 	numMat				 = 0;
 
-
 	// ‰ñ“]
 	D3DXMATRIX mRotX, mRotY, mRotZ;
 
@@ -232,7 +231,7 @@ void Player::initializeTitle()
 
 	hierarchyMeshData.pAnimCtrl->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[2]);
 
-	isUsed = true;
+	myTransform.isUsed = true;
 
 	D3DXQuaternionRotationAxis(&StartQuaternion, &getUpVec(), 0);
 	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
@@ -312,7 +311,7 @@ void Player::initializeGameMain()
 
 	playerStateType = PlayerState::Stop;
 	isGround		= true;
-	isUsed			= true;
+	myTransform.isUsed			= true;
 }
 
 
@@ -512,7 +511,7 @@ void Player::updateSelect()
 	D3DXMatrixRotationY(&worldMtx, D3DXToRadian(myTransform.rotDeg.y));
 	myTransform.rotDeg.y += 1;
 
-	D3DXVECTOR3 cameraPos = Collision::getCameraTransform("Camera", 1).pos;
+	D3DXVECTOR3 cameraPos = Collision::getCameraTransform("Camera", 1)->pos;
 
 	setWorldMtxPos(myTransform.pos);
 }
@@ -678,9 +677,9 @@ void Player::rideBall(size_t setIndex)
 //
 void Player::fall(size_t checkIndex)
 {
-	if (!Collision::getRayHitData("Player", checkIndex).isHit)
+	if (!Collision::getRayHitData("Player", checkIndex)->isHit)
 	{
-		if (Collision::getRayHitData("Player", checkIndex).length < 10.0f)
+		if (Collision::getRayHitData("Player", checkIndex)->length < 10.0f)
 		{
 			myTransform.velocity.y -= FallSpeed;
 			DirectX3D::printDebug("—Ž‰º’†");
@@ -699,7 +698,6 @@ void Player::fall(size_t checkIndex)
 		FLOAT ads = std::abs(std::abs(oldPos.y - cross.y));
 	
 		myTransform.pos = cross;
-		//myTransform.pos.y += myTransform.collisionBox.y;
 	
 		oldPos = myTransform.pos;
 
@@ -825,9 +823,9 @@ void Player::updateGoal()
 	myTransform.velocity.x = 0.0f;
 	myTransform.velocity.z = 0.0f;
 
-	if (Collision::getRayHitData(tagName, 0).isHit)
+	if (Collision::getRayHitData(tagName, 0)->isHit)
 	{
-		if (Collision::getRayHitData("Player", 0).length < 0.0f)
+		if (Collision::getRayHitData("Player", 0)->length < 0.0f)
 		{
 			myTransform.velocity.y = JumpSpeed;
 			MyAudiere::getSe(1)->setVolume(0.1f);

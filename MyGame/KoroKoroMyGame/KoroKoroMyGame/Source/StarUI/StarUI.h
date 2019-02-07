@@ -18,6 +18,7 @@ class StarUI final : public Board
 {
 public:
 	StarUI();
+	StarUI(size_t indexNumber);
 	~StarUI();
 
 	void initialize();

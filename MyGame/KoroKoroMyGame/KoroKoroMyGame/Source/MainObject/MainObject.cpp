@@ -35,7 +35,7 @@ MainObject::MainObject(std::string modelPass,std::string texturePass, size_t set
 	myGameObjType				= setGameObj;
 	isFieldObject				= setFieldModel;
 	
-	isUsed = false;
+	myTransform.isUsed = false;
 }
 
 //
@@ -90,7 +90,7 @@ void MainObject::update()
 {
 	updateExportData();
 
-	if (!isUsed)
+	if (!myTransform.isUsed)
 	{
 		return;
 	}
@@ -121,7 +121,7 @@ void MainObject::update()
 //
 void MainObject::draw()
 {
-	if (!isUsed)
+	if (!myTransform.isUsed)
 	{
 		return;
 	}
@@ -135,7 +135,7 @@ void MainObject::draw()
 void MainObject::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 {
 	// —áŠOˆ—
-	if (!isUsed)
+	if (!myTransform.isUsed)
 	{
 		return;
 	}

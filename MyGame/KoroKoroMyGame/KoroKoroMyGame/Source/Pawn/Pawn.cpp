@@ -127,7 +127,7 @@ void Pawn::update()
 void Pawn::draw()
 {
 	// 例外処理
-	if (!isUsed)
+	if (!myTransform.isUsed)
 	{
 		return;
 	}
@@ -191,7 +191,7 @@ void Pawn::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	// 例外処理
-	if (!isUsed)
+	if (!myTransform.isUsed)
 		return;
 
 	// 移動、回転、拡大縮小用行列
@@ -322,7 +322,7 @@ void Pawn::draw(LPD3DXMESH pMesh, LPDIRECT3DTEXTURE9 pTex, LPD3DXBUFFER pBuff,DW
 void Pawn::drawObjectLocal()
 {
 	// 例外処理
-	if (!isUsed)
+	if (!myTransform.isUsed)
 	{
 		return;
 	}
@@ -719,7 +719,7 @@ DWORD Pawn::getMatNum()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Pawn::setUsedFlg(bool setFlg)
 {
-	isUsed = setFlg;
+	myTransform.isUsed = setFlg;
 
 	// コライダー使用フラグセット
 	if(colliderPtr)
@@ -787,7 +787,7 @@ LPDIRECT3DTEXTURE9 Pawn::getTexture()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 BOOL Pawn::getUsedFlg()
 {
-	return isUsed;
+	return myTransform.isUsed;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -949,7 +949,7 @@ void Pawn::setPawn(Pawn setData)
 	//rot			= setData.rotDegData;	// 回転
 	//scale		= setData.scaleData;	// 拡大率
 	//idNumber	= setData.idNumber;		// 識別番号
-	//isUsed		= setData.isUsed;		// 使用フラグ
+	//myTransform.isUsed		= setData.myTransform.isUsed;		// 使用フラグ
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -1158,7 +1158,7 @@ const ExportData& Pawn::getExportData() const
 void Pawn::reflectionExportData(const ExportData setExport)
 {
 	myTransform = setExport.myTransform;
-	isUsed		= setExport.isUsed;
+	myTransform.isUsed		= setExport.myTransform.isUsed;
 	myGameObjType = setExport.myGameObjType;
 
 	setDefaultValue();
@@ -1169,9 +1169,9 @@ void Pawn::reflectionExportData(const ExportData setExport)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Pawn::updateExportData()
 {
-	myExportData.myTransform	= myTransform;
-	myExportData.myGameObjType  = myGameObjType;
-	myExportData.isUsed			= isUsed;
+	myExportData.myTransform				= myTransform;
+	myExportData.myGameObjType				= myGameObjType;
+	myExportData.myTransform.isUsed			= myTransform.isUsed;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

@@ -180,7 +180,7 @@ void HeartObj::initializeTitleObj_Title()
 	D3DXMatrixTranslation(&mtxTranslate, myTransform.pos.x, myTransform.pos.y, myTransform.pos.z);
 	D3DXMatrixMultiply(&worldMtx, &worldMtx, &mtxTranslate);
 
-	isUsed = true;
+	myTransform.isUsed = true;
 
 	// コライダー初期化
 //	pCollider = NEW C_COLLIDER(pos, MeshData.collitionBox);

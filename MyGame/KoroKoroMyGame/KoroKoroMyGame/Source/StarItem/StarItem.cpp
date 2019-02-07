@@ -35,7 +35,7 @@ StarItem::StarItem(std::string modelPass,std::string texturePass, size_t setNumb
 	myGameObjType				= setGameObj;
 	isFieldObject				= setFieldModel;
 	
-	isUsed = false;
+	myTransform.isUsed = false;
 }
 
 //
@@ -59,15 +59,14 @@ void StarItem::initialize()
 	ResourceManager::makeModel(meshDataObj, fileName, meshType);
 	ResourceManager::createTexture(textureData, texFileName);
 
-	myTransform.collisionBox = meshDataObj.collitionBox;
-
 	Collision::registerList(&myTransform, tagName);
 
-	// ˆÊ’uAˆÚ“®—ÊAŠg‘å—¦‰Šú‰»
 	myTransform.scale	 = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 	myTransform.rotDeg	 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.pos		 = D3DXVECTOR3(0.0f, -meshDataObj.collitionBox.y * 2, 0.0f);
 	myTransform.rotDeg.y = 90.0f;
+	myTransform.collisionBox = meshDataObj.collitionBox;
+
 }
 
 //
@@ -89,14 +88,9 @@ void StarItem::finalize()
 //
 void StarItem::update()
 {
-	if (!isUsed)
-	{
-		return;
-	}
-
 	updateExportData();
 
-	if (!isUsed)
+	if (!myTransform.isUsed)
 	{
 		return;
 	}
@@ -106,22 +100,10 @@ void StarItem::update()
 		return;
 	}
 
-	if (myGameObjType == GameObjectType::NormalBlockObj)
-	{
-		myTransform.rotDeg.y += 0.1f;
-
-		D3DXMATRIX matrix;
-		D3DXMatrixRotationY(&matrix, D3DXToRadian(myTransform.rotDeg.y));
-		D3DXMatrixMultiply(&worldMtx, &worldMtx, &matrix);
-	}
-
-	/*
-	if (Collision::getTransform(tagName, idNumber)->isHitAABB)
-	{
- 		GameManager::changeGameType(GameManager::GameType::Miss);
-	}
-	*/
-
+	myTransform.rotDeg.y += 0.1f;
+	D3DXMATRIX matrix;
+	D3DXMatrixRotationY(&matrix, D3DXToRadian(myTransform.rotDeg.y));
+	D3DXMatrixMultiply(&worldMtx, &worldMtx, &matrix);
 }
 
 //
@@ -129,7 +111,7 @@ void StarItem::update()
 //
 void StarItem::draw()
 {
-	if (!isUsed)
+	if (!myTransform.isUsed)
 	{
 		return;
 	}
@@ -142,7 +124,7 @@ void StarItem::draw()
 //
 void StarItem::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 {
-	if (!isUsed)
+	if (!myTransform.isUsed)
 	{
 		return;
 	}

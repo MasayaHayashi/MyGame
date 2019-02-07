@@ -56,7 +56,7 @@ SceneMain::SceneMain()
 
 	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW StageClearUI()  ));
 	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW MissUI()	    ));
-	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW StarUI()));
+	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW StarUI(0)));
 	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW Countdown())	);
 
 	collisionPtr.reset( NEW Collision() );
@@ -88,7 +88,6 @@ SceneMain::SceneMain()
 			}
 		}
 	}
-
 }
 
 //
@@ -293,7 +292,7 @@ void SceneMain::loadStageData(size_t stageNumber)
 		{
 			loadtFile.read((CHAR*)(&exportWorkData), sizeof(ExportData));
 
-			if (exportWorkData.isUsed)
+			if (exportWorkData.myTransform.isUsed)
 			{
 				selectGameObjIndex++;
 			}

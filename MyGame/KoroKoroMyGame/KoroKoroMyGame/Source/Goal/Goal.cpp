@@ -29,7 +29,7 @@ Goal::Goal(std::string keyName, std::string textureName,size_t setNumber)
 	isFieldObject			= false;
 	myGameObjType			= GameObjectType::GoalObj;
 	
-	isUsed = false;
+	myTransform.isUsed = false;
 }
 
 //
@@ -84,7 +84,7 @@ void Goal::update()
 {
 	updateExportData();
 
-	if (!isUsed)
+	if (!myTransform.isUsed)
 	{
 		return;
 	}
@@ -105,7 +105,7 @@ void Goal::update()
 //
 void Goal::draw()
 {
-	if (!isUsed)
+	if (!myTransform.isUsed)
 	{
 		return;
 	}
@@ -118,7 +118,7 @@ void Goal::draw()
 //
 void Goal::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 {
-	if (!isUsed)
+	if (!myTransform.isUsed)
 	{
 		return;
 	}

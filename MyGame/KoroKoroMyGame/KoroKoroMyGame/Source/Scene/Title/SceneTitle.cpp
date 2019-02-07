@@ -36,10 +36,6 @@
 //
 SceneTitle::SceneTitle()
 {
-	bChangeScene = false;
-	nChangeSceneWaitCnt = 0;
-	uSelectScene = 0;
-
 	boardPtres.push_back(std::unique_ptr<Board>(NEW TitleUI()));
 	boardPtres.push_back(std::unique_ptr<Board>(NEW TitleSelectUI()));
 
@@ -119,8 +115,6 @@ void SceneTitle::initialize()
 //
 void SceneTitle::finalize()
 {
-	_ASSERT(_CrtCheckMemory());
-
 	cameraPtr->finalize();
 	playerPtr->finalize();
 
@@ -131,7 +125,9 @@ void SceneTitle::finalize()
 	{
 		boardPtr->finalize();
 	}
-	_ASSERT(_CrtCheckMemory());
+
+	collisionPtr->finalize("Player");
+
 
 	/*
 	// ƒJƒƒ‰Œãˆ—
@@ -184,7 +180,7 @@ void SceneTitle::finalize()
 //
 void SceneTitle::update()
 {
-	playerPtr->update(Collision::getCameraTransform("Camera", 0).fowerd);
+	playerPtr->update(Collision::getCameraTransform("Camera", 0)->fowerd);
 	heartObjPtr->update();
 	skydomePtr->update();
 	fieldPtr->update();

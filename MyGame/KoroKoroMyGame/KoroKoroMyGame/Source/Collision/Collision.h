@@ -78,7 +78,7 @@ public:
 	void initilize();
 
 	static void registerList(Transform *setPawn,std::string keyName);
-	static void registerList(CameraTransform &setCamera, std::string keyName);
+	static void registerList(CameraTransform *setCamera, std::string keyName);
 	static void release(std::string keyName);
 
 	INT isHitRayToMesh(Pawn *pPawnA, Pawn *pPawnB, LPD3DXVECTOR3 pRayPos, LPD3DXVECTOR3 pRayDir, bool bSegment, LPD3DXVECTOR3 pCross, LPD3DXVECTOR3 pNormal, FLOAT& length);
@@ -88,10 +88,10 @@ public:
 	bool IsHitSphereToSphere(Pawn *, Pawn*);
 
 	static const Transform*				getTransform(std::string keyName, INT index);
-	static const CameraTransform&		getCameraTransform(std::string keyName, INT index);
-	static const RayHit&				getRayHitData(std::string keyName, UINT index);
+	static const CameraTransform*		getCameraTransform(std::string keyName, INT index);
+	static const RayHit*				getRayHitData(std::string keyName, UINT index);
 	static const size_t					getSize(std::string keyName);
-	static const size_t					getHitIndex(std::string keyName);
+	static const INT					getHitIndex(std::string keyName);
 
 	static void setVelocity(std::string keyName, UINT index,D3DXVECTOR3 velocity);
 
@@ -117,10 +117,9 @@ private:
 
 	static D3DXVECTOR3 cross;
 
-	static std::unordered_map < std::string, std::list<   std::unique_ptr<Transform> >>					collisionMapes;
-	static std::unordered_map < std::string, std::vector< std::unique_ptr<RayHit>	>>					rayHitMapes;
-	static std::unordered_map < std::string, std::list<	  std::unique_ptr<CameraTransform> >>			cameraTransforms;
-
+	static std::unordered_map < std::string, std::list<   Transform *>		>				collisionMapes;
+	static std::unordered_map < std::string, std::vector< RayHit *>			>				rayHitMapes;
+	static std::unordered_map < std::string, std::list<	  CameraTransform*> >				cameraTransforms;
 };
 
 #endif

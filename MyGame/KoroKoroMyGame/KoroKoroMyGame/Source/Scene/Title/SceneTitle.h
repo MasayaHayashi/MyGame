@@ -21,14 +21,13 @@ enum class UIType
 };
 
 // ===== クラスの前方宣言 =====
-class MainField;
-class Player;
-class TitleUI;
-class C_Star_BASE;
-class HeartObj;
 class Light;
-class Camera;
-class FadeUI;
+class Collision;
+class Skydome;
+class Player;
+class MainField;
+class TitleUI;
+class HeartObj;
 class Board;
 
 // ===== クラス定義 =====
@@ -57,11 +56,7 @@ private:
 	std::unique_ptr <HeartObj>		heartObjPtr = nullptr;
 
 	std::list<std::unique_ptr<Board>> boardPtres;
-
-	bool					bChangeScene;						// シーン切り替え
-	INT						nChangeSceneWaitCnt;				// 待機用カウンタ
-	UINT					uSelectScene;
-
+	std::unique_ptr<Collision>		  collisionPtr;
 };
 
 #endif

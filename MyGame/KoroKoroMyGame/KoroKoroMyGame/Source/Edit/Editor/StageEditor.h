@@ -17,18 +17,12 @@
 #include <array>
 #include <fstream>
 
-
 // ===== 定数・マクロ定義 =====
-#define MAX_STAGE     (4)
-#define MAX_FILE_NAME (256)
-#define STAGE_TUTORIAL_FILE_NAME "StageTutorial.bin"
-#define STAGE_1_FILE_NAME		 "Stage1.bin"
-#define STAGE_2_FILE_NAME		 "Stage2.bin"
-#define STAGE_3_FILE_NAME		 "Stage3.bin"
 
 // ===== クラスの前方参照 =====
 class Player;
 class Light;
+class Collision;
 
 // ===== 列挙体定義 =====
 enum EDITOR_UI_TYPE
@@ -98,6 +92,7 @@ private:
 	std::unique_ptr<Light>	lightPtr;
 	std::unique_ptr<Camera> cameraPtr;
 	std::unique_ptr<Player> playerPtr;
+	std::unique_ptr<Collision>		  collisionPtr;
 
 	std::array<std::list<std::unique_ptr<Board>>,MaxBoardObj>						boardObjPtr;
 	std::array<std::vector<MainObject*>,GameObjectBase::MaxGameObjType>				gameObjPtr;
@@ -112,22 +107,11 @@ private:
 
 	std::vector<std::string> stagePass;
 
-	/*
-	template<class T>
-	void creteGamesObj(T dataType, size_t size);
-	*/
-
-//	Board 					*pUIObj[MAX_EDITOR_UI_TYPE];
-
-	//C_COLLISION				*pCollision;								// 衝突用
-	//C_PAUSE					*pPause;									// ポーズ用
-
 	UINT					uSaveStage;									// 保存先ステージ番号
 
 	UINT					uExportBlockCnt[2];			// 出力用カウンタ
 	UINT					uSelectObjNum[2];			// 現在の選択されているオブジェクトの識別番号
-	CHAR					szStageFileName[MAX_STAGE][MAX_FILE_NAME];	// ステージ読み込みのファイル名
-	
+
 	FILE					*fp;										// ファイルポインタ
 	errno_t 				nErrorFopen;								// ファイルオープンフラグ
 	ExportData				exportWorkData;								// 書き出し用データ保存場所

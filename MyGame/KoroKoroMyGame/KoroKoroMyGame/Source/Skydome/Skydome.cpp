@@ -21,7 +21,7 @@ Skydome::Skydome()
 	myTransform.scale = (D3DXVECTOR3(Scale,Scale,Scale));
 	textureSize  = D3DXVECTOR3(10.0f, 10.0f, 10.0f);
 
-	isUsed = true;
+	myTransform.isUsed = true;
 }
 
 //

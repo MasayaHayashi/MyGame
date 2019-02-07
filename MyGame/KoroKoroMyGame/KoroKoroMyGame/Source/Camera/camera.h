@@ -52,6 +52,7 @@ public:
 	void updateGameMain(Player &,INT);
 	void updateGameMainPlay(Player &,Board);
 	void updateGameMainMiss();
+
 	void updateGameMainReady(Player &pPlayer, INT countDown);
 	void editInput(D3DXVECTOR3 blockPos);
 
@@ -85,6 +86,9 @@ private:
 	static constexpr FLOAT ViewFarZ			= 20000.0f;
 	static constexpr INT RotSpeed			= 10;
 	static constexpr size_t MaxFade			= 3;
+
+
+	void updateFallMiss();
 
 	INT rotCnt = 0;
 

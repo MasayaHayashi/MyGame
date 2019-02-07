@@ -35,7 +35,7 @@ SpikeBlock::SpikeBlock(std::string modelPass, std::string texturePass, size_t se
 	myGameObjType = setGameObj;
 	isFieldObject = setFieldModel;
 
-	isUsed = false;
+	myTransform.isUsed = false;
 }
 
 //
@@ -94,7 +94,7 @@ void SpikeBlock::update()
 {
 	updateExportData();
 
-	if (!isUsed)
+	if (!myTransform.isUsed)
 	{
 		return;
 	}
@@ -127,7 +127,7 @@ void SpikeBlock::update()
 //
 void SpikeBlock::draw()
 {
-	if (!isUsed)
+	if (!myTransform.isUsed)
 	{
 		return;
 	}
@@ -141,7 +141,7 @@ void SpikeBlock::draw()
 void SpikeBlock::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 {
 	// —áŠOˆ—
-	if (!isUsed)
+	if (!myTransform.isUsed)
 	{
 		return;
 	}

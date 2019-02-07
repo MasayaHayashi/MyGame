@@ -37,16 +37,17 @@ class Collider;
 // ===== 構造体定義 =====
 typedef struct
 {
-	D3DXVECTOR3			pos			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3			velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3			rotDeg		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3			rotDegDest	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3			scale		= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-	D3DXVECTOR3			cross		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3			normal		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3			pos			 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3			velocity	 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3			rotDeg		 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3			rotDegDest	 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3			scale		 = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	D3DXVECTOR3			cross		 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3			normal		 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3			collisionBox = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	FLOAT				accele = 1.0f;
-	bool				isHitAABB	= false;
+	bool				isHitAABB	 = false;
+	bool				isUsed		 = false;
 } Transform;
 
 typedef struct
@@ -71,13 +72,6 @@ public:
 	Pawn();
 	Pawn(UINT);
 	virtual ~Pawn();
-
-	// 識別用列挙体定義
-	enum class TagType
-	{
-		Player = 0,
-		Enemy,
-	};
 
 	virtual void initialize();
 	virtual void initialize(std::string fileName);
@@ -162,6 +156,7 @@ public:
 	void debugMove();
 
 	static constexpr FLOAT DebugMoveSpeed = 0.05f;
+
 #endif
 protected:
 	std::unique_ptr <Collider> colliderPtr = nullptr;
