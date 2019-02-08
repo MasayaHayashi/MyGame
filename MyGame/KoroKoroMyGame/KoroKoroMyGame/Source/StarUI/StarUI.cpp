@@ -50,7 +50,7 @@ StarUI::StarUI(size_t indexNumber)
 	vertexBoard.pos = D3DXVECTOR3(Application::ScreenCenterX * 0.5f, 0.0f, 0.0f);
 	vertexBoard.rotDeg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	vertexBoard.scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-	vertexBoard.size = D3DXVECTOR3(330.0f * 0.4f, 320.0f * 0.4f, 0.0f);
+	vertexBoard.size = D3DXVECTOR3(330.0f * 0.2f, 320.0f * 0.2f, 0.0f);
 	vertexBoard.radAngle = 0.0f;
 	posDestBoard = D3DXVECTOR3(Application::ScreenCenterX * 0.5f, Application::ScreenCenterY * 0.25f, 0.0f);
 	isAlphaBlend = false;
@@ -67,8 +67,8 @@ StarUI::StarUI(size_t indexNumber)
 
 	curvePos[0] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	curvePos[1] = D3DXVECTOR3(Application::ScreenCenterX * 0.25f, Application::ScreenCenterY, 0.0f);
-	curvePos[2] = D3DXVECTOR3(Application::ScreenWidth - vertexBoard.size.x, Application::ScreenCenterY + vertexBoard.size.y, 0.0f);
-	curvePos[3] = D3DXVECTOR3(Application::ScreenWidth - (vertexBoard.size.x * 0.5f * (idNumber + 1)), vertexBoard.size.y, 0.0f);
+	curvePos[2] = D3DXVECTOR3(Application::ScreenWidth - (vertexBoard.size.x * 0.5f * (idNumber + 1)) - 10.0f, vertexBoard.size.y, 0.0f);
+	curvePos[3] = D3DXVECTOR3(Application::ScreenWidth - (vertexBoard.size.x * 0.5f * (idNumber + 1)) - 10.0f, vertexBoard.size.y, 0.0f);
 
 	isUsed = false;
 }
@@ -109,7 +109,7 @@ void StarUI::update()
 {
 	const INT hitIndex = Collision::getHitIndex("star.x");
 
-	if (hitIndex > 0)
+	if (hitIndex >= 0)
 	{
 		awake = true;
 		isUsed = true;
@@ -134,12 +134,20 @@ void StarUI::update()
 		MyVector3::CalcBezierCurve(vertexBoard.pos, curvePos[0], curvePos[1], curvePos[2], curvePos[3], 1.0f, curveCnt);
 	}
 	*/
-	if (hitIndex > 0)
+
+	if (hitIndex >= 0)
 	{
-		awake = false;
-		vertexBoard.pos = checkUnProject(Collision::getTransform("star.x", hitIndex)->pos - Collision::getTransform("star.x",hitIndex)-, 1);
+		D3DXVECTOR3   size2D = checkUnProject(Collision::getTransform("star.x", hitIndex)->pos, hitIndex);
+		curvePos[0]	= size2D - D3DXVECTOR3(vertexBoard.size.x * 2.0f, 0.0f, 0.0f);
 	}
 
+	MyVector3::CalcBezierCurve(vertexBoard.pos, curvePos[0], curvePos[1], curvePos[2], curvePos[3], 1.0f, curveCnt);
+
+	if (curveCnt < 1.0f)
+	{
+		vertexBoard.radAngle += D3DXToRadian(4);
+		curveCnt += 0.007f;
+	}
 
 	setVtx();
 	setTexture();

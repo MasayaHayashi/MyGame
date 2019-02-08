@@ -80,6 +80,7 @@ public:
 	virtual void draw();
 	virtual void draw(D3DXMATRIX,D3DXMATRIX);
 	virtual void draw(LPD3DXMESH pMesh, LPDIRECT3DTEXTURE9 pTex, LPD3DXBUFFER pBuff, DWORD numMat);
+	virtual void drawObjectLocal(D3DXMATRIX mtxView, D3DXMATRIX mtxProj);
 	virtual void finalize();
 
 	virtual void initializeStatus();	// 各種ステータスを初期値にする
@@ -109,13 +110,13 @@ public:
 	GameObjectType		getGameObjectType() const;
 	bool				getIsGround();			// 地面上状態取得
 	const bool			isUsedShader() const;	// シェーダー使用
-	bool			getIsFieldObject() const;
+	bool				getIsFieldObject() const;
 
 	LPD3DXMESH	 getMesh();
 	LPD3DXBUFFER getMat();
 	DWORD		 getMatNum();
 
-	LPDIRECT3DVERTEXBUFFER9 getVtxBuff();		// 頂点情報取得
+	LPDIRECT3DVERTEXBUFFER9 getVtxBuff();		// 頂点情報取得 
 	LPDIRECT3DTEXTURE9		getTexture();		// テクスチャ取得
 	BOOL					getUsedFlg();		// 使用フラグ取得
 

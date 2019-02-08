@@ -23,6 +23,7 @@ std::unordered_map<std::string, std::list<		Transform*		 >>	Collision::collision
 std::unordered_map<std::string, std::vector<	RayHit*>		 >	Collision::rayHitMapes;
 std::unordered_map<std::string, std::list<		CameraTransform* >>	Collision::cameraTransforms;
 D3DXVECTOR3 Collision::cross;
+INT Collision::hitIndex = 0;
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -567,16 +568,22 @@ void Collision::checkCollision(std::string keyNameA,std::string keyNameB)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 const INT Collision::getHitIndex(std::string keyName)
 {
-	INT index = 0;
+	hitIndex = 0;
+
 	for (auto & collisionMap : collisionMapes[keyName])
 	{
+		if (!collisionMap->isUsed)
+		{
+			continue;
+		}
+
 		if (collisionMap->isHitAABB)
 		{
-			return index;
+			return hitIndex;
 		}
 		else
 		{
-			index ++;
+			hitIndex++;
 		}
 	}
 

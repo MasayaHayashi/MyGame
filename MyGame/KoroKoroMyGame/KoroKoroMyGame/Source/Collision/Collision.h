@@ -120,6 +120,8 @@ private:
 	static std::unordered_map < std::string, std::list<   Transform *>		>				collisionMapes;
 	static std::unordered_map < std::string, std::vector< RayHit *>			>				rayHitMapes;
 	static std::unordered_map < std::string, std::list<	  CameraTransform*> >				cameraTransforms;
+
+	static INT hitIndex;
 };
 
 #endif

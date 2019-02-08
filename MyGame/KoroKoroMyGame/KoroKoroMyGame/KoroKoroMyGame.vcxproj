@@ -161,6 +161,7 @@
     <ClCompile Include="Source\Scene\StageEdit\SceneStageEdit.cpp" />
     <ClCompile Include="Source\Scene\Title\SceneTitle.cpp" />
     <ClCompile Include="Source\SelectManager\SelectManager.cpp" />
+    <ClCompile Include="Source\Shader\Shader.cpp" />
     <ClCompile Include="Source\Skydome\Skydome.cpp" />
     <ClCompile Include="Source\SpikeBlock\SpikeBlock.cpp" />
     <ClCompile Include="Source\StageClearUI\StageClearUI.cpp" />
@@ -169,6 +170,7 @@
     <ClCompile Include="Source\StarUI\StarUI.cpp" />
     <ClCompile Include="Source\TitleSelectUI\TitleSelectUI.cpp" />
     <ClCompile Include="Source\TitleUI\TitleUI.cpp" />
+    <ClCompile Include="Source\Xinput\Xinput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CrtDebug.h" />
@@ -219,6 +221,7 @@
     <ClInclude Include="Source\Scene\StageEdit\SceneStageEdit.h" />
     <ClInclude Include="Source\Scene\Title\SceneTitle.h" />
     <ClInclude Include="Source\SelectManager\SelectManager.h" />
+    <ClInclude Include="Source\Shader\Shader.h" />
     <ClInclude Include="Source\Skydome\Skydome.h" />
     <ClInclude Include="Source\SpikeBlock\SpikeBlock.h" />
     <ClInclude Include="Source\StageClearUI\StageClearUI.h" />
@@ -227,6 +230,7 @@
     <ClInclude Include="Source\StarUI\StarUI.h" />
     <ClInclude Include="Source\TitleSelectUI\TitleSelectUI.h" />
     <ClInclude Include="Source\TitleUI\TitleUI.h" />
+    <ClInclude Include="Source\Xinput\Xinput.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

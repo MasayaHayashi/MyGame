@@ -8,6 +8,7 @@
 #include "DirectX3D.h"
 #include "../Application/Application.h"
 #include "../SceneManager/SceneManager.h"
+#include "../Shader/Shader.h"
 
 // ===== 静的メンバ変数 =====
 Microsoft::WRL::ComPtr<IDirect3DDevice9>   DirectX3D::directXDevice  = nullptr;
@@ -99,11 +100,7 @@ HRESULT DirectX3D::initialize(HWND& wnd)
 	}
 
 	//シェーダーを読み込み
-	if (FAILED(D3DXCreateEffectFromFile( directXDevice.Get(), "Data/FX/Min.fx", nullptr, nullptr, 0, nullptr, &directXEffect, nullptr)))
-	{
-		MessageBox(nullptr, "シェーダーファイル読み込み失敗", "", MB_OK);
-		return E_FAIL;
-	}
+	Shader::make("Data/FX/Min.fx");
 
 	// レンダーステートパラメータの設定	
 	directXDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);			// 裏面をカリング

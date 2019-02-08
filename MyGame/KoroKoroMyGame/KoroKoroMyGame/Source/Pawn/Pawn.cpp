@@ -12,6 +12,7 @@
 #include "../KeyBoard/Keyboard.h"
 #include "../Collision/Collision.h"
 #include "../MyVector3/MyVector3.h"
+#include "../Shader/Shader.h"
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -224,17 +225,14 @@ void Pawn::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 	// マテリアル情報に対するポインタを取得
  	pD3DXMat = (D3DXMATERIAL*)meshDataObj.materialBufferPtr->GetBufferPointer();
 
+	LPD3DXEFFECT shaderObj = Shader::get();
 
-	LPD3DXEFFECT pEffect = DirectX3D::getEffect();
-
-	// 
-	pEffect->SetTechnique("tecMinimum");
+	shaderObj->SetTechnique("tecMinimum");
 
 	D3DXMATRIX mtxAll = worldMtx * mtxView * mtxProj;
-	pEffect->SetMatrix("mWVP", &mtxAll);
+	shaderObj->SetMatrix("mWVP", &mtxAll);
 
-	pEffect->Begin(nullptr, 0);
-	pEffect->BeginPass(0);
+	Shader::RenderStart();
 
 	for (int nCntMat = 0; nCntMat < static_cast<INT>(meshDataObj.numMat); nCntMat++)
 	{
@@ -249,8 +247,7 @@ void Pawn::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
 		meshDataObj.meshPtr->DrawSubset(nCntMat);
 	}
 
-	pEffect->EndPass();
-	pEffect->End();
+	Shader::RenderEnd();
 
 	// マテリアルをデフォルトに戻す
 	devicePtr->SetMaterial(&matDef);
@@ -360,6 +357,63 @@ void Pawn::drawObjectLocal()
 	// マテリアルをデフォルトに戻す
 	devicePtr->SetMaterial(&matDef);
 }
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 現在自身が持っているワールド行列をそのまま使い描画
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Pawn::drawObjectLocal(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
+{
+	// 例外処理
+	if (!myTransform.isUsed)
+	{
+		return;
+	}
+
+	// デバイス取得
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
+
+	devicePtr->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+
+	//	D3DXMATRIX mtxRot, translateMtx, mtxScale;
+	D3DXMATERIAL *pD3DXMat;
+	D3DMATERIAL9 matDef;
+
+	// ワールドマトリックスの設定
+	devicePtr->SetTransform(D3DTS_WORLD, &worldMtx);
+
+	// 現在のマテリアルを取得
+	devicePtr->GetMaterial(&matDef);
+
+	// マテリアル情報に対するポインタを取得
+	pD3DXMat = (D3DXMATERIAL*)meshDataObj.materialBufferPtr->GetBufferPointer();
+
+	LPD3DXEFFECT shaderObj = Shader::get();
+
+	shaderObj->SetTechnique("tecMinimum");
+
+	D3DXMATRIX mtxAll = worldMtx * mtxView * mtxProj;
+	shaderObj->SetMatrix("mWVP", &mtxAll);
+
+	Shader::RenderStart();
+
+	for (int nCntMat = 0; nCntMat < static_cast<INT>(meshDataObj.numMat); nCntMat++)
+	{
+		// マテリアルの設定
+		devicePtr->SetMaterial(&pD3DXMat[nCntMat].MatD3D);
+
+		// テクスチャの設定
+		devicePtr->SetTexture(0, textureData.pD3DTexture);
+
+		// 描画
+		meshDataObj.meshPtr->DrawSubset(nCntMat);
+	}
+
+	Shader::RenderEnd();
+
+	// マテリアルをデフォルトに戻す
+	devicePtr->SetMaterial(&matDef);
+}
+
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // フレームの描画

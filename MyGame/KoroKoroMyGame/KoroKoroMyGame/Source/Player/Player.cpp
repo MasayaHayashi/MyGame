@@ -151,12 +151,7 @@ void Player::update(D3DXVECTOR3 CameraForward)
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::draw()
 {
-	// デバイス取得
-	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
-	
-	// 描画
 	Pawn::drawFrame(hierarchyMeshData.pFrameRoot);
-
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

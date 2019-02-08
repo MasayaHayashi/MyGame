@@ -36,7 +36,7 @@ public:
 	void draw();
 
 	void initializeStatus();
-	void loadStageData(size_t stageNumber);
+	bool loadStageData(size_t stageNumber);
 
 private:
 
@@ -57,7 +57,6 @@ private:
 	ExportData				exportWorkData;
 	size_t					selectGameObjIndex;
 
-	void checkUnProject(INT);
 	void creteGameObj(size_t objType);
 	void createItem(size_t index);
 
@@ -77,8 +76,6 @@ private:
 	std::list<std::unique_ptr<Board>>														boardObjectesPtr;
 	std::array<std::list<std::unique_ptr<Pawn>>, GameObjectBase::MaxGameObjType>			gameObjPtr;
 
-	GameState				currentGameState;
-	static UINT				currentStage;
-	static UINT				prevScore;
-	INT						restartCnt = 0;
+	INT		restartCnt = 0;
+
 };

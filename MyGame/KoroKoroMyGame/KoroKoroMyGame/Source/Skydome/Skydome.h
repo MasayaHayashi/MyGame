@@ -19,6 +19,7 @@ public :
 	void initialize();
 	void update();
 	void draw();
+	void draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj);
 	void finalize();
 
 	HRESULT createTexture();

@@ -29,15 +29,22 @@ public:
 		GetItem,
 	};
 
+	static constexpr int HitStopTime = 60;
+
 	static const bool isGameType(GameType setGameType);
 	static void changeGameType(GameType setGameType);
 	static const GameType getGameType();
+	static void addNextStage();
+	static int getStage();
+	static void update();
 protected:
 	
 private:
+	static GameManager  instance;
+	static GameType		currentGameType;
+	static int			currentStage;
 
-	static GameType currentGameType;
-	static GameManager instance;
+	static int			hitStopCnt;
 
 	GameManager();
 	~GameManager();

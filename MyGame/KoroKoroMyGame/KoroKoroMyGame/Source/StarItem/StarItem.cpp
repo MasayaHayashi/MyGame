@@ -9,6 +9,7 @@
 #include "../ResoueceManager/ResourceManager.h"
 #include "../Collision/Collision.h"
 #include "../SceneManager/SceneManager.h"
+#include "../DirectX3D/DirectX3D.h"
 #include "../GameManager/GameManager.h"
 #include "../MyVector3/MyVector3.h"
 #include "../KeyBoard/Keyboard.h"
@@ -66,7 +67,6 @@ void StarItem::initialize()
 	myTransform.pos		 = D3DXVECTOR3(0.0f, -meshDataObj.collitionBox.y * 2, 0.0f);
 	myTransform.rotDeg.y = 90.0f;
 	myTransform.collisionBox = meshDataObj.collitionBox;
-
 }
 
 //
@@ -98,6 +98,12 @@ void StarItem::update()
 	if (GameManager::getGameType() != GameManager::GameType::Playing)
 	{
 		return;
+	}
+
+	if (idNumber == Collision::getHitIndex("star.x"))
+	{
+		myTransform.isUsed = false;
+		GameManager::changeGameType(GameManager::GameType::GetItem);
 	}
 
 	myTransform.rotDeg.y += 0.1f;

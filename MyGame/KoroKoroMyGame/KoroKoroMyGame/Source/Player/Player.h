@@ -75,7 +75,6 @@ private:
 	static constexpr FLOAT  MissSpeed			    = 0.2f;
 	static constexpr FLOAT  FallMissPosY			= 11.0f;
 
-
 	bool isKeyInput = false;
 	bool fallFlg	= true;
 
@@ -117,6 +116,8 @@ private:
 	D3DXVECTOR3 oldPosition = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	UINT currentModelType = 0;
+	
+	INT hitStopCnt = 0;
 
 };
 

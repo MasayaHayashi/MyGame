@@ -187,6 +187,9 @@
     <Filter Include="ソース ファイル\StarUI">
       <UniqueIdentifier>{c169d21f-36f5-4139-a0d8-921bdde2c3b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Shader">
+      <UniqueIdentifier>{33bbb84c-85c7-4182-863a-093cbb4731ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Audio\MyAudiere.cpp">
@@ -344,6 +347,12 @@
     </ClCompile>
     <ClCompile Include="Source\StarUI\StarUI.cpp">
       <Filter>ソース ファイル\StarUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Xinput\Xinput.cpp">
+      <Filter>ソース ファイル\Xinput</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Shader\Shader.cpp">
+      <Filter>ソース ファイル\Shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -514,6 +523,12 @@
     </ClInclude>
     <ClInclude Include="Source\StarUI\StarUI.h">
       <Filter>ソース ファイル\StarUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Xinput\Xinput.h">
+      <Filter>ソース ファイル\Xinput</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shader\Shader.h">
+      <Filter>ソース ファイル\Shader</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

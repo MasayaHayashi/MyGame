@@ -31,6 +31,7 @@ public:
 	void finalize();
 	void update();
 	void draw();
+	void draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj);
 
 private:
 

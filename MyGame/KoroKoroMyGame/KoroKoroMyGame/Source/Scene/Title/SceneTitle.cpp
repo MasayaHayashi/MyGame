@@ -286,8 +286,8 @@ void SceneTitle::update()
 void SceneTitle::draw()
 {
 	playerPtr->draw();
-	heartObjPtr->draw();
-	skydomePtr->draw();
+	heartObjPtr->draw(cameraPtr->getMtxView(), cameraPtr->getProjectionMtx());
+	skydomePtr->draw(cameraPtr->getMtxView(), cameraPtr->getProjectionMtx());
 	fieldPtr->draw();
 
 	for (const auto &boardPtr : boardPtres)

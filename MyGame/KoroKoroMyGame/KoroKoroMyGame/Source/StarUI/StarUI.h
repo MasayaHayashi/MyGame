@@ -31,6 +31,7 @@ private:
 
 	const std::string TextureFilePass = "Data/Texture/GoldStar.png";
 	const FLOAT MoveSpeed = 1.5f;
+
 };
 
 #endif

@@ -65,6 +65,14 @@ void Skydome::draw()
 	Pawn::draw();
 }
 
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// スカイドーム描画
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Skydome::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
+{
+	Pawn::draw();
+}
+
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // テクスチャ生成
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

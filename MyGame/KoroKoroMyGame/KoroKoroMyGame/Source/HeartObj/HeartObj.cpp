@@ -111,7 +111,7 @@ void HeartObj::update()
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-// プレイヤー描画
+// 描画
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void HeartObj::draw()
 {
@@ -124,6 +124,20 @@ void HeartObj::draw()
 
 	// コライダー描画
 //	pCollider->DrawCollider();
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 描画
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void HeartObj::draw(D3DXMATRIX mtxView, D3DXMATRIX mtxProj)
+{
+	// デバイス取得
+	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
+
+
+	// 描画
+	Pawn::drawObjectLocal(mtxView, mtxProj);
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

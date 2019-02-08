@@ -54,6 +54,8 @@ void Countdown::initialize()
 {
 	ResourceManager::makevertexBoard(vertexBoard, fileName);
 	ResourceManager::createFadeTexture(texture, fileName);
+	
+	currentAnimPattern = 3;
 
 	setVtx();
 	setTexture();

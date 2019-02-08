@@ -15,16 +15,11 @@
 #include "../../BackGround/BackGround.h"
 #include "../../SelectManager/SelectManager.h"
 
-// ===== 静的メンバ変数 =====
-UINT	SceneSelect::currentStage = 0;
-UINT	SceneSelect::prevScore = 0;
-
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 SceneSelect::SceneSelect()
 {
-	prevScore = 0;
 	lightPtr.reset(	NEW Light() );
 	cameraPtr.reset(NEW Camera());
 

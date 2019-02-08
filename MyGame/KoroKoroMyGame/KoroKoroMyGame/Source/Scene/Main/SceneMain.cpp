@@ -28,15 +28,12 @@
 #include <fstream>
 
 // ===== 静的メンバ変数 =====
-UINT	SceneMain::currentStage = 0;
-UINT	SceneMain::prevScore	= 0;
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 SceneMain::SceneMain()
 {
-	prevScore = 0;
 	lightPtr.reset( NEW Light());
 	cameraPtr.reset(NEW Camera());
 
@@ -56,8 +53,8 @@ SceneMain::SceneMain()
 
 	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW StageClearUI()  ));
 	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW MissUI()	    ));
-	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW StarUI(0)));
-	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW Countdown())	);
+	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW StarUI(0)		));
+	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW Countdown()		));
 
 	collisionPtr.reset( NEW Collision() );
 
@@ -103,6 +100,8 @@ SceneMain::~SceneMain()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneMain::initialize()
 {
+	GameManager::changeGameType(GameManager::GameType::Ready);
+
 	for (size_t gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
 	{
 		for (auto itr = gameObjPtr[gameObjTypeIndex].begin(); itr != gameObjPtr[gameObjTypeIndex].end(); itr++)
@@ -111,7 +110,10 @@ void SceneMain::initialize()
 		}
 	}
 
-	loadStageData(1);
+	if (!loadStageData(GameManager::getStage()))
+	{
+		return;
+	}
 	
 	lightPtr->initialize();
 
@@ -160,6 +162,7 @@ void SceneMain::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneMain::update()
 {
+
 	if (Keyboard::getTrigger(DIK_2))
 	{
 		SceneManager::setNextScene(SceneManager::SceneState::SceneTitle);
@@ -188,14 +191,15 @@ void SceneMain::update()
 		}
 	}
 
+	collisionPtr->update();
+
+
 	cameraPtr->update(*playeresPtr.front().get(), boardObjectesPtr.back()->getCurrentAnim());
 	
 	if (Keyboard::getPress(DIK_1))
 	{
 		SceneManager::setNextScene(SceneManager::SceneState::SceneMain);
 	}
-
-	collisionPtr->update();
 
 	if (GameManager::isGameType(GameManager::GameType::Miss))
 	{
@@ -208,6 +212,21 @@ void SceneMain::update()
 			restartCnt = 0;
 		}
 	}
+
+	if (GameManager::isGameType(GameManager::GameType::Goal))
+	{
+		restartCnt ++;
+
+		if (restartCnt > RestartFream)
+		{
+			GameManager::addNextStage();
+			SceneManager::setNextScene(SceneManager::SceneState::SceneMain);
+			restartCnt = 0;
+		}
+	}
+
+	GameManager::update();
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -231,7 +250,7 @@ void SceneMain::draw()
 	{
 		for (auto itr = gameObjPtr[gameObjTypeIndex].begin(); itr != gameObjPtr[gameObjTypeIndex].end(); itr++)
 		{
-			(*itr)->draw();
+			(*itr)->draw(cameraPtr->getMtxView(),cameraPtr->getProjectionMtx());
 		}
 	}
 
@@ -243,7 +262,6 @@ void SceneMain::draw()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneMain::initializeStatus()
 {
-	// プレイヤーステータス初期化
 	playeresPtr.front()->initializeStatus();
 
 	for (const auto &boardObject : boardObjectesPtr)
@@ -273,8 +291,9 @@ void SceneMain::initializeStatus()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // データ読み込み
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-void SceneMain::loadStageData(size_t stageNumber)
+bool SceneMain::loadStageData(size_t stageNumber)
 {
+
 	std::ifstream loadtFile;
 
 	std::string stageString = std::to_string(stageNumber);
@@ -282,8 +301,10 @@ void SceneMain::loadStageData(size_t stageNumber)
 
 	if (!loadtFile)
 	{
-		MessageBox(nullptr, TEXT("Error"), TEXT("ステージデータ読み込みエラー"), MB_ICONERROR);
-		return;
+		SceneManager::setNextScene(SceneManager::SceneState::SceneMain);
+
+	//	MessageBox(nullptr, TEXT("Error"), TEXT("ステージデータ読み込みエラー"), MB_ICONERROR);
+		return false;
 	}
 
 	for (size_t gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
@@ -300,6 +321,8 @@ void SceneMain::loadStageData(size_t stageNumber)
 			(*itr)->reflectionExportData(exportWorkData);
 		}
 	}
+
+	return true;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

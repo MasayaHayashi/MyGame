@@ -12,6 +12,8 @@
 // ===== 静的メンバ =====
 GameManager				GameManager::instance;
 GameManager::GameType	GameManager::currentGameType;
+INT						GameManager::currentStage = 1;
+INT						GameManager::hitStopCnt   = 0;
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -37,6 +39,22 @@ void GameManager::initialize()
 
 }
 
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 更新
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void GameManager::update()
+{
+	if (isGameType(GameType::GetItem))
+	{
+		hitStopCnt++;
+
+		if (hitStopCnt > HitStopTime)
+		{
+			hitStopCnt = 0;
+			GameManager::changeGameType(GameType::Playing);
+		}
+	}
+}
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // ゲーム状態取得
@@ -67,4 +85,19 @@ const GameManager::GameType GameManager::getGameType()
 void GameManager::changeGameType(GameType setGameType)
 {
 	currentGameType = setGameType;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 次のステージへ
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void GameManager::addNextStage()
+{
+	currentStage ++;
+}
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// ステージ取得
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+INT GameManager::getStage()
+{
+	return currentStage;
 }
