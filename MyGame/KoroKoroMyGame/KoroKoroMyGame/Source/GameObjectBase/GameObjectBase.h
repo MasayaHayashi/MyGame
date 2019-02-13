@@ -14,7 +14,6 @@ enum class GameObjectType
 {
 	NormalBlockObj = 0,
 	MoveBlockOBj,
-//	HeartObj,
 	FieldObj,
 	GoalObj,
 	SpikeObj,

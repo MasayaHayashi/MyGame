@@ -20,7 +20,6 @@ public:
 	static constexpr FLOAT Radius = Size * 0.5f;
 
 	const std::string ModelFilePass   = "Data/Model/MainField/Island_Land_Base.x";
-	const std::string TextureFilePass = "Data/Model/MainField/land.tga";
 
 	MainField();
 	virtual ~MainField();

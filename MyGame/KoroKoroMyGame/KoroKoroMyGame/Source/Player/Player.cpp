@@ -1,5 +1,6 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // Player.cpp
+// プレイヤー
 // Author : Masaya Hayashi
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
@@ -14,8 +15,10 @@
 #include "../Ball/BallObj.h"
 #include "../Random/MyRandom.h"
 #include "../GameManager/GameManager.h"
+#include "../Xinput/Xinput.h"
 #include "../Audio/MyAudiere.h"
 #include "../Audio/audiere.h"
+
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -61,6 +64,8 @@ Player::Player(D3DXVECTOR3 startPosition,UINT setNumber)
 
 	// 状態初期化
 	playerStateType = PlayerState::Stop;
+
+	myTransform.accele = 0.0f;
 
 	// 行列初期化
 	D3DXMatrixIdentity(&worldMtx);
@@ -172,9 +177,6 @@ void Player::initializeTitle()
 
 	setDefaultValue();
 
-	// デバイス取得
-	IDirect3DDevice9 *devicePtr = DirectX3D::getDevice();
-
 	// 各種変数初期化
 	pD3DTexture			 = nullptr;
 	meshPtr				 = nullptr;
@@ -278,7 +280,7 @@ void Player::initializeGameMain()
 
 	meshType = MeshObjType::HierarchyModel;
 
-	ResourceManager::setHierarchy(&hierarchyMeshData, SelectManager::getModelPass(idNumber), idNumber);
+	ResourceManager::setHierarchy(&hierarchyMeshData, SelectManager::getModelPass(0), 0);
 	myTransform.collisionBox = hierarchyMeshData.CollitionBox;
 
 	Collision::registerList(&myTransform, "Player");
@@ -467,11 +469,12 @@ void Player::updateGameMain(D3DXVECTOR3 CameraForward)
 	case GameManager::GameType::Miss:
 		updateMiss();
 		break;
+	case GameManager::GameType::FallMiss:
+		updateFallMiss();
+		break;
 	default:
 		break;
 	}
-
-
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -693,9 +696,8 @@ void Player::fall(size_t checkIndex)
 		FLOAT ads = std::abs(std::abs(oldPos.y - cross.y));
 	
 		myTransform.pos = cross;
-	
 		oldPos = myTransform.pos;
-
+		isGround = true;
 	}
 }
 
@@ -727,53 +729,9 @@ void Player::changeModel()
 	}
 }
 
-void Player::input()
-{
-	/*
-	Xnum = 0.0f;
-	Ynum = 0.0f;
-
-	if (idNumber == 0)
-	{
-		if (Keyboard::getPress(DIK_D))
-		{
-			Xnum++;
-		}
-		if (Keyboard::getPress(DIK_A))
-		{
-			Xnum--;
-		}
-		if (Keyboard::getPress(DIK_S))
-		{
-			Ynum--;
-		}
-		if (Keyboard::getPress(DIK_W))
-		{
-			Ynum++;
-		}
-	}
-	else if (idNumber == 1)
-	{
-		if (Keyboard::getPress(DIK_L))
-		{
-			Xnum++;
-		}
-		if (Keyboard::getPress(DIK_J))
-		{
-			Xnum--;
-		}
-		if (Keyboard::getPress(DIK_K))
-		{
-			Ynum--;
-		}
-		if (Keyboard::getPress(DIK_I))
-		{
-			Ynum++;
-		}
-	}
-	*/
-}
-
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 回転
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Player::rotation(D3DXVECTOR3 destVec)
 {
 	D3DXVECTOR3 FowrdVec = getForwardVec();
@@ -841,8 +799,9 @@ void Player::updatePlayng(D3DXVECTOR3 CameraForward)
 {
 	hierarchyMeshData.pAnimCtrl->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[0]);
 
+	fall(0);
+
 	MyAudiere::getSe(0)->setVolume(0.09f);
-	MyAudiere::getBgm(0)->play();
 	static int repeatCnt = 35;
 
 	if (repeatCnt > 35)
@@ -867,13 +826,10 @@ void Player::updatePlayng(D3DXVECTOR3 CameraForward)
 		inputVec.z = 0.0f;
 	}
 
-	fall(0);
-	
-	updateAnimation();
-
 	if (idNumber == 0)
 	{
-		if (Keyboard::getPress(DIK_D))
+		if (Keyboard::getPress(DIK_D) || 
+			Xinput::isRightLS())
 		{
 			inputVec.x = SideSpeed;
 			isKeyInput = true;
@@ -882,7 +838,8 @@ void Player::updatePlayng(D3DXVECTOR3 CameraForward)
 		{
 			isKeyInput = false;
 		}
-		if (Keyboard::getPress(DIK_A))
+		if (Keyboard::getPress(DIK_A) ||
+			Xinput::isLeftLS())
 		{
 			inputVec.x = -SideSpeed;
 			isKeyInput = true;
@@ -911,6 +868,11 @@ void Player::updatePlayng(D3DXVECTOR3 CameraForward)
 		{
 			isKeyInput = false;
 		}
+
+		if (Keyboard::getPress(DIK_SPACE))
+		{
+			jump = true;
+		}
 	}
 		else if (idNumber == 1)
 		{
@@ -932,7 +894,19 @@ void Player::updatePlayng(D3DXVECTOR3 CameraForward)
 			}
 		}
 
+	if (jump)
+	{
+ 		myTransform.velocity.y = 0.6f;
+	}
 
+	if(Collision::getRayHitData("Player", 0)->length > 0.0f &&
+	   jump)
+	{
+		jump = false;
+		myTransform.velocity.y -= 0.001f;
+	}
+
+	DirectX3D::printDebug("%f", Collision::getRayHitData("Player", 0)->length);
 	inputVec.z = MoveSpeed;
 
 	D3DXVECTOR3 CameraRight = D3DXVECTOR3(CameraForward.z, 0.0f, -CameraForward.x);
@@ -952,14 +926,11 @@ void Player::updatePlayng(D3DXVECTOR3 CameraForward)
 	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);
 
 	moveVector.y = 0.0f;
+
 	myTransform.velocity += moveVector;
+	
 
-	D3DXVECTOR3 vv;
-
-	D3DXVec3Normalize(&vv, &inputVec);
-	vv *= 0.001f;
-
-	myTransform.velocity += vv;
+	myTransform.velocity += myTransform.acceleVector;
 	myTransform.pos += myTransform.velocity;
 
 	if (idNumber == 0)
@@ -1009,6 +980,7 @@ void Player::updatePlayng(D3DXVECTOR3 CameraForward)
 	myTransform.velocity.x = 0.0f;
 
 	setWorldMtxPos(myTransform.pos);
+	updateAnimation();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -1024,12 +996,9 @@ void Player::updateReady(D3DXVECTOR3 CameraForward)
 	inputVec.y = 0.0f;
 	inputVec.z = 0.0f;
 
-	D3DXVECTOR3 vv;
-
 	fall(0);
 
 	updateAnimation();
-
 
 	D3DXVECTOR3 CameraRight = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
 
@@ -1082,15 +1051,23 @@ void Player::updateMiss()
 	myTransform.pos += myTransform.velocity;
 
 	hierarchyMeshData.pAnimCtrl->SetTrackAnimationSet(0, hierarchyMeshData.ppAnimSet[1]);
-	
 	hierarchyMeshData.pAnimCtrl->KeyTrackEnable(0, true, hierarchyMeshData.ppAnimSet[1]->GetPeriod());
-
-//	hierarchyMeshData.pAnimCtrl->KeyTrackSpeed(0, 1.0f, 180.0f, 240.0f, D3DXTRANSITION_LINEAR);
-//	hierarchyMeshData.pAnimCtrl->KeyTrackWeight(0, 1.0f, 180.0f, 240.0f, D3DXTRANSITION_LINEAR);
-
+	
 	updateAnimation();
 
 	setWorldMtxPos(myTransform.pos);
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 落下中
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Player::updateFallMiss()
+{
+	myTransform.velocity.y -= FallSpeed;
+
+	myTransform.pos += myTransform.velocity;
+	setWorldMtxPos(myTransform.pos);
+	updateAnimation();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

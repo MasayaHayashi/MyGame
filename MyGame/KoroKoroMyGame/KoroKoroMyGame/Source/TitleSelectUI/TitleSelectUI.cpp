@@ -49,8 +49,6 @@ TitleSelectUI::~TitleSelectUI()
 //
 void TitleSelectUI::initialize()
 {
-//	ResourceManager *pResourceMgr = GetResourceManager();
-
 	ResourceManager::makevertexBoard(vertexBoard, fileName);
 	ResourceManager::createTexture(texture, fileName);
 

@@ -14,6 +14,10 @@
 #include "../../HeartObj/HeartObj.h"
 #include "../../TitleUI/TitleUI.h"
 #include "../../TitleSelectUI/TitleSelectUI.h"
+#include "../../TitleDisp/TitleDisp.h"
+#include "../../Xinput/Xinput.h"
+#include "../../EditUI/StageEditUI.h"
+#include "../../Audio/MyAudiere.h"
 
 /*
 #include "C_MainField.h"
@@ -36,8 +40,8 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 SceneTitle::SceneTitle()
 {
-	boardPtres.push_back(std::unique_ptr<Board>(NEW TitleUI()));
 	boardPtres.push_back(std::unique_ptr<Board>(NEW TitleSelectUI()));
+	boardPtres.push_back(std::unique_ptr<Board>(NEW TitleUI()));
 
 	lightPtr.reset(NEW Light());
 	cameraPtr.reset(NEW Camera());
@@ -46,6 +50,9 @@ SceneTitle::SceneTitle()
 	fieldPtr.reset(NEW MainField());
 	titleUiPtr.reset(NEW TitleUI());
 	heartObjPtr.reset(NEW HeartObj());
+
+	boardPtres.push_back(std::unique_ptr<TitleDisp>( NEW TitleDisp()) );
+	boardPtres.push_back(std::unique_ptr<Board>	   ( NEW StageEditUI()));
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -75,39 +82,10 @@ void SceneTitle::initialize()
 		boardPtr->initialize();
 	}
 
-	/*
-	// パーティクル初期化
-	for (INT i = 0; i < MAX_Star; i++)
-	{
-		pStar[i] = NEW C_Star_BASE(i);
-		pStar[i]->initialize();
-	}
-	*/
-	/*
 
-	// 
-	for (INT BoardCnt = 0; BoardCnt < MAX_UI_TYPE; BoardCnt++)
-	{
-		switch (BoardCnt)
-		{
-		case UI_MAIN:
-			pBoard[BoardCnt] = NEW C_SCENE_MAIN_UI;
-			break;
-		case UI_EDIT:
-			pBoard[BoardCnt] = NEW C_STAGE_EDIT_UI;
-			break;
-		case UI_DESC:
-			pBoard[BoardCnt] = NEW C_TITLE_DESCR_UI;
-			break;
-		default:
-			break;
-		}
-		pBoard[BoardCnt]->initialize();
-	}
-
-	pBoard[UI_MAIN]->setUsedFlg(false);
-	*/
-
+	MyAudiere::getBgm(0)->setRepeat(true);
+	MyAudiere::getBgm(0)->setVolume(0.05f);
+	MyAudiere::getBgm(0)->play();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -128,51 +106,9 @@ void SceneTitle::finalize()
 
 	collisionPtr->finalize("Player");
 
-
-	/*
-	// カメラ後処理
-	pCamera->finalizeCamera();
-	SAFE_DELETE(pCamera);
-
-	// ライト後処理
-	pLight->finalizeLight();
-	SAFE_DELETE(pLight);
-
-	// プレイヤー後処理
-	pPlayer->finalizeObject();
-	SAFE_DELETE(pPlayer);
-
-	// スカイドーム後処理
-	pSkydome->finalizeObject();
-	SAFE_DELETE(pSkydome);
-
-	// フィールド後処理
-	pField->finalizeMeshField();
-	SAFE_DELETE(pField);
-
-	// タイトルUI後処理
-	pTitleUI->finalizeObject();
-	SAFE_DELETE(pTitleUI);
-
-	// タイトルオブジェクト後処理
-	pTitleObj->finalizeObject();
-	SAFE_DELETE(pTitleObj);
-
-	// パーティクル後処理
-	for (int i = 0; i < MAX_Star; i++)
-	{
-		pStar[i]->finalizeObject();
-		SAFE_DELETE(pStar[i]);
-	}
-
-	// UI後処理
-	for (INT BoardCnt = 0; BoardCnt < MAX_UI_TYPE; BoardCnt++)
-	{
-		pBoard[BoardCnt]->finalizeObject();
-		SAFE_DELETE(pBoard[BoardCnt]);
-	}
-
-	*/
+	MyAudiere::getBgm(0)->setRepeat(true);
+	MyAudiere::getBgm(0)->setVolume(0.1f);
+	MyAudiere::getBgm(0)->stop();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -180,13 +116,20 @@ void SceneTitle::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneTitle::update()
 {
+
 	playerPtr->update(Collision::getCameraTransform("Camera", 0)->fowerd);
 	heartObjPtr->update();
 	skydomePtr->update();
 	fieldPtr->update();
+	Xinput::update();
+	DirectX3D::printDebug("isss%d", Xinput::isLeftLS());
+	DirectX3D::printDebug("right%d", Xinput::isRightLS());
+	DirectX3D::printDebug("yyyyyyyyyyyy%d", Xinput::getThumbLX());
+
 	cameraPtr->updateTitle(playerPtr.get());
 
-	if (Keyboard::getPress(DIK_1))
+	if (Keyboard::getPress(DIK_1) || 
+		Xinput::getButton_A_Triger())
 	{
 		SceneManager::setNextScene(SceneManager::SceneState::SceneMain);
 	}
@@ -200,83 +143,30 @@ void SceneTitle::update()
 	{
 		SceneManager::setNextScene(SceneManager::SceneState::SceneStageEdit);
 	}
+
+	if (Keyboard::getPress(DIK_A))
+	{
+		boardPtres.back()->setUsedFlg(true);
+		boardPtres.front()->setUsedFlg(false);
+		changeMode = SceneManager::SceneState::SceneStageEdit;
+	}
+
+	if (Keyboard::getPress(DIK_D))
+	{
+		boardPtres.back()->setUsedFlg(false);
+		boardPtres.front()->setUsedFlg(true);
+		changeMode = SceneManager::SceneState::SceneMain;
+	}
+
+	if (Keyboard::getTrigger(DIK_SPACE))
+	{
+		SceneManager::setNextScene(changeMode);
+	}
+
 	for (const auto &boardPtr : boardPtres)
 	{
 		boardPtr->update();
 	}
-
-	/*
-	D3DXVECTOR3 CameraFowerd = pCamera->getCameraFowerd();
-
-	// タイトルUI更新
-	pTitleUI->updateObject();
-
-	// パーティクル更新
-	for (INT i = 0; i < MAX_Star; i++)
-		pStar[i]->updateObject();
-
-	// プレイヤー更新
-	pPlayer->updateObject(CameraFowerd);
-
-	// タイトルオブジェクト更新
-	pTitleObj->updateObject();
-
-	// カメラ更新
-	pCamera->updateCamera_Title(pPlayer);
-
-	// シーン遷移
-	if (getKeyboardTrigger(DIK_F1))
-	{
-//		PlaySound(SOUND_SE_CHANGE_SCENE);
-		getSceneManager()->setSceneChange(C_SCENE_MANAGER::SCENE_STAGE_EDIT);
-
-		bChangeScene = true;
-	}
-	if (getKeyboardTrigger(DIK_F2))
-	{
-//		PlaySound(SOUND_SE_CHANGE_SCENE);
-		getSceneManager()->setSceneChange(C_SCENE_MANAGER::SCENE_MAIN);
-
-		bChangeScene = true;
-	}
-
-	if (getKeyboardTrigger(DIK_SPACE))
-	{
-		if (uSelectScene == 0)
-		{
-//			PlaySound(SOUND_SE_CHANGE_SCENE);
-			getSceneManager()->setSceneChange(C_SCENE_MANAGER::SCENE_STAGE_EDIT);
-
-			bChangeScene = true;
-		}
-		else if (uSelectScene == 1)
-		{
-//			PlaySound(SOUND_SE_CHANGE_SCENE);
-			getSceneManager()->setSceneChange(C_SCENE_MANAGER::SCENE_MAIN);
-
-			bChangeScene = true;
-		}
-	}
-
-	if (getKeyboardPress(DIK_A))
-	{
-		pBoard[UI_MAIN]->setUsedFlg(false);
-		pBoard[UI_EDIT]->setUsedFlg(true);
-		uSelectScene = 0;
-	}
-	if (getKeyboardPress(DIK_D))
-	{
-		pBoard[UI_MAIN]->setUsedFlg(true);
-		pBoard[UI_EDIT]->setUsedFlg(false);
-		uSelectScene = 1;
-	}
-
-	// UI更新
-	for (INT BoardCnt = 0; BoardCnt < MAX_UI_TYPE; BoardCnt++)
-	{
-		pBoard[BoardCnt]->updateObject();
-	}
-	*/
 
 }
 

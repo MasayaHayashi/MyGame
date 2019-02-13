@@ -14,6 +14,9 @@ GameManager				GameManager::instance;
 GameManager::GameType	GameManager::currentGameType;
 INT						GameManager::currentStage = 1;
 INT						GameManager::hitStopCnt   = 0;
+INT						GameManager::restartCnt   = 0;
+bool					GameManager::restart	  = false;
+bool					GameManager::gameClear	  = false;
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -36,7 +39,9 @@ GameManager::~GameManager()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void GameManager::initialize()
 {
-
+	restart		= false;
+	gameClear	= false;
+	restartCnt = 0;
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -52,6 +57,33 @@ void GameManager::update()
 		{
 			hitStopCnt = 0;
 			GameManager::changeGameType(GameType::Playing);
+		}
+	}
+
+
+	if (GameManager::isGameType(GameManager::GameType::Miss) || 
+		GameManager::isGameType(GameManager::GameType::FallMiss))
+	{
+		restartCnt++;
+
+		if (restartCnt > RestartFream)
+		{
+			restart = true;
+			GameManager::changeGameType(GameManager::GameType::Ready);
+			restartCnt = 0;
+		}
+	}
+
+
+	if (GameManager::isGameType(GameManager::GameType::Goal))
+	{
+		restartCnt++;
+
+		if (restartCnt > RestartFream)
+		{
+			GameManager::addNextStage();
+			SceneManager::setNextScene(SceneManager::SceneState::SceneMain);
+			restartCnt = 0;
 		}
 	}
 }
@@ -100,4 +132,28 @@ void GameManager::addNextStage()
 INT GameManager::getStage()
 {
 	return currentStage;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// ゲーム管理
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+bool GameManager::isRestart()
+{
+	return restart;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// ゲームクリア
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+bool GameManager::isGameClear()
+{
+	return gameClear;
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// ステータス初期化
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void GameManager::initializeStatus()
+{
+	restartCnt = 0;
 }

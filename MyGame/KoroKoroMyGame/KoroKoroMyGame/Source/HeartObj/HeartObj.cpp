@@ -154,26 +154,17 @@ void HeartObj::UpdateTitleObj_Result()
 void HeartObj::initializeTitleObj_Title()
 {
 	// 位置、移動量、拡大率初期化
-	myTransform.pos		= D3DXVECTOR3(-8.5f, -2.0f, 0.0f);
+	myTransform.pos		= D3DXVECTOR3(-10.0f, -1.68f, 8.0f);
 	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.rotDeg		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.rotDegDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.scale	= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-
-	// デバイス取得
-	LPDIRECT3DDEVICE9 devicePtr = DirectX3D::getDevice();
 
 	// 各種変数初期化
 	pD3DTexture	 = nullptr;
 	meshPtr	 = nullptr;
 	materialBufferPtr = nullptr;
 	numMat		 = 0;
-
-	// Xファイルの読み込み
-//	ResourceManager *pResourceMgr = GetResourceManager();
-
-//	ResourceManager::MakevertexBoard(vertexBoard, fileName);
-//	ResourceManager::CreateTexture(Texture, fileName);
 
 	ResourceManager::makeModel(meshDataObj, fileName,meshType);
 	ResourceManager::createTexture(textureData, texFileName);
@@ -207,7 +198,7 @@ void HeartObj::initializeTitleObj_Title()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void HeartObj::initializeTitleObj_GameMain()
 {
-	myTransform.pos		= D3DXVECTOR3(0.0f, 100.0f, 0.0f);
+	myTransform.pos		= D3DXVECTOR3(0.0f, 10.0f, 0.0f);
 	myTransform.velocity	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.rotDeg		= D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
 	myTransform.rotDegDest = D3DXVECTOR3(0.0f, D3DXToRadian(180.0f), 0.0f);
@@ -260,16 +251,20 @@ void HeartObj::initializeTitleObj_Result()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void HeartObj::UpdateTitleObj_Title()
 {
+	D3DXMATRIX transMtx;
 	// 回転軸設定
 	D3DXVECTOR3 rotAxis = D3DXVECTOR3(1.0f,5.0f,2.0f);
 	
 	// クォータニオンによる回転
 	rotCnt += TitleRotSpeed;
+
+
+
 	D3DXQuaternionRotationAxis(&quatanion, &rotAxis, rotCnt);		// クォータニオンでの任意軸回転
 	D3DXMatrixRotationQuaternion(&worldMtx, &quatanion);			// クォータニオンから回転行列掛け合わせ
 
-	// コライダー更新
-//	pCollider->UpdateCollider(worldMtx, DEFAULT_BOXcolor);
+	D3DXMatrixTranslation(&transMtx, myTransform.pos.x, myTransform.pos.y, myTransform.pos.z);
+	D3DXMatrixMultiply(&worldMtx, &worldMtx, &transMtx);
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

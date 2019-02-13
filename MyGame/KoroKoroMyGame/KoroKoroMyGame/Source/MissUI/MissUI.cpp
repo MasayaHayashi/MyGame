@@ -68,7 +68,6 @@ void MissUI::finalize()
 //
 void MissUI::update()
 {
-
 	if (GameManager::isGameType(GameManager::GameType::Miss) || 
 		GameManager::isGameType(GameManager::GameType::FallMiss))
 	{

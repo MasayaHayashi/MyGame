@@ -9,6 +9,7 @@
 
 // ===== インクルード部 =====
 #include "../../SceneInterface/sceneBase.h"
+#include "../../SceneManager/SceneManager.h"
 #include "../../Skydome/Skydome.h"
 #include <memory>
 
@@ -57,6 +58,8 @@ private:
 
 	std::list<std::unique_ptr<Board>> boardPtres;
 	std::unique_ptr<Collision>		  collisionPtr;
+
+	SceneManager::SceneState changeMode = SceneManager::SceneState::SceneMain;
 };
 
 #endif

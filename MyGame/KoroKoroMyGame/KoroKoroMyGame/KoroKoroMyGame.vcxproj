@@ -127,10 +127,13 @@
     <ClCompile Include="Source\Collision\Collision.cpp" />
     <ClCompile Include="Source\Countdown\Countdown.cpp" />
     <ClCompile Include="Source\DirectX3D\DirectX3D.cpp" />
+    <ClCompile Include="Source\DispDistance\DispDistance.cpp" />
+    <ClCompile Include="Source\EditUI\StageEditUI.cpp" />
     <ClCompile Include="Source\EditUI\WhatStageSaveUI.cpp" />
     <ClCompile Include="Source\Edit\Editor\StageEditor.cpp" />
     <ClCompile Include="Source\EntryPoint\Main.cpp" />
     <ClCompile Include="Source\Fade\FadeUI.cpp" />
+    <ClCompile Include="Source\Field\Field.cpp" />
     <ClCompile Include="Source\Figure\Figure.cpp" />
     <ClCompile Include="Source\Fream\Fream.cpp" />
     <ClCompile Include="Source\GameManager\GameManager.cpp" />
@@ -148,6 +151,7 @@
     <ClCompile Include="Source\MyDelete\MyDelete.cpp" />
     <ClCompile Include="Source\MyHierarchy\MyHierarchy.cpp" />
     <ClCompile Include="Source\MyVector3\MyVector3.cpp" />
+    <ClCompile Include="Source\NumberUI\NumberUI.cpp" />
     <ClCompile Include="Source\Particle\Particle.cpp" />
     <ClCompile Include="Source\Pawn\Pawn.cpp" />
     <ClCompile Include="Source\Player\Player.cpp" />
@@ -168,6 +172,7 @@
     <ClCompile Include="Source\StarItem\StarItem.cpp" />
     <ClCompile Include="Source\StarParticle\StarParticle.cpp" />
     <ClCompile Include="Source\StarUI\StarUI.cpp" />
+    <ClCompile Include="Source\TitleDisp\TitleDisp.cpp" />
     <ClCompile Include="Source\TitleSelectUI\TitleSelectUI.cpp" />
     <ClCompile Include="Source\TitleUI\TitleUI.cpp" />
     <ClCompile Include="Source\Xinput\Xinput.cpp" />
@@ -185,9 +190,12 @@
     <ClInclude Include="Source\Collision\Collision.h" />
     <ClInclude Include="Source\Countdown\Countdown.h" />
     <ClInclude Include="Source\DirectX3D\DirectX3D.h" />
+    <ClInclude Include="Source\DispDistance\DispDistance.h" />
+    <ClInclude Include="Source\EditUI\StageEditUI.h" />
     <ClInclude Include="Source\EditUI\WhatStageSaveUI.h" />
     <ClInclude Include="Source\Edit\Editor\StageEditor.h" />
     <ClInclude Include="Source\Fade\FadeUI.h" />
+    <ClInclude Include="Source\Field\Field.h" />
     <ClInclude Include="Source\Figure\Figure.h" />
     <ClInclude Include="Source\Fream\Fream.h" />
     <ClInclude Include="Source\GameManager\GameManager.h" />
@@ -207,6 +215,7 @@
     <ClInclude Include="Source\MyDelete\MyDelete.h" />
     <ClInclude Include="Source\MyHierarchy\MyHierarchy.h" />
     <ClInclude Include="Source\MyVector3\MyVector3.h" />
+    <ClInclude Include="Source\NumberUI\NumberUI.h" />
     <ClInclude Include="Source\Particle\Particle.h" />
     <ClInclude Include="Source\Pawn\Pawn.h" />
     <ClInclude Include="Source\Player\Player.h" />
@@ -228,6 +237,7 @@
     <ClInclude Include="Source\StarItem\StarItem.h" />
     <ClInclude Include="Source\StarParticle\StarParticle.h" />
     <ClInclude Include="Source\StarUI\StarUI.h" />
+    <ClInclude Include="Source\TitleDisp\TitleDisp.h" />
     <ClInclude Include="Source\TitleSelectUI\TitleSelectUI.h" />
     <ClInclude Include="Source\TitleUI\TitleUI.h" />
     <ClInclude Include="Source\Xinput\Xinput.h" />

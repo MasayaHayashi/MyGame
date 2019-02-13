@@ -53,7 +53,6 @@ private:
 	const std::string StageFilePass = "Stage";
 
 	static constexpr UINT	MaxGameObj	 = 512;
-	static constexpr INT    RestartFream = 110;
 	ExportData				exportWorkData;
 	size_t					selectGameObjIndex;
 
@@ -76,6 +75,5 @@ private:
 	std::list<std::unique_ptr<Board>>														boardObjectesPtr;
 	std::array<std::list<std::unique_ptr<Pawn>>, GameObjectBase::MaxGameObjType>			gameObjPtr;
 
-	INT		restartCnt = 0;
 
 };

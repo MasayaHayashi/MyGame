@@ -45,6 +45,7 @@ typedef struct
 	D3DXVECTOR3			cross		 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3			normal		 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3			collisionBox = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3			acceleVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	FLOAT				accele = 1.0f;
 	bool				isHitAABB	 = false;
 	bool				isUsed		 = false;

@@ -791,7 +791,7 @@ void Board::initializeStatus()
 //
 D3DXVECTOR3 Board::getPosition()
 {
-	return pos;
+	return vertexBoard.pos;
 }
 
 //
@@ -799,7 +799,7 @@ D3DXVECTOR3 Board::getPosition()
 //
 D3DXVECTOR3 Board::getSize()
 {
-	return size;
+	return vertexBoard.size;
 }
 
 //

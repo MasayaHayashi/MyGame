@@ -18,7 +18,7 @@
 class Xinput final
 {
 public:
-	void update();
+	static void update();
 
 	// ボタン状態取得
 	static bool getButtonPress(WORD uButtonCode);
@@ -82,6 +82,9 @@ public:
 	static bool getButton_DpadRight_Triger();
 	static bool getButton_DpadRight_Release();
  
+	static bool isRightLS();
+	static bool isLeftLS();
+
 	// デジタル入力値取得
 	static BYTE  getLeftTrigger();	// 0～255 LT
 	static BYTE  getRightTrigger();	// 0～255 RT

@@ -145,9 +145,6 @@
     <Filter Include="ソース ファイル\Scene\StageEdit">
       <UniqueIdentifier>{c7056d2a-2e2b-4d67-b792-32c7f566cfa9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\EditUI">
-      <UniqueIdentifier>{24aa20c9-5140-42a5-905d-9a84bcb6eda2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Scene\CharacterSelect">
       <UniqueIdentifier>{6677ddaf-05be-4594-af32-9f31e954d55c}</UniqueIdentifier>
     </Filter>
@@ -189,6 +186,24 @@
     </Filter>
     <Filter Include="ソース ファイル\Shader">
       <UniqueIdentifier>{33bbb84c-85c7-4182-863a-093cbb4731ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\DispDistance">
+      <UniqueIdentifier>{ab22dc48-7e85-454b-a7cc-6b496ce93ccb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\NumberUI">
+      <UniqueIdentifier>{b09ec7bd-404b-40b3-9fb0-493bf6881d9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Field">
+      <UniqueIdentifier>{d6448b40-e135-40fe-8be8-2eb23a99c492}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\TitleDisp">
+      <UniqueIdentifier>{b0d6c6f5-9f30-49c6-89bc-8ec73621256c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\WhatSave">
+      <UniqueIdentifier>{24aa20c9-5140-42a5-905d-9a84bcb6eda2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\EditModeUI">
+      <UniqueIdentifier>{5ddf97a9-b76b-432f-b1ba-046bbe983410}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -310,7 +325,7 @@
       <Filter>ソース ファイル\Edit</Filter>
     </ClCompile>
     <ClCompile Include="Source\EditUI\WhatStageSaveUI.cpp">
-      <Filter>ソース ファイル\EditUI</Filter>
+      <Filter>ソース ファイル\WhatSave</Filter>
     </ClCompile>
     <ClCompile Include="Source\Goal\Goal.cpp">
       <Filter>ソース ファイル\Goal</Filter>
@@ -353,6 +368,21 @@
     </ClCompile>
     <ClCompile Include="Source\Shader\Shader.cpp">
       <Filter>ソース ファイル\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DispDistance\DispDistance.cpp">
+      <Filter>ソース ファイル\DispDistance</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\NumberUI\NumberUI.cpp">
+      <Filter>ソース ファイル\NumberUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Field\Field.cpp">
+      <Filter>ソース ファイル\Field</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TitleDisp\TitleDisp.cpp">
+      <Filter>ソース ファイル\TitleDisp</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EditUI\StageEditUI.cpp">
+      <Filter>ソース ファイル\EditModeUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -483,7 +513,7 @@
       <Filter>ソース ファイル\Edit</Filter>
     </ClInclude>
     <ClInclude Include="Source\EditUI\WhatStageSaveUI.h">
-      <Filter>ソース ファイル\EditUI</Filter>
+      <Filter>ソース ファイル\WhatSave</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene\CharacterSelect\SceneCharacterSelect.h">
       <Filter>ソース ファイル\Scene\CharacterSelect</Filter>
@@ -529,6 +559,21 @@
     </ClInclude>
     <ClInclude Include="Source\Shader\Shader.h">
       <Filter>ソース ファイル\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DispDistance\DispDistance.h">
+      <Filter>ソース ファイル\DispDistance</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\NumberUI\NumberUI.h">
+      <Filter>ソース ファイル\NumberUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Field\Field.h">
+      <Filter>ソース ファイル\Field</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TitleDisp\TitleDisp.h">
+      <Filter>ソース ファイル\TitleDisp</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EditUI\StageEditUI.h">
+      <Filter>ソース ファイル\EditModeUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

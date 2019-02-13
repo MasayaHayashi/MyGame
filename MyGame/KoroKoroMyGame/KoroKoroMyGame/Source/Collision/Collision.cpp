@@ -55,46 +55,25 @@ Collision::~Collision()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void Collision::update()
 {
-	D3DXVECTOR3 normal, length;
+	SceneManager::SceneState currentScene = SceneManager::getCurrentSceneType();
 
-	UINT playerIndex = 0;
-	
-	checkCollision("Player", "heart.x");
-
-	checkCollisionBlock();
-
-	checkCollision("Player","star.x");
-
-	for (auto fieldPtr : fieldPtres)
+	switch (currentScene)
 	{
-		if (!fieldPtr->getUsedFlg())
-		{
-			continue;
-		}
-
-		if (!fieldPtr->getIsFieldObject())
-		{
-			continue;
-		}
-
-		if (checkCollisionField(playersPtr.front(), playersPtr.front(), fieldPtr, cross, normal, rayHitMapes["Player"].front()->length, D3DXVECTOR3(0.0f, -1.0f, 0.0f)))
-		{
-			if (std::abs(rayHitMapes["Player"].front()->length) < 1.0f)
-			{
-				rayHitMapes["Player"][playerIndex]->isHit = true;
-				return;
-			}
-			else
-			{
-				rayHitMapes["Player"][playerIndex]->isHit = false;
-			}
-		}
-		else
-		{
-			rayHitMapes["Player"][playerIndex]->isHit = false;
-		}
+		case SceneManager::SceneState::SceneTitle:
+			break;
+		case SceneManager::SceneState::SceneMain:
+			updateMain();
+			break;
+		case SceneManager::SceneState::SceneStageEdit:
+			updateEdit();
+			break;
+		case SceneManager::SceneState::SceneSelect:
+			break;
+		case SceneManager::SceneState::SceneResult:
+			break;
+		default:
+			break;
 	}
-	
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -612,4 +591,58 @@ void Collision::initilize()
 			second->isHitAABB = false;
 		}
 	}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// シーンメイン中更新
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Collision::updateMain()
+{
+	D3DXVECTOR3 normal, length;
+
+	UINT playerIndex = 0;
+
+	checkCollision("Player", "heart.x");
+
+	checkCollisionBlock();
+
+	checkCollision("Player", "star.x");
+
+	for (auto fieldPtr : fieldPtres)
+	{
+		if (!fieldPtr->getUsedFlg())
+		{
+			continue;
+		}
+
+		if (!fieldPtr->getIsFieldObject())
+		{
+			continue;
+		}
+
+		if (checkCollisionField(playersPtr.front(), playersPtr.front(), fieldPtr, cross, normal, rayHitMapes["Player"].front()->length, D3DXVECTOR3(0.0f, -1.0f, 0.0f)))
+		{
+			if (std::abs(rayHitMapes["Player"].front()->length) < 1.0f)
+			{
+				rayHitMapes["Player"][playerIndex]->isHit = true;
+				return;
+			}
+			else
+			{
+				rayHitMapes["Player"][playerIndex]->isHit = false;
+			}
+		}
+		else
+		{
+			rayHitMapes["Player"][playerIndex]->isHit = false;
+		}
+	}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// シーンエディット中更新
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+void Collision::updateEdit()
+{
+
 }

@@ -30,6 +30,14 @@ public:
 		p = nullptr;
 	}
 
+	template <class T>
+
+	static inline void safeRelease(T *&p)
+	{
+		p->Release(); 
+		p = nullptr;
+	}
+
 
 private:
 

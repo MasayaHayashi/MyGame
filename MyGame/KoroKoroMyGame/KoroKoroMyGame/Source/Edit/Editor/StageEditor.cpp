@@ -1,5 +1,5 @@
 //
-// C_StageEditor.cpp
+// StageEditor.cpp
 // Author : Masaya Hayashi
 //
 
@@ -110,7 +110,6 @@ void StageEditor::initialize()
 
 	(*currentGameObject)->setUsedFlg(true);
 
-//	loadStageData(1);
 
 }
 
@@ -285,7 +284,7 @@ void StageEditor::checkSaveData()
 //
 void StageEditor::deleteObj()
 {
-
+	
 }
 
 //

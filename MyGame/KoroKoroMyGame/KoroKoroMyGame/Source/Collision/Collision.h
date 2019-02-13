@@ -101,6 +101,9 @@ public:
 	void registerField(Pawn* fieldPtr);
 	void registerBlock(Pawn &blockPtr);
 
+	void updateMain();
+	void updateEdit();
+
 	const bool isHitAABB(Transform pPawnA, Transform pPawnB);
 	const bool isHitAABB(Transform pPawnA, Pawn &pPawnB);
 

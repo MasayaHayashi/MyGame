@@ -154,7 +154,7 @@ private:
 	D3DVIEWPORT9 viewPort;
 	
 	bool changeCamera;
-
+	bool deadCameraflg = false;
 };
 
 #endif

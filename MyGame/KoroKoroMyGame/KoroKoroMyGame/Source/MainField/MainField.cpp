@@ -1,5 +1,5 @@
 //
-// C_MainField.cpp
+// MainField.cpp
 // Author : Masaya Hayashi
 //
 
@@ -15,15 +15,15 @@ MainField::MainField()
 {
 	strcpy_s(fileName, ModelFilePass.c_str());
 	strcpy_s(texFileName, ModelFilePass.c_str());
-	myTransform.pos		= D3DXVECTOR3(0.0f, 0.0f, 1.0f);
-	myTransform.scale	= D3DXVECTOR3(0.7f, 0.1f, 0.5f);
+	myTransform.pos		= D3DXVECTOR3(-10.0f, -2.68f, -5.0f);
+	myTransform.scale	= D3DXVECTOR3(0.7f, 0.1f, 0.7f);
 
 	meshPtr = nullptr;
-	myTransform.isUsed  = false;
+	myTransform.isUsed  = true;
 
 	tagName = "field";
 
-	Collision::registerList(&myTransform,"field");
+	Collision::registerList(&myTransform,tagName);
 
 	idNumber = 0;
 }

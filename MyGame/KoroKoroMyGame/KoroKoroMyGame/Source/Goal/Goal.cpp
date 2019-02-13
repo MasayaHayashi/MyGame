@@ -55,7 +55,6 @@ void Goal::initialize()
 
 	Collision::registerList(&myTransform, tagName);
 
-	// 位置、移動量、拡大率初期化
 	myTransform.scale	= D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 	myTransform.rotDeg	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	myTransform.pos		= D3DXVECTOR3(0.0f, -meshDataObj.collitionBox.y * 2.0f, 0.0f);
@@ -95,9 +94,6 @@ void Goal::update()
 	}
 
 	myTransform.rotDeg.y += D3DXToRadian(2);
-
-	// コライダー更新
-//	pCollider->UpdateCollider(mtxWorldPawn, FIELD_BOX_COLOR );
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

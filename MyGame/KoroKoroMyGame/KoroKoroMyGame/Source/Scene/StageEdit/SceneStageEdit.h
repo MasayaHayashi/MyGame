@@ -24,8 +24,8 @@ class Skydome;
 class SceneStageEdit : public SceneBase
 {
 public:
-	SceneStageEdit();	// コンストラクタ
-	~SceneStageEdit();	// デストラクタ
+	SceneStageEdit();
+	~SceneStageEdit();
 
 	void initialize();
 	void finalize();

@@ -251,7 +251,8 @@ void Camera::updateTitle(Pawn *pPlayer)
 	myTransform.look = PlayerPos;
 	myTransform.fowerd = myTransform.look - myTransform.pos;
 
-	myTransform.posDest = PlayerPos - ForwardVec * 10;
+	myTransform.posDest = PlayerPos - ForwardVec * 6.0f;
+	myTransform.posDest.y += 1.8f;
 	
 #if 1 // üŒ`•âŠÔˆ—
 	// ‹¤’Êˆ—
@@ -288,7 +289,7 @@ void Camera::updateStageEdit(std::string keyName,UINT selectIndex)
 	myTransform.look = blockPos;
 
 	static float fcnt = 0.0f;
-	fcnt += 0.0001f;
+	fcnt += 0.001f;
 	D3DXVec3Lerp(&myTransform.pos,  &myTransform.pos,	&myTransform.posDest,  fcnt);
 	D3DXVec3Lerp(&myTransform.look, &myTransform.look,	&myTransform.lookDest, fcnt);
 
@@ -311,7 +312,7 @@ void Camera::updateStageEdit(std::string keyName,UINT selectIndex)
 
 	if (fcnt > 0.3f)
 	{
-		fcnt = 0.0f;
+		fcnt = 0.3f;
 	}
 }
 
@@ -335,6 +336,7 @@ void Camera::updateGameMain(Player &pPlayer,INT countDown)
 			break;
 		case GameManager::GameType::FallMiss:
 			updateFallMiss();
+			break;
 		default:
 			break;
 	}
@@ -355,7 +357,7 @@ void Camera::updateGameMainReady(Player &pPlayer, INT countDown)
 
 	if (countDown <= 0)
 	{
-		countDown = 0;
+		countDown = 3;
 	}
 
 	DirectX3D::printDebug("XXX%f\n", myTransform.pos.x);
@@ -387,16 +389,6 @@ void Camera::updateGameMainPlay(Player &pPlayer,Board countDown)
 
 	D3DXVec3Normalize(&UpVec, &UpVec);
 	D3DXVec3Normalize(&ForwardVec, &ForwardVec);
-/*
-	if (GameManager::isGameType(GameManager::GameType::Ready))
-	{
-		myTransform.pos = pPlayer.getPosition();
-		myTransform.pos.y += 2.0f;
-		myTransform.pos.z -= 10.0f;
-		myTransform.look = pPlayer.getPosition();
-	}*/
-
-
 
 	myTransform.posDest = Collision::getTransform("Player", 0)->pos - *D3DXVec3Normalize(&cameraFowerd, &cameraFowerd) * 6.0f;
 	myTransform.posDest.y += 4.0f;
@@ -608,7 +600,6 @@ void Camera::editInput(D3DXVECTOR3 blockPos)
 	{
 		myTransform.look -= forwd;
 	}
-
 }
 
 //
@@ -618,4 +609,11 @@ void Camera::updateFallMiss()
 {
 	myTransform.look = Collision::getTransform("Player", 0)->pos;
 
+	lerpCnt += 0.02f;
+
+	if (lerpCnt > 1.0f)
+	{
+		lerpCnt = 1.0f;
+	}
+	myTransform.pos.y += 0.5f;
 }

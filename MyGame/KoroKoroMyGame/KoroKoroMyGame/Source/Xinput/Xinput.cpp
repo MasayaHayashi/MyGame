@@ -9,7 +9,7 @@
 #include "../DirectX3D/DirectX3D.h"
 
 // ===== グローバル変数宣言 =====
-Xinput* Xinput::pInstance;
+Xinput* Xinput::pInstance = NEW Xinput();
 XINPUT_STATE		Xinput::state;
 XINPUT_VIBRATION	Xinput::vibration;
 XINPUT_GAMEPAD		Xinput::WorkStatePrev;
@@ -83,28 +83,6 @@ void Xinput::update()
 
 	WorkStateTrigger.wButtons = (XINP_PRESS ^ XINP_PREV) & XINP_PRESS;
 	WorkStateRelease.wButtons = (XINP_PRESS ^ XINP_PREV) & ~XINP_PRESS;
-	/*
-	if (aKeyState[nCnKey])
-	{
-		if (g_aKeyStateRepeatCnt[nCnKey] < LIMIT_COUNT_REPEAT)
-		{
-			g_aKeyStateRepeatCnt[nCnKey] ++;
-			if (g_aKeyStateRepeatCnt[nCnKey] == 1)
-			{// キーを押し始めた最初のフレーム
-				g_aKeyStateRepeat[nCnKey] = aKeyState[nCnKey];
-			}
-			else if (g_aKeyStateRepeatCnt[nCnKey] >= LIMIT_COUNT_REPEAT)
-			{// カウンタが最大値を超えたらリセット
-				g_aKeyStateRepeat[nCnKey] = 0;
-				g_aKeyStateRepeatCnt[nCnKey] = 0;
-			}
-			else
-			{
-				g_aKeyStateRepeat[nCnKey] = 0;
-			}
-		}
-	}
-	*/
 	
 	nVibCnt --;
 
@@ -170,7 +148,9 @@ bool Xinput::getButton_A_Press()
 {
 	// 未接続ならfalseに
 	if (!bConnected)
+	{
 		return false;
+	}
 
 	return  (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) ? true : false;
 }
@@ -182,7 +162,9 @@ bool Xinput::getButton_A_Triger()
 {
 	// 未接続ならfalseに
 	if (!bConnected)
+	{
 		return false;
+	}
 
 	return (WorkStateTrigger.wButtons & XINPUT_GAMEPAD_A) ? true : false;
 }
@@ -194,7 +176,9 @@ bool Xinput::getButton_A_Release()
 {
 	// 未接続ならfalseに
 	if (!bConnected)
+	{
 		return false;
+	}
 
 	return (WorkStateRelease.wButtons & XINPUT_GAMEPAD_A) ? true : false;
 }
@@ -206,7 +190,9 @@ bool Xinput::getButton_B_Press()
 {
 	// 未接続ならfalseに
 	if (!bConnected)
+	{
 		return false;
+	}
 
 	return  (state.Gamepad.wButtons & XINPUT_GAMEPAD_B) ? true : false;
 }
@@ -218,7 +204,9 @@ bool Xinput::getButton_B_Triger()
 {
 	// 未接続ならfalseに
 	if (!bConnected)
+	{
 		return false;
+	}
 
 	return  (WorkStateTrigger.wButtons & XINPUT_GAMEPAD_B) ? true : false;
 }
@@ -230,7 +218,9 @@ bool Xinput::getButton_B_Release()
 {
 	// 未接続ならfalseに
 	if (!bConnected)
+	{
 		return false;
+	}
 
 	return  (WorkStateRelease.wButtons & XINPUT_GAMEPAD_B) ? true : false;
 }
@@ -242,7 +232,9 @@ bool Xinput::getButton_X_Press()
 {
 	// 未接続ならfalseに
 	if (!bConnected)
+	{
 		return false;
+	}
 
 	return  (state.Gamepad.wButtons & XINPUT_GAMEPAD_X) ? true : false;
 }
@@ -785,7 +777,9 @@ SHORT Xinput::getThumbRY()
 
 	// 未接続なら値を0に
 	if (!bConnected)
+	{
 		return 0;
+	}
 
 	// デッドゾーン設定 (一定量以下なら値を0に)
 	if ((state.Gamepad.sThumbRY <  XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE &&
@@ -796,6 +790,50 @@ SHORT Xinput::getThumbRY()
 
 	return state.Gamepad.sThumbRY;
 }
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 左スティックが右に傾いているか
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+bool Xinput::isRightLS()
+{
+	if (getThumbLX() == 0)
+	{
+		return false;
+	}
+
+	if (getThumbLX() > -VK_PAD_LTHUMB_LEFT &&
+		getThumbLX() > 0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+// 左スティックが左に傾いているか
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+bool Xinput::isLeftLS()
+{
+	if (getThumbLX() == 0)
+	{
+		return false;
+	}
+
+	if (getThumbLX() < VK_PAD_LTHUMB_RIGHT && 
+		getThumbLX() < 0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // 左モーター振動開始

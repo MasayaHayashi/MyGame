@@ -48,6 +48,7 @@ public:
 	void updateGoal();
 	void updateSelect();
 	void updateMiss();
+	void updateFallMiss();
 
 	void setStatus(Player::PlayerState setStatus);
 	void setScore(INT);
@@ -73,10 +74,11 @@ private:
 	static constexpr FLOAT  MaxSpeed				= 0.02f;
 	static constexpr FLOAT  JumpSpeed				= 0.14f;
 	static constexpr FLOAT  MissSpeed			    = 0.2f;
-	static constexpr FLOAT  FallMissPosY			= 11.0f;
+	static constexpr FLOAT  FallMissPosY			= 60.0f;
 
 	bool isKeyInput = false;
 	bool fallFlg	= true;
+	bool jump		= false;
 
 	D3DXVECTOR3 inputVec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
@@ -104,6 +106,7 @@ private:
 
 	PlayerState	playerStateType;
 	bool missFlg = false;
+	bool isGround = true;
 	INT score;
 	FLOAT radianRotCnt = 0;
 

@@ -44,7 +44,6 @@ private:
 
 	std::map<std::string, std::string> modelPasses;
 
-//	const std::string ModelPass		= "Data/Model/Goal/flatAndHill.x";
 	const std::string TexturePass	= "Data/Texture/double_1.png";
 
 };

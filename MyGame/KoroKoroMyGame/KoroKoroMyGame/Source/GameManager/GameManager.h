@@ -16,7 +16,8 @@
 class GameManager final
 {
 public:
-	void initialize();
+	static void initialize();
+	static void initializeStatus();
 
 	enum class GameType
 	{
@@ -30,13 +31,16 @@ public:
 	};
 
 	static constexpr int HitStopTime = 60;
+	static constexpr int RestartFream = 110;
 
 	static const bool isGameType(GameType setGameType);
-	static void changeGameType(GameType setGameType);
+	static void  changeGameType(GameType setGameType);
 	static const GameType getGameType();
-	static void addNextStage();
-	static int getStage();
-	static void update();
+	static void  addNextStage();
+	static int   getStage();
+	static void  update();
+	static bool  isRestart();
+	static bool  isGameClear();
 protected:
 	
 private:
@@ -46,6 +50,9 @@ private:
 
 	static int			hitStopCnt;
 
+	static int			restartCnt;
+	static bool			restart;
+	static bool			gameClear;
 	GameManager();
 	~GameManager();
 

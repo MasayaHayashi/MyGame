@@ -25,9 +25,9 @@
 #include "../../HeartObj/HeartObj.h"
 #include "../../StarItem/StarItem.h"
 #include "../../StarUI/StarUI.h"
+#include "../../DispDistance/DispDistance.h"
+#include "../../Xinput/Xinput.h"
 #include <fstream>
-
-// ===== 静的メンバ変数 =====
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 // コンストラクタ
@@ -46,7 +46,7 @@ SceneMain::SceneMain()
 
 	skyDomePtr.push_back(		std::unique_ptr<Skydome>(	NEW Skydome())	);
 	
-	for (int index = 0; index < StarParticle::MaxParticle; index++)
+	for (INT index = 0; index < StarParticle::MaxParticle; index++)
 	{
 		boardObjectesPtr.push_back(std::unique_ptr<Board>(  NEW StarParticle(index) ));
 	}
@@ -54,6 +54,7 @@ SceneMain::SceneMain()
 	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW StageClearUI()  ));
 	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW MissUI()	    ));
 	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW StarUI(0)		));
+	boardObjectesPtr.push_back(std::unique_ptr<Board>(		NEW DispDistance() ));
 	boardObjectesPtr.push_back( std::unique_ptr<Board>(		NEW Countdown()		));
 
 	collisionPtr.reset( NEW Collision() );
@@ -100,6 +101,7 @@ SceneMain::~SceneMain()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneMain::initialize()
 {
+	GameManager::initialize();
 	GameManager::changeGameType(GameManager::GameType::Ready);
 
 	for (size_t gameObjTypeIndex = 0; gameObjTypeIndex < GameObjectBase::MaxGameObjType; gameObjTypeIndex++)
@@ -131,9 +133,9 @@ void SceneMain::initialize()
 		boardObject->initialize();
 	}
 
-	MyAudiere::getBgm(0)->setRepeat(true);
-	MyAudiere::getBgm(0)->setVolume(0.1f);
-	MyAudiere::getBgm(0)->play();
+	MyAudiere::getBgm(2)->setRepeat(true);
+	MyAudiere::getBgm(2)->setVolume(0.05f);
+	MyAudiere::getBgm(2)->play();
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -162,6 +164,7 @@ void SceneMain::finalize()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 void SceneMain::update()
 {
+	Xinput::update();
 
 	if (Keyboard::getTrigger(DIK_2))
 	{
@@ -193,7 +196,6 @@ void SceneMain::update()
 
 	collisionPtr->update();
 
-
 	cameraPtr->update(*playeresPtr.front().get(), boardObjectesPtr.back()->getCurrentAnim());
 	
 	if (Keyboard::getPress(DIK_1))
@@ -201,32 +203,19 @@ void SceneMain::update()
 		SceneManager::setNextScene(SceneManager::SceneState::SceneMain);
 	}
 
-	if (GameManager::isGameType(GameManager::GameType::Miss))
-	{
-		restartCnt ++;
-
-		if (restartCnt > RestartFream)
-		{
-			initializeStatus();
-			GameManager::changeGameType(GameManager::GameType::Ready);
-			restartCnt = 0;
-		}
-	}
-
-	if (GameManager::isGameType(GameManager::GameType::Goal))
-	{
-		restartCnt ++;
-
-		if (restartCnt > RestartFream)
-		{
-			GameManager::addNextStage();
-			SceneManager::setNextScene(SceneManager::SceneState::SceneMain);
-			restartCnt = 0;
-		}
-	}
-
 	GameManager::update();
 
+	if(GameManager::isRestart())
+	{
+		initializeStatus();
+		GameManager::initialize();
+	}
+
+	if (GameManager::isGameClear())
+	{
+		GameManager::addNextStage();
+		SceneManager::setNextScene(SceneManager::SceneState::SceneMain);
+	}
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -286,6 +275,8 @@ void SceneMain::initializeStatus()
 		}
 	}
 
+	GameManager::initializeStatus();
+
 }
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -293,7 +284,6 @@ void SceneMain::initializeStatus()
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 bool SceneMain::loadStageData(size_t stageNumber)
 {
-
 	std::ifstream loadtFile;
 
 	std::string stageString = std::to_string(stageNumber);
@@ -303,7 +293,6 @@ bool SceneMain::loadStageData(size_t stageNumber)
 	{
 		SceneManager::setNextScene(SceneManager::SceneState::SceneMain);
 
-	//	MessageBox(nullptr, TEXT("Error"), TEXT("ステージデータ読み込みエラー"), MB_ICONERROR);
 		return false;
 	}
 
